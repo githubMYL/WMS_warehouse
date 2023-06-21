@@ -11,6 +11,6 @@ public interface UserMapper {
 	void insertUser(User user); // 회원 가입
 	User getUserByEmail(String email); // 회원 정보 가져오기
 	User getUserById(String userId);
-	void updateUser(User user); // 회원 정보 수정
-	void deleteUser(String userId); // 회원 탈퇴
+	//void updateUser(User user); // 회원 정보 수정
+	//void deleteUser(String userId); // 회원 탈퇴
 }

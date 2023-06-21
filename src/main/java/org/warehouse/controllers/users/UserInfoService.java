@@ -18,6 +18,7 @@ import java.util.List;
 public class UserInfoService implements UserDetailsService {
 	private final UserMapper userMapper;
 
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userMapper.getUserById(username);
@@ -25,7 +26,7 @@ public class UserInfoService implements UserDetailsService {
 			throw new UsernameNotFoundException(username);
 		}
 
-		List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getUserType().toString()));
+		List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getUserType()));
 
 		return UserInfo.builder()
 				.userId(user.getUserId())
