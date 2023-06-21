@@ -39,6 +39,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 			session.setAttribute(e.getField(), e.getMessage());
 		}
 
-		response.sendRedirect(request.getContextPath() + "/member/login");
+		response.sendRedirect(request.getContextPath() + "/user/login");
 	}
 }
