@@ -70,6 +70,17 @@
 			}
 		</script>
 
+		<div>
+			<input type="text" id="cust_ctr_cd" th:field="*{custCtrCd}"/>
+			<input type="text" list="cust_ctr_list" id="cust_ctr" name="cust_ctr_tmp" placeholder="납품센터 명"/>
+			<datalist id="cust_ctr_list">
+				<select id="cust_ctr_sel">
+					<option th:each="custCtr : ${custCtrList}" th:label="${custCtr.custCtrCd}" th:value="${custCtr.custCtrNm}">
+					</option>
+				</select>
+			</datalist>
+		</div>
+
 
 		<div>
 			<input type="text" name="custCtrCd" th:field="*{custCtrCd}" th:placeholder="#{custCtrCd}">

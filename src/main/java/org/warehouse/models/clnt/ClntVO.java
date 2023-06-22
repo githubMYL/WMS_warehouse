@@ -4,7 +4,7 @@ import lombok.Data;
 import org.warehouse.models.BaseEntity;
 
 @Data
-public class Clnt extends BaseEntity {
+public class ClntVO extends BaseEntity {
 	private String clntCd;
 	private String clntNm;
 	private String salesNm;
