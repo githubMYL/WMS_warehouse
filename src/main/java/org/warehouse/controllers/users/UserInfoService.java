@@ -22,11 +22,12 @@ public class UserInfoService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userMapper.getUserById(username);
+		System.out.println(user);
 		if(user == null) {
 			throw new UsernameNotFoundException(username);
 		}
 
-		List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getUserType()));
+		List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getUserType().toString()));
 
 		return UserInfo.builder()
 				.userId(user.getUserId())

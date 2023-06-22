@@ -1,32 +1,25 @@
 package org.warehouse.services;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.warehouse.configs.models.mapper.UserMapper;
+import org.warehouse.controllers.admins.JoinForm;
 import org.warehouse.models.user.User;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserJoinService {
 	private final UserMapper userMapper;
 	private final PasswordEncoder passwordEncoder;
 
-	public List<User> getUserList() {
-		return userMapper.getUserList();
-	}
+	public void join(JoinForm joinForm) {
+		User user = new ModelMapper().map(joinForm, User.class);
 
-	public User getUserById(String userId) {
-		User user = userMapper.getUserById(userId);
-		System.out.println(user);
-		System.out.println("modDt: " + user.getModDt());
-		return user;
-	}
+		user.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
 
-	public User getUserByEmail(String email) {
-		return userMapper.getUserByEmail(email);
+		userMapper.insertUser(user);
 	}
 
 }

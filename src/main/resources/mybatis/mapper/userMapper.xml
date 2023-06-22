@@ -12,9 +12,15 @@
 		<result property="position" column="POSITION" />
 		<result property="tel" column="TEL" />
 		<result property="email" column="EMAIL" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
 	</resultMap>
 	<select id="getUserById" resultMap="userMap"> <!--  회원 정보  -->
-		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE WHERE USER_ID=#{userId}
+		SELECT * FROM USER_MANAGE WHERE USER_ID=#{userId}
 	</select>
 
 	<select id="getUserByEmail" parameterType="String" resultMap="userMap"> <!--  회원 정보  -->
@@ -28,7 +34,7 @@
 
 	<insert id="insertUser" parameterType="org.warehouse.models.user.User" keyProperty="userId">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
+		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
 	</insert>
 
 

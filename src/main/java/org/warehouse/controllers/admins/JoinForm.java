@@ -1,4 +1,4 @@
-package org.warehouse.controllers.users;
+package org.warehouse.controllers.admins;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

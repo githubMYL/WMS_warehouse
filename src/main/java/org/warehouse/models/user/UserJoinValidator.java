@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.warehouse.configs.models.mapper.UserMapper;
-import org.warehouse.controllers.users.JoinForm;
+import org.warehouse.controllers.admins.JoinForm;
 
 @Component
 @RequiredArgsConstructor
 public class UserJoinValidator implements Validator {
-	private UserMapper userMapper;
+	private final UserMapper userMapper;
 
 	@Override
 	public boolean supports(Class<?> clazz) {

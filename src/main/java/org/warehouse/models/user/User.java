@@ -1,18 +1,16 @@
 package org.warehouse.models.user;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
+import org.warehouse.commons.constraints.Role;
+import org.warehouse.models.BaseEntity;
 
 @Data
-public class User{
+public class User extends BaseEntity {
 	private String userId;
 	private String userPw;
 
 	private String userNm;
-	private String userType;
+	private Role userType;
 	private String clntCd;
 	private String custCtrCd;
 	private String custCd;

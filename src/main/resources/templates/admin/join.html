@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/admin/main}">
+
+<main layout:fragment="content">
+	<form name="frmJoin" method="post" th:action="@{/admin/join}" th:object="${joinForm}" autocomplete="off">
+		<div>
+			<input type="text" name="userId" th:field="*{userId}" th:placeholder="#{userId}">
+			<div class="errors" th:each="err : ${#fields.errors('userId')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="password" name="userPw" th:field="*{userPw}" th:placeholder="#{userPw}">
+			<div class="errors" th:each="err : ${#fields.errors('userPw')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="password" name="userPwRe" th:field="*{userPwRe}" th:placeholder="#{userPwRe}">
+			<div class="errors" th:each="err : ${#fields.errors('userPwRe')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" name="userNm" th:field="*{userNm}" th:placeholder="#{userNm}">
+			<div class="errors" th:each="err : ${#fields.errors('userNm')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" name="userNm" th:field="*{userType}" th:placeholder="#{userType}">
+			<div class="errors" th:each="err : ${#fields.errors('userType')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" name="clntCd" th:field="*{clntCd}" th:placeholder="#{clntCd}">
+			<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" name="custCtrCd" th:field="*{custCtrCd}" th:placeholder="#{custCtrCd}">
+			<div class="errors" th:each="err : ${#fields.errors('custCtrCd')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" name="custCd" th:field="*{custCd}" th:placeholder="#{custCd}">
+			<div class="errors" th:each="err : ${#fields.errors('custCd')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" name="position" th:field="*{position}" th:placeholder="#{position}">
+			<div class="errors" th:each="err : ${#fields.errors('position')}" th:text="${err}"></div>
+		</div>
+
+
+		<div>
+			<input type="text" name="email" th:field="*{email}" th:placeholder="#{email}">
+			<div class="errors" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" name="mobile" th:field="*{tel}" th:placeholder="#{tel}">
+			<div class="errors" th:each="err : ${#fields.errors('tel')}" th:text="${err}"></div>
+		</div>
+
+		<button type="submit" th:text="#{user.action.join}"></button>
+	</form>
+</main>
+</html>
