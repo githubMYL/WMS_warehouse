@@ -5,7 +5,7 @@ import org.warehouse.commons.constraints.Role;
 import org.warehouse.models.BaseEntity;
 
 @Data
-public class User extends BaseEntity {
+public class UserVO extends BaseEntity {
 	private String userId;
 	private String userPw;
 

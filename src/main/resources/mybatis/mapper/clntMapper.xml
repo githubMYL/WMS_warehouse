@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.warehouse.configs.models.mapper.ClntMapper">
+<mapper namespace="org.warehouse.configs.models.mapper.ClntDAO">
 	<resultMap id="clntMap" type="org.warehouse.models.clnt.Clnt">
 		<result property="clntCd" column="CLNT_CD" />
 		<result property="clntNm" column="CLNT_NM" />

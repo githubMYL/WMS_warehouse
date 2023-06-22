@@ -6,6 +6,6 @@ import org.warehouse.models.clnt.Clnt;
 import java.util.List;
 
 @Mapper
-public interface ClntMapper {
+public interface ClntDAO {
 	List<Clnt> getClntList();
 }

@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.warehouse.configs.models.mapper.UserMapper;
+import org.warehouse.configs.models.mapper.UserDAO;
 import org.warehouse.controllers.admins.JoinForm;
 
 @Component
 @RequiredArgsConstructor
 public class UserJoinValidator implements Validator {
-	private final UserMapper userMapper;
+	private final UserDAO userDAO;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -49,7 +49,7 @@ public class UserJoinValidator implements Validator {
 
 
 		//1. 아이디 중복 여부
-		if(userId != null && !userId.isBlank() && (userMapper.getUserById(userId) != null)){
+		if(userId != null && !userId.isBlank() && (userDAO.getUserById(userId) != null)){
 			errors.rejectValue("userId", "Validation.duplicate.userId");
 		}
 

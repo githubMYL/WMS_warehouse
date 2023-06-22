@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.warehouse.configs.models.mapper.UserMapper">
-	<resultMap id="userMap" type="org.warehouse.models.user.User">
+<mapper namespace="org.warehouse.configs.models.mapper.UserDAO">
+	<resultMap id="userMap" type="org.warehouse.models.user.UserVO">
 		<result property="userId" column="USER_ID" />
 		<result property="userPw" column="USER_PW" />
 		<result property="userNm" column="USER_NM" />
@@ -32,7 +32,7 @@
 		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE ORDER BY memNo DESC
 	</select>
 
-	<insert id="insertUser" parameterType="org.warehouse.models.user.User" keyProperty="userId">
+	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
 		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
 	</insert>

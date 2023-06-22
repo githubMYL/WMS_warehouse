@@ -8,11 +8,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.warehouse.configs.models.mapper.ClntMapper;
+import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.models.clnt.Clnt;
 import org.warehouse.models.user.UserJoinValidator;
 import org.warehouse.services.UserJoinService;
-import org.warehouse.services.UserService;
 
 import java.util.List;
 
@@ -23,12 +22,12 @@ public class AdminController {
 	private final UserJoinService joinService;
 	private final UserJoinValidator joinValidator;
 
-	private final ClntMapper clntMapper;
+	private final ClntDAO clntDAO;
 
 	@GetMapping("/join")
 	public String join(Model model) {
 		JoinForm joinForm = new JoinForm();
-		List<Clnt> clntList = clntMapper.getClntList();
+		List<Clnt> clntList = clntDAO.getClntList();
 
 		System.out.println(clntList);
 

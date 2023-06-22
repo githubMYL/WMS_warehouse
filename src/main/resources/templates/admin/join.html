@@ -37,21 +37,39 @@
 		</div>
 
 		<div>
-			<input type="text" id="clnt_nm">
-			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:data-clntlist="${clntList}">
+			<input type="text" id="clnt_cd" th:field="*{clntCd}"/>
+			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명"/>
 			<datalist id="clnt">
-				<select>
-					<option th:each="clnt : ${clntList}" th:value="${clnt.clntCd}" th:label="${clnt.clntNm}">
+				<select id="clnt_sel">
+					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+					</option>
 				</select>
 			</datalist>
 		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const clnt = document.getElementById("clnt_tmp");
 
-		test
+				var selected = document.querySelector("select#clnt_sel")
 
-		<div>
-			<input type="text" name="clntCd" th:field="*{clntCd}" th:placeholder="#{clntCd}">
-			<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
-		</div>
+				clnt.addEventListener("change", UpdateClnt)
+			});
+
+
+			function UpdateClnt(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#clnt_sel")
+				var datalist = evnt.list;
+				var clntcd = document.getElementById("clnt_cd");
+
+				for(var j = 0; j < datalist.options.length; j++){
+					if(this.value == datalist.options[j].value) {
+						clntcd.value = datalist.options[j].label;
+					}
+				}
+			}
+		</script>
+
 
 		<div>
 			<input type="text" name="custCtrCd" th:field="*{custCtrCd}" th:placeholder="#{custCtrCd}">
