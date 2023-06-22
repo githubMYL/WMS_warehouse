@@ -26,9 +26,26 @@
 		</div>
 
 		<div>
-			<input type="text" name="userNm" th:field="*{userType}" th:placeholder="#{userType}">
+			<select class="form-select" id="userType" name="userType" th:field="*{userType}" th:value="*{userType}">
+
+				<option th:value="ADMIN">관리자</option>
+				<option th:value="CLNT">고객사</option>
+				<option th:value="CUST">납품처</option>
+				<option th:value="CUST_CTR">납품센터</option>
+			</select>
 			<div class="errors" th:each="err : ${#fields.errors('userType')}" th:text="${err}"></div>
 		</div>
+
+		<div>
+			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:data-clntlist="${clntList}">
+			<datalist id="clnt">
+				<select>
+					<option th:each="clnt : ${clntList}" th:value="${clnt.clntCd}" th:label="${clnt.clntNm}">
+				</select>
+			</datalist>
+		</div>
+
+		test
 
 		<div>
 			<input type="text" name="clntCd" th:field="*{clntCd}" th:placeholder="#{clntCd}">

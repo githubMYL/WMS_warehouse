@@ -10,6 +10,7 @@
 		<th:block layout:fragment="addCss"></th:block>
 
 		<script th:src="@{/js/admin/common.js}"></script>
+		<script th:src="@{/js/admin/join.js}"></script>
 		<script th:each="jsFile : ${addScript}"
 				th:src="@{/js/admin/{jsFile}.js(jsFile=${jsFile})}"></script>
 		<th:block layout:fragment="addScript"></th:block>
