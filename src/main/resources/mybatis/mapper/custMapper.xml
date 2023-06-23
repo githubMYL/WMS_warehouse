@@ -21,4 +21,7 @@
 		SELECT * FROM CUST ORDER BY CUST_CD
 	</select>
 
+	<select id="getCustByCustNm" resultMap="custMap">
+		SELECT * FROM CUST WHERE CUST_NM=#{custNm}
+	</select>
 </mapper>
