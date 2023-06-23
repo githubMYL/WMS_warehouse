@@ -9,6 +9,9 @@
         <module name="warehouse" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="warehouse" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

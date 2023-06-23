@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.warehouse.configs.models.mapper.UserMapper;
-import org.warehouse.controllers.users.JoinForm;
+import org.warehouse.configs.models.mapper.UserDAO;
+import org.warehouse.controllers.admins.JoinForm;
 
 @Component
 @RequiredArgsConstructor
 public class UserJoinValidator implements Validator {
-	private UserMapper userMapper;
+	private final UserDAO userDAO;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -35,21 +35,21 @@ public class UserJoinValidator implements Validator {
 		String userPwRe = joinForm.getUserPwRe();
 
 		/** 기타 입력폼 정보들 - 추후에 검증 추가할지도?
-		String userNm = joinForm.getUserNm();
-		String userType = joinForm.getUserType();
+		 String userNm = joinForm.getUserNm();
+		 String userType = joinForm.getUserType();
 
-		String clntCd = joinForm.getClntCd();
-		String custCtrCd = joinForm.getCustCtrCd();
-		String custCd = joinForm.getCustCd();
-		String position = joinForm.getPosition();
-		String tel = joinForm.getTel();
-		String email = joinForm.getEmail();
+		 String clntCd = joinForm.getClntCd();
+		 String custCtrCd = joinForm.getCustCtrCd();
+		 String custCd = joinForm.getCustCd();
+		 String position = joinForm.getPosition();
+		 String tel = joinForm.getTel();
+		 String email = joinForm.getEmail();
 		 */
 
 
 
 		//1. 아이디 중복 여부
-		if(userId != null && !userId.isBlank() && (userMapper.getUserById(userId) != null)){
+		if(userId != null && !userId.isBlank() && (userDAO.getUserById(userId) != null)){
 			errors.rejectValue("userId", "Validation.duplicate.userId");
 		}
 

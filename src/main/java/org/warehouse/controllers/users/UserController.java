@@ -14,7 +14,6 @@ import org.warehouse.configs.models.mapper.UserMapper;
 @RequiredArgsConstructor
 public class UserController {
 	private final UserInfoService userInfoService;
-
 	private final UserMapper userMapper;
 
 	@GetMapping("/join")
@@ -36,6 +35,4 @@ public class UserController {
 
 		return "user/login";
 	}
-
-
 }
