@@ -71,26 +71,45 @@
 		</script>
 
 		<div>
-			<input type="text" id="cust_ctr_cd" th:field="*{custCtrCd}"/>
-			<input type="text" list="cust_ctr_list" id="cust_ctr" name="cust_ctr_tmp" placeholder="납품센터 명"/>
+			<input type="text" id="cust_nm" th:field="*{custCd}" readonly/>
+			<input type="text" list="cust_ctr_list" id="cust_ctr_nm" th:field="*{custCtrCd}" name="cust_ctr_tmp" placeholder="납품센터 명"/>
 			<datalist id="cust_ctr_list">
 				<select id="cust_ctr_sel">
-					<option th:each="custCtr : ${custCtrList}" th:label="${custCtr.custCtrCd}" th:value="${custCtr.custCtrNm}">
+					<option th:each="custCustCtr : ${custCustCtrList}" th:value="${custCustCtr.custCtrNm +'('+custCustCtr.custNm + ')'}" >
 					</option>
 				</select>
 			</datalist>
 		</div>
 
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const cust_ctr = document.getElementById("cust_ctr_nm");
 
-		<div>
-			<input type="text" name="custCtrCd" th:field="*{custCtrCd}" th:placeholder="#{custCtrCd}">
-			<div class="errors" th:each="err : ${#fields.errors('custCtrCd')}" th:text="${err}"></div>
-		</div>
+				var selected = document.querySelector("select#cust_ctr_sel")
 
-		<div>
-			<input type="text" name="custCd" th:field="*{custCd}" th:placeholder="#{custCd}">
-			<div class="errors" th:each="err : ${#fields.errors('custCd')}" th:text="${err}"></div>
-		</div>
+				cust_ctr.addEventListener("change", UpdateCustCtr)
+			});
+
+
+			function UpdateCustCtr(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#cust_ctr_sel")
+				var datalist = evnt.list;
+				var cust_nm = document.getElementById("cust_nm");
+				console.log(this);
+				console.log(this.value);
+
+				if(this.value.indexOf(')') != -1) {
+					var slice_cust_ctr_nm = this.value.substr(0, this.value.indexOf('('));
+					console.log(cust_ctr_nm);
+					var slice_cust_nm = this.value.slice(this.value.indexOf('(') +1, this.value.indexOf(')'));
+					console.log(cust_nm);
+
+					cust_nm.value=slice_cust_nm;
+					this.value=slice_cust_ctr_nm;
+				}
+			}
+		</script>
 
 		<div>
 			<input type="text" name="position" th:field="*{position}" th:placeholder="#{position}">

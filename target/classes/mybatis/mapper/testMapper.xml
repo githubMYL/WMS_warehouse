@@ -1,12 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.TestDAO">
+	<resultMap id="custCustCtrMap" type="org.warehouse.models.cust.CustCustCtrVO">
+		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
+		<result property="custCtrCd" column="CUST_CTR_CD" />
+		<result property="custCtrNm" column="CUST_CTR_NM" />
+	</resultMap>
 
-<mapper namespace="com.example.spring.myapp.model.mapper.TestMapper">
-
-	<select id="SelectAllList" resultType="hashmap">
-		SELECT * FROM CAR_INFO
+	<select id="getCustCustCtrList" resultMap="custCustCtrMap">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		SELECT cc.CUST_CTR_CD,
+				cc.CUST_CTR_NM,
+				c.CUST_CD,
+				c.CUST_NM
+			FROM CUST_CTR cc
+		LEFT OUTER JOIN CUST c
+			ON c.CUST_CD = cc.CUST_CD
+		ORDER BY CUST_CTR_CD
 	</select>
 
 </mapper>

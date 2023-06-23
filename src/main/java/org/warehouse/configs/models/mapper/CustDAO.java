@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface CustDAO {
 	List<CustVO> getCustList();
+	CustVO getCustByCustNm(String custNm);
 }

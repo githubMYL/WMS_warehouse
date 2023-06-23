@@ -21,4 +21,14 @@
 		SELECT * FROM CUST_CTR ORDER BY CUST_CTR_CD
 	</select>
 
+	<select id="getCustCtrListByCustCd" resultMap="custCtrMap">
+
+		SELECT * FROM CUST_CTR WHERE CUST_CD=#{custCd}
+
+	</select>
+
+	<select id="getCustCtrByCustCdCustCtrNm" resultMap="custCtrMap">
+		SELECT * FROM CUST_CTR WHERE CUST_CD=#{custCd} AND CUST_CTR_NM=#{custCtrNm}
+	</select>
+
 </mapper>

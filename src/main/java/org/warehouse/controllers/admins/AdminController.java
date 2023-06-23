@@ -8,10 +8,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.warehouse.configs.models.mapper.ClntDAO;
-import org.warehouse.configs.models.mapper.CustCtrDAO;
-import org.warehouse.configs.models.mapper.CustDAO;
+import org.warehouse.configs.models.mapper.*;
 import org.warehouse.models.clnt.ClntVO;
+import org.warehouse.models.cust.CustCustCtrVO;
 import org.warehouse.models.cust.CustVO;
 import org.warehouse.models.custctr.CustCtrVO;
 import org.warehouse.models.user.UserJoinValidator;
@@ -29,24 +28,21 @@ public class AdminController {
 	private final ClntDAO clntDAO;
 	private final CustDAO custDAO;
 	private final CustCtrDAO custCtrDAO;
+	private final TestDAO testDAO;
 
 	@GetMapping("/join")
 	public String join(Model model) {
 		JoinForm joinForm = new JoinForm();
 		List<ClntVO> clntList = clntDAO.getClntList();
-		List<CustVO> custList = custDAO.getCustList();
-		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
-		System.out.println(custCtrList);
-		System.out.println();
-		System.out.println(custList);
+
+		List<CustCustCtrVO> custCustCtrList = testDAO.getCustCustCtrList();
 
 
 		System.out.println(clntList);
 
 		model.addAttribute("joinForm", joinForm);
 		model.addAttribute("clntList", clntList);
-		model.addAttribute("custList", custList);
-		model.addAttribute("custCtrList", custCtrList);
+		model.addAttribute("custCustCtrList", custCustCtrList);
 
 		return "admin/join";
 	}
