@@ -55,7 +55,6 @@
 				clnt.addEventListener("change", UpdateClnt)
 			});
 
-
 			function UpdateClnt(e) {
 				var evnt = e.currentTarget;
 				var selected = document.querySelector("select#clnt_sel")
@@ -64,6 +63,7 @@
 
 				for(var j = 0; j < datalist.options.length; j++){
 					if(this.value == datalist.options[j].value) {
+
 						clntcd.value = datalist.options[j].label;
 					}
 				}
@@ -91,7 +91,6 @@
 				cust_ctr.addEventListener("change", UpdateCustCtr)
 			});
 
-
 			function UpdateCustCtr(e) {
 				var evnt = e.currentTarget;
 				var selected = document.querySelector("select#cust_ctr_sel")
@@ -100,13 +99,11 @@
 				console.log(this);
 				console.log(this.value);
 
-
 				for(var j = 0; j < datalist.options.length; j++){
 					if(this.value == datalist.options[j].value) {
 						cust_ctr_nm.value = datalist.options[j].label;
 
-						console.log('idxcnt ' + j);
-						console.log('idx ' + datalist.options[j].value);
+						console.log(" aa " + this.value);
 
 						console.log(datalist.options[j].label);
 					}
