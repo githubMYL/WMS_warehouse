@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.CustDAO">
+	<resultMap id="custMap" type="org.warehouse.models.cust.CustVO">
+		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
+		<result property="busiNum" column="BUSI_NUM" />
+		<result property="custTel" column="CUST_TEL" />
+		<result property="ownerNm" column="OWNER_NM" />
+		<result property="busiAddr" column="BUSI_ADDR" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+	</resultMap>
+
+	<select id="getCustList" resultMap="custMap">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		SELECT * FROM CUST ORDER BY CUST_CD
+	</select>
+
+</mapper>

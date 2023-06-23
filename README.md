@@ -1,5 +1,7 @@
 # WMS_warehouse
 * * *
+![WAREHOUSE](https://github.com/githubMYL/WMS_warehouse/assets/50220165/fe1efaac-24d5-47b2-a486-9bd9e9426cb4)
+* * *
 ## 프로젝트 진행 상황
 ### 6/12
 * ERD 설계
