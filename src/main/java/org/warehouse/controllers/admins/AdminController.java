@@ -27,22 +27,20 @@ public class AdminController {
 
 	private final ClntDAO clntDAO;
 	private final CustDAO custDAO;
-	private final CustCtrDAO custCtrDAO;
 	private final TestDAO testDAO;
 
 	@GetMapping("/join")
 	public String join(Model model) {
 		JoinForm joinForm = new JoinForm();
 		List<ClntVO> clntList = clntDAO.getClntList();
+		List<CustVO> custList = custDAO.getCustList();
 
-		List<CustCustCtrVO> custCustCtrList = testDAO.getCustCustCtrList();
-
-
-		System.out.println(clntList);
+		//List<CustCustCtrVO> custCustCtrList = testDAO.getCustCustCtrList();
 
 		model.addAttribute("joinForm", joinForm);
 		model.addAttribute("clntList", clntList);
-		model.addAttribute("custCustCtrList", custCustCtrList);
+		model.addAttribute("custList", custList);
+		//model.addAttribute("custCustCtrList", custCustCtrList);
 
 		return "admin/join";
 	}

@@ -14,11 +14,18 @@
 		<result property="modDt" column="MOD_DT" />
 		<result property="modNm" column="MOD_NM" />
 		<result property="delyn" column="DEL_YN" />
+
+		<result property="custCtrCd" column="CUST_CTR_CD" />
+		<result property="custCtrNm" column="CUST_CTR_NM" />
 	</resultMap>
 
 	<select id="getCustList" resultMap="custMap">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		SELECT * FROM CUST ORDER BY CUST_CD
+		SELECT *
+		FROM CUST_CTR cc
+		LEFT OUTER JOIN CUST c
+		ON c.CUST_CD = cc.CUST_CD
+		ORDER BY CUST_CTR_CD
 	</select>
 
 	<select id="getCustByCustNm" resultMap="custMap">

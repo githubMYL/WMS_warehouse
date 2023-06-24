@@ -11,4 +11,8 @@ public class CustVO extends BaseEntity {
 	private String custTel;
 	private String ownerNm;
 	private String busiAddr;
+
+	// Join 컬럼
+	private String custCtrCd;
+	private String custCtrNm;
 }

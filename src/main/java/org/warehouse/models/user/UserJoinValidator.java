@@ -75,8 +75,9 @@ public class UserJoinValidator implements Validator {
 		//6. 납품처 명이 존재하는지 검증
 		if(custDAO.getCustByCustNm(custCd) == null) {
 			errors.rejectValue("custCd", "Validation.notExist.cust");
+		} else {
+			joinForm.setCustCd(custDAO.getCustByCustNm(custCd).getCustCd());
 		}
-		joinForm.setCustCd(custDAO.getCustByCustNm(custCd).getCustCd());
 
 
 
@@ -84,11 +85,8 @@ public class UserJoinValidator implements Validator {
 		CustCtrVO custCtr = custCtrDAO.getCustCtrByCustCdCustCtrNm(joinForm.getCustCd(), joinForm.getCustCtrCd());
 		if(custCtr == null) {
 			errors.rejectValue("custCtrCd", "Validation.notExist.custCtr");
+		} else {
+			joinForm.setCustCtrCd(custCtr.getCustCtrCd());
 		}
-		joinForm.setCustCtrCd(custCtr.getCustCtrCd());
-
-		System.out.println(joinForm);
-
-
 	}
 }

@@ -37,7 +37,7 @@
 		</div>
 
 		<div>
-			<input type="text" id="clnt_cd" th:field="*{clntCd}"/>
+			<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly/>
 			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명"/>
 			<datalist id="clnt">
 				<select id="clnt_sel">
@@ -75,11 +75,13 @@
 			<input type="text" list="cust_ctr_list" id="cust_ctr_nm" th:field="*{custCtrCd}" name="cust_ctr_tmp" placeholder="납품센터 명"/>
 			<datalist id="cust_ctr_list">
 				<select id="cust_ctr_sel">
-					<option th:each="custCustCtr : ${custCustCtrList}" th:value="${custCustCtr.custCtrNm +'('+custCustCtr.custNm + ')'}" >
+					<option th:each="cust : ${custList}" th:value="${cust.custCtrNm +'('+cust.custNm + ')'}" >
 					</option>
 				</select>
 			</datalist>
 		</div>
+		<div class="errors" th:each="err : ${#fields.errors('custCd')}" th:text="${err}"></div>
+		<div class="errors" th:each="err : ${#fields.errors('custCtrCd')}" th:text="${err}"></div>
 
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
@@ -129,5 +131,8 @@
 
 		<button type="submit" th:text="#{user.action.join}"></button>
 	</form>
+
+
+	<a th:href="@{/user/find_id}" onclick="window.open(this.href, '')"><i class="xi-search"></i>[[#{findId}]]</a>
 </main>
 </html>
