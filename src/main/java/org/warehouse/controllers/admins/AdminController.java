@@ -35,12 +35,9 @@ public class AdminController {
 		List<ClntVO> clntList = clntDAO.getClntList();
 		List<CustVO> custList = custDAO.getCustList();
 
-		//List<CustCustCtrVO> custCustCtrList = testDAO.getCustCustCtrList();
-
 		model.addAttribute("joinForm", joinForm);
 		model.addAttribute("clntList", clntList);
 		model.addAttribute("custList", custList);
-		//model.addAttribute("custCustCtrList", custCustCtrList);
 
 		return "admin/join";
 	}

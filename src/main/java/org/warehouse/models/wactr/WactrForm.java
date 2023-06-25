@@ -1,14 +1,17 @@
 package org.warehouse.models.wactr;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.warehouse.models.BaseEntity;
 
 @Data
-public class WactrVO extends BaseEntity {
+public class WactrForm {
+	@NotBlank
 	private String wactrCd;
+	@NotBlank
 	private String wactrNm;
 	private String addr;
 	private String tel;
+
 	private String size;
 	private String scale;
 	private String reech;
@@ -16,4 +19,5 @@ public class WactrVO extends BaseEntity {
 	private String diesel;
 	private String racNum;
 	private String numInPer;
+	private String remk;
 }
