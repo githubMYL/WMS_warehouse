@@ -35,19 +35,23 @@ public class WactrValidator implements Validator, NumberValidator {
 		 * 3. 리치, 쟉키, 디젤, 랙 수, 투입인원 수 숫자 형식 확인
 		 */
 
+		if(wactrForm.getFlag() == null) {	// 수정 상태가 아닌 등록인 경우
+			if(wactrCd != null && !wactrCd.isBlank() && (wactrDAO.getWactrByCd(wactrCd) != null)) {
+				errors.rejectValue("wactrCd", "Validation.duplicate.wactrCd");
+			}
 
-		if(wactrCd != null && !wactrCd.isBlank() && (wactrDAO.getWactrByCd(wactrCd) != null)) {
-			errors.rejectValue("wactrCd", "Validation.duplicate.wactrCd");
+			if(wactrNm != null && !wactrNm.isBlank() && (wactrDAO.getWactrByNm(wactrNm) != null)) {
+				errors.rejectValue("wactrNm", "Validation.duplicate.wactrNm");
+			}
+
+			if(!isInteger(reech) || !isInteger(jackee) || !isInteger(diesel) || !isInteger(racNum) || !isInteger(numInPer)) {
+				errors.rejectValue("numInPer", "Validation.notInteger.numInPer");
+			}
+		} else { // 수정 상태인 경우는 중복 검증은 제외한다.
+			if(!isInteger(reech) || !isInteger(jackee) || !isInteger(diesel) || !isInteger(racNum) || !isInteger(numInPer)) {
+				errors.rejectValue("numInPer", "Validation.notInteger.numInPer");
+			}
 		}
-
-		if(wactrNm != null && !wactrNm.isBlank() && (wactrDAO.getWactrByNm(wactrNm) != null)) {
-			errors.rejectValue("wactrNm", "Validation.duplicate.wactrNm");
-		}
-
-		if(!isInteger(reech) || !isInteger(jackee) || !isInteger(diesel) || !isInteger(racNum) || !isInteger(numInPer)) {
-			errors.rejectValue("numInPer", "Validation.notInteger.numInPer");
-		}
-
 
 	}
 }

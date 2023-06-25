@@ -20,4 +20,6 @@ public class WactrForm {
 	private String racNum;
 	private String numInPer;
 	private String remk;
+
+	private String flag;
 }

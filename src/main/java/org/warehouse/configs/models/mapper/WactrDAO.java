@@ -8,6 +8,7 @@ import java.util.List;
 @Mapper
 public interface WactrDAO {
 	void insertWactr(WactrVO wactrVO);
+	void updateWactr(WactrVO wactrVO);
 	WactrVO getWactrByCd(String wactrCd);
 	WactrVO getWactrByNm(String wactrNm);
 }
