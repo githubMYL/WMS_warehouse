@@ -10,6 +10,8 @@
 		<th:block layout:fragment="addCss"></th:block>
 
 		<script th:src="@{/js/front/common.js}"></script>
+		<script th:src="@{/js/front/layer.js}"></script>
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script th:each="jsFile : ${addScript}"
 				th:src="@{/js/front/{jsFile}.js(jsFile=${jsFile})}"></script>
 		<th:block layout:fragment="addScript"></th:block>

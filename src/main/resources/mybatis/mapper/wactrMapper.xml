@@ -31,6 +31,10 @@
 		SET WACTR_CD=#{wactrCd}, WACTR_NM=#{wactrNm}, ADDR=#{addr}, TEL=#{tel}, "SIZE"=#{size}, "SCALE"=#{scale}, REECH=#{reech}, JACKEE=#{jackee}, DIESEL=#{diesel}, RAC_NUM=#{racNum}, NUM_IN_PER=#{numInPer}, REMK=#{remark}, MOD_DT=SYSDATE, MOD_NM=#{modNm} WHERE WACTR_CD = #{wactrCd}
 	</update>
 
+	<update id="deleteWactr" parameterType="org.warehouse.models.wactr.WactrVO">
+		UPDATE WACTR SET DEL_YN = 'Y' WHERE WACTR_CD = #{wactrCd}
+	</update>
+
 	<select id="getWactrByCd" resultMap="wactrMap">
 		SELECT * FROM WACTR WHERE WACTR_CD = #{wactrCd}
 	</select>
@@ -40,11 +44,10 @@
 	</select>
 
 	<select id="getList" resultMap="wactrMap">
-		SELECT * FROM WACTR
+		SELECT * FROM WACTR WHERE DEL_YN = 'N'
 	</select>
 
 	<select id="getListByNmScale" resultMap="wactrMap">
 		SELECT * FROM WACTR WHERE WACTR_NM LIKE '%'||#{wactrNm}||'%' OR "SCALE" = #{scale}
-
 	</select>
 </mapper>

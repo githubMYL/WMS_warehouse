@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/front/main}">
+
 	<main layout:fragment="content">
 		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off">
 			<table class="table-cols">
@@ -20,8 +21,10 @@
 			<div class="btns">
 				<input type="button" value="검색" id="ajax_btn">
 				<input type="button" onClick="window.open('wactr/admin/register')" value="추가">
-				<input type="button" onClick="window.open('wactr/admin/test/update')" value="수정">
-				<button type="button">삭제</button>
+				<button type="button" id="add">추가</button>
+				<button type="button" id="update">수정</button>
+				<button type="button" id="delete">삭제</button>
+
 			</div>
 
 		</form>
@@ -49,6 +52,7 @@
 					var str = '';
 					for(var i = 0; i < data.length; i++) {
 						str += '<tr>'
+						str += "<td><input type='checkbox' name='check'></td>";
 						str += "<td>"+(i+1)+"</td>";
 						str += "<td>"+data[i].wactrNm+"</td>";
 						str += "<td>"+data[i].addr+"</td>";
@@ -74,6 +78,7 @@
 
 		<table id="wactr_table">
 			<tr>
+				<th> </th>
 				<th>순번</th>
 				<th>물류센터명</th>
 				<th>주소</th>
@@ -89,6 +94,9 @@
 			</tr>
 			<tbody id="search">
 				<tr th:each="wactr, wactrCount : ${list}" id="wactr_infos">
+					<td>
+						<input type="checkbox" name="chk" th:value="${wactr.wactrCd}">
+					</td>
 					<td th:text="${wactrCount.count}"></td>
 					<td th:text="${wactr.wactrNm}"></td>
 					<td th:text="${wactr.addr}"></td>
@@ -104,5 +112,71 @@
 				</tr>
 			</tbody>
 		</table>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const add = document.getElementById("add");
+				add.addEventListener("click", addItem);
+
+				const del = document.getElementById("delete");
+				del.addEventListener("click", deleteItem);
+
+				const update = document.getElementById("update");
+				update.addEventListener("click", updateItem);
+			});
+
+			function addItem(e) {
+
+				url = 'wactr/admin/register';
+				warehouse.popup.open(url, "테스트", 500, 800);
+			}
+
+			function deleteItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log("data" + chk_data);
+
+				const url = `wactr/delete?wactrCd=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++){
+					if(chk[i].checked == true) {
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log(chk_data);
+
+				if(chk_data.length > 1) {
+					alert("수정은 하나씩만 가능합니다.");
+
+				} else if(chk_data.length == 0) {
+					alert("수정할 항목을 선택해주세요.");
+				} else {
+					url = 'wactr/admin/' + chk_data[0] + '/update';
+					warehouse.popup.open(url, "테스트", 500, 800);
+				}
+			}
+		</script>
+		<script>
+
+		</script>
 	</main>
 </html>

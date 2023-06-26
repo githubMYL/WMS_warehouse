@@ -6,6 +6,7 @@
 				display:inline-block;
 			}
 		</style>
+		<script th:src="@{/js/front/layer.js}"></script>
 	</head>
 	<th:block th:fragment="wactrForm" th:object="${wactrForm}">
 		<div>
@@ -49,16 +50,18 @@
 
 		<div>
 			<dt th:text="#{size}" class="require_item"></dt>
-			<input type="text" name="size" id="size" th:field="*{size}" th:placeholder="#{size}">
+			<input type="text" name="size" id="wactr_size" th:field="*{size}" th:placeholder="#{size}">
 			<div class="errors" th:each="err : ${#fields.errors('size')}" th:text="${err}"></div>
 		</div>
 
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
-				const size = document.getElementById("size");
-				size.addEventListener("change", UpdateSize)
+				var wactr_size = document.getElementById("wactr_size");
+				console.log(wactr_size);
+				wactr_size.addEventListener("change", UpdateSize)
 			});
 			function UpdateSize(e) {
+				console.log(e);
 				const evnt = e.currentTarget;
 				var scale = document.getElementById("scale");
 

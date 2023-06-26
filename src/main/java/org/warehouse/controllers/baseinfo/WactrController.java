@@ -67,7 +67,7 @@ public class WactrController {
 
 		registerService.register(wactrForm);
 
-		return "user/login";
+		return "redirect:/baseinfo/wactr";
 	}
 
 }

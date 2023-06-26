@@ -64,3 +64,17 @@ const commonLib = {
 window.addEventListener("DOMContentLoaded", function() {
 
 });
+
+
+
+function execDaumPostcode() {
+				new daum.Postcode( {
+					oncomplete: function( data ) {
+						console.log(data);
+						var addr = document.getElementById("addr");
+						addr.value=data.address;
+						addr.focus();
+					}
+				} ).open();
+			}
+

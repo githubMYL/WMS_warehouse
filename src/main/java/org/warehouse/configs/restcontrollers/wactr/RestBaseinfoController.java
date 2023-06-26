@@ -24,4 +24,13 @@ public class RestBaseinfoController {
 
 		return list;
 	}
+
+	@GetMapping("wactr/delete")
+	public void delete(String wactrCd) {
+		System.out.println(wactrCd);
+		String[] wactrCdList = wactrCd.split(",");
+		for(int i = 0; i < wactrCdList.length; i++) {
+			wactrDAO.deleteWactr(wactrCdList[i]);
+		}
+	}
 }

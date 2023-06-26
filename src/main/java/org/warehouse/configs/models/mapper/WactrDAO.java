@@ -9,6 +9,7 @@ import java.util.List;
 public interface WactrDAO {
 	void insertWactr(WactrVO wactrVO);
 	void updateWactr(WactrVO wactrVO);
+	void deleteWactr(String wactrCd);
 	WactrVO getWactrByCd(String wactrCd);
 	WactrVO getWactrByNm(String wactrNm);
 	List<WactrVO> getList();
