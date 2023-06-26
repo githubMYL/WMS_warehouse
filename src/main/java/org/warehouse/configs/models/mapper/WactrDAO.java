@@ -11,4 +11,6 @@ public interface WactrDAO {
 	void updateWactr(WactrVO wactrVO);
 	WactrVO getWactrByCd(String wactrCd);
 	WactrVO getWactrByNm(String wactrNm);
+	List<WactrVO> getList();
+	List<WactrVO> getListByNmScale(String wactrNm, String scale);
 }
