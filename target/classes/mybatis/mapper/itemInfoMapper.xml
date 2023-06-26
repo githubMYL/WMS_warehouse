@@ -11,15 +11,20 @@
         <result property="pltInBox" column="PLT_IN_BOX" />
         <result property="remk" column="REMK" />
         <result property="regNm" column="REG_NM" />
+
+        <result property="itemCode" column="ITEM_CODE" />
+        <result property="itemValue" column="ITEM_VALUE" />
     </resultMap>
 
-<!--    <insert id="insertItemInfo" parameterType="org.warehouse.models.baseinfoVO.ItemInfoVO">-->
-<!--        INSERT INTO ITEM (WACTR_CD, CLNT_CD, LOC_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)-->
-<!--        VALUES (#{waCtrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})-->
-<!--    </insert>-->
     <insert id="insertItemInfo" parameterType="org.warehouse.models.baseinfoVO.ItemInfoVO">
         INSERT INTO ITEM (WACTR_CD, CLNT_CD, LOC_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
         VALUES (#{waCtrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
+
+    <select id="getCodeList" resultMap="itemMap">
+        SELECT ITEM_CODE
+            , ITEM_VALUE
+            FROM ITEM_CODE
+    </select>
 
 </mapper>

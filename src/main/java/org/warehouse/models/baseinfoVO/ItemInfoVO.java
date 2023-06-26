@@ -18,4 +18,9 @@ public class ItemInfoVO extends BaseEntity {
     private Long pltInBox; // 파렛트당 박스 수
     private String remk; // 비고
 
+    /** 관리단위 코드 S */
+    private String itemCode; // 단위 코드
+    private String itemValue; // 단위 명
+    /** 관리단위 코드 E */
+
 }
