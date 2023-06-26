@@ -1,0 +1,21 @@
+package org.warehouse.models.baseinfoVO;
+
+import lombok.*;
+import org.warehouse.models.BaseEntity;
+
+@Data @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ItemInfoVO extends BaseEntity {
+
+    private String waCtrCd; // 물류센터코드
+    private String clntCd; // 고객사코드
+    private String itemCd; // 상품코드
+    private String itemNm; // 상품명
+    private String locCd; // 로케이션코드
+    private Number boxUnit; // 관리단위
+    // private Number getBox; // 박스당 입수
+    private Number pltOnBox; // 파렛트당 박스 수
+    private String remk; // 비고
+
+}
