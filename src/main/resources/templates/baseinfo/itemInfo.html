@@ -4,8 +4,32 @@
       layout:decorate="~{layouts/admin/main}">
 
   <main layout:fragment="content">
-    <div>
-      <input type="text" th:placeholder="#{waCtrNm}">
-    </div>
+    <form name="itemInfo" method="post" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}" autocomplete="off">
+      <div>
+        <input type="text" th:field="*{waCtrCd}" th:placeholder="#{waCtrCd}">
+      </div>
+      <div>
+        <input type="text" th:field="*{clntCd}" th:placeholder="#{clntCd}">
+      </div>
+      <div>
+        <input type="text" th:field="*{locCd}" th:placeholder="#{locCd}">
+      </div>
+      <div>
+        <input type="text" th:field="*{itemCd}" th:placeholder="#{itemCd}">
+      </div>
+      <div>
+        <input type="text" th:field="*{itemNm}" th:placeholder="#{itemNm}">
+      </div>
+      <div>
+        <input type="text" th:field="*{boxUnit}" th:placeholder="#{boxUnit}">
+      </div>
+      <div>
+        <input type="number" th:field=*{pltInBox} th:placeholder="#{pltInBox}">
+      </div>
+      <div>
+        <input type="text" th:field="*{remk}" th:placeholder="#{remk}">
+      </div>
+      <button type="submit">저장하기</button>
+    </form>
   </main>
 </html>

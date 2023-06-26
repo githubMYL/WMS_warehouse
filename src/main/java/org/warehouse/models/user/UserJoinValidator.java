@@ -63,8 +63,6 @@ public class UserJoinValidator implements Validator {
 			errors.rejectValue("userId", "Validation.duplicate.userId");
 		}
 
-
-
 		//2. 비밀번호 복잡성 체크 - 우선은 빼고 진행
 
 		//3. 비밀번호와 비밀번호 확인란 일치

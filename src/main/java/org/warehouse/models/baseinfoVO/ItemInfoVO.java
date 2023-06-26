@@ -13,9 +13,9 @@ public class ItemInfoVO extends BaseEntity {
     private String itemCd; // 상품코드
     private String itemNm; // 상품명
     private String locCd; // 로케이션코드
-    private Number boxUnit; // 관리단위
-    // private Number getBox; // 박스당 입수
-    private Number pltOnBox; // 파렛트당 박스 수
+    private String boxUnit; // 관리단위
+    //private Number getBox; // 박스당 입수
+    private Long pltInBox; // 파렛트당 박스 수
     private String remk; // 비고
 
 }
