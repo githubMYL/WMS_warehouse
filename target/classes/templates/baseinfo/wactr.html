@@ -177,13 +177,20 @@
 		</script>
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
+<<<<<<< HEAD
 				const tds = document.querySelectorAll('td');
 				tds.forEach( (td) => {
 					td.addEventListener('dblclick', editForm)
+=======
+				const trs = document.querySelectorAll('tr');
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', editForm)
+>>>>>>> 28b5aa5266629fa9c8358416a99e8709c1b7bf6d
 				});
 			});
 
 			function editForm(e) {
+<<<<<<< HEAD
 				console.log('dbclick!');
 				console.log(e.target);
 				var tr = e.target.parentNode;
@@ -198,6 +205,11 @@
 					console.log(td);
 					td.appendChild(input);
 				});
+=======
+				console.log(e.target);
+				var tr = console.log(e.target.parentNode);
+
+>>>>>>> 28b5aa5266629fa9c8358416a99e8709c1b7bf6d
 
 			}
 		</script>

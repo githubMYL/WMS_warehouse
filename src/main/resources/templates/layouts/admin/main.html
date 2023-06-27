@@ -1,52 +1,25 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-	<head>
-		<meta name="_csrf" th:content="${_csrf.token}">
-		<meta name="_csrf_header" th:content="${_csrf.headerName}">
-		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-		<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
-		<link rel="stylesheet" type="text/css" th:each="file : ${addCss}" th:href="@{/css/admin/{cssFile}.css(cssFile=${file})}">
-		<th:block layout:fragment="addCss"></th:block>
+<head>
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
+	<link rel="stylesheet" type="text/css" th:each="file : ${addCss}" th:href="@{/css/admin/{cssFile}.css(cssFile=${file})}">
+	<th:block layout:fragment="addCss"></th:block>
 
-		<script th:src="@{/js/admin/common.js}"></script>
-		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		<script th:each="jsFile : ${addScript}"
-				th:src="@{/js/admin/{jsFile}.js(jsFile=${jsFile})}"></script>
-		<th:block layout:fragment="addScript"></th:block>
-	</head>
+	<script th:src="@{/js/admin/common.js}"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script th:each="jsFile : ${addScript}"
+			th:src="@{/js/admin/{jsFile}.js(jsFile=${jsFile})}"></script>
+	<th:block layout:fragment="addScript"></th:block>
+</head>
 
-	<body>
-		<header th:replace="~{outlines/admin/header::common}"></header>
-		<main layout:fragment="content"></main>
-		<footer th:replace="~{outlines/admin/footer::common}"></footer>
-		<iframe name="ifrmProcess" class="dn"></iframe>
-	</body>
-=======
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-	<head>
-		<meta name="_csrf" th:content="${_csrf.token}">
-		<meta name="_csrf_header" th:content="${_csrf.headerName}">
-		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-		<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
-		<link rel="stylesheet" type="text/css" th:each="file : ${addCss}" th:href="@{/css/admin/{cssFile}.css(cssFile=${file})}">
-		<th:block layout:fragment="addCss"></th:block>
-
-		<script th:src="@{/js/admin/common.js}"></script>
-		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		<script th:each="jsFile : ${addScript}"
-				th:src="@{/js/admin/{jsFile}.js(jsFile=${jsFile})}"></script>
-		<th:block layout:fragment="addScript"></th:block>
-	</head>
-
-	<body>
-		<header th:replace="~{outlines/admin/header::common}"></header>
-		<main layout:fragment="content"></main>
-		<footer th:replace="~{outlines/admin/footer::common}"></footer>
-		<iframe name="ifrmProcess" class="dn"></iframe>
-	</body>
->>>>>>> 28b5aa5266629fa9c8358416a99e8709c1b7bf6d
+<body>
+<header th:replace="~{outlines/admin/header::common}"></header>
+<main layout:fragment="content"></main>
+<footer th:replace="~{outlines/admin/footer::common}"></footer>
+<iframe name="ifrmProcess" class="dn"></iframe>
+</body>
 </html>
