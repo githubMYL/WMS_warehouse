@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ConInfoDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
-import org.warehouse.models.baseinfo.coninf.ConInfoService;
-import org.warehouse.models.baseinfo.coninf.ConInfoVO;
-import org.warehouse.models.baseinfo.coninf.ConInfoValidator;
+import org.warehouse.models.baseinfo.coninfo.ConInfoService;
+import org.warehouse.models.baseinfo.coninfo.ConInfoVO;
+import org.warehouse.models.baseinfo.coninfo.ConInfoValidator;
 
 import java.util.List;
 

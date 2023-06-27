@@ -1,7 +1,7 @@
 package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.warehouse.models.baseinfo.coninf.ConInfoVO;
+import org.warehouse.models.baseinfo.coninfo.ConInfoVO;
 
 @Mapper
 public interface ConInfoDAO {

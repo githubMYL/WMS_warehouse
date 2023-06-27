@@ -1,4 +1,4 @@
-package org.warehouse.models.baseinfo.coninf;
+package org.warehouse.models.baseinfo.coninfo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
