@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.ClntDAO">
+	<resultMap id="clntMap" type="org.warehouse.models.admin.clnt.ClntVO">
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
+		<result property="salesNm" column="SALES_NM" />
+		<result property="salesTel" column="SALES_TEL" />
+		<result property="tplNm" column="TPL_NM" />
+		<result property="tplTel" column="TPL_TEL" />
+		<result property="tplEmail" column="TPL_EMAIL" />
+		<result property="business" column="BUSINESS" />
+		<result property="event" column="EVENT" />
+		<result property="busiNum" column="BUSI_NUM" />
+		<result property="ownerNm" column="OWNER_NM" />
+		<result property="ownerTel" column="OWNER_TEL" />
+		<result property="busiAddr" column="BUSI_ADDR" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+	</resultMap>
+
+	<select id="getClntList" resultMap="clntMap">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		SELECT * FROM CLNT ORDER BY CLNT_CD
+	</select>
+
+</mapper>
