@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/front/main}">
+
+<main layout:fragment="content">
+<!--    <div>로그인정보 : <span th:text="${session.userInfo.username}"></span></div>-->
+    <form name="locJoin" method="post" th:action="@{/baseinfo/locjoin}"  autocomplete="off">
+
+        <div>
+            <input type="hidden" id="wactr_cd" name="wactr_cd">
+            <input type="text" list="wactr" id="wactr_nm" placeholder="물류센터 명"/>
+            <datalist id="wactr">
+                <select id="wactr_sel" class="inline-option-label">
+                    <option th:each="wactr : ${wactr_list}" th:label="${wactr.wactr_cd}" th:value="${wactr.wactr_nm}">
+                    </option>
+                </select>
+            </datalist>
+        </div>
+
+        <script>
+
+			document.addEventListener('DOMContentLoaded', function() {
+				const wactr = document.getElementById("wactr_nm");
+
+				var selected = document.querySelector("select#wactr_sel")
+
+				wactr.addEventListener("change", UpdateWactr)
+			});
+
+
+			function UpdateWactr(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#wactr_sel")
+				var datalist = evnt.list;
+				var wactr_cd = document.getElementById("wactr_cd");
+
+				for(var j = 0; j < datalist.options.length; j++){
+					if(this.value == datalist.options[j].value) {
+						wactr_cd.value = datalist.options[j].label;
+					}
+				}
+			}
+		</script>
+
+
+
+        <div>
+            <input type="text" name="loc_nm" th:placeholder="#{loc_nm}">
+        </div>
+
+        <div>
+            <input type="text" name="loc_addr" th:placeholder="#{loc_addr}">
+        </div>
+
+
+        <div>
+            <input type="text" name="rac_num"  th:placeholder="#{rac_num}">
+        </div>
+
+        <div>
+            <textarea rows="5" cols="22" name="remk" th:placeholder="비고"></textarea>
+        </div>
+
+        <button type="submit" th:text="#{loc.action.join}"></button>
+    </form>
+</main>
+</html>
