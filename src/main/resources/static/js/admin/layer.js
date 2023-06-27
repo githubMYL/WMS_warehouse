@@ -2,6 +2,10 @@
  * 레이어 팝업
  *
  */
+
+
+
+
 var warehouse = warehouse || {};
 warehouse.popup = {
     callback : function() {}, // popup 오픈 후 실행될 콜백 함수
@@ -173,5 +177,8 @@ window.addEventListener("DOMContentLoaded", function() {
             layerCloses[i].addEventListener("click", warehouse.popup.close);
         }
     }
+
+    var btn = document.getElementById("submit_btn");
+    btn.addEventListener("click", warehouse.popup.close);
     /** 답업 닫기 처리 E */
 });
