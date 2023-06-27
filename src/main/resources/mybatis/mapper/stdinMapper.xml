@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.StdinDAO">
+	<resultMap id="userMap" type="org.warehouse.models.stdin.StdinVO">
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="userId" column="USER_ID" />
+	</resultMap>
+
+	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO" keyProperty="stdinNo">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
+	</insert>
+
+
+</mapper>
+

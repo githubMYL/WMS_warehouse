@@ -177,8 +177,5 @@ window.addEventListener("DOMContentLoaded", function() {
             layerCloses[i].addEventListener("click", warehouse.popup.close);
         }
     }
-
-    var btn = document.getElementById("submit_btn");
-    btn.addEventListener("click", warehouse.popup.close);
     /** 답업 닫기 처리 E */
 });

@@ -1,0 +1,58 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<th:block th:fragment="stdinForm" th:object="${stdinForm}">
+		<div>
+			<dt th:text="#{stdin_dt}" class="require_item"></dt>
+			<input type="date" name="stdinDt" th:field="*{stdinDt}" th:placeholder="#{stdin_dt}">
+			<div class="errors" th:each="err : ${#fields.errors('stdinDt')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly/>
+			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명"/>
+			<datalist id="clnt">
+				<select id="clnt_sel">
+					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+					</option>
+				</select>
+			</datalist>
+		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const clnt = document.getElementById("clnt_tmp");
+
+				var selected = document.querySelector("select#clnt_sel")
+
+				clnt.addEventListener("change", UpdateClnt)
+			});
+
+
+			function UpdateClnt(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#clnt_sel")
+				var datalist = evnt.list;
+				var clntcd = document.getElementById("clnt_cd");
+
+				for(var j = 0; j < datalist.options.length; j++){
+					if(this.value == datalist.options[j].value) {
+						clntcd.value = datalist.options[j].label;
+					}
+				}
+			}
+		</script>
+
+		<div>
+			<dt th:text="#{status}" class="require_item"></dt>
+			<select name="status" th:field="*{status}">
+				<option th:value="01">01 - 등록</option>
+				<option th:value="02">02 - 확정</option>
+			</select>
+			<div class="errors" th:each="err : ${#fields.errors('status')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{remk}" class="require_item"></dt>
+			<textarea name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
+			<div class="errors" th:each="err : ${#fields.errors('remark')}" th:text="${err}"></div>
+		</div>
+	</th:block>
+</html>

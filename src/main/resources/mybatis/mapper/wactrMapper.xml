@@ -48,6 +48,19 @@
 	</select>
 
 	<select id="getListByNmScale" resultMap="wactrMap">
-		SELECT * FROM WACTR WHERE WACTR_NM LIKE '%'||#{wactrNm}||'%' OR "SCALE" = #{scale}
+		SELECT * FROM WACTR WHERE
+		<choose>
+			<when test='wactrNm != "" and scale != ""'>
+				"SCALE" = #{scale} AND WACTR_NM LIKE '%'||#{wactrNm}||'%'
+			</when>
+
+			<when test='wactrNm == "" and scale != ""'>
+				"SCALE" = #{scale}
+			</when>
+
+			<when test='wactrNm != "" and scale == ""'>
+				WACTR_NM LIKE '%'||#{wactrNm}||'%'
+			</when>
+		</choose>
 	</select>
 </mapper>
