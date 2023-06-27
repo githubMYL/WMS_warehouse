@@ -1,11 +1,11 @@
-package org.warehouse.configs.restcontrollers.wactr;
+package org.warehouse.restcontrollers.wactr;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.configs.models.mapper.WactrDAO;
-import org.warehouse.models.wactr.WactrVO;
+import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 import java.util.List;
 

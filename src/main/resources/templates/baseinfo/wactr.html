@@ -176,7 +176,30 @@
 			}
 		</script>
 		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const tds = document.querySelectorAll('td');
+				tds.forEach( (td) => {
+					td.addEventListener('dblclick', editForm)
+				});
+			});
 
+			function editForm(e) {
+				console.log('dbclick!');
+				console.log(e.target);
+				var tr = e.target.parentNode;
+				console.log(tr);
+
+				const tr_td = tr.childNodes;
+				var input = document.createElement('input');
+				input.setAttribute('type', 'text');
+				input.setAttribute('class', 'quantity');
+
+				tr_td.forEach( (td) => {
+					console.log(td);
+					td.appendChild(input);
+				});
+
+			}
 		</script>
 	</main>
 </html>

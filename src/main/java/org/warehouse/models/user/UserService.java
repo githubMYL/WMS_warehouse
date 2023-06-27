@@ -1,4 +1,4 @@
-package org.warehouse.services;
+package org.warehouse.models.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

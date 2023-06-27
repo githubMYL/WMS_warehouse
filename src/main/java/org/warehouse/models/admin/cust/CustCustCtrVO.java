@@ -1,4 +1,4 @@
-package org.warehouse.models.cust;
+package org.warehouse.models.admin.cust;
 
 import lombok.Data;
 

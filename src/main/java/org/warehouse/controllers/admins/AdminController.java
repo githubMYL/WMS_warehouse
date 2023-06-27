@@ -8,13 +8,13 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.warehouse.configs.models.mapper.*;
-import org.warehouse.models.clnt.ClntVO;
-import org.warehouse.models.cust.CustCustCtrVO;
-import org.warehouse.models.cust.CustVO;
-import org.warehouse.models.custctr.CustCtrVO;
+import org.warehouse.configs.models.mapper.ClntDAO;
+import org.warehouse.configs.models.mapper.CustDAO;
+import org.warehouse.configs.models.mapper.TestDAO;
+import org.warehouse.models.admin.clnt.ClntVO;
+import org.warehouse.models.admin.cust.CustVO;
+import org.warehouse.models.user.UserJoinService;
 import org.warehouse.models.user.UserJoinValidator;
-import org.warehouse.services.UserJoinService;
 
 import java.util.List;
 

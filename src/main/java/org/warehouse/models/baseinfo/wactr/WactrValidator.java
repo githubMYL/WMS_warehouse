@@ -1,4 +1,4 @@
-package org.warehouse.models.wactr;
+package org.warehouse.models.baseinfo.wactr;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

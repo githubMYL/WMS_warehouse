@@ -1,6 +1,7 @@
 package org.warehouse.models.user;
 
 import lombok.Data;
+
 import org.warehouse.commons.constraints.Role;
 import org.warehouse.models.BaseEntity;
 

@@ -9,9 +9,8 @@ import org.warehouse.configs.models.mapper.CustCtrDAO;
 import org.warehouse.configs.models.mapper.CustDAO;
 import org.warehouse.configs.models.mapper.UserDAO;
 import org.warehouse.controllers.admins.JoinForm;
-import org.warehouse.models.custctr.CustCtrVO;
-
-import java.util.List;
+import org.warehouse.models.admin.custctr.CustCtrVO;
+import org.warehouse.models.admin.cust.CustVO;
 
 @Component
 @RequiredArgsConstructor

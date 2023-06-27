@@ -1,4 +1,4 @@
-package org.warehouse.models.custctr;
+package org.warehouse.models.admin.custctr;
 
 import lombok.Data;
 import org.warehouse.models.BaseEntity;

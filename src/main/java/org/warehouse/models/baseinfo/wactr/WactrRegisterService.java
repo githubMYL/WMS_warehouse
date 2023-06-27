@@ -1,15 +1,11 @@
-package org.warehouse.services;
+package org.warehouse.models.baseinfo.wactr;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.warehouse.configs.models.mapper.WactrDAO;
 import org.warehouse.controllers.users.UserInfo;
-import org.warehouse.models.user.UserVO;
-import org.warehouse.models.wactr.WactrForm;
-import org.warehouse.models.wactr.WactrVO;
 
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.warehouse.models.wactr.WactrVO;
+import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 import java.util.List;
 

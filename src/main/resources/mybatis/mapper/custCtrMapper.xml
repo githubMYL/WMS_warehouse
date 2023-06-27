@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.warehouse.configs.models.mapper.CustCtrDAO">
-	<resultMap id="custCtrMap" type="org.warehouse.models.custctr.CustCtrVO">
+	<resultMap id="custCtrMap" type="org.warehouse.models.admin.custctr.CustCtrVO">
 		<result property="custCtrCd" column="CUST_CTR_CD" />
 		<result property="custCd" column="CUST_CD" />
 		<result property="custCtrNm" column="CUST_CTR_NM" />

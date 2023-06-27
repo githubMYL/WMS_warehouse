@@ -1,7 +1,8 @@
 package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.warehouse.models.cust.CustVO;
+import org.warehouse.models.admin.cust.CustVO;
+
 
 import java.util.List;
 

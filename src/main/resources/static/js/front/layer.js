@@ -175,3 +175,19 @@ window.addEventListener("DOMContentLoaded", function() {
     }
     /** 답업 닫기 처리 E */
 });
+
+function updateScale() {
+	var size = document.getElementById("wactr_size");
+	var scale = document.getElementById("scale");
+
+
+	if(size.value < 1000) {
+		scale.value="small";
+	} else if(size.value < 10000) {
+		scale.value="medium";
+	} else if(size.value < 100000){
+		scale.value="large";
+	} else {
+		scale.value="평 수는 숫자로 입력해주세요.";
+	}
+}

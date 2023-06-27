@@ -1,4 +1,4 @@
-package org.warehouse.models.clnt;
+package org.warehouse.models.admin.clnt;
 
 import lombok.Data;
 import org.warehouse.models.BaseEntity;
