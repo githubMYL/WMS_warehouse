@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.LocDAO">
+
+	<!--    로케이션 리스트-->
+	<select id="getLocList" resultType="org.warehouse.models.baseinfo.loc.LocVO">
+		SELECT * FROM loc ORDER BY loc_cd
+	</select>
+
+	<select id="getSearchList" resultType="org.warehouse.models.baseinfo.loc.LocVO" parameterType="String">
+		select * from loc where loc_cd like '%'||#{loc_cd}||'%'
+	</select>
+
+	<!--    로케이션 등록-->
+	<insert id="insertLoc" parameterType="org.warehouse.models.baseinfo.loc.LocVO">
+		insert into loc(loc_cd, wactr_cd, loc_nm, loc_addr, rac_num, remk, reg_dt , reg_nm)
+		VALUES (
+		#{loc_cd},
+		#{wactr_cd},
+		#{loc_nm},
+		#{loc_addr},
+		#{rac_num},
+		#{remk},
+		sysdate,
+		#{reg_nm}
+		)
+	</insert>
+
+
+	<delete id="deleteLoc" parameterType="String">
+		delete from loc where loc_cd = #{loc_cd}
+	</delete>
+
+	<select id="modLoc" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
+		select * from loc where loc_cd = #{loc_cd_array}
+	</select>
+</mapper>
