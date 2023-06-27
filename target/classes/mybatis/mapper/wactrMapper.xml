@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.WactrDAO">
+	<resultMap id="wactrMap" type="org.warehouse.models.baseinfo.wactr.WactrVO">
+		<result property="wactrCd" column="WACTR_CD" />
+		<result property="wactrNm" column="WACTR_NM" />
+		<result property="addr" column="ADDR" />
+		<result property="tel" column="TEL" />
+		<result property="size" column="SIZE" />
+		<result property="scale" column="SCALE" />
+		<result property="reech" column="REECH" />
+		<result property="jackee" column="JACKEE" />
+		<result property="diesel" column="DIESEL" />
+		<result property="racNum" column="RAC_NUM" />
+		<result property="numInPer" column="NUM_IN_PER" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+	</resultMap>
+
+	<insert id="insertWactr" parameterType="org.warehouse.models.baseinfo.wactr.WactrVO">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		INSERT INTO WACTR(WACTR_CD, WACTR_NM, ADDR, TEL, "SIZE", "SCALE", REECH, JACKEE, DIESEL, RAC_NUM, NUM_IN_PER, REMK, REG_DT, REG_NM) VALUES (#{wactrCd}, #{wactrNm}, #{addr}, #{tel}, #{size}, #{scale}, #{reech}, #{jackee}, #{diesel}, #{racNum}, #{numInPer}, #{remark}, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="updateWactr" parameterType="org.warehouse.models.baseinfo.wactr.WactrVO">
+		UPDATE WACTR
+		SET WACTR_CD=#{wactrCd}, WACTR_NM=#{wactrNm}, ADDR=#{addr}, TEL=#{tel}, "SIZE"=#{size}, "SCALE"=#{scale}, REECH=#{reech}, JACKEE=#{jackee}, DIESEL=#{diesel}, RAC_NUM=#{racNum}, NUM_IN_PER=#{numInPer}, REMK=#{remark}, MOD_DT=SYSDATE, MOD_NM=#{modNm} WHERE WACTR_CD = #{wactrCd}
+	</update>
+
+	<update id="deleteWactr" parameterType="org.warehouse.models.baseinfo.wactr.WactrVO">
+		UPDATE WACTR SET DEL_YN = 'Y' WHERE WACTR_CD = #{wactrCd}
+	</update>
+
+	<select id="getWactrByCd" resultMap="wactrMap">
+		SELECT * FROM WACTR WHERE WACTR_CD = #{wactrCd}
+	</select>
+
+	<select id="getWactrByNm" resultMap="wactrMap">
+		SELECT * FROM WACTR WHERE WACTR_NM = #{wactrNm}
+	</select>
+
+	<select id="getList" resultMap="wactrMap">
+		SELECT * FROM WACTR WHERE DEL_YN = 'N'
+	</select>
+
+	<select id="getListByNmScale" resultMap="wactrMap">
+		SELECT * FROM WACTR WHERE WACTR_NM LIKE '%'||#{wactrNm}||'%' OR "SCALE" = #{scale}
+	</select>
+</mapper>
