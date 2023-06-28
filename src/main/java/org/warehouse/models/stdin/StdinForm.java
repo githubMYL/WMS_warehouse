@@ -23,7 +23,8 @@ public class StdinForm extends BaseEntity {
 	private String itemNm;
 	@NotBlank
 	private String location;
-	private String normal;
-	private String fault;
+	private Long beforeStdin;
+	private Long normal;
+	private Long fault;
 
 }

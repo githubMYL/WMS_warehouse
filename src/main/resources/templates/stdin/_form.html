@@ -31,10 +31,18 @@
 				var selected = document.querySelector("select#clnt_sel")
 				var datalist = evnt.list;
 				var clntcd = document.getElementById("clnt_cd");
+				var itemsel = document.getElementById("item_sel");
+
+				var item_options = itemsel.querySelectorAll('option');
 
 				for(var j = 0; j < datalist.options.length; j++){
 					if(this.value == datalist.options[j].value) {
 						clntcd.value = datalist.options[j].label;
+						for(var l = 0; l < item_options.length; l++) {
+							if(clntcd.value != item_options[l].dataset.itemclntcd){
+								itemsel.remove(l);
+							}
+						}
 					}
 				}
 			}
@@ -93,7 +101,7 @@
 			<input type="text" list="item" id="item_tmp" name="item_tmp" placeholder="상품명"/>
 			<datalist id="item">
 				<select id="item_sel">
-					<option th:each="item : ${itemList}" th:label="${item.itemCd}" th:value="${item.itemNm}" th:data-itemwactrCd="${item.waCtrCd}">
+					<option th:each="item : ${itemList}" th:label="${item.itemCd}" th:value="${item.itemNm}" th:data-itemwactrCd="${item.waCtrCd}" th:data-itemclntcd="${item.clntCd}">
 					</option>
 				</select>
 			</datalist>
@@ -110,6 +118,41 @@
 			</datalist>
 		</div>
 
+		<div>
+			<dt th:text="#{beforeStdin}" class="require_item"></dt>
+			<input type="text" name="beforeStdin" th:field="*{beforeStdin}" th:placeholder="#{beforeStdin}" id="amount" readonly/>
+			<div class="errors" th:each="err : ${#fields.errors('beforeStdin')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{normal}" class="require_item"></dt>
+			<input type="number" name="normal" th:field="*{normal}" th:placeholder="#{normal}" id="normal"/>
+			<div class="errors" th:each="err : ${#fields.errors('normal')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{fault}" class="require_item"></dt>
+			<input type="number" name="fault" th:field="*{fault}" th:placeholder="#{fault}" id="fault"/>
+			<div class="errors" th:each="err : ${#fields.errors('fault')}" th:text="${err}"></div>
+		</div>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				var amount = document.getElementById('amount');
+				var normal = document.getElementById('normal');
+				var fault = document.getElementById('fault');
+
+				normal.addEventListener("change", sum);
+				fault.addEventListener("change", sum);
+			});
+
+			function sum() {
+				if(!isNaN(parseInt(normal.value) + parseInt(fault.value))) {
+					amount.value = parseInt(normal.value) + parseInt(fault.value);
+				}
+			};
+
+		</script>
 
 		<div>
 			<dt th:text="#{remk}" class="require_item"></dt>
