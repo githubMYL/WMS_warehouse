@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.warehouse.commons.constraints.Role;
 
 import java.util.Collection;
 
@@ -14,7 +13,7 @@ public class UserInfo implements UserDetails {
 	private String userPw;
 
 	private String userNm;
-	private Role userType;
+	private String userType;
 	private String clntCd;
 	private String custCtrCd;
 	private String custCd;

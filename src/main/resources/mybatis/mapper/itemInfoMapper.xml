@@ -27,4 +27,8 @@
             FROM ITEM_CODE
     </select>
 
+    <select id="getItemList" resultMap="itemMap">
+        SELECT * FROM ITEM WHERE DEL_YN = 'N'
+    </select>
+
 </mapper>

@@ -49,6 +49,68 @@
 			<div class="errors" th:each="err : ${#fields.errors('status')}" th:text="${err}"></div>
 		</div>
 
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const item = document.getElementById("item_tmp");
+				var itemCd = document.getElementById("item_cd");
+
+				var selected = document.querySelector("select#item_sel")
+
+				item.addEventListener("change", UpdateItem);
+			});
+
+
+			function UpdateItem(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#item_sel")
+				var datalist = evnt.list;
+				var itemcd = document.getElementById("item_cd");
+				var wactrCd;
+
+				for(var j = 0; j < datalist.options.length; j++){
+					if(this.value == datalist.options[j].value) {
+						itemcd.value = datalist.options[j].label;
+						dataset = datalist.options[j].dataset;
+					}
+				}
+
+
+				var loc_sel = document.getElementById("loc_sel");
+				var options = loc_sel.querySelectorAll('option');
+				for(var k = 0; k < options.length; k++) {
+					console.log(dataset.itemwactrcd + ', ' + options[k].dataset.locwactrcd);
+					if(dataset.itemwactrcd != options[k].dataset.locwactrcd) {
+						loc_sel.remove(k);
+					}
+				}
+
+			};
+
+		</script>
+
+		<div>
+			<input type="text" id="item_cd" th:field="*{itemCd}" readonly onchange="testing()"/>
+			<input type="text" list="item" id="item_tmp" name="item_tmp" placeholder="상품명"/>
+			<datalist id="item">
+				<select id="item_sel">
+					<option th:each="item : ${itemList}" th:label="${item.itemCd}" th:value="${item.itemNm}" th:data-itemwactrCd="${item.waCtrCd}">
+					</option>
+				</select>
+			</datalist>
+		</div>
+
+
+
+		<div>
+			<input type="text" list="loc" id="loc_tmp" name="loc_tmp" placeholder="로케이션"/>
+			<datalist id="loc">
+				<select id="loc_sel">
+					<option th:each="loc : ${locList}" th:value="${loc.loc_cd}" th:data-locwactrCd="${loc.wactr_cd}"></option>
+				</select>
+			</datalist>
+		</div>
+
+
 		<div>
 			<dt th:text="#{remk}" class="require_item"></dt>
 			<textarea name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>

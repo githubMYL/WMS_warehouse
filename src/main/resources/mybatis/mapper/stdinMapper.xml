@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.warehouse.configs.models.mapper.StdinDAO">
-	<resultMap id="userMap" type="org.warehouse.models.stdin.StdinVO">
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
-		<result property="userId" column="USER_ID" />
+	<resultMap id="stdinMap" type="org.warehouse.models.stdin.StdinVO">
+		<result property="stdinDt" column="STDIN_DT" />
+		<result property="stdinNum" column="STDIN_NUM" />
+		<result property="stdinNo" column="STDIN_NO" />
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="status" column="STATUS" />
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="locCd" column="LOC_CD" />
+		<result property="wactrCd" column="WACTR_CD" />
+		<result property="beforeStdin" column="BEFORE_STDIN" />
+		<result property="normal" column="NORMAL" />
+		<result property="fault" column="FAULT" />
+		<result property="stdin_after_amt" column="STDIN_AFTER_AMT" />
+		<result property="stdin_fault" column="STDIN_FAULT" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delYn" column="DEL_YN" />
 	</resultMap>
 
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO" keyProperty="stdinNo">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
 		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
 	</insert>
+
+	<select id="getList" resultMap="stdinMap">
+		SELECT * FROM STDIN_H h LEFT OUTER JOIN STDIN_D d ON h.STDIN_DT = d.STDIN_DT WHERE d.DEL_YN = 'N'
+	</select>
 
 
 </mapper>

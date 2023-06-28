@@ -10,8 +10,20 @@ import java.time.LocalDate;
 public class StdinForm extends BaseEntity {
 	@NotBlank
 	private LocalDate stdinDt;
-	private Long stdinNum;
 	@NotBlank
 	private String clntCd;
+	@NotBlank
+	private String clntNm;
+
 	private String status;
+
+	@NotBlank
+	private String itemCd;
+	@NotBlank
+	private String itemNm;
+	@NotBlank
+	private String location;
+	private String normal;
+	private String fault;
+
 }
