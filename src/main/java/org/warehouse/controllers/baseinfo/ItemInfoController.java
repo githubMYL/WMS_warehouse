@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
+import org.warehouse.configs.models.mapper.WactrDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoService;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
+import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class ItemInfoController {
 
 	private final ItemInfoDAO itemInfoDAO;
 	private final ClntDAO clntDAO;
+	private final WactrDAO wactrDAO;
 	private final ItemInfoService itemInfoService;
 
 	@GetMapping("/iteminfo")
@@ -32,7 +35,8 @@ public class ItemInfoController {
 		ItemInfoVO itemInfoVO = new ItemInfoVO();
 
 		/** 물류센터 코드 S */
-		//List<WactrVO> wactrList = wactrDAO.getGetList;
+		List<WactrVO> wactrList = wactrDAO.getList();
+		model.addAttribute("wactrList", wactrList);
 		/** 물류센터 코드 E */
 
 		/** 고객사 코드 S */

@@ -1,17 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{layouts/admin/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/admin/main}">
+      xmlns:th="http://www.thymeleaf.org">
 
-  <main layout:fragment="content">
-    <form name="itemInfo" method="post" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}" autocomplete="off">
-      <div>
-        <input type="text" th:field="*{waCtrCd}" th:placeholder="#{wactrCd}">
-      </div>
+<main layout:fragment="content">
+    <form autocomplete="off" method="post" name="itemInfo" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}">
+        <div>
+            <input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}"
+                   th:style="'background:#D8D8D8'" type="text"/>
+            <input id="wactr_tmp" list="wactr" name="wactr_tmp" th:placeholder="#{wactrNm}" type="text"/>
+            <datalist id="wactr">
+                <select id="wactr_sel">
+                    <option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
+                    </option>
+                </select>
+            </datalist>
+        </div>
+
+        <script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const wactr = document.getElementById("wactr_tmp");
+	        var selected = document.querySelector("select#wactr_sel")
+
+			wactr.addEventListener("change", Updatewactr)
+        });
+
+
+        function UpdateWactr(e) {
+            var evnt = e.currentTarget;
+            var selected = document.querySelector("select#wactr_sel")
+            var datalist = evnt.list;
+            var wactrCd = document.getElementById("wactr_cd");
+
+            for(var j = 0; j < datalist.options.length; j++){
+                if(this.value == datalist.options[j].value) {
+                    wactrCd.value = datalist.options[j].label;
+                }
+            }
+        }
+        </script>
 
         <div>
-            <input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly/>
-            <input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
+            <input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
+            <input id="clnt_tmp" list="clnt" name="clnt_tmp" th:placeholder="#{clntNm}" type="text"/>
             <datalist id="clnt">
                 <select id="clnt_sel">
                     <option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
@@ -20,51 +51,51 @@
             </datalist>
         </div>
         <script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const clnt = document.getElementById("clnt_tmp");
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const clnt = document.getElementById("clnt_tmp");
+	        var selected = document.querySelector("select#clnt_sel")
 
-				var selected = document.querySelector("select#clnt_sel")
-
-				clnt.addEventListener("change", UpdateClnt)
-			});
+			clnt.addEventListener("change", UpdateClnt)
+        });
 
 
-			function UpdateClnt(e) {
-				var evnt = e.currentTarget;
-				var selected = document.querySelector("select#clnt_sel")
-				var datalist = evnt.list;
-				var clntcd = document.getElementById("clnt_cd");
+        function UpdateClnt(e) {
+            var evnt = e.currentTarget;
+            var selected = document.querySelector("select#clnt_sel")
+            var datalist = evnt.list;
+            var clntcd = document.getElementById("clnt_cd");
 
-				for(var j = 0; j < datalist.options.length; j++){
-					if(this.value == datalist.options[j].value) {
-						clntcd.value = datalist.options[j].label;
-					}
-				}
-			}
-		</script>
+            for(var j = 0; j < datalist.options.length; j++){
+                if(this.value == datalist.options[j].value) {
+                    clntcd.value = datalist.options[j].label;
+                }
+            }
+        }
 
-      <div>
-        <input type="text" th:field="*{locCd}" th:placeholder="#{locCd}">
-      </div>
-      <div>
-        <input type="text" th:field="*{itemCd}" th:placeholder="#{itemCd}">
-      </div>
-      <div>
-        <input type="text" th:field="*{itemNm}" th:placeholder="#{itemNm}">
-      </div>
-      <div>
-        <select th:field="*{boxUnit}" th:value="*{boxUnit}">
-          <option value="">관리단위</option>
-          <option th:each="code : ${codeList}" th:value="${code.itemCode}" th:text="${code.itemValue}"></option>
-        </select>
-      </div>
-      <div>
-        <input type="number" th:field=*{pltInBox} th:placeholder="#{pltInBox}">
-      </div>
-      <div>
-        <input type="text" th:field="*{remk}" th:placeholder="#{remk}">
-      </div>
-      <button type="submit">저장하기</button>
+        </script>
+
+        <div>
+            <input th:field="*{locCd}" th:placeholder="#{locCd}" type="text">
+        </div>
+        <div>
+            <input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
+        </div>
+        <div>
+            <input th:field="*{itemNm}" th:placeholder="#{itemNm}" type="text">
+        </div>
+        <div>
+            <select th:field="*{boxUnit}" th:value="*{boxUnit}">
+                <option value="">관리단위</option>
+                <option th:each="code : ${codeList}" th:text="${code.itemValue}" th:value="${code.itemCode}"></option>
+            </select>
+        </div>
+        <div>
+            <input th:field=*{pltInBox} th:placeholder="#{pltInBox}" type="number">
+        </div>
+        <div>
+            <input th:field="*{remk}" th:placeholder="#{remk}" type="text">
+        </div>
+        <button type="submit">저장하기</button>
     </form>
-  </main>
+</main>
 </html>

@@ -8,7 +8,7 @@ import org.warehouse.models.BaseEntity;
 @AllArgsConstructor
 public class ItemInfoVO extends BaseEntity {
 
-    private String waCtrCd; // 물류센터코드
+    private String wactrCd; // 물류센터코드
     private String clntCd; // 고객사코드
     private String itemCd; // 상품코드
     private String itemNm; // 상품명

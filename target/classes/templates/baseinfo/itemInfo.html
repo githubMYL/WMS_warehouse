@@ -6,42 +6,71 @@
   <main layout:fragment="content">
     <form name="itemInfo" method="post" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}" autocomplete="off">
       <div>
-        <input type="text" th:field="*{waCtrCd}" th:placeholder="#{wactrCd}">
+        <input type="text" id="wactr_cd" th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" readonly/>
+        <input type="text" list="wactr" id="wactr_tmp" name="wactr_tmp" th:placeholder="#{wactrNm}"/>
+        <datalist id="wactr">
+            <select id="wactr_sel">
+                <option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
+                </option>
+            </select>
+        </datalist>
       </div>
 
-        <div>
-            <input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly/>
-            <input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
-            <datalist id="clnt">
-                <select id="clnt_sel">
-                    <option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
-                    </option>
-                </select>
-            </datalist>
-        </div>
-        <script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const clnt = document.getElementById("clnt_tmp");
+      <script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const wactr = document.getElementById("wactr_tmp");
+	        var selected = document.querySelector("select#wactr_sel")
 
-				var selected = document.querySelector("select#clnt_sel")
-
-				clnt.addEventListener("change", UpdateClnt)
-			});
+			wactr.addEventListener("change", Updatewactr)
+        });
 
 
-			function UpdateClnt(e) {
-				var evnt = e.currentTarget;
-				var selected = document.querySelector("select#clnt_sel")
-				var datalist = evnt.list;
-				var clntcd = document.getElementById("clnt_cd");
+        function UpdateWactr(e) {
+            var evnt = e.currentTarget;
+            var selected = document.querySelector("select#wactr_sel")
+            var datalist = evnt.list;
+            var wactrCd = document.getElementById("wactr_cd");
 
-				for(var j = 0; j < datalist.options.length; j++){
-					if(this.value == datalist.options[j].value) {
-						clntcd.value = datalist.options[j].label;
-					}
-				}
-			}
-		</script>
+            for(var j = 0; j < datalist.options.length; j++){
+                if(this.value == datalist.options[j].value) {
+                    wactrCd.value = datalist.options[j].label;
+                }
+            }
+        }
+      </script>
+
+      <div>
+          <input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly/>
+          <input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
+          <datalist id="clnt">
+              <select id="clnt_sel">
+                  <option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+                  </option>
+              </select>
+          </datalist>
+      </div>
+      <script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const clnt = document.getElementById("clnt_tmp");
+	        var selected = document.querySelector("select#clnt_sel")
+
+			clnt.addEventListener("change", UpdateClnt)
+        });
+
+
+        function UpdateClnt(e) {
+            var evnt = e.currentTarget;
+            var selected = document.querySelector("select#clnt_sel")
+            var datalist = evnt.list;
+            var clntcd = document.getElementById("clnt_cd");
+
+            for(var j = 0; j < datalist.options.length; j++){
+                if(this.value == datalist.options[j].value) {
+                    clntcd.value = datalist.options[j].label;
+                }
+            }
+        }
+      </script>
 
       <div>
         <input type="text" th:field="*{locCd}" th:placeholder="#{locCd}">
