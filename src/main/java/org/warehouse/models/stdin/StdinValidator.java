@@ -25,9 +25,6 @@ public class StdinValidator implements Validator {
 		 * 1. 입고일자가 현재 날짜보다 앞선 경우
 		 */
 
-		if(LocalDate.now().isAfter(stdinForm.getStdinDt())) {
-			errors.rejectValue("stdinDt", "Validation.invalid.stdinDt");
-		}
 
 	}
 }

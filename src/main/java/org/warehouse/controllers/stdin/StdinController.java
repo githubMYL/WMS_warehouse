@@ -58,13 +58,16 @@ public class StdinController {
 	public String stdinRegisterPs(@Valid StdinForm stdinForm, Errors errors, Model model) {
 		validator.validate(stdinForm, errors);
 
+		System.out.println("stdinForm : " + stdinForm);
+
 		if(errors.hasErrors()) {
 			return "stdin/register";
 		}
 
+		service.register(stdinForm);
 
 
-		return null;
+		return "stdin/list_h";
 	}
 
 	@GetMapping
@@ -74,6 +77,8 @@ public class StdinController {
 
 		List<StdinVO> stdin_list = stdinDAO.getList();
 		model.addAttribute("stdin_list", stdin_list);
+
+
 
 		return "stdin/list_h";
 	}

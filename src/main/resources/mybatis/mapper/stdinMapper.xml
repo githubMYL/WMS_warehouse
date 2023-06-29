@@ -25,7 +25,8 @@
 
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO" keyProperty="stdinNo">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
+		INSERT ALL INTO STDIN_H(STDIN_DT, STDIN_NUM, CLNT_CD) VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd})
+		INTO STDIN_D(STDIN_NO, STDIN_DT, STDIN_NUM, ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD) VALUES ((SELECT COUNT(*) FROM STDIN_D WHERE STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.NEXTVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd})
 	</insert>
 
 	<select id="getList" resultMap="stdinMap">

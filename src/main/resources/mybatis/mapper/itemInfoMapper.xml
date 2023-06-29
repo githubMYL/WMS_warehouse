@@ -31,4 +31,8 @@
         SELECT * FROM ITEM WHERE DEL_YN = 'N'
     </select>
 
+    <select id="getItemListByClntCd" resultMap="itemMap">
+        SELECT * FROM ITEM WHERE CLNT_CD = #{clntCd}
+    </select>
+
 </mapper>
