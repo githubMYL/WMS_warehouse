@@ -2,8 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.warehouse.configs.models.mapper.ItemInfoDAO">
     <resultMap id="itemMap" type="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
-        <result property="waCtrCd" column="WACTR_CD" />
+        <result property="wactrCd" column="WACTR_CD" />
+        <result property="wactrNm" column="WACTR_NM" />
         <result property="clntCd" column="CLNT_CD" />
+        <result property="clntNm" column="CLNT_NM" />
         <result property="locCd" column="LOC_CD" />
         <result property="itemCd" column="ITEM_CD" />
         <result property="itemNm" column="ITEM_NM" />
@@ -18,7 +20,7 @@
 
     <insert id="insertItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         INSERT INTO ITEM (WACTR_CD, CLNT_CD, LOC_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
-        VALUES (#{waCtrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
+        VALUES (#{wactrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
 
     <select id="getCodeList" resultMap="itemMap">
@@ -27,4 +29,34 @@
             FROM ITEM_CODE
     </select>
 
+    <select id="getItemEqualsChk" resultMap="itemMap">
+        SELECT ITEM_CD
+            FROM ITEM
+        WHERE ITEM_CD = #{itemCd}
+    </select>
+
+    <!-- 물류센터 존재유무 확인 -->
+    <select id="getWactrByCdAndNm" resultMap="itemMap">
+        SELECT WACTR_CD
+             , replace(WACTR_NM, ' ', '') WACTR_NM
+            FROM WACTR
+        WHERE WACTR_CD = #{wactrCd}
+        AND WACTR_NM = #{wactrNm}
+    </select>
+
+    <!-- 고객사 존재유무 확인 -->
+    <select id="getClntByCdAndNm" resultMap="itemMap">
+        SELECT CLNT_CD
+             , replace(CLNT_NM, ' ', '') CLNT_NM
+            FROM CLNT
+        WHERE CLNT_CD = #{clntCd}
+        AND CLNT_NM = #{clntNm}
+    </select>
+
+    <!-- 고객사 존재유무 확인 -->
+    <select id="getLocByCd" resultMap="itemMap">
+        SELECT LOC_CD
+            FROM LOC
+        WHERE LOC_CD = #{locCd}
+    </select>
 </mapper>
