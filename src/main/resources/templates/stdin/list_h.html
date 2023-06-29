@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/front/main}">
+<head>
+	<script th:src="@{/js/front/stdin.js}"></script>
+</head>
 
 <main layout:fragment="content">
 	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off">
@@ -34,7 +37,66 @@
 		</div>
 	</form>
 
+	<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const add = document.getElementById("add");
+				add.addEventListener("click", addItem);
 
+				const del = document.getElementById("delete");
+				del.addEventListener("click", deleteItem);
+			});
+
+			function addItem(e) {
+
+				url = 'stdin/register';
+				warehouse.popup.open(url, "테스트", 500, 800, false);
+			}
+
+			function deleteItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log("data" + chk_data);
+
+				const url = `wactr/delete?wactrCd=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++){
+					if(chk[i].checked == true) {
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log(chk_data);
+
+				if(chk_data.length > 1) {
+					alert("수정은 하나씩만 가능합니다.");
+
+				} else if(chk_data.length == 0) {
+					alert("수정할 항목을 선택해주세요.");
+				} else {
+					url = 'wactr/admin/' + chk_data[0] + '/update';
+					warehouse.popup.open(url, "테스트", 500, 800);
+				}
+			}
+		</script>
 
 	<table id="stdin_h_table">
 		<tr>

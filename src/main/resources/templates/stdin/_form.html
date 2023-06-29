@@ -1,4 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script th:src="@{/js/front/layer.js}"></script>
+</head>
 	<th:block th:fragment="stdinForm" th:object="${stdinForm}">
 		<div>
 			<dt th:text="#{stdin_dt}" class="require_item"></dt>
@@ -8,7 +11,7 @@
 
 		<div>
 			<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly/>
-			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명"/>
+			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명" onchange="UpdateClnt()"/>
 			<datalist id="clnt">
 				<select id="clnt_sel">
 					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
@@ -16,37 +19,6 @@
 				</select>
 			</datalist>
 		</div>
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const clnt = document.getElementById("clnt_tmp");
-
-				var selected = document.querySelector("select#clnt_sel")
-
-				clnt.addEventListener("change", UpdateClnt)
-			});
-
-
-			function UpdateClnt(e) {
-				var evnt = e.currentTarget;
-				var selected = document.querySelector("select#clnt_sel")
-				var datalist = evnt.list;
-				var clntcd = document.getElementById("clnt_cd");
-				var itemsel = document.getElementById("item_sel");
-
-				var item_options = itemsel.querySelectorAll('option');
-
-				for(var j = 0; j < datalist.options.length; j++){
-					if(this.value == datalist.options[j].value) {
-						clntcd.value = datalist.options[j].label;
-						for(var l = 0; l < item_options.length; l++) {
-							if(clntcd.value != item_options[l].dataset.itemclntcd){
-								itemsel.remove(l);
-							}
-						}
-					}
-				}
-			}
-		</script>
 
 		<div>
 			<dt th:text="#{status}" class="require_item"></dt>
@@ -57,44 +29,6 @@
 			<div class="errors" th:each="err : ${#fields.errors('status')}" th:text="${err}"></div>
 		</div>
 
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const item = document.getElementById("item_tmp");
-				var itemCd = document.getElementById("item_cd");
-
-				var selected = document.querySelector("select#item_sel")
-
-				item.addEventListener("change", UpdateItem);
-			});
-
-
-			function UpdateItem(e) {
-				var evnt = e.currentTarget;
-				var selected = document.querySelector("select#item_sel")
-				var datalist = evnt.list;
-				var itemcd = document.getElementById("item_cd");
-				var wactrCd;
-
-				for(var j = 0; j < datalist.options.length; j++){
-					if(this.value == datalist.options[j].value) {
-						itemcd.value = datalist.options[j].label;
-						dataset = datalist.options[j].dataset;
-					}
-				}
-
-
-				var loc_sel = document.getElementById("loc_sel");
-				var options = loc_sel.querySelectorAll('option');
-				for(var k = 0; k < options.length; k++) {
-					console.log(dataset.itemwactrcd + ', ' + options[k].dataset.locwactrcd);
-					if(dataset.itemwactrcd != options[k].dataset.locwactrcd) {
-						loc_sel.remove(k);
-					}
-				}
-
-			};
-
-		</script>
 
 		<div>
 			<input type="text" id="item_cd" th:field="*{itemCd}" readonly onchange="testing()"/>
@@ -126,33 +60,15 @@
 
 		<div>
 			<dt th:text="#{normal}" class="require_item"></dt>
-			<input type="number" name="normal" th:field="*{normal}" th:placeholder="#{normal}" id="normal"/>
+			<input type="number" name="normal" th:field="*{normal}" th:placeholder="#{normal}" id="normal" onchange="sum()"/>
 			<div class="errors" th:each="err : ${#fields.errors('normal')}" th:text="${err}"></div>
 		</div>
 
 		<div>
 			<dt th:text="#{fault}" class="require_item"></dt>
-			<input type="number" name="fault" th:field="*{fault}" th:placeholder="#{fault}" id="fault"/>
+			<input type="number" name="fault" th:field="*{fault}" th:placeholder="#{fault}" id="fault" onchange="sum()"/>
 			<div class="errors" th:each="err : ${#fields.errors('fault')}" th:text="${err}"></div>
 		</div>
-
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				var amount = document.getElementById('amount');
-				var normal = document.getElementById('normal');
-				var fault = document.getElementById('fault');
-
-				normal.addEventListener("change", sum);
-				fault.addEventListener("change", sum);
-			});
-
-			function sum() {
-				if(!isNaN(parseInt(normal.value) + parseInt(fault.value))) {
-					amount.value = parseInt(normal.value) + parseInt(fault.value);
-				}
-			};
-
-		</script>
 
 		<div>
 			<dt th:text="#{remk}" class="require_item"></dt>

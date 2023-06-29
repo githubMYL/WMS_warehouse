@@ -191,3 +191,25 @@ function updateScale() {
 		scale.value="평 수는 숫자로 입력해주세요.";
 	}
 }
+
+/*
+function loadValue() {
+	const clnt = document.getElementById("clnt_tmp");
+	const item = document.getElementById("item_tmp");
+	var itemCd = document.getElementById("item_cd");
+	var amount = document.getElementById('amount');
+	var normal = document.getElementById('normal');
+	var fault = document.getElementById('fault');
+
+	console.log(normal);
+
+	normal.addEventListener("change", sum);
+	fault.addEventListener("change", sum);
+
+	item.addEventListener("change", UpdateItem);
+	clnt.addEventListener("change", UpdateClnt);
+
+}
+*/
+
+
