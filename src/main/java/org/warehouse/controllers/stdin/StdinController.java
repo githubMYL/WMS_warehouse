@@ -67,7 +67,7 @@ public class StdinController {
 		service.register(stdinForm);
 
 
-		return "stdin/list_h";
+		return "redirect:/stdin";
 	}
 
 	@GetMapping
