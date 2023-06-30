@@ -3,33 +3,31 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/front/main}">
 
-	<main layout:fragment="content">
-		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off">
-			<table class="table-cols">
-				<tr>
-					<th>납품센터 명</th>
-					<td>
-						<input type="text" name="wactrNm" placeholder="납품센터 명">
-					</td>
+<main layout:fragment="content">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off">
+		<table class="table-cols">
+			<tr>
+				<th>납품센터 명</th>
+				<td>
+					<input type="text" name="wactrNm" placeholder="납품센터 명">
+				</td>
 
-					<th>규모</th>
-					<td>
-						<input type="text" name="wactrScale" placeholder="규모">
-					</td>
-				</tr>
-			</table>
-			<div class="btns">
-				<input type="button" value="검색" id="ajax_btn">
-				<input type="button" onClick="window.open('wactr/admin/register')" value="추가">
-				<button type="button" id="add">추가</button>
-				<button type="button" id="update">수정</button>
-				<button type="button" id="delete">삭제</button>
+				<th>규모</th>
+				<td>
+					<input type="text" name="wactrScale" placeholder="규모">
+				</td>
+			</tr>
+		</table>
+		<div class="btns">
+			<input type="button" value="검색" id="ajax_btn">
+			<button type="button" id="add">추가</button>
+			<button type="button" id="delete">삭제</button>
 
-			</div>
+		</div>
 
-		</form>
+	</form>
 
-		<script>
+	<script>
 			var btn = document.getElementById("ajax_btn");
 
 			btn.addEventListener("click", () => {
@@ -76,52 +74,49 @@
 		</script>
 
 
-		<table id="wactr_table">
-			<tr>
-				<th> </th>
-				<th>순번</th>
-				<th>물류센터명</th>
-				<th>주소</th>
-				<th>전화번호</th>
-				<th>평 수</th>
-				<th>규모</th>
-				<th>리치</th>
-				<th>쟉키</th>
-				<th>디젤</th>
-				<th>랙 수</th>
-				<th>투입 인원 수</th>
-				<th>비고</th>
-			</tr>
-			<tbody id="search">
-				<tr th:each="wactr, wactrCount : ${list}" id="wactr_infos">
-					<td>
-						<input type="checkbox" name="chk" th:value="${wactr.wactrCd}">
-					</td>
-					<td th:text="${wactrCount.count}"></td>
-					<td th:text="${wactr.wactrNm}"></td>
-					<td th:text="${wactr.addr}"></td>
-					<td th:text="${wactr.tel}"></td>
-					<td th:text="${wactr.size}"></td>
-					<td th:text="${wactr.scale}"></td>
-					<td th:text="${wactr.reech}"></td>
-					<td th:text="${wactr.jackee}"></td>
-					<td th:text="${wactr.diesel}"></td>
-					<td th:text="${wactr.racNum}"></td>
-					<td th:text="${wactr.numInPer}"></td>
-					<td th:text="${wactr.remark}"></td>
-				</tr>
-			</tbody>
-		</table>
-		<script>
+	<table id="wactr_table">
+		<tr>
+			<th> </th>
+			<th>순번</th>
+			<th>물류센터명</th>
+			<th>주소</th>
+			<th>전화번호</th>
+			<th>평 수</th>
+			<th>규모</th>
+			<th>리치</th>
+			<th>쟉키</th>
+			<th>디젤</th>
+			<th>랙 수</th>
+			<th>투입 인원 수</th>
+			<th>비고</th>
+		</tr>
+		<tbody id="search">
+		<tr th:each="wactr, wactrCount : ${list}" id="wactr_infos">
+			<td>
+				<input type="checkbox" name="chk" th:value="${wactr.wactrCd}" id="chk">
+			</td>
+			<td th:text="${wactrCount.count}"></td>
+			<td th:text="${wactr.wactrNm}"></td>
+			<td th:text="${wactr.addr}"></td>
+			<td th:text="${wactr.tel}"></td>
+			<td th:text="${wactr.size}"></td>
+			<td th:text="${wactr.scale}"></td>
+			<td th:text="${wactr.reech}"></td>
+			<td th:text="${wactr.jackee}"></td>
+			<td th:text="${wactr.diesel}"></td>
+			<td th:text="${wactr.racNum}"></td>
+			<td th:text="${wactr.numInPer}"></td>
+			<td th:text="${wactr.remark}"></td>
+		</tr>
+		</tbody>
+	</table>
+	<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				const add = document.getElementById("add");
 				add.addEventListener("click", addItem);
 
 				const del = document.getElementById("delete");
 				del.addEventListener("click", deleteItem);
-
-				const update = document.getElementById("update");
-				update.addEventListener("click", updateItem);
 			});
 
 			function addItem(e) {
@@ -175,43 +170,21 @@
 				}
 			}
 		</script>
-		<script>
+	<script>
 			document.addEventListener('DOMContentLoaded', function() {
-<<<<<<< HEAD
-				const tds = document.querySelectorAll('td');
-				tds.forEach( (td) => {
-					td.addEventListener('dblclick', editForm)
-=======
 				const trs = document.querySelectorAll('tr');
 				trs.forEach( (tr) => {
 					tr.addEventListener('dblclick', editForm)
->>>>>>> 28b5aa5266629fa9c8358416a99e8709c1b7bf6d
 				});
 			});
 
 			function editForm(e) {
-<<<<<<< HEAD
-				console.log('dbclick!');
 				console.log(e.target);
 				var tr = e.target.parentNode;
-				console.log(tr);
-
-				const tr_td = tr.childNodes;
-				var input = document.createElement('input');
-				input.setAttribute('type', 'text');
-				input.setAttribute('class', 'quantity');
-
-				tr_td.forEach( (td) => {
-					console.log(td);
-					td.appendChild(input);
-				});
-=======
-				console.log(e.target);
-				var tr = console.log(e.target.parentNode);
-
->>>>>>> 28b5aa5266629fa9c8358416a99e8709c1b7bf6d
-
+				var cd = tr.querySelector('#chk').value;
+				url = 'wactr/admin/' + cd + '/update';
+				warehouse.popup.open(url, "테스트", 500, 800);
 			}
 		</script>
-	</main>
+</main>
 </html>

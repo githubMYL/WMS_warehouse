@@ -2,6 +2,10 @@
  * 레이어 팝업
  *
  */
+
+
+
+
 var warehouse = warehouse || {};
 warehouse.popup = {
     callback : function() {}, // popup 오픈 후 실행될 콜백 함수

@@ -6,13 +6,22 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
+import org.warehouse.configs.models.mapper.LocDAO;
+import org.warehouse.configs.models.mapper.WactrDAO;
+import org.warehouse.models.admin.clnt.ClntVO;
+import org.warehouse.models.baseinfo.loc.LocVO;
+import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 @Component
 @RequiredArgsConstructor
 public class ItemInfoValidator implements Validator {
 
-    private final ItemInfoDAO itemInfoDAO;
+    private final WactrDAO wactrDAO;
     private final ClntDAO clntDAO;
+    private final LocDAO locDAO;
+    private final ItemInfoDAO itemInfoDAO;
+
+
     @Override
     public boolean supports(Class<?> clazz) {
         return ItemInfoVO.class.isAssignableFrom(clazz);
@@ -31,11 +40,20 @@ public class ItemInfoValidator implements Validator {
          * 4. 파렛트당 박스 수 음수 및 자릿수 확인(100,000 개 미만)
          */
         System.out.println("======== 1 ========");
-        ItemInfoVO itemInfoVO = (ItemInfoVO) target;
+        ItemInfoVO itemInfoVO = (ItemInfoVO) target;;
 
-        ItemInfoVO wactrChk = itemInfoDAO.getWactrByCdAndNm(itemInfoVO);
-        ItemInfoVO clntChk = itemInfoDAO.getClntByCdAndNm(itemInfoVO);
-        ItemInfoVO LocChk = itemInfoDAO.getLocByCd(itemInfoVO);
+        // 물류센터
+        String wactrCd = itemInfoVO.getWactrCd();
+        String wactrNm = itemInfoVO.getWactrNm();
+        // 고객사
+        String clntCd = itemInfoVO.getClntCd();
+        String clntNm = itemInfoVO.getClntNm();
+        // 로케이션
+        String locCd = itemInfoVO.getLocCd();
+
+        WactrVO wactrChk = wactrDAO.getWactrByCdAndNm(wactrCd, wactrNm);
+        ClntVO clntChk = clntDAO.getClntByCdAndNm(clntCd, clntNm);
+        LocVO LocChk = locDAO.getLocByCd(locCd);
         ItemInfoVO itemChk = itemInfoDAO.getItemEqualsChk(itemInfoVO);
 
         System.out.println("======== 4 ======== " + wactrChk);
@@ -64,6 +82,8 @@ public class ItemInfoValidator implements Validator {
             itemInfoVO.setPltInBox(0L);
         }else if (itemInfoVO.getPltInBox() < 0) {
             errors.rejectValue("pltInBox", "Validation.minusCheck");
+        }else if (itemInfoVO.getPltInBox() > 100000) {
+            errors.rejectValue("pltInBox", "Validation.maxCheck");
         }
     }
 }

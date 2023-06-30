@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.warehouse.configs.models.mapper.UserDAO">
-	<resultMap id="userMap" type="org.warehouse.models.user.UserVO">
+<mapper namespace="org.warehouse.configs.models.mapper.UserMapper">
+	<resultMap id="userMap" type="org.warehouse.models.user.User">
 		<result property="userId" column="USER_ID" />
 		<result property="userPw" column="USER_PW" />
 		<result property="userNm" column="USER_NM" />
@@ -12,15 +12,9 @@
 		<result property="position" column="POSITION" />
 		<result property="tel" column="TEL" />
 		<result property="email" column="EMAIL" />
-		<result property="remark" column="REMK" />
-		<result property="regDt" column="REG_DT" />
-		<result property="regNm" column="REG_NM" />
-		<result property="modDt" column="MOD_DT" />
-		<result property="modNm" column="MOD_NM" />
-		<result property="delyn" column="DEL_YN" />
 	</resultMap>
 	<select id="getUserById" resultMap="userMap"> <!--  회원 정보  -->
-		SELECT * FROM USER_MANAGE WHERE USER_ID=#{userId}
+		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE WHERE USER_ID=#{userId}
 	</select>
 
 	<select id="getUserByEmail" parameterType="String" resultMap="userMap"> <!--  회원 정보  -->
@@ -32,9 +26,9 @@
 		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE ORDER BY memNo DESC
 	</select>
 
-	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">
+	<insert id="insertUser" parameterType="org.warehouse.models.user.User" keyProperty="userId">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
+		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
 	</insert>
 
 
