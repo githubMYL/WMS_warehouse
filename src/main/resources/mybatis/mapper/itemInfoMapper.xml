@@ -27,4 +27,15 @@
             FROM ITEM_CODE
     </select>
 
+<<<<<<< HEAD
+=======
+    <select id="getItemList" resultMap="itemMap">
+        SELECT * FROM ITEM WHERE DEL_YN = 'N'
+    </select>
+
+    <select id="getItemListByClntCd" resultMap="itemMap">
+        SELECT * FROM ITEM WHERE CLNT_CD = #{clntCd}
+    </select>
+
+>>>>>>> b87b55b3e622c40438d90399cc53252322973bbd
 </mapper>

@@ -12,4 +12,8 @@ public interface ItemInfoDAO {
     void insertItemInfo(ItemInfoVO itemInfoVO); // 상품정보 저장
 
     List<ItemInfoVO> getCodeList(); // 관리단위 코드 가져오기
+
+    List<ItemInfoVO> getItemList();
+
+    List<ItemInfoVO> getItemListByClntCd(String clntCd);
 }

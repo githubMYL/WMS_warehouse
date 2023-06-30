@@ -44,15 +44,15 @@ public class UserJoinValidator implements Validator {
 		String custCtrCd = joinForm.getCustCtrCd();
 
 		/** 기타 입력폼 정보들 - 추후에 검증 추가할지도?
-		String userNm = joinForm.getUserNm();
-		String userType = joinForm.getUserType();
+		 String userNm = joinForm.getUserNm();
+		 String userType = joinForm.getUserType();
 
-		String clntCd = joinForm.getClntCd();
-		String custCtrCd = joinForm.getCustCtrCd();
-		String custCd = joinForm.getCustCd();
-		String position = joinForm.getPosition();
-		String tel = joinForm.getTel();
-		String email = joinForm.getEmail();
+		 String clntCd = joinForm.getClntCd();
+		 String custCtrCd = joinForm.getCustCtrCd();
+		 String custCd = joinForm.getCustCd();
+		 String position = joinForm.getPosition();
+		 String tel = joinForm.getTel();
+		 String email = joinForm.getEmail();
 		 */
 
 

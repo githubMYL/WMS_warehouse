@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<<<<<<< HEAD
 <mapper namespace="org.warehouse.configs.models.mapper.UserDAO">
 	<resultMap id="userMap" type="org.warehouse.models.user.UserVO">
+=======
+<mapper namespace="org.warehouse.configs.models.mapper.UserMapper">
+	<resultMap id="userMap" type="org.warehouse.models.user.User">
+>>>>>>> b87b55b3e622c40438d90399cc53252322973bbd
 		<result property="userId" column="USER_ID" />
 		<result property="userPw" column="USER_PW" />
 		<result property="userNm" column="USER_NM" />
@@ -12,6 +17,7 @@
 		<result property="position" column="POSITION" />
 		<result property="tel" column="TEL" />
 		<result property="email" column="EMAIL" />
+<<<<<<< HEAD
 		<result property="remark" column="REMK" />
 		<result property="regDt" column="REG_DT" />
 		<result property="regNm" column="REG_NM" />
@@ -21,6 +27,11 @@
 	</resultMap>
 	<select id="getUserById" resultMap="userMap"> <!--  회원 정보  -->
 		SELECT * FROM USER_MANAGE WHERE USER_ID=#{userId}
+=======
+	</resultMap>
+	<select id="getUserById" resultMap="userMap"> <!--  회원 정보  -->
+		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE WHERE USER_ID=#{userId}
+>>>>>>> b87b55b3e622c40438d90399cc53252322973bbd
 	</select>
 
 	<select id="getUserByEmail" parameterType="String" resultMap="userMap"> <!--  회원 정보  -->
@@ -32,9 +43,15 @@
 		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE ORDER BY memNo DESC
 	</select>
 
+<<<<<<< HEAD
 	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
 		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
+=======
+	<insert id="insertUser" parameterType="org.warehouse.models.user.User" keyProperty="userId">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
+>>>>>>> b87b55b3e622c40438d90399cc53252322973bbd
 	</insert>
 
 

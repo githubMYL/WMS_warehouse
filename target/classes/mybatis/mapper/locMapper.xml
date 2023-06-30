@@ -11,6 +11,14 @@
 		select * from loc where loc_cd like '%'||#{loc_cd}||'%'
 	</select>
 
+<<<<<<< HEAD
+=======
+	<select id="getLocListByItemCd" resultType="org.warehouse.models.baseinfo.loc.LocVO" parameterType="String">
+		SELECT L.* FROM ITEM I JOIN LOC L ON I.LOC_CD = L.LOC_CD AND I.WACTR_CD = L.WACTR_CD WHERE I.ITEM_CD = #{itemCd}
+	</select>
+
+
+>>>>>>> b87b55b3e622c40438d90399cc53252322973bbd
 	<!--    로케이션 등록-->
 	<insert id="insertLoc" parameterType="org.warehouse.models.baseinfo.loc.LocVO">
 		insert into loc(loc_cd, wactr_cd, loc_nm, loc_addr, rac_num, remk, reg_dt , reg_nm)

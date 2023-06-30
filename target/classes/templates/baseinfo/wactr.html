@@ -30,50 +30,50 @@
 		</form>
 
 		<script>
-			var btn = document.getElementById("ajax_btn");
+				var btn = document.getElementById("ajax_btn");
 
-			btn.addEventListener("click", () => {
-				var trEl = document.getElementsByName("wactrNm");
-				var trEl2 = document.getElementsByName("wactrScale");
+				btn.addEventListener("click", () => {
+					var trEl = document.getElementsByName("wactrNm");
+					var trEl2 = document.getElementsByName("wactrScale");
 
-				var wactrNm = trEl[0].value;
-				var wactrScale = trEl2[0].value;
+					var wactrNm = trEl[0].value;
+					var wactrScale = trEl2[0].value;
 
-				const params = { wactrNm, wactrScale };
+					const params = { wactrNm, wactrScale };
 
-				const url = `wactr/getSearch?wactrNm=${wactrNm}&wactrScale=${wactrScale}`;
-				commonLib.ajaxLoad(url)
-				.then((data) => {
-					var search = document.getElementById("search");
-					search.innerHTML='';
-					console.log(data);
+					const url = `wactr/getSearch?wactrNm=${wactrNm}&wactrScale=${wactrScale}`;
+					commonLib.ajaxLoad(url)
+					.then((data) => {
+						var search = document.getElementById("search");
+						search.innerHTML='';
+						console.log(data);
 
-					data = JSON.parse(data);
-					var str = '';
-					for(var i = 0; i < data.length; i++) {
-						str += '<tr>'
-						str += "<td><input type='checkbox' name='check'></td>";
-						str += "<td>"+(i+1)+"</td>";
-						str += "<td>"+data[i].wactrNm+"</td>";
-						str += "<td>"+data[i].addr+"</td>";
-						str += "<td>"+data[i].tel+"</td>";
-						str += "<td>"+data[i].size+"</td>";
-						str += "<td>"+data[i].scale+"</td>";
-						str += "<td>"+data[i].reech+"</td>";
-						str += "<td>"+data[i].jackee+"</td>";
-						str += "<td>"+data[i].diesel+"</td>";
-						str += "<td>"+data[i].racNum+"</td>";
-						str += "<td>"+data[i].numInPer+"</td>";
-						str += "<td>"+data[i].remark+"</td>";
-						str += '</tr>'
-					}
-					search.innerHTML=str;
-				})
-				.catch((err) => {
-					console.error(err);
+						data = JSON.parse(data);
+						var str = '';
+						for(var i = 0; i < data.length; i++) {
+							str += '<tr>'
+							str += "<td><input type='checkbox' name='check'></td>";
+							str += "<td>"+(i+1)+"</td>";
+							str += "<td>"+data[i].wactrNm+"</td>";
+							str += "<td>"+data[i].addr+"</td>";
+							str += "<td>"+data[i].tel+"</td>";
+							str += "<td>"+data[i].size+"</td>";
+							str += "<td>"+data[i].scale+"</td>";
+							str += "<td>"+data[i].reech+"</td>";
+							str += "<td>"+data[i].jackee+"</td>";
+							str += "<td>"+data[i].diesel+"</td>";
+							str += "<td>"+data[i].racNum+"</td>";
+							str += "<td>"+data[i].numInPer+"</td>";
+							str += "<td>"+data[i].remark+"</td>";
+							str += '</tr>'
+						}
+						search.innerHTML=str;
+					})
+					.catch((err) => {
+						console.error(err);
+					});
 				});
-			});
-		</script>
+			</script>
 
 
 		<table id="wactr_table">
@@ -93,102 +93,102 @@
 				<th>비고</th>
 			</tr>
 			<tbody id="search">
-				<tr th:each="wactr, wactrCount : ${list}" id="wactr_infos">
-					<td>
-						<input type="checkbox" name="chk" th:value="${wactr.wactrCd}">
-					</td>
-					<td th:text="${wactrCount.count}"></td>
-					<td th:text="${wactr.wactrNm}"></td>
-					<td th:text="${wactr.addr}"></td>
-					<td th:text="${wactr.tel}"></td>
-					<td th:text="${wactr.size}"></td>
-					<td th:text="${wactr.scale}"></td>
-					<td th:text="${wactr.reech}"></td>
-					<td th:text="${wactr.jackee}"></td>
-					<td th:text="${wactr.diesel}"></td>
-					<td th:text="${wactr.racNum}"></td>
-					<td th:text="${wactr.numInPer}"></td>
-					<td th:text="${wactr.remark}"></td>
-				</tr>
+			<tr th:each="wactr, wactrCount : ${list}" id="wactr_infos">
+				<td>
+					<input type="checkbox" name="chk" th:value="${wactr.wactrCd}">
+				</td>
+				<td th:text="${wactrCount.count}"></td>
+				<td th:text="${wactr.wactrNm}"></td>
+				<td th:text="${wactr.addr}"></td>
+				<td th:text="${wactr.tel}"></td>
+				<td th:text="${wactr.size}"></td>
+				<td th:text="${wactr.scale}"></td>
+				<td th:text="${wactr.reech}"></td>
+				<td th:text="${wactr.jackee}"></td>
+				<td th:text="${wactr.diesel}"></td>
+				<td th:text="${wactr.racNum}"></td>
+				<td th:text="${wactr.numInPer}"></td>
+				<td th:text="${wactr.remark}"></td>
+			</tr>
 			</tbody>
 		</table>
 		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const add = document.getElementById("add");
-				add.addEventListener("click", addItem);
+				document.addEventListener('DOMContentLoaded', function() {
+					const add = document.getElementById("add");
+					add.addEventListener("click", addItem);
 
-				const del = document.getElementById("delete");
-				del.addEventListener("click", deleteItem);
+					const del = document.getElementById("delete");
+					del.addEventListener("click", deleteItem);
 
-				const update = document.getElementById("update");
-				update.addEventListener("click", updateItem);
-			});
+					const update = document.getElementById("update");
+					update.addEventListener("click", updateItem);
+				});
 
-			function addItem(e) {
+				function addItem(e) {
 
-				url = 'wactr/admin/register';
-				warehouse.popup.open(url, "테스트", 500, 800);
-			}
-
-			function deleteItem(e) {
-				var chk = document.getElementsByName("chk");
-				var chk_data = [];
-
-				for(var i = 0; i < chk.length; i++) {
-					if(chk[i].checked == true) {
-						console.log(chk[i].value);
-						chk_data.push(chk[i].value);
-					}
-				}
-				console.log("data" + chk_data);
-
-				const url = `wactr/delete?wactrCd=${chk_data}`;
-				commonLib.ajaxLoad(url)
-					.then((data) => {
-						console.log(data);
-						location.reload();
-					})
-					.catch((err) => {
-						console.error(err);
-					});
-			}
-
-			function updateItem(e) {
-				var chk = document.getElementsByName("chk");
-				var chk_data = [];
-
-				for(var i = 0; i < chk.length; i++){
-					if(chk[i].checked == true) {
-						chk_data.push(chk[i].value);
-					}
-				}
-				console.log(chk_data);
-
-				if(chk_data.length > 1) {
-					alert("수정은 하나씩만 가능합니다.");
-
-				} else if(chk_data.length == 0) {
-					alert("수정할 항목을 선택해주세요.");
-				} else {
-					url = 'wactr/admin/' + chk_data[0] + '/update';
+					url = 'wactr/admin/register';
 					warehouse.popup.open(url, "테스트", 500, 800);
 				}
-			}
-		</script>
+
+				function deleteItem(e) {
+					var chk = document.getElementsByName("chk");
+					var chk_data = [];
+
+					for(var i = 0; i < chk.length; i++) {
+						if(chk[i].checked == true) {
+							console.log(chk[i].value);
+							chk_data.push(chk[i].value);
+						}
+					}
+					console.log("data" + chk_data);
+
+					const url = `wactr/delete?wactrCd=${chk_data}`;
+					commonLib.ajaxLoad(url)
+						.then((data) => {
+							console.log(data);
+							location.reload();
+						})
+						.catch((err) => {
+							console.error(err);
+						});
+				}
+
+				function updateItem(e) {
+					var chk = document.getElementsByName("chk");
+					var chk_data = [];
+
+					for(var i = 0; i < chk.length; i++){
+						if(chk[i].checked == true) {
+							chk_data.push(chk[i].value);
+						}
+					}
+					console.log(chk_data);
+
+					if(chk_data.length > 1) {
+						alert("수정은 하나씩만 가능합니다.");
+
+					} else if(chk_data.length == 0) {
+						alert("수정할 항목을 선택해주세요.");
+					} else {
+						url = 'wactr/admin/' + chk_data[0] + '/update';
+						warehouse.popup.open(url, "테스트", 500, 800);
+					}
+				}
+			</script>
 		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const trs = document.querySelectorAll('tr');
-				trs.forEach( (tr) => {
-					tr.addEventListener('dblclick', editForm)
+				document.addEventListener('DOMContentLoaded', function() {
+					const trs = document.querySelectorAll('tr');
+					trs.forEach( (tr) => {
+						tr.addEventListener('dblclick', editForm)
+					});
 				});
-			});
 
-			function editForm(e) {
-				console.log(e.target);
-				var tr = console.log(e.target.parentNode);
+				function editForm(e) {
+					console.log(e.target);
+					var tr = console.log(e.target.parentNode);
 
 
-			}
-		</script>
+				}
+			</script>
 	</main>
 </html>
