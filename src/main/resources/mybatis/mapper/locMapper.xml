@@ -39,4 +39,11 @@
 	<select id="modLoc" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
 		select * from loc where loc_cd = #{loc_cd_array}
 	</select>
+
+	<select id="getLocByCd" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
+		SELECT LOC_CD
+		FROM LOC
+		WHERE LOC_CD = #{loc_cd}
+		AND DEL_YN = 'N'
+	</select>
 </mapper>

@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
+import org.warehouse.configs.models.mapper.LocDAO;
+import org.warehouse.configs.models.mapper.WactrDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoService;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
+import org.warehouse.models.baseinfo.iteminfo.ItemInfoValidator;
+import org.warehouse.models.baseinfo.loc.LocVO;
+import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 
 import java.util.List;
@@ -22,9 +27,12 @@ import java.util.List;
 @RequestMapping("/baseinfo")
 public class ItemInfoController {
 
-	private final ItemInfoDAO itemInfoDAO;
+	private final WactrDAO wactrDAO;
 	private final ClntDAO clntDAO;
+	private final LocDAO locDAO;
+	private final ItemInfoDAO itemInfoDAO;
 	private final ItemInfoService itemInfoService;
+	private final ItemInfoValidator itemInfoValidator;
 
 	@GetMapping("/iteminfo")
 	public String iteminfo(Model model) {
@@ -32,7 +40,8 @@ public class ItemInfoController {
 		ItemInfoVO itemInfoVO = new ItemInfoVO();
 
 		/** 물류센터 코드 S */
-		//List<WactrVO> wactrList = wactrDAO.getGetList;
+		List<WactrVO> wactrList = wactrDAO.getList();
+		model.addAttribute("wactrList", wactrList);
 		/** 물류센터 코드 E */
 
 		/** 고객사 코드 S */
@@ -40,10 +49,18 @@ public class ItemInfoController {
 		model.addAttribute("clntList", clntList);
 		/** 고객사 코드 E */
 
+		/** 로케이션 코드 S */
+		List<LocVO> locList = locDAO.getLocList();
+		model.addAttribute("locList", locList);
+		/** 로케이션 코드 E */
+
 		/** 관리단위 S */
 		List<ItemInfoVO> codeList = itemInfoDAO.getCodeList();
 		model.addAttribute("codeList", codeList);
 		/** 관리단위 E */
+
+		if(itemInfoVO.getPltInBox() == null)
+			itemInfoVO.setPltInBox(0L);
 
 		model.addAttribute("itemInfoVO", itemInfoVO);
 
@@ -54,6 +71,8 @@ public class ItemInfoController {
 	public String iteminfoPs(@Valid ItemInfoVO itemInfoVO, Errors errors, Model model) {
 
 		System.out.println("Controller :: " + itemInfoVO);
+
+		itemInfoValidator.validate(itemInfoVO, errors);
 
 		if(errors.hasErrors()) {
 			return "baseinfo/iteminfo";

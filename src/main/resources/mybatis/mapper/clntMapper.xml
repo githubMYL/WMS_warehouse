@@ -24,8 +24,16 @@
 	</resultMap>
 
 	<select id="getClntList" resultMap="clntMap">
-		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
 		SELECT * FROM CLNT ORDER BY CLNT_CD
+	</select>
+
+	<!-- 고객사 존재유무 확인 -->
+	<select id="getClntByCdAndNm" resultMap="clntMap">
+		SELECT CLNT_CD
+		, replace(CLNT_NM, ' ', '') CLNT_NM
+		FROM CLNT
+		WHERE CLNT_CD = #{clntCd}
+		AND CLNT_NM = #{clntNm}
 	</select>
 
 </mapper>

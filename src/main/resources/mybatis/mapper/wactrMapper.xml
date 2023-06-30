@@ -63,4 +63,13 @@
 			</when>
 		</choose>
 	</select>
+
+	<!-- 물류센터 존재유무 확인 -->
+	<select id="getWactrByCdAndNm" resultMap="wactrMap">
+		SELECT WACTR_CD
+		, replace(WACTR_NM, ' ', '') WACTR_NM
+		FROM WACTR
+		WHERE WACTR_CD = #{wactrCd}
+		AND WACTR_NM = #{wactrNm}
+	</select>
 </mapper>

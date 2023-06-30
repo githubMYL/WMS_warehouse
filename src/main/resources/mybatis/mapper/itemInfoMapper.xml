@@ -21,10 +21,18 @@
         VALUES (#{waCtrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
 
+    <!-- 관리단위 조회-->
     <select id="getCodeList" resultMap="itemMap">
         SELECT ITEM_CODE
-            , ITEM_VALUE
-            FROM ITEM_CODE
+        , ITEM_VALUE
+        FROM ITEM_CODE
+    </select>
+
+    <!-- 상품코드 중복확인 -->
+    <select id="getItemEqualsChk" resultMap="itemMap">
+        SELECT ITEM_CD
+        FROM ITEM
+        WHERE ITEM_CD = #{itemCd}
     </select>
 
     <select id="getItemList" resultMap="itemMap">
