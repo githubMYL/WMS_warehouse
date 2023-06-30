@@ -8,6 +8,7 @@
 		<result property="itemCd" column="ITEM_CD" />
 		<result property="status" column="STATUS" />
 		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
 		<result property="locCd" column="LOC_CD" />
 		<result property="wactrCd" column="WACTR_CD" />
 		<result property="beforeStdin" column="BEFORE_STDIN" />
@@ -20,16 +21,20 @@
 		<result property="regNm" column="REG_NM" />
 		<result property="modDt" column="MOD_DT" />
 		<result property="modNm" column="MOD_NM" />
-		<result property="delYn" column="DEL_YN" />
+		<result property="delyn" column="DEL_YN" />
 	</resultMap>
 
-	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+	<insert id="insertHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT ALL INTO STDIN_H H(H.STDIN_DT, H.STDIN_NUM, H.CLNT_CD) VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd}) INTO STDIN_D D(D.STDIN_NO, D.STDIN_DT, D.STDIN_NUM, D.ITEM_CD, D.CLNT_CD, D.LOC_CD, D.WACTR_CD) VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}) SELECT * FROM DUAL
+		INSERT INTO STDIN_H H(H.STDIN_DT, H.STDIN_NUM, H.CLNT_CD, H.STATUS, H.REMK, H.REG_DT, H.REG_NM) VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd}, #{status}, #{remark}, SYSDATE, #{regNm})
+	</insert>
+
+	<insert id="insertDetailStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		INSERT INTO STDIN_D D(D.STDIN_NO, D.STDIN_DT, D.STDIN_NUM, D.ITEM_CD, D.CLNT_CD, D.LOC_CD, D.WACTR_CD, D.REMK, D.REG_DT, D.REG_NM) VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
 	<select id="getList" resultMap="stdinMap">
-		SELECT * FROM STDIN_H h LEFT OUTER JOIN STDIN_D d ON h.STDIN_DT = d.STDIN_DT WHERE d.DEL_YN = 'N'
+		SELECT H.STDIN_DT, C.CLNT_CD, C.CLNT_NM, H.STATUS FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD WHERE H.DEL_YN = 'N' ORDER BY STDIN_DT
 	</select>
 
 

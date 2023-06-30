@@ -11,6 +11,7 @@ public class StdinVO extends BaseEntity {
 	private Long stdinNum;
 	private Long stdinNo;
 	private String clntCd;
+	private String clntNm;
 	private String status;
 
 	private String itemCd;

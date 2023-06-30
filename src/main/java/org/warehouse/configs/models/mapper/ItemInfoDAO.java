@@ -16,4 +16,6 @@ public interface ItemInfoDAO {
     List<ItemInfoVO> getItemList();
 
     List<ItemInfoVO> getItemListByClntCd(String clntCd);
+
+    ItemInfoVO getItem(String itemCd);
 }
