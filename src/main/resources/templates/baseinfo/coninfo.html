@@ -4,6 +4,7 @@
 	  layout:decorate="~{layouts/admin/main}">
 
 <main layout:fragment="content">
+	<script th:src="@{/js/front/conInfo.js}"></script>
 	<form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
 		계약정보 페이지
 		<div>
@@ -16,40 +17,17 @@
 				</select>
 			</datalist>
 		</div>
-		<script>
-                 document.addEventListener('DOMContentLoaded', function() {
-                    const clnt = document.getElementById("clnt_tmp");
-
-                    var selected = document.querySelector("select#clnt_sel")
-
-                    clnt.addEventListener("change", UpdateClnt)
-                 });
-
-
-                 function UpdateClnt(e) {
-                    var evnt = e.currentTarget;
-                    var selected = document.querySelector("select#clnt_sel")
-                    var datalist = evnt.list;
-                    var clntcd = document.getElementById("clnt_cd");
-
-                    for(var j = 0; j < datalist.options.length; j++){
-                       if(this.value == datalist.options[j].value) {
-                          clntcd.value = datalist.options[j].label;
-                       }
-                    }
-                 }
-            </script>
 		<div>
-			<input type="number" th:field="*{mMin}" th:placeholder="#{m_min}">
+			<input type="number" th:field="*{mMin}" th:placeholder="#{mMin}">
 		</div>
 		<div>
-			<input type="text" th:field="*{pltFee}" th:placeholder="#{plt_fee}">
+			<input type="number" th:field="*{pltFee}" th:placeholder="#{pltFee}">
 		</div>
 		<div>
-			<input type="text" th:field="*{transSdt}" th:placeholder="#{tran_sdt}">
+			<input type="text" th:field="*{transSdt}" th:placeholder="#{transSdt}">
 		</div>
 		<div>
-			<input type="text" th:field="*{transEdt}" th:placeholder="#{tran_edt}">
+			<input type="text" th:field="*{transEdt}" th:placeholder="#{transEdt}">
 		</div>
 		<div>
 			<input type="text" th:field="*{remark}" th:placeholder="#{remk}">
