@@ -55,6 +55,7 @@ public class ConInfoController {
 		validator.validate(conInfoVO, errors);
 		System.out.println("여기서 멈춤 :: " + conInfoVO);
 
+		System.out.println(errors);
 		if(errors.hasErrors()) {
 			return "/baseinfo/coninfo";
 		}
