@@ -27,7 +27,7 @@ public class StdinService {
 		System.out.println(stdinVO);
 
 		ItemInfoVO item = itemInfoDAO.getItem(stdinVO.getItemCd());
-		stdinVO.setWactrCd(item.getWaCtrCd());
+		stdinVO.setWactrCd(item.getWactrCd());
 
 		stdinDAO.insertHeaderStdin(stdinVO);
 		stdinDAO.insertDetailStdin(stdinVO);

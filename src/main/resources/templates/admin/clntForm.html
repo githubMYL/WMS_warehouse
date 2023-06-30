@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/admin/main}">
+<main layout:fragment="content">
+
+	<h2>고객사 등록(admin)</h2>
+	<!--    <div>로그인정보 : <span th:text="${session.userInfo.username}"></span></div>-->
+	<form name="clntJoin" method="post" th:action="@{/admin/clntJoin}"  autocomplete="off">
+
+		<div>
+			<div><span>고객사 코드 : </span></div>
+			<input type="text" name="clntCd" placeholder="고객사 코드"/>
+		</div>
+
+		<div>
+			<div><span>고객사 명 : </span></div>
+			<input type="text" name="clntNm" placeholder="고객사 명">
+		</div>
+
+		<div>
+			<div><span>영업 담당자 : </span></div>
+			<input type="text" name="salesNm" placeholder="담당자 명">
+			<input type="text" name="salesTel" placeholder="담당자 연락처">
+		</div>
+
+
+		<div>
+			<div><span>TPL 담당자 : </span></div>
+			<input type="text"  name="tplNm" placeholder="담당자 명">
+			<input type="text"  name="tplTel" placeholder="담당자 연락처">
+		</div>
+
+		<div>
+			<div><span>TPL 이메일 : </span></div>
+			<input type="text" name="tplEmail" placeholder="e-mail">
+		</div>
+
+		<h4>업소정보</h4>
+
+		<div>
+			업 태 : <input type="text"  name="business" placeholder="업태">
+			종 목 : <input type="text"  name="event" placeholder="종목">
+			<div>
+				<span>사업자 번호</span>
+				<input type="text" name="busiNum" placeholder="사업자 번호를 작성해주세요">
+			</div>
+		</div>
+
+		<br>
+		<div>
+			<div><span>대표자 : </span></div>
+			<input type="text"  name="ownerNm" placeholder="대표자 명">
+			<input type="text"  name="ownerTel" placeholder="대표자 연락처">
+		</div>
+
+		<div>
+			<div><span>사업자 주소 : </span></div>
+			<input type="text" name="busiAddr" placeholder="사업자 주소">
+		</div>
+
+		<div>
+			<div><span>비고</span></div>
+			<textarea rows="5" cols="22" name="remk" th:text="*{remk}"></textarea>
+		</div>
+
+		<br>
+		<button type="submit"> 고객사 등록 </button>
+
+	</form>
+</main>
+</html>
+
+
+</main>
+</html>
