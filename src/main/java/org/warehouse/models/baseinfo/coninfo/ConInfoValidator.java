@@ -19,37 +19,44 @@ public class ConInfoValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		/**
-		 * 1. 월 미니멈 0 or isBlank 체크
-		 * 2. 파렛트보관료 0 or isBlank 체크
-		 * 3. 거래시작일이 거래만료일보다 작은지 체크
-		 * 4. 거래만료일이 거래시작일보다 큰지 체크
+		 * 1. 고객사 검증
+		 * 2. 월 미니멈 0 or isBlank 체크
+		 * 3. 파렛트보관료 0 or isBlank 체크
+		 * 4. 거래시작일과 거래종료일 체크
 		 */
 
 		ConInfoVO conInfoVO = (ConInfoVO) target;
+		System.out.println("conInfoVO  ::  " + conInfoVO.toString());
+//		System.out.println(">>>>>>>>>>>" + Long.class.isInstance(conInfoVO.getmMin()) );
+
+		String clntCd = conInfoVO.getClntCd();
 		Long mMin = conInfoVO.getMMin();
+//		System.out.println("mMin :: " + mMin);
 		Long pltFee = conInfoVO.getPltFee();
 		LocalDate transSdt = conInfoVO.getTransSdt();
 		LocalDate transEdt = conInfoVO.getTransEdt();
 
-		// 1. 월 미니멈 0 or isBlank 체크
-		if (mMin == null) {
-			errors.rejectValue("mMin", "Validation.incorrect.mMin");
-		} else if (mMin < 0) {
-			errors.rejectValue("mMin", "Validation.incorrect.mMin");
+		// 1. 고객사 검증
+		if (clntCd == null || clntCd.isBlank()) {
+			errors.rejectValue("clntCd", "Validation.incorrect.clntCd");
 		}
-		// 2. 파렛트보관료 0 or isBlank 체크
+
+		// 2. 월 미니멈 0 or isBlank 체크
+		if (mMin == null) {
+			errors.rejectValue("MMin", "Validation.incorrect.mMin");
+		} else if (mMin < 0 || mMin > 10000) {
+			errors.rejectValue("MMin", "Validation.incorrect.mMin2");
+		}
+		// 3. 파렛트보관료 0 or isBlank 체크
 
 		if (pltFee == null) {
 			errors.rejectValue("pltFee", "Validation.incorrect.pltFee");
 		} else if (pltFee < 0) {
 			errors.rejectValue("pltFee", "Validation.incorrect.pltFee");
 		}
-		// 3. 거래시작일이 거래만료일보다 작은지 체크
-		// 4. 거래만료일이 거래시작일보다 큰지 체크
-		if ((transSdt != null && transEdt != null) && transSdt.isAfter(transEdt)) {
-			//System.out.println("error!!!!!!!!!!!!!!!");
+		// 4. 거래시작일이 거래만료일보다 작은지 체크
+		if (transSdt != null && transEdt != null && !transSdt.isBefore(transEdt.plusDays(1))) {
 			errors.rejectValue("transSdt", "Validation.incorrect.transSdt");
-
 		}
 	}
 }
