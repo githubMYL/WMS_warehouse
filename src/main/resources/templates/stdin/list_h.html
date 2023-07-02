@@ -6,7 +6,7 @@
 	<script th:src="@{/js/front/stdin.js}"></script>
 </head>
 
-<main layout:fragment="content">
+<section layout:fragment="content">
 	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off">
 		<table class="table-cols">
 			<tr>
@@ -30,10 +30,10 @@
 				</td>
 			</tr>
 		</table>
-		<div class="btns">
-			<input type="button" value="검색" id="ajax_btn">
-			<button type="button" id="add">추가</button>
-			<button type="button" id="delete">삭제</button>
+		<div class="btns" style="text-align:right;">
+			<input type="button" value="검색" id="ajax_btn" class="sbtn">
+			<button type="button" id="add" class="sbtn">추가</button>
+			<button type="button" id="delete" class="sbtn blue">삭제</button>
 		</div>
 	</form>
 
@@ -97,18 +97,18 @@
 				}
 			}
 		</script>
-
-	<table id="stdin_h_table">
-		<tr>
-			<th> </th>
-			<th>순번</th>
-			<th>입고일자</th>
-			<th>고객사 코드</th>
-			<th>고객사 명</th>
-			<th>진행상태</th>
-			<th>비고</th>
-		</tr>
-		<tbody id="search">
+	<div class="table_wrapper">
+		<table id="stdin_h_table">
+			<tr>
+				<th> </th>
+				<th>순번</th>
+				<th>입고일자</th>
+				<th>고객사 코드</th>
+				<th>고객사 명</th>
+				<th>진행상태</th>
+				<th>비고</th>
+			</tr>
+			<tbody id="search">
 			<tr th:each="stdin, wactrCount : ${stdin_list}" id="stdin_infos">
 				<td>
 					<input type="checkbox" name="chk" th:value="${stdin.stdinNum}" id="chk">
@@ -120,7 +120,9 @@
 				<td th:text="${stdin.status}"></td>
 				<td th:text="${stdin.remark}"></td>
 			</tr>
-		</tbody>
-	</table>
-</main>
+			</tbody>
+		</table>
+	</div>
+
+</section>
 </html>

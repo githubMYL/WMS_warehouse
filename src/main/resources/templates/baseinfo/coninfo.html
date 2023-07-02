@@ -3,7 +3,7 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/admin/main}">
 
-<main layout:fragment="content">
+<section layout:fragment="content">
 	<script th:src="@{/js/front/conInfo.js}"></script>
 	<form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
 		계약정보 페이지
@@ -34,5 +34,5 @@
 		</div>
 		<button type="submit" th:text="#{conInfo.action.submit}"></button>
 	</form>
-</main>
+</section>
 </html>
