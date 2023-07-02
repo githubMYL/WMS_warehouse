@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.warehouse.configs.models.mapper.ItemInfoDAO">
     <resultMap id="itemMap" type="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
-        <result property="waCtrCd" column="WACTR_CD" />
+        <result property="wactrCd" column="WACTR_CD" />
         <result property="clntCd" column="CLNT_CD" />
         <result property="locCd" column="LOC_CD" />
         <result property="itemCd" column="ITEM_CD" />
@@ -18,7 +18,7 @@
 
     <insert id="insertItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         INSERT INTO ITEM (WACTR_CD, CLNT_CD, LOC_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
-        VALUES (#{waCtrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
+        VALUES (#{wactrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
 
     <!-- 관리단위 조회-->

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/front/main}">
+<head>
+	<script th:src="@{/js/front/stdin.js}"></script>
+	<style>
+		table {
+			width : 50%;
+			margin-left:auto;
+			margin-right:auto;
+			font-size: 13px;
+			border-top: 1px solid #ccc;
+			border-bottom: 1px solid #ccc;
+		}
+		td {
+  			text-align: center;
+		}
+
+	</style>
+</head>
+
+<main layout:fragment="content">
+	<table id="stdin_d_table">
+		<tr>
+			<th>순번</th>
+			<th>상품코드</th>
+			<th>상품명</th>
+			<th>로케이션</th>
+			<th>입고예정수량</th>
+			<th>정상수량</th>
+			<th>불량수량</th>
+			<th>비고</th>
+		</tr>
+		<tbody id="search">
+		<tr th:each="stdin, stdinCount : ${detailList}" id="stdin_d_infos">
+			<td th:text="${stdinCount.count}"></td>
+			<td th:text="${stdin.itemCd}"></td>
+			<td th:text="${stdin.itemNm}"></td>
+			<td th:text="${stdin.locCd}"></td>
+			<td th:text="${stdin.beforeStdin}"></td>
+			<td th:text="${stdin.normal}"></td>
+			<td th:text="${stdin.fault}"></td>
+			<td th:text="${stdin.remark}"></td>
+		</tr>
+		</tbody>
+	</table>
+</main>
+</html>

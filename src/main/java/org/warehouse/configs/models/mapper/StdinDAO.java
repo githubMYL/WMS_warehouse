@@ -10,4 +10,5 @@ public interface StdinDAO {
 	void insertHeaderStdin(StdinVO stdinVO);
 	void insertDetailStdin(StdinVO stdinVO);
 	List<StdinVO> getList();
+	List<StdinVO> getDetailList();
 }

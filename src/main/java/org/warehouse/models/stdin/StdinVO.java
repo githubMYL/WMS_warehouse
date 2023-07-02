@@ -22,4 +22,6 @@ public class StdinVO extends BaseEntity {
 	private Long fault;
 	private Long stdinAfterAmt;
 	private Long stdinFault;
+
+	private String itemNm;
 }

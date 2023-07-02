@@ -6,7 +6,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.warehouse.configs.models.mapper.UserDAO;
 import org.warehouse.controllers.admins.JoinForm;
-import org.warehouse.models.user.UserVO;
 
 @Service
 @RequiredArgsConstructor
