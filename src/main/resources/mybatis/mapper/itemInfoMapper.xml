@@ -3,7 +3,9 @@
 <mapper namespace="org.warehouse.configs.models.mapper.ItemInfoDAO">
     <resultMap id="itemMap" type="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         <result property="wactrCd" column="WACTR_CD" />
+        <result property="wactrNm" column="WACTR_NM" />
         <result property="clntCd" column="CLNT_CD" />
+        <result property="clntNm" column="CLNT_NM" />
         <result property="locCd" column="LOC_CD" />
         <result property="itemCd" column="ITEM_CD" />
         <result property="itemNm" column="ITEM_NM" />
@@ -37,6 +39,59 @@
 
     <select id="getItemList" resultMap="itemMap">
         SELECT * FROM ITEM WHERE DEL_YN = 'N'
+    </select>
+
+    <select id="getItemListSrch" resultMap="itemMap">
+        SELECT ROWNUM idx, A.*
+        FROM (
+        SELECT A.WACTR_CD
+        , B.WACTR_NM
+        , A.CLNT_CD
+        , C.CLNT_NM
+        , A.LOC_CD
+        , A.ITEM_CD
+        , A.ITEM_NM
+        , A.BOX_UNIT
+        , A.PLT_IN_BOX
+        , A.REMK
+        FROM ITEM A
+        INNER JOIN WACTR B
+        ON A.WACTR_CD = B.WACTR_CD
+        INNER JOIN CLNT C
+        ON A.CLNT_CD = C.CLNT_CD
+        INNER JOIN LOC D
+        ON A.LOC_CD = D.LOC_CD
+        WHERE A.DEL_YN  = 'N'
+        ORDER BY A.REG_DT DESC
+        ) A
+        <choose>
+            <when test='clntNm != "" and itemCd == "" and itemNm == ""'>
+                WHERE A.CLNT_NM like '%'||#{clntNm}||'%'
+            </when>
+            <when test='clntNm == "" and itemCd != "" and itemNm == ""'>
+                WHERE A.ITEM_CD like '%'||#{itemCd}||'%'
+            </when>
+            <when test='clntNm == "" and itemCd == "" and itemNm != ""'>
+                WHERE A.ITEM_NM like '%'||#{itemNm}||'%'
+            </when>
+            <when test='clntNm != "" and itemCd != "" and itemNm == ""'>
+                WHERE A.CLNT_NM like '%'||#{clntNm}||'%'
+                AND A.ITEM_CD like '%'||#{itemCd}||'%'
+            </when>
+            <when test='clntNm == "" and itemCd != "" and itemNm != ""'>
+                WHERE A.ITEM_CD like '%'||#{itemCd}||'%'
+                AND UPPER(A.ITEM_NM) like UPPER('%'||#{itemNm}||'%')
+            </when>
+            <when test='clntNm != "" and itemCd == "" and itemNm != ""'>
+                WHERE A.CLNT_NM like '%'||#{clntNm}||'%'
+                AND UPPER(A.ITEM_NM) like UPPER('%'||#{itemNm}||'%')
+            </when>
+            <when test='clntNm != "" and itemCd != "" and itemNm != ""'>
+                WHERE A.CLNT_NM like '%'||#{clntNm}||'%'
+                AND A.ITEM_CD like '%'||#{itemCd}||'%'
+                AND UPPER(A.ITEM_NM) like UPPER('%'||#{itemNm}||'%')
+            </when>
+        </choose>
     </select>
 
     <select id="getItemListByClntCd" resultMap="itemMap">

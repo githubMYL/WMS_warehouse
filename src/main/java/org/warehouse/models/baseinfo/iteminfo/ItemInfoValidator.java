@@ -32,8 +32,6 @@ public class ItemInfoValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
 
-        System.out.println("validate11 :: " + target);
-
         /**
          * 1. 물류센터코드 존재여부 확인
          * 2. 고객사코드 존재여부 확인
@@ -41,7 +39,6 @@ public class ItemInfoValidator implements Validator {
          * 3. 상품코드 중복여부 확인
          * 4. 파렛트당 박스 수 음수 및 자릿수 확인(100,000 개 미만)
          */
-        System.out.println("======== 1 ========");
         ItemInfoVO itemInfoVO = (ItemInfoVO) target;;
 
         // 물류센터
@@ -58,9 +55,7 @@ public class ItemInfoValidator implements Validator {
         LocVO LocChk = locDAO.getLocByCd(locCd);
         ItemInfoVO itemChk = itemInfoDAO.getItemEqualsChk(itemInfoVO);
 
-        System.out.println("======== 4 ======== " + wactrChk);
         /** 물류센터코드 존재여부 확인 */
-        System.out.println("wactrChk ::::::::::::::: " + wactrChk);
         if(wactrChk == null) {
             errors.rejectValue("wactrCd", "Validation.notExist.wactr");
         }

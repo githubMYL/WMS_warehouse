@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/front/main}">
 
 <head>
@@ -117,7 +117,6 @@
             <tr th:each="list,listCount : ${loc_list}"  ondblclick="double(event)" class="loc_list">
                 <td>
                     <input type="checkbox" id="locCheckBok-${listCount.count}" class="check" th:value="${list.loc_cd}" onclick="che()">
-                    <label for="locCheckBok-${listCount.count}"></label>
                 </td>
                 <td th:text="${listCount.count}"></td>
                 <td th:text="${list.wactr_cd}"></td>

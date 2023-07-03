@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.ClntDAO;
@@ -34,31 +35,18 @@ public class ItemInfoController{
 	private final ItemInfoService itemInfoService;
 	private final ItemInfoValidator itemInfoValidator;
 
-	private void commonProcess(Model model) {
-		String Title = "기본정보::상품정보";
-		String menuCode = "iteminfo";
-		String pageName = "baseinfo";
-		model.addAttribute("pageName", pageName);
-		model.addAttribute("Title", Title);
-		model.addAttribute("menuCode", menuCode);
-	}
-
-
-
 	@GetMapping("/iteminfo")
-	public String iteminfo(ItemInfoVO itemInfoVO, Model model){
-
+	public String iteminfo(@ModelAttribute("srchParams") ItemInfoVO srchParams, Model model){
 		commonProcess(model);
 
-		List<ItemInfoVO> itemInfoList = itemInfoDAO.getItemList();
-		System.out.println("itemInfoList :: " + itemInfoList);
-		System.out.println("itemInfoList.size() : " + itemInfoList.size());
+		System.out.println("sechParams ::: " + srchParams);
+		if(srchParams.getClntNm() == null && srchParams.getItemCd() == null && srchParams.getItemNm() == null){
+			srchParams.setClntNm("");
+			srchParams.setItemCd("");
+			srchParams.setItemNm("");
+		}
 
-		/** idx init */
-//		for(int i = 0; i < itemInfoList.size()-1; i++){
-//
-//			itemInfoList.set(i, idx);
-//		}
+		List<ItemInfoVO> itemInfoList = itemInfoDAO.getItemListSrch(srchParams);
 
 		model.addAttribute("itemInfoList", itemInfoList);
 
@@ -115,4 +103,12 @@ public class ItemInfoController{
 		return "redirect:/baseinfo/iteminfo";
 	}
 
+	private void commonProcess(Model model) {
+		String Title = "기본정보::상품정보";
+		String menuCode = "iteminfo";
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
+	}
 }
