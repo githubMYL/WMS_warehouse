@@ -1,14 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<script th:src="@{/js/front/layer.js}"></script>
+
 </head>
+
 	<th:block th:fragment="stdinForm" th:object="${stdinForm}" >
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				var today = new Date().toISOString().split('T')[0];
-				document.getElementsByName("stdinDt")[0].setAttribute('min', today);
-			});
-		</script>
+		<script th:src="@{/js/front/stdin.js}"></script>
 		<div>
 			<dt th:text="#{stdin_dt}" class="require_item"></dt>
 			<input type="date" name="stdinDt" th:field="*{stdinDt}" th:placeholder="#{stdin_dt}" onclick="minDate">

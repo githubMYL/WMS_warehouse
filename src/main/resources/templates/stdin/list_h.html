@@ -2,9 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/front/main}">
-<head>
-	<script th:src="@{/js/front/stdin.js}"></script>
-</head>
 
 <section layout:fragment="content">
 	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">

@@ -1,6 +1,8 @@
 package org.warehouse.controllers.stdin;
 
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import org.warehouse.models.stdin.StdinService;
 import org.warehouse.models.stdin.StdinVO;
 import org.warehouse.models.stdin.StdinValidator;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -39,6 +43,7 @@ public class StdinController {
 	private final StdinService service;
 
 	private final HttpServletRequest request;
+	private final HttpServletResponse response;
 
 
 	@GetMapping("/register")
@@ -59,11 +64,9 @@ public class StdinController {
 		return "stdin/register";
 	}
 
-	@PostMapping("/register")
+	@PostMapping("/save")
 	public String stdinRegisterPs(@Valid StdinForm stdinForm, Errors errors, Model model) {
 		validator.validate(stdinForm, errors);
-
-		System.out.println("stdinForm : " + stdinForm);
 
 		if(errors.hasErrors()) {
 			return "stdin/register";
@@ -71,8 +74,10 @@ public class StdinController {
 
 		service.register(stdinForm);
 
+		closeLayer(response);
 
-		return "redirect:/stdin";
+
+		return "close";
 	}
 
 	@GetMapping
@@ -92,6 +97,7 @@ public class StdinController {
 
 	@GetMapping("/detail")
 	public String stdin_detail(Model model) {
+		commonProcess(model, "입고");
 		model.addAttribute("detailList", stdinDAO.getDetailList());
 		return "stdin/list_d";
 	}
@@ -108,5 +114,22 @@ public class StdinController {
 
 
 		model.addAttribute("menuCode", menuCode);
+	}
+
+	private void closeLayer(HttpServletResponse response) {
+		response.setContentType("text/html; charset=euc-kr");
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			out.println("<script>var parent = window.parent.document;" +
+					"var layerDim = parent.getElementById('layer_dim');" +
+					"var layerPopup = parent.getElementById('layer_popup');" +
+					"parent.body.removeChild(layerDim);" +
+					"parent.body.removeChild(layerPopup);" +
+					"parent.location.reload();</script>");
+			out.flush();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -14,7 +14,7 @@
 	<section layout:fragment="content">
 		<h2>물류센터 수정</h2>
 
-		<form name="wactrSave" method="post" th:action="@{/baseinfo/wactr/admin/save}" autocomplete="off" th:object="${wactrForm}" class="_form">
+		<form name="wactrSave" method="post" th:action="@{/baseinfo/wactr/admin/save}" autocomplete="off" th:object="${wactrForm}" class="_form" onsubmit="close();">
 			<input type="hidden" name="flag" th:field="*{flag}" th:value="update">
 
 			<th:block th:replace="~{admin/wactr/_form::wactrForm}"></th:block>
@@ -23,5 +23,6 @@
 				<button type="submit" th:text="#{admin.action.update}"></button>
 			</div>
 		</form>
+
 	</section>
 </html>

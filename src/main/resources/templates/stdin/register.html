@@ -9,7 +9,7 @@
 	</head>
 	<main layout:fragment="content">
 		<h2>입고등록 추가</h2>
-		<form name="stdinSave" method="post" th:action="@{/stdin/register}" autocomplete="off" th:object="${stdinForm}" class="_form">
+		<form name="stdinSave" method="post" th:action="@{/stdin/save}" autocomplete="off" th:object="${stdinForm}" class="_form">
 
 			<th:block th:replace="~{stdin/_form::stdinForm}"></th:block>
 			<div class="btns">

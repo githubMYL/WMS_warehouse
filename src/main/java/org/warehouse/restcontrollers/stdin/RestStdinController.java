@@ -12,7 +12,7 @@ import org.warehouse.models.baseinfo.loc.LocVO;
 import java.util.List;
 
 @RestController("stdinAjaxController")
-@RequestMapping("/ajaxstdin")
+@RequestMapping("/stdin/ajaxstdin")
 @RequiredArgsConstructor
 public class RestStdinController {
 	private final ItemInfoDAO itemInfoDAO;

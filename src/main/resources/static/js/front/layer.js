@@ -123,6 +123,7 @@ warehouse.popup = {
     close() {
         var layerDim = document.getElementById("layer_dim");
         var layerPopup = document.getElementById("layer_popup");
+        console.log(layerDim);
         if (layerPopup) {
             document.body.removeChild(layerPopup);
         }
