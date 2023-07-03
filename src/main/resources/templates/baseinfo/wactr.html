@@ -4,7 +4,7 @@
 	  layout:decorate="~{layouts/front/main}">
 
 	<section layout:fragment="content">
-		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off">
+		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
 			<table class="table-cols">
 				<tr>
 					<th>납품센터 명</th>
@@ -122,7 +122,7 @@
 			function addItem(e) {
 
 				url = 'wactr/admin/register';
-				warehouse.popup.open(url, "테스트", 500, 800);
+				warehouse.popup.open(url, "테스트", 500, 800, true);
 			}
 
 			function deleteItem(e) {

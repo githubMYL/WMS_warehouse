@@ -2,10 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/admin/main}">
-
+	<head>
+		<style>
+			header {height:0px;}
+		</style>
+	</head>
 	<main layout:fragment="content">
 		<h2>입고등록 추가</h2>
-		<form name="stdinSave" method="post" th:action="@{/stdin/register}" autocomplete="off" th:object="${stdinForm}">
+		<form name="stdinSave" method="post" th:action="@{/stdin/register}" autocomplete="off" th:object="${stdinForm}" class="_form">
 
 			<th:block th:replace="~{stdin/_form::stdinForm}"></th:block>
 			<div class="btns">

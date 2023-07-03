@@ -3,6 +3,10 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header th:fragment="common">
 	<section class="left">로고</section>
+	<section class="mid">
+		<th:block th:replace="~{layouts/front/common/_submenu::menus}"></th:block>
+	</section>
+
 	<section class="right">
 		<th:block sec:authorize="isAuthenticated()">
 			<a th:href="@{/user/logout}" class="sbtn blue">로그아웃</a>

@@ -93,7 +93,7 @@
 <section layout:fragment="content">
 
     <div>
-        <form id="search"  >
+        <form id="search">
             로케이션 코드
             <input type="text"  id="search_loc" name="search_loc">
             <!-- 체크상태의 loc_cd 문자열-->
@@ -101,36 +101,39 @@
         </form>
     </div>
 
-    <table border="1">
-        <tr>
-            <td colspan="6" align="right">
-                <button th:text="#{search_list}" onclick="search_loc()"></button>
-                <button onclick="location.href='locjoin'"th:text="#{add_list}"></button>
-                <button th:text="#{mod_list}" onclick="mod_list()"></button>
-                <button th:text="#{delete_list}" onclick="delete_loc()"></button>
-            </td>
-        </tr>
-        <tr>
-            <th></th>
-            <th>순번</th>
-            <th>물류센터명</th>
-            <th>로케이션명</th>
-            <th>로케이션주소</th>
-            <th>비고</th>
-            <th>비고</th>
-        </tr>
+    <div class="table_wrapper">
+        <table>
+            <tr>
+                <td colspan="6">
+                    <button th:text="#{search_list}" onclick="search_loc()" class="sbtn"></button>
+                    <button onclick="location.href='locjoin'"th:text="#{add_list}" class="sbtn"></button>
+                    <button th:text="#{mod_list}" onclick="mod_list()" class="sbtn"></button>
+                    <button th:text="#{delete_list}" onclick="delete_loc()" class="sbtn blue"></button>
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <th>순번</th>
+                <th>물류센터명</th>
+                <th>로케이션명</th>
+                <th>로케이션주소</th>
+                <th>비고</th>
+                <th>비고</th>
+            </tr>
 
-        <tr th:each="list,listCount : ${loc_list}" >
-            <td><input type="checkbox" class="check" th:value="${list.loc_cd}" onclick="che()"></td>
-            <td th:text="${listCount.count}"></td>
-            <td th:text="${list.wactr_cd}"></td>
-            <td th:text="${list.loc_nm}"></td>
-            <td th:text="${list.loc_addr}"></td>
-            <td th:text="${list.rac_num}"></td>
-            <td th:text="${list.remk}"></td>
-        </tr>
+            <tr th:each="list,listCount : ${loc_list}" >
+                <td><input type="checkbox" class="check" th:value="${list.loc_cd}" onclick="che()"></td>
+                <td th:text="${listCount.count}"></td>
+                <td th:text="${list.wactr_cd}"></td>
+                <td th:text="${list.loc_nm}"></td>
+                <td th:text="${list.loc_addr}"></td>
+                <td th:text="${list.rac_num}"></td>
+                <td th:text="${list.remk}"></td>
+            </tr>
 
-    </table>
+        </table>
+    </div>
+
 
 
 </section>

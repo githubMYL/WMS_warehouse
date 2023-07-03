@@ -7,7 +7,7 @@
 </head>
 
 <section layout:fragment="content">
-	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
 		<table class="table-cols">
 			<tr>
 				<th>입고일자</th>
@@ -49,7 +49,7 @@
 			function addItem(e) {
 
 				url = 'stdin/register';
-				warehouse.popup.open(url, "테스트", 500, 800, false);
+				warehouse.popup.open(url, "테스트", 500, 800, true);
 			}
 
 			function deleteItem(e) {

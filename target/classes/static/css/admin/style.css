@@ -36,6 +36,7 @@ input[type='date'] { border: 1px solid #d5d5d5; width: 100%; height: 45px; paddi
 /** 기본 레이아웃 스타일 */
 header { height: 80px; background: #fff; display: flex; align-items: center; }
 header > .left { width: 208px; text-align: center; }
+header > .mid {text-align:center;}
 header > .right { flex-grow: 1; text-align: right; padding: 10px; }
 
 /** 기본 버튼 스타일 */
@@ -47,3 +48,11 @@ header > .right { flex-grow: 1; text-align: right; padding: 10px; }
 nav.submenus { background: #fff; box-shadow: 1px 1px 5px #cdced5; margin-bottom: 30px; display: flex; height: 60px; }
 nav.submenus a.on { background: #596b99; color: #fff; }
 nav.submenus a { line-height: 60px; padding: 0 40px; font-size: 18px; }
+
+._form input[type=text] {width:300px;}
+
+.frmSearch {margin-bottom:15px;}
+.frmSearch td{ padding-right:50px; }
+.frmSearch th {padding-right: 10px;}
+
+.table-cols {margin-bottom:20px;}

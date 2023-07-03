@@ -2,7 +2,7 @@
 <head>
 	<script th:src="@{/js/front/layer.js}"></script>
 </head>
-	<th:block th:fragment="stdinForm" th:object="${stdinForm}">
+	<th:block th:fragment="stdinForm" th:object="${stdinForm}" >
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				var today = new Date().toISOString().split('T')[0];
