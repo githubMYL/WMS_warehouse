@@ -12,6 +12,7 @@ import org.warehouse.models.BaseEntity;
 @AllArgsConstructor
 public class ItemInfoVO extends BaseEntity {
 
+    private int idx; // 순번
     @NotBlank
     private String wactrCd; // 물류센터코드
     private String wactrNm; // 물류센터명

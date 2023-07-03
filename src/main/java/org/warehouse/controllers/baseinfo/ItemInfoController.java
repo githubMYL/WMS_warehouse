@@ -35,7 +35,25 @@ public class ItemInfoController{
 	private final ItemInfoValidator itemInfoValidator;
 
 	@GetMapping("/iteminfo")
-	public String iteminfo(Model model) {
+	public String iteminfo(ItemInfoVO itemInfoVO, Model model){
+
+		List<ItemInfoVO> itemInfoList = itemInfoDAO.getItemList();
+		System.out.println("itemInfoList :: " + itemInfoList);
+		System.out.println("itemInfoList.size() : " + itemInfoList.size());
+
+		/** idx init */
+//		for(int i = 0; i < itemInfoList.size()-1; i++){
+//
+//			itemInfoList.set(i, idx);
+//		}
+
+		model.addAttribute("itemInfoList", itemInfoList);
+
+		return "baseinfo/iteminfo";
+	}
+
+	@GetMapping("/iteminfo/register")
+	public String register(Model model) {
 
 		ItemInfoVO itemInfoVO = new ItemInfoVO();
 

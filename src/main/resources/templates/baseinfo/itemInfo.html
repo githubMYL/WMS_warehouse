@@ -4,109 +4,57 @@
       xmlns:th="http://www.thymeleaf.org">
 
     <main layout:fragment="content">
-        <form autocomplete="off" method="post" name="itemInfo" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}">
+        <form method="post">
+            <tr>
+                <th>고객사명</th>
+                <td>
+                    <input th:text>
+                </td>
+                <th>상품코드</th>
+                <td>
+                    <input th:text>
+                </td>
+                <th>상품명</th>
+                <td>
+                    <input th:text>
+                </td>
+            </tr>
             <div>
-                <input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
-                <input id="wactr_tmp" list="wactr" name="wactr_tmp" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
-                <datalist id="wactr">
-                    <select id="wactr_sel">
-                        <option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
-                        </option>
-                    </select>
-                </datalist>
-                <div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
+                <button th:type="button"></button>
+                <button></button>
+                <button></button>
             </div>
 
-            <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const wactr = document.getElementById("wactr_tmp");
-                var selected = document.querySelector("select#wactr_sel")
-
-                wactr.addEventListener("change", UpdateWactr)
-            });
-
-
-            function UpdateWactr(e) {
-                var evnt = e.currentTarget;
-                var selected = document.querySelector("select#wactr_sel")
-                var datalist = evnt.list;
-                var wactrCd = document.getElementById("wactr_cd");
-
-                for(var j = 0; j < datalist.options.length; j++){
-                    if(this.value == datalist.options[j].value) {
-                        wactrCd.value = datalist.options[j].label;
-                    }
-                }
-            }
-            </script>
-
-            <div>
-                <input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
-                <input id="clnt_tmp" list="clnt" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
-                <datalist id="clnt">
-                    <select id="clnt_sel">
-                        <option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
-                        </option>
-                    </select>
-                </datalist>
-                <div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
-            </div>
-            <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const clnt = document.getElementById("clnt_tmp");
-                var selected = document.querySelector("select#clnt_sel")
-
-                clnt.addEventListener("change", UpdateClnt)
-            });
-
-
-            function UpdateClnt(e) {
-                var evnt = e.currentTarget;
-                var selected = document.querySelector("select#clnt_sel")
-                var datalist = evnt.list;
-                var clntcd = document.getElementById("clnt_cd");
-
-                for(var j = 0; j < datalist.options.length; j++){
-                    if(this.value == datalist.options[j].value) {
-                        clntcd.value = datalist.options[j].label;
-                    }
-                }
-            }
-
-            </script>
-
-            <div>
-                <input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
-                <datalist id="loc">
-                    <select id="loc_sel">
-                        <option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
-                        </option>
-                    </select>
-                </datalist>
-                <div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
-            </div>
-
-            <div>
-                <input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
-                <div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
-            </div>
-            <div>
-                <input th:field="*{itemNm}" th:placeholder="#{itemNm}" type="text">
-            </div>
-            <div>
-                <select th:field="*{boxUnit}" th:value="*{boxUnit}">
-                    <option value="">관리단위</option>
-                    <option th:each="code : ${codeList}" th:text="${code.itemValue}" th:value="${code.itemCode}"></option>
-                </select>
-            </div>
-            <div>
-                <input th:field=*{pltInBox} th:placeholder="#{pltInBox}" type="number">
-                <div class="errors" th:each="err : ${#fields.errors('pltInBox')}" th:text="${err}"></div>
-            </div>
-            <div>
-                <input th:field="*{remk}" th:placeholder="#{remk}" type="text">
-            </div>
-            <button type="submit">저장하기</button>
+            <table th:border="1">
+                <tr>
+                    <th width="30" align="center">
+                        <input th:type="checkbox">
+                    </th>
+                    <th width="40">순번</th>
+                    <th width="130px">물류센터명</th>
+                    <th width="100px">고객사코드</th>
+                    <th width="150px">고객사명</th>
+                    <th width="150px">상품코드</th>
+                    <th width="300px">상품명</th>
+                    <th width="80px">관리단위</th>
+                    <th width="150px">파렛트당 박스 수</th>
+                    <th width="500px">비고</th>
+                </tr>
+                <tr th:each="itemList : ${itemInfoList}">
+                    <td align="center">
+                        <input th:type="checkbox">
+                    </td>
+                    <td align="center" th:text="${itemList.idx}"></td>
+                    <td align="center" th:text="${itemList.wactrNm}"/>
+                    <td align="center" th:text="${itemList.clntCd}"/>
+                    <td th:text="${itemList.clntNm}"/>
+                    <td th:text="${itemList.itemCd}"></td>
+                    <td th:text="${itemList.itemNm}"></td>
+                    <td th:text="${itemList.boxUnit}"></td>
+                    <td th:text="${itemList.pltInBox}"></td>
+                    <td th:text="${itemList.remk}"></td>
+                </tr>
+            </table>
         </form>
     </main>
 </html>
