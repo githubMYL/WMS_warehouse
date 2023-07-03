@@ -1,6 +1,7 @@
 package org.warehouse.controllers.baseinfo;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.warehouse.commons.MenuDetail;
+import org.warehouse.commons.Menus;
 import org.warehouse.configs.models.mapper.WactrDAO;
 import org.warehouse.models.baseinfo.wactr.WactrForm;
 import org.warehouse.models.baseinfo.wactr.WactrRegisterService;
@@ -27,8 +30,13 @@ public class WactrController {
 	private final WactrValidator validator;
 	private final WactrRegisterService registerService;
 
+	private final HttpServletRequest request;
+
 	@GetMapping
 	public String wactr(Model model) {
+		commonProcess(model, "기본정보");
+
+
 		List<WactrVO> list = wactrDAO.getList();
 
 		model.addAttribute("list", list);
@@ -71,6 +79,20 @@ public class WactrController {
 		registerService.register(wactrForm);
 
 		return "redirect:/baseinfo/wactr";
+	}
+
+	private void commonProcess(Model model, String title) {
+		String menuCode = "wactr";
+
+		String subMenuCode = Menus.getSubMenuCode(request);
+		subMenuCode = title.equals("기본정보") ? "baseinfo" : subMenuCode;
+		model.addAttribute("subMenuCode", subMenuCode);
+
+		List<MenuDetail> submenus = Menus.gets("baseinfo");
+		model.addAttribute("submenus", submenus);
+
+
+		model.addAttribute("menuCode", menuCode);
 	}
 
 }

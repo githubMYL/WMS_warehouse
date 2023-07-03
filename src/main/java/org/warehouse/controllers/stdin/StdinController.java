@@ -1,5 +1,6 @@
 package org.warehouse.controllers.stdin;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.warehouse.commons.MenuDetail;
+import org.warehouse.commons.Menus;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
 import org.warehouse.configs.models.mapper.LocDAO;
@@ -34,6 +37,8 @@ public class StdinController {
 
 	private final StdinValidator validator;
 	private final StdinService service;
+
+	private final HttpServletRequest request;
 
 
 	@GetMapping("/register")
@@ -72,6 +77,8 @@ public class StdinController {
 
 	@GetMapping
 	public String stdin(Model model) {
+		commonProcess(model, "입고");
+		
 		List<ClntVO> clnt_list = clntDAO.getClntList();
 		model.addAttribute("clnt_list", clnt_list);
 
@@ -87,5 +94,19 @@ public class StdinController {
 	public String stdin_detail(Model model) {
 		model.addAttribute("detailList", stdinDAO.getDetailList());
 		return "stdin/list_d";
+	}
+
+	private void commonProcess(Model model, String title) {
+		String menuCode = "stdin";
+
+		String subMenuCode = Menus.getSubMenuCode(request);
+		subMenuCode = title.equals("입고") ? "stdin" : subMenuCode;
+		model.addAttribute("subMenuCode", subMenuCode);
+
+		List<MenuDetail> submenus = Menus.gets("stdin");
+		model.addAttribute("submenus", submenus);
+
+
+		model.addAttribute("menuCode", menuCode);
 	}
 }
