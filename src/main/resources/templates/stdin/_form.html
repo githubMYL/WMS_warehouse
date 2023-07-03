@@ -17,7 +17,7 @@
 		<div>
 			<dt th:text="#{clnt}" class="require_item"></dt>
 			<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly/>
-			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명" onchange="UpdateClnt()"/>
+			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명" onchange="UpdateClnt()" th:field="*{clntNm}"/>
 			<datalist id="clnt">
 				<select id="clnt_sel">
 					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
@@ -45,7 +45,7 @@
 		<div>
 			<dt th:text="#{item}" class="require_item"></dt>
 			<input type="text" id="item_cd" th:field="*{itemCd}" readonly/>
-			<input type="text" list="item" id="item_tmp" name="item_tmp" placeholder="상품명" onchange="UpdateItem()"/>
+			<input type="text" list="item" id="item_tmp" name="item_tmp" placeholder="상품명" onchange="UpdateItem()" th:field="*{itemNm}"/>
 			<datalist id="item">
 				<select id="item_sel">
 

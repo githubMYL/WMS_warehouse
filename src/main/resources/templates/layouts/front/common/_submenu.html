@@ -3,9 +3,12 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:fragment="menus" >
 	<nav class='submenus'>
-		<a th:each="menu : ${submenus}" th:href="@{{url}(url=${menu.url})}" th:text="${menu.name}"
-		   th:classappend="${subMenuCode == menu.code} ? 'on'"></a>
+		<a th:href="@{/baseinfo/iteminfo(pageName='baseinfo')}" th:classappend="${pageName} == 'baseinfo' ? 'on'">기본정보</a>
+		<a th:href="@{/stdin(pageName='stdin')}" th:classappend="${pageName} == 'stdin' ? 'on'">입고</a>
+		<a th:href="@{/}" th:classappend="${pageName} == 'rels' ? 'on'">출고</a>
+		<a th:href="@{/}" th:classappend="${pageName} == 'tmstk' ? 'on'">재고</a>
+		<a th:href="@{/}" th:classappend="${pageName} == '' ? 'on'">반품</a>
+		<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin}" th:text="#{adminPage}"></a>
 	</nav>
-
 </th:block>
 </html>

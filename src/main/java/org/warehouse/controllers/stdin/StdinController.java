@@ -5,10 +5,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.commons.MenuDetail;
@@ -20,6 +22,8 @@ import org.warehouse.configs.models.mapper.StdinDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 import org.warehouse.models.baseinfo.loc.LocVO;
+import org.warehouse.models.baseinfo.wactr.WactrForm;
+import org.warehouse.models.baseinfo.wactr.WactrVO;
 import org.warehouse.models.stdin.StdinForm;
 import org.warehouse.models.stdin.StdinService;
 import org.warehouse.models.stdin.StdinVO;
@@ -64,6 +68,17 @@ public class StdinController {
 		return "stdin/register";
 	}
 
+	@GetMapping("/update/{stdinNum}")
+	public String update(@PathVariable Long stdinNum, Model model) {
+		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
+
+		StdinForm stdinForm = new ModelMapper().map(stdinVO, StdinForm.class);
+
+		model.addAttribute("stdinForm", stdinForm);
+
+		return("stdin/update");
+	}
+
 	@PostMapping("/save")
 	public String stdinRegisterPs(@Valid StdinForm stdinForm, Errors errors, Model model) {
 		validator.validate(stdinForm, errors);
@@ -82,7 +97,7 @@ public class StdinController {
 
 	@GetMapping
 	public String stdin(Model model) {
-		commonProcess(model, "입고");
+		commonProcess(model);
 		
 		List<ClntVO> clnt_list = clntDAO.getClntList();
 		model.addAttribute("clnt_list", clnt_list);
@@ -97,22 +112,17 @@ public class StdinController {
 
 	@GetMapping("/detail")
 	public String stdin_detail(Model model) {
-		commonProcess(model, "입고");
+		commonProcess(model);
 		model.addAttribute("detailList", stdinDAO.getDetailList());
 		return "stdin/list_d";
 	}
 
-	private void commonProcess(Model model, String title) {
-		String menuCode = "stdin";
-
-		String subMenuCode = Menus.getSubMenuCode(request);
-		subMenuCode = title.equals("입고") ? "stdin" : subMenuCode;
-		model.addAttribute("subMenuCode", subMenuCode);
-
-		List<MenuDetail> submenus = Menus.gets("stdin");
-		model.addAttribute("submenus", submenus);
-
-
+	private void commonProcess(Model model) {
+		String Title = "입고";
+		String menuCode = "";
+		String pageName = "stdin";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
 	}
 

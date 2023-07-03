@@ -67,13 +67,12 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 .table_wrapper th { background: #f8f8f8; width: 160px; padding: 10px 20px; text-align: left; }
 .table_wrapper td { background: #fff; padding: 10px 15px; }
 
-.table_wrapper { overflow=auto;}
-
 .table-cols {margin-bottom:20px;}
-
 
 ._form input[type=text,number] {width:300px;}
 
 .frmSearch {margin-bottom:15px;}
 .frmSearch td{ padding-right:50px; }
 .frmSearch th {padding-right: 10px;}
+
+.loc_list:hover td{ background-color:#d3d3d3; }

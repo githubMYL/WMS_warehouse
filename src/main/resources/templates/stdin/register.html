@@ -7,7 +7,8 @@
 			header {height:0px;}
 		</style>
 	</head>
-	<main layout:fragment="content">
+
+	<section layout:fragment="content">
 		<h2>입고등록 추가</h2>
 		<form name="stdinSave" method="post" th:action="@{/stdin/save}" autocomplete="off" th:object="${stdinForm}" class="_form">
 
@@ -17,6 +18,6 @@
 				<button type="submit" th:text="#{admin.action.register}"></button>
 			</div>
 		</form>
-	</main>
+	</section>
 
 </html>

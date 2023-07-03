@@ -37,4 +37,9 @@ public class RestStdinController {
 		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
 		return stdinVO;
 	}
+
+	@GetMapping("modify")
+	public void modify(Long stdinnum) {
+
+	}
 }

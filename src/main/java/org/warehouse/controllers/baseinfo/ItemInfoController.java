@@ -25,7 +25,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/baseinfo")
-public class ItemInfoController {
+public class ItemInfoController{
 
 	private final WactrDAO wactrDAO;
 	private final ClntDAO clntDAO;
@@ -34,8 +34,39 @@ public class ItemInfoController {
 	private final ItemInfoService itemInfoService;
 	private final ItemInfoValidator itemInfoValidator;
 
+	private void commonProcess(Model model) {
+		String Title = "기본정보::상품정보";
+		String menuCode = "iteminfo";
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
+	}
+
+
+
 	@GetMapping("/iteminfo")
-	public String iteminfo(Model model) {
+	public String iteminfo(ItemInfoVO itemInfoVO, Model model){
+
+		commonProcess(model);
+
+		List<ItemInfoVO> itemInfoList = itemInfoDAO.getItemList();
+		System.out.println("itemInfoList :: " + itemInfoList);
+		System.out.println("itemInfoList.size() : " + itemInfoList.size());
+
+		/** idx init */
+//		for(int i = 0; i < itemInfoList.size()-1; i++){
+//
+//			itemInfoList.set(i, idx);
+//		}
+
+		model.addAttribute("itemInfoList", itemInfoList);
+
+		return "baseinfo/iteminfo";
+	}
+
+	@GetMapping("/iteminfo/register")
+	public String register(Model model) {
 
 		ItemInfoVO itemInfoVO = new ItemInfoVO();
 

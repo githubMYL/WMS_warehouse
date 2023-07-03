@@ -30,7 +30,7 @@ public class LocController {
 	//loc 리스트
 	@GetMapping("/loc")
 	public String loc(@RequestParam(name = "search_loc", required = false) String search_loc, Model model) {
-
+		commonProcess(model);
 
 		if (search_loc != null) {
 			List<LocVO> search_list = locDAO.getSearchList(search_loc);
@@ -159,4 +159,12 @@ public class LocController {
 	}
 
 
+	private void commonProcess(Model model) {
+		String Title = "기본정보::로케이션정보";
+		String menuCode = "loc";
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
+	}
 }

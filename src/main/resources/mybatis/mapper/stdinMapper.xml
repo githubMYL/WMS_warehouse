@@ -44,7 +44,7 @@
 	</select>
 
 	<select id="getDetail" resultMap="stdinMap">
-		SELECT * FROM STDIN_D D LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD WHERE STDIN_NUM = #{stdinNum}
+		SELECT * FROM STDIN_D D LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD WHERE STDIN_NUM = #{stdinNum}
 	</select>
 </mapper>
 

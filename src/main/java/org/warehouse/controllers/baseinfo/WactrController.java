@@ -38,8 +38,7 @@ public class WactrController {
 
 	@GetMapping
 	public String wactr(Model model) {
-		commonProcess(model, "기본정보");
-
+		commonProcess(model);
 
 		List<WactrVO> list = wactrDAO.getList();
 
@@ -86,19 +85,15 @@ public class WactrController {
 		return "redirect:/baseinfo/wactr";
 	}
 
-	private void commonProcess(Model model, String title) {
+	private void commonProcess(Model model) {
+		String Title = "기본정보::물류센터정보";
 		String menuCode = "wactr";
-
-		String subMenuCode = Menus.getSubMenuCode(request);
-		subMenuCode = title.equals("기본정보") ? "baseinfo" : subMenuCode;
-		model.addAttribute("subMenuCode", subMenuCode);
-
-		List<MenuDetail> submenus = Menus.gets("baseinfo");
-		model.addAttribute("submenus", submenus);
-
-
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
 	}
+
 
 	private void closeLayer(HttpServletResponse response) {
 		response.setContentType("text/html; charset=euc-kr");

@@ -46,11 +46,6 @@
 				trs.forEach( (tr) => {
 					tr.addEventListener('click', getDetail);
 				});
-
-				const trs = document.querySelectorAll('#stdin_d_table tr');
-				trs.forEach( (tr) => {
-					tr.addEventListener('dblclick', updateTable)
-				});
 			});
 
 			function addItem(e) {
@@ -110,13 +105,13 @@
 				const stdinNum = test.querySelector('input').value;
 				var str = '<tr><th>순번</th><th>상품코드</th><th>상품명</th><th>로케이션</th><th>입고예정수량</th><th>정상수량</th><th>불량수량</th><th>비고</th></tr>';
 
-				str += '<tr>';
+				str += '<tr id="stdin_d_infos">';
 
 				const url = `/stdin/ajaxstdin/getDetail?stdinNum=${stdinNum}`;
 				commonLib.ajaxLoad(url)
 					.then((data) => {
 						data = JSON.parse(data);
-						str += '<td>' + 1 + '</td>';
+						str += '<td data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
 						str += '<td>' + data.itemCd + '</td>';
 						str += '<td>' + data.itemNm + '</td>';
 						str += '<td>' + data.locCd + '</td>';
@@ -130,8 +125,15 @@
 					.catch((err) => {
 						console.error(err);
 					});
-
 			}
+
+			function updateTable() {
+				const td = document.querySelector('#stdin_d_infos td')
+				const stdinnum = td.dataset.stdinnum;
+
+				url = 'stdin/update/' + stdinnum;
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			};
 		</script>
 	<div class="table_wrapper">
 		<h1>입고 헤더</h1>
@@ -161,7 +163,7 @@
 		</table>
 
 		<h1>입고 상세</h1>
-		<table id="stdin_d_table">
+		<table id="stdin_d_table" ondblclick="updateTable()">
 			<tr>
 				<th>순번</th>
 				<th>상품코드</th>
