@@ -7,6 +7,8 @@ import java.util.List;
 
 @Mapper
 public interface StdinDAO {
-	void insertStdin(StdinVO stdinVO);
+	void insertHeaderStdin(StdinVO stdinVO);
+	void insertDetailStdin(StdinVO stdinVO);
 	List<StdinVO> getList();
+	List<StdinVO> getDetailList();
 }

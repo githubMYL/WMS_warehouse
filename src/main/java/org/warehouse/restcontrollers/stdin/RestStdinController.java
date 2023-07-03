@@ -21,8 +21,6 @@ public class RestStdinController {
 	@GetMapping
 	public List<ItemInfoVO> getItemList(String clntCd) {
 		List<ItemInfoVO> list = itemInfoDAO.getItemListByClntCd(clntCd);
-		System.out.println(clntCd);
-		System.out.println(list);
 		return list;
 	}
 

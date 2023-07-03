@@ -39,7 +39,7 @@
 		<div>
 			<dt th:text="#{addr}" class="require_item"></dt>
 			<input type="text" style="width:300px;" name="addr" id="addr" th:field="*{addr}" th:placeholder="#{addr}">
-			<input type="button" onclick="execDaumPostcode()" value="주소 찾기"><br>
+			<input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="sbtn" style="height: 45px;"><br>
 			<div class="errors" th:each="err : ${#fields.errors('addr')}" th:text="${err}"></div>
 		</div>
 

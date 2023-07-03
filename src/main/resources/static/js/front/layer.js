@@ -211,5 +211,13 @@ function loadValue() {
 
 }
 */
+function mod_loc(){
 
+       if(!confirm('선택한 항목을 수정하시겠습니까?')){
+        return;
+    }
+
+     // 폼 서버로 제출
+     form.submit();
+    }
 

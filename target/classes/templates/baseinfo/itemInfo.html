@@ -3,43 +3,58 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 
-    <main layout:fragment="content">
-        <head>
+    <section layout:fragment="content">
+        <form method="post">
+            <tr>
+                <th>고객사명</th>
+                <td>
+                    <input th:text>
+                </td>
+                <th>상품코드</th>
+                <td>
+                    <input th:text>
+                </td>
+                <th>상품명</th>
+                <td>
+                    <input th:text>
+                </td>
+            </tr>
+            <div>
+                <button th:type="button"></button>
+                <button></button>
+                <button></button>
+            </div>
 
-        </head>
-        <body>
-            <form method="post">
-                <table th:border="1">
-                    <tr>
-                        <th width="30" align="center">
-                            <input th:type="checkbox">
-                        </th>
-                        <th width="40">순번</th>
-                        <th width="130px">물류센터명</th>
-                        <th width="100px">고객사코드</th>
-                        <th width="150px">고객사명</th>
-                        <th width="150px">상품코드</th>
-                        <th width="300px">상품명</th>
-                        <th width="80px">관리단위</th>
-                        <th width="150px">파렛트당 박스 수</th>
-                        <th width="500px">비고</th>
-                    </tr>
-                    <tr th:each="itemList : ${itemInfoList}">
-                        <td align="center">
-                            <input th:type="checkbox">
-                        </td>
-                        <td align="center" th:text="${itemList.idx}"></td>
-                        <td align="center" th:text="${itemList.wactrNm}"/>
-                        <td align="center" th:text="${itemList.clntCd}"/>
-                        <td th:text="${itemList.clntNm}"/>
-                        <td th:text="${itemList.itemCd}"></td>
-                        <td th:text="${itemList.itemNm}"></td>
-                        <td th:text="${itemList.boxUnit}"></td>
-                        <td th:text="${itemList.pltInBox}"></td>
-                        <td th:text="${itemList.remk}"></td>
-                    </tr>
-                </table>
-            </form>
-        </body>
-    </main>
+            <table th:border="1">
+                <tr>
+                    <th width="30" align="center">
+                        <input th:type="checkbox">
+                    </th>
+                    <th width="40">순번</th>
+                    <th width="130px">물류센터명</th>
+                    <th width="100px">고객사코드</th>
+                    <th width="150px">고객사명</th>
+                    <th width="150px">상품코드</th>
+                    <th width="300px">상품명</th>
+                    <th width="80px">관리단위</th>
+                    <th width="150px">파렛트당 박스 수</th>
+                    <th width="500px">비고</th>
+                </tr>
+                <tr th:each="itemList : ${itemInfoList}">
+                    <td align="center">
+                        <input th:type="checkbox">
+                    </td>
+                    <td align="center" th:text="${itemList.idx}"></td>
+                    <td align="center" th:text="${itemList.wactrNm}"/>
+                    <td align="center" th:text="${itemList.clntCd}"/>
+                    <td th:text="${itemList.clntNm}"/>
+                    <td th:text="${itemList.itemCd}"></td>
+                    <td th:text="${itemList.itemNm}"></td>
+                    <td th:text="${itemList.boxUnit}"></td>
+                    <td th:text="${itemList.pltInBox}"></td>
+                    <td th:text="${itemList.remk}"></td>
+                </tr>
+            </table>
+        </form>
+    </section>
 </html>

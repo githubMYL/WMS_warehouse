@@ -24,7 +24,6 @@
 	</resultMap>
 
 	<select id="getClntList" resultMap="clntMap">
-		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
 		SELECT * FROM CLNT ORDER BY CLNT_CD
 	</select>
 

@@ -97,7 +97,7 @@ function UpdateItem(e) {
             						loc_str += '<option label=';
             						loc_str += data[i].wactr_cd;
             						loc_str += ' value=';
-            						loc_str += data[i].loc_nm;
+            						loc_str += data[i].loc_cd;
             						loc_str += '></option>';
             					}
             					loc_str += '</select>'

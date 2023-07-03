@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 
-<main layout:fragment="content">
+<section layout:fragment="content">
     <form autocomplete="off" method="post" name="itemInfo" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}">
         <div>
             <input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
@@ -107,5 +107,5 @@
         </div>
         <button type="submit">저장하기</button>
     </form>
-</main>
+</section>
 </html>

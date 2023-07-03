@@ -67,7 +67,7 @@ public class StdinController {
 		service.register(stdinForm);
 
 
-		return "stdin/list_h";
+		return "redirect:/stdin";
 	}
 
 	@GetMapping
@@ -81,5 +81,11 @@ public class StdinController {
 
 
 		return "stdin/list_h";
+	}
+
+	@GetMapping("/detail")
+	public String stdin_detail(Model model) {
+		model.addAttribute("detailList", stdinDAO.getDetailList());
+		return "stdin/list_d";
 	}
 }
