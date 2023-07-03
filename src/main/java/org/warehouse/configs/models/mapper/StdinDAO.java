@@ -11,4 +11,5 @@ public interface StdinDAO {
 	void insertDetailStdin(StdinVO stdinVO);
 	List<StdinVO> getList();
 	List<StdinVO> getDetailList();
+	StdinVO getDetail(Long stdinNum);
 }
