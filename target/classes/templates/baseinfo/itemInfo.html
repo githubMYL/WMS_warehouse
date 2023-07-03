@@ -1,44 +1,68 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layouts/admin/main}"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{layouts/front/main}">
 
     <section layout:fragment="content">
-        <form method="post">
-            <tr>
-                <th>고객사명</th>
-                <td>
-                    <input th:text>
-                </td>
-                <th>상품코드</th>
-                <td>
-                    <input th:text>
-                </td>
-                <th>상품명</th>
-                <td>
-                    <input th:text>
-                </td>
-            </tr>
-            <div>
-                <button th:type="button"></button>
-                <button></button>
-                <button></button>
-            </div>
-
-            <table th:border="1">
+        <form class="frmSearch" id="searchForm" onsubmit="return false" autocomplete="off">
+            <table class="table-cols">
                 <tr>
-                    <th width="30" align="center">
+                    <th>고객사명</th>
+                    <td>
+                        <input type="text" id="clntNmSrch">
+                    </td>
+                    <th>상품코드</th>
+                    <td>
+                        <input type="text" id="itemCdSrch">
+                    </td>
+                    <th>상품명</th>
+                    <td>
+                        <input type="text" id="itemNmSrch">
+                    </td>
+                </tr>
+            </table>
+            <div class="btns" align="left">
+                <button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
+                <button class="sbtn" th:text="#{add_btn}"></button>
+                <button class="sbtn blue" th:text="#{delete_btn}"></button>
+            </div>
+        </form>
+        <script>
+            // 페이지이동
+            function movePage(page){
+
+                // 검색 조건을 form 에 넣어줌
+                const form = document.getElementById('searchForm');
+
+                // form 에 들어있는 검색조건을 queryParams에 넣어줌.
+                const queryParams = {
+                    page: (page) ? page: 1,
+                    recordSize: 10,
+                    pageSize: 10,
+                    clntNm: form.clntNmSrch.value,
+                    itemCd: form.itemCdSrch.value,
+                    itemNm: form.itemNmSrch.value
+                }
+                // location.pathname :: 페이지의 URI를 의미함.
+                // new URLSearchParams(queryParams).toString() :: queryParams 의 모든 값을 쿼리스트링으로 변환
+                location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+            }
+        </script>
+        <div class="table_wrapper">
+            <table class="table-cols">
+                <tr>
+                    <th align="center">
                         <input th:type="checkbox">
                     </th>
-                    <th width="40">순번</th>
-                    <th width="130px">물류센터명</th>
-                    <th width="100px">고객사코드</th>
-                    <th width="150px">고객사명</th>
-                    <th width="150px">상품코드</th>
-                    <th width="300px">상품명</th>
-                    <th width="80px">관리단위</th>
-                    <th width="150px">파렛트당 박스 수</th>
-                    <th width="500px">비고</th>
+                    <th>순번</th>
+                    <th>물류센터명</th>
+                    <th>고객사코드</th>
+                    <th>고객사명</th>
+                    <th>상품코드</th>
+                    <th>상품명</th>
+                    <th>관리단위</th>
+                    <th>파렛트 당<br/>박스 수</th>
+                    <th>비고</th>
                 </tr>
                 <tr th:each="itemList : ${itemInfoList}">
                     <td align="center">
@@ -50,11 +74,11 @@
                     <td th:text="${itemList.clntNm}"/>
                     <td th:text="${itemList.itemCd}"></td>
                     <td th:text="${itemList.itemNm}"></td>
-                    <td th:text="${itemList.boxUnit}"></td>
-                    <td th:text="${itemList.pltInBox}"></td>
+                    <td align="center" th:text="${itemList.boxUnit}"></td>
+                    <td align="center" th:text="${itemList.pltInBox}"></td>
                     <td th:text="${itemList.remk}"></td>
                 </tr>
             </table>
-        </form>
+        </div>
     </section>
 </html>
