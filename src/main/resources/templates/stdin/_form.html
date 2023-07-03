@@ -8,7 +8,7 @@
 		<script th:src="@{/js/front/stdin.js}"></script>
 		<div>
 			<dt th:text="#{stdin_dt}" class="require_item"></dt>
-			<input type="date" name="stdinDt" th:field="*{stdinDt}" th:placeholder="#{stdin_dt}" onclick="minDate">
+			<input type="date" name="stdinDt" th:value="${#temporals.format(stdinForm.stdinDt, 'yyyy-MM-dd')}" th:placeholder="#{stdin_dt}" onclick="minDate">
 			<div class="errors" th:each="err : ${#fields.errors('stdinDt')}" th:text="${err}"></div>
 		</div>
 
