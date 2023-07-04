@@ -7,15 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.warehouse.configs.models.mapper.UserMapper;
 
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 	private final UserInfoService userInfoService;
-
-	private final UserMapper userMapper;
 
 	@GetMapping("/join")
 	public String join(Model model) {

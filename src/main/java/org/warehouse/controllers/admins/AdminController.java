@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.CustDAO;
 import org.warehouse.configs.models.mapper.TestDAO;
+import org.warehouse.configs.models.mapper.UserDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.admin.cust.CustVO;
 import org.warehouse.models.user.UserJoinService;
 import org.warehouse.models.user.UserJoinValidator;
+import org.warehouse.models.user.UserVO;
 
 import java.util.List;
 
@@ -28,6 +30,17 @@ public class AdminController {
 	private final ClntDAO clntDAO;
 	private final CustDAO custDAO;
 	private final TestDAO testDAO;
+	private final UserDAO userDAO;
+
+	@GetMapping
+	public String userManage(Model model) {
+		commonProcess(model);
+		List<UserVO> userList = userDAO.getUserList();
+
+		model.addAttribute("userList", userList);
+
+		return "admin/userManage";
+	}
 
 	@GetMapping("/join")
 	public String join(Model model) {
@@ -53,5 +66,14 @@ public class AdminController {
 		joinService.join(joinForm);
 
 		return "redirect:/user/login";
+	}
+
+	private void commonProcess(Model model) {
+		String Title = "관리자::사용자관리";
+		String menuCode = "admin";
+		String pageName = "userManage";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
 	}
 }
