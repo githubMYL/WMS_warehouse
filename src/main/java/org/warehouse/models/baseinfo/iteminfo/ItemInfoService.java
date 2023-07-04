@@ -15,5 +15,4 @@ public class ItemInfoService {
 		System.out.println("service :: " + itemInfoVO);
 		itemInfoDAO.insertItemInfo(itemInfoVO);
 	}
-
 }

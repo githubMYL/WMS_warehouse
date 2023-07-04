@@ -35,6 +35,54 @@
 		INSERT INTO STDIN_D D(D.STDIN_NO, D.STDIN_DT, D.STDIN_NUM, D.ITEM_CD, D.CLNT_CD, D.LOC_CD, D.WACTR_CD, D.BEFORE_STDIN, D.NORMAL, D.FAULT, D.REMK, D.REG_DT, D.REG_NM) VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{normal}, #{fault}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
+	<update id="updateHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		UPDATE STDIN_H H SET
+			H.STDIN_DT = #{stdinDt},
+			H.CLNT_CD = #{clntCd},
+			H.STATUS = #{status},
+			H.REMK = #{remark},
+			H.MOD_DT = SYSDATE,
+			H.MOD_NM = #{modNm},
+			<choose>
+				<when test="delyn == true">
+					H.DEL_YN = 'Y'
+					WHERE H.STDIN_NUM = #{stdinNum}
+				</when>
+				<when test="delyn == false">
+					H.DEL_YN = 'N'
+					WHERE H.STDIN_NUM = #{stdinNum}
+				</when>
+			</choose>
+	</update>
+
+	<update id="updateDetailStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		UPDATE STDIN_D D SET
+			D.STDIN_DT= #{stdinDt},
+			D.ITEM_CD = #{itemCd},
+			D.CLNT_CD = #{clntCd},
+			D.LOC_CD = #{locCd},
+			D.WACTR_CD = #{wactrCd},
+			D.BEFORE_STDIN = #{beforeStdin},
+			D.NORMAL = #{normal},
+			D.FAULT = #{fault},
+			D.REMK = #{remark},
+			D.MOD_DT = SYSDATE,
+			D.MOD_NM = #{modNm},
+			<choose>
+				<when test="delyn == true">
+					D.DEL_YN = 'Y'
+					WHERE D.STDIN_NUM = #{stdinNum}
+				</when>
+				<when test="delyn == false">
+					D.DEL_YN = 'N'
+					WHERE D.STDIN_NUM = #{stdinNum}
+				</when>
+			</choose>
+	</update>
+
+
+
 	<select id="getList" resultMap="stdinMap">
 		SELECT H.STDIN_NUM, H.STDIN_DT, C.CLNT_CD, C.CLNT_NM, H.STATUS FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD WHERE H.DEL_YN = 'N' ORDER BY STDIN_DT
 	</select>
