@@ -101,5 +101,4 @@
     <select id="getItem" resultMap="itemMap">
         SELECT * FROM ITEM WHERE ITEM_CD = #{itemCd}
     </select>
-
 </mapper>

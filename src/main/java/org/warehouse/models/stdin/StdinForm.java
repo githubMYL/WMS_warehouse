@@ -2,6 +2,7 @@ package org.warehouse.models.stdin;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.warehouse.models.BaseEntity;
 
 import java.time.LocalDate;
@@ -25,4 +26,6 @@ public class StdinForm extends BaseEntity {
 	private Long beforeStdin;
 	private Long normal;
 	private Long fault;
+
+	private String flag;	// register, update 구분용
 }

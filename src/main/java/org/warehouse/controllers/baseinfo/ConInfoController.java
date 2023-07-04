@@ -33,6 +33,7 @@ public class ConInfoController {
 
 	@GetMapping("/coninfo")
 	public String conInfo(Model model) {
+		model.addAttribute("pageName", "baseinfo");
 
 		ConInfoVO conInfoVO = new ConInfoVO();
 		//List<ConInfoVO> conInfoVOList = conInfoDAO.getConInfoList();
@@ -70,5 +71,14 @@ public class ConInfoController {
 
 		conInfoService.conInfoSave(conInfoVO);
 		return "redirect:/baseinfo/coninfo";
+	}
+
+	private void commonProcess(Model model) {
+		String Title = "기본정보::계약정보";
+		String menuCode = "coninfo";
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
 	}
 }

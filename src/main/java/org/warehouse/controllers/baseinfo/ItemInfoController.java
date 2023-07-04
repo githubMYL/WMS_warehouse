@@ -38,6 +38,8 @@ public class ItemInfoController{
 	@GetMapping("/iteminfo")
 	public String iteminfo(@ModelAttribute("srchParams") ItemInfoVO srchParams, Model model){
 
+		commonProcess(model);
+
 		System.out.println("sechParams ::: " + srchParams);
 		if(srchParams.getClntNm() == null && srchParams.getItemCd() == null && srchParams.getItemNm() == null){
 			srchParams.setClntNm("");
@@ -102,4 +104,12 @@ public class ItemInfoController{
 		return "redirect:/baseinfo/iteminfo";
 	}
 
+	private void commonProcess(Model model) {
+		String Title = "기본정보::상품정보";
+		String menuCode = "iteminfo";
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
+	}
 }

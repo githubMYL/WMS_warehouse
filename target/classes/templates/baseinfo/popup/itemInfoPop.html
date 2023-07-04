@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layouts/admin/main}"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:th="http://www.thymeleaf.org">
 
-<section layout:fragment="content">
     <form autocomplete="off" method="post" name="itemInfo" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}">
         <div>
             <input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
@@ -16,7 +14,6 @@
             </datalist>
             <div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
         </div>
-
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const wactr = document.getElementById("wactr_tmp");
@@ -38,8 +35,7 @@
                     }
                 }
             }
-            </script>
-
+        </script>
         <div>
             <input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
             <input id="clnt_tmp" list="clnt" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
@@ -71,9 +67,7 @@
                     }
                 }
             }
-
             </script>
-
         <div>
             <input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
             <datalist id="loc">
@@ -107,5 +101,4 @@
         </div>
         <button type="submit">저장하기</button>
     </form>
-</section>
 </html>

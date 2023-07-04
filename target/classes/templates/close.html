@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<body>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				var layerDim = document.getElementById("layer_dim");
+				var layerPopup = document.getElementById("layer_popup");
+				console.log(layerDim);
+				if (layerPopup) {
+					document.body.removeChild(layerPopup);
+				}
+
+				if (layerDim) {
+					document.body.removeChild(layerDim);
+				}
+			}
+			);
+		</script>
+	</body>
+</html>

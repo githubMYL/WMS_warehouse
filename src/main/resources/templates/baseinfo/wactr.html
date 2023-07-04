@@ -7,9 +7,9 @@
 		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
 			<table class="table-cols">
 				<tr>
-					<th>납품센터 명</th>
+					<th>물류센터 명</th>
 					<td>
-						<input type="text" name="wactrNm" placeholder="납품센터 명">
+						<input type="text" name="wactrNm" placeholder="물류센터 명">
 					</td>
 
 					<th>규모</th>
@@ -19,7 +19,7 @@
 				</tr>
 			</table>
 			<div class="btns" style="text-align:right;">
-				<input type="button" value="검색" id="ajax_btn" class="sbtn">
+				<button type="button" id="ajax_btn" class="sbtn">검색</button>
 				<button type="button" id="add" class="sbtn">추가</button>
 				<button type="button" id="delete" class="sbtn blue">삭제</button>
 			</div>
@@ -181,7 +181,7 @@
 				var tr = e.target.parentNode;
 				var cd = tr.querySelector('#chk').value;
 				url = 'wactr/admin/' + cd + '/update';
-				warehouse.popup.open(url, "테스트", 500, 800);
+				warehouse.popup.open(url, "테스트", 500, 800, true);
 			}
 		</script>
 	</section>

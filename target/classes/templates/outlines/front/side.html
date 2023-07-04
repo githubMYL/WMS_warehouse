@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<aside th:fragment="menu">
-	<div>
-		<ul>
-			<li>
-				<a>test</a>
-			</li>
-		</ul>
-	</div>
+<aside th:fragment="menu" th:switch="${pageName}">
+	<ul th:case="baseinfo">
+		<li>
+			<a th:href="@{/baseinfo/iteminfo}" th:classappend="${menuCode} == 'iteminfo' ? 'on'">
+				<i class="xi-view-list"></i>
+				상품정보
+			</a>
+		</li>
+
+		<li>
+			<a th:href="@{/baseinfo/wactr}" th:classappend="${menuCode} == 'wactr' ? 'on'">
+				<i class="xi-view-list"></i>
+				물류센터정보
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/baseinfo/loc}" th:classappend="${menuCode} == 'loc' ? 'on'">
+				<i class="xi-view-list"></i>
+				로케이션 정보
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/baseinfo/coninfo}" th:classappend="${menuCode} == 'coninfo' ? 'on'">
+				<i class="xi-view-list"></i>
+				계약정보
+			</a>
+		</li>
+	</ul>
+
+	<ul th:case="stdin">
+		<li>
+			<a>사이드</a>
+		</li>
+	</ul>
+
+
 </aside>
 </html>

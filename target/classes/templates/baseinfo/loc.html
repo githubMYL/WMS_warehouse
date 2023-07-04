@@ -47,6 +47,10 @@
          retrun;
         }
 
+        if(!confirm('선택한 항목을 삭제하시겠습니까?')){
+            return;
+        }
+
          // 폼 서버로 제출
          form.method="get"
          form.action="/baseinfo/locDelte"
@@ -54,75 +58,66 @@
     }
 
 
-
-    function mod_list(){
-
-    var form = document.getElementById("search");
-    var check = document.getElementsByClassName("check");
-    var checked_input = document.getElementById("checked_input").value.trim();
-    var loc_cd = [];
-
-
-        for( var i = 0; i < check.length; i++){
-
-           if(check[i].checked){
-           loc_cd.push(check[i].value);
-           }
-        }
-
-        if(loc_cd.length > 1){
-            alert("수정할 항목은 1개만 선택해주세요");
-            return;
-        } else if(loc_cd.length == 0) {
-            alert("수정하실 리스트를 선택해주세요");
-            return;
-        }
-
-        checked_input.value = loc_cd;
-
-
-        // 폼 서버로 제출
-         form.method="get"
-         form.action="/baseinfo/locMod"
-         form.submit();
-
-
+    function add_loc(){
+     url = 'locjoin';
+    warehouse.popup.open(url, '로케이션 추가', 500, 600, true);
     }
+
+
+    <!-- tr 항목 더블클릭해서 loc_cd 가져오기-->
+    function double(event) {
+        var clicked = event.currentTarget;
+        var checkbox = clicked.querySelector('.check');
+        var loc_cd = checkbox.value;
+
+        url = 'locMod' + '/' + loc_cd;
+        title = '( ' + loc_cd + ' ) ' + '정보 수정';
+       warehouse.popup.open(url, title, 500, 500,true);
+    }
+
+
     </script>
+
+
+
 </head>
 <section layout:fragment="content">
 
-    <div>
-        <form id="search">
-            로케이션 코드
-            <input type="text"  id="search_loc" name="search_loc">
-            <!-- 체크상태의 loc_cd 문자열-->
-            <input type="hidden" id="checked_input" name="loc_cd_array">
-        </form>
-    </div>
-
-    <div class="table_wrapper">
+    <div  align="center" class="table_wrapper">
+        <table>
+            <tr align="left">
+                <th style="width:80px;">로케이션 코드</th>
+                <td >
+                    <form id="search"  >
+                        <input type="text"  id="search_loc" name="search_loc" th:placeholder="로케이션검색" style="width:30%;">
+                        <!-- 체크상태의 loc_cd 문자열-->
+                        <input type="hidden" id="checked_input" name="loc_cd_array">
+                    </form>
+                </td>
+            </tr>
+        </table>
         <table>
             <tr>
-                <td colspan="6">
+                <td colspan="7" align="right">
                     <button th:text="#{search_list}" onclick="search_loc()" class="sbtn"></button>
-                    <button onclick="location.href='locjoin'"th:text="#{add_list}" class="sbtn"></button>
-                    <button th:text="#{mod_list}" onclick="mod_list()" class="sbtn"></button>
+                    <button onclick="add_loc()"th:text="#{add_list}" class="sbtn"></button>
                     <button th:text="#{delete_list}" onclick="delete_loc()" class="sbtn blue"></button>
                 </td>
             </tr>
             <tr>
-                <th></th>
-                <th>순번</th>
-                <th>물류센터명</th>
-                <th>로케이션명</th>
-                <th>로케이션주소</th>
-                <th>비고</th>
+                <th style="width:50px;"></th>
+                <th style="width:50px;">순번</th>
+                <th style="width:100px;">물류센터명</th>
+                <th style="width:80px;">로케이션명</th>
+                <th style="width:80px;">로케이션주소</th>
+                <th style="width:50px;">랙 수</th>
                 <th>비고</th>
             </tr>
 
-            <tr th:each="list,listCount : ${loc_list}" >
-                <td><input type="checkbox" class="check" th:value="${list.loc_cd}" onclick="che()"></td>
+            <tr th:each="list,listCount : ${loc_list}"  ondblclick="double(event)" class="loc_list">
+                <td>
+                    <input type="checkbox" id="locCheckBok-${listCount.count}" class="check" th:value="${list.loc_cd}" onclick="che()">
+                </td>
                 <td th:text="${listCount.count}"></td>
                 <td th:text="${list.wactr_cd}"></td>
                 <td th:text="${list.loc_nm}"></td>
@@ -132,9 +127,7 @@
             </tr>
 
         </table>
+
     </div>
-
-
-
 </section>
 </html>
