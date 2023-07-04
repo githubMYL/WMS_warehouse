@@ -94,5 +94,47 @@
 	<select id="getDetail" resultMap="stdinMap">
 		SELECT * FROM STDIN_D D LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD WHERE STDIN_NUM = #{stdinNum}
 	</select>
+
+	<select id="getListByConditions" resultMap="stdinMap">
+		SELECT * FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD WHERE
+		<choose>
+			<when test='stdinDt != null and clntNm == "" and status == ""'>
+				H.STDIN_DT = #{stdinDt}
+			</when>
+			<when test='stdinDt == null and clntNm != "" and status == ""'>
+				C.CLNT_NM = #{clntNm}
+			</when>
+			<when test='stdinDt == null and clntNm == "" and status != ""'>
+				H.STATUS = #{status}
+			</when>
+
+			<when test='stdinDt != null and clntNm != "" and status == ""'>
+				H.STDIN_DT = #{stdinDt} AND
+				C.CLNT_NM = #{clntNm}
+			</when>
+			<when test='stdinDt != null and clntNm == "" and status != ""'>
+				H.STDIN_DT = #{stdinDt} AND
+				H.STATUS = #{status}
+			</when>
+			<when test='stdinDt == null and clntNm != "" and status != ""'>
+				C.CLNT_NM = #{clntNm} AND
+				H.STATUS = #{status}
+			</when>
+			<when test='stdinDt != null and clntNm != "" and status != ""'>
+				H.STDIN_DT = #{stdinDt} AND
+				C.CLNT_NM = #{clntNm} AND
+				H.STATUS = #{status}
+			</when>
+		</choose>
+	</select>
+
+	<update id="deleteHeaderStdin">
+		UPDATE STDIN_H SET DEL_YN = 'Y' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
+	<update id="deleteDetailStdin">
+		UPDATE STDIN_D SET DEL_YN = 'Y' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
 </mapper>
 

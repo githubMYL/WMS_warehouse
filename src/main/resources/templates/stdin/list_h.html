@@ -35,6 +35,48 @@
 	</form>
 
 	<script>
+			var btn = document.getElementById("ajax_btn");
+
+			btn.addEventListener("click", () => {
+				var trEl = document.getElementsByName("stdinDt");
+				var trEl2 = document.getElementsByName("clntNm");
+				var trEl3 = document.getElementsByName("status");
+
+				var stdinDt = trEl[0].value;
+				var clntNm = trEl2[0].value;
+				var status = trEl3[0].value;
+
+				const params = { stdinDt, clntNm, status };
+
+				const url = `stdin/ajaxstdin/getStdinSearch?stdinDt=${stdinDt}&clntNm=${clntNm}&status=${status}`;
+				commonLib.ajaxLoad(url)
+				.then((data) => {
+					var search = document.getElementById("search");
+					search.innerHTML='';
+					console.log(data);
+
+					data = JSON.parse(data);
+					var str = '';
+					for(var i = 0; i < data.length; i++) {
+						str += "<tr onclick='getDetail()'>";
+						str += "<td><input type='checkbox' name='check' data-stdinnum=" + data[i].stdinNum +" th:value=" + data[i].stdinNum + " id='chk'></td>";
+						str += "<td>"+(i+1)+"</td>";
+						str += "<td>"+data[i].stdinDt+"</td>";
+						str += "<td>"+data[i].clntCd+"</td>";
+						str += "<td>"+data[i].clntNm+"</td>";
+						str += "<td>"+data[i].status+"</td>";
+						str += "<td>"+data[i].remark+"</td>";
+						str += '</tr>'
+					}
+					search.innerHTML=str;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			});
+		</script>
+
+	<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				const add = document.getElementById("add");
 				add.addEventListener("click", addItem);
@@ -66,7 +108,7 @@
 				}
 				console.log("data" + chk_data);
 
-				const url = `wactr/delete?wactrCd=${chk_data}`;
+				const url = `stdin/ajaxstdin/delete?stdinNum=${chk_data}`;
 				commonLib.ajaxLoad(url)
 					.then((data) => {
 						console.log(data);
@@ -101,8 +143,7 @@
 
 			function getDetail(e) {
 				var stdin_d_table = document.querySelector("#stdin_d_table > tbody");
-				var test = e.target.parentNode;
-				const stdinNum = test.querySelector('input').value;
+				const stdinNum = document.querySelector('#chk').dataset.stdinnum;
 				var str = '<tr><th>순번</th><th>상품코드</th><th>상품명</th><th>로케이션</th><th>입고예정수량</th><th>정상수량</th><th>불량수량</th><th>비고</th></tr>';
 
 				str += '<tr id="stdin_d_infos">';
@@ -150,7 +191,7 @@
 			<tbody id="search" style="cursor:pointer;">
 			<tr th:each="stdin, wactrCount : ${stdin_list}" id="stdin_infos">
 				<td>
-					<input type="checkbox" name="chk" th:value="${stdin.stdinNum}" id="chk">
+					<input type="checkbox" name="chk" th:value="${stdin.stdinNum}" id="chk" th:data-stdinnum="${stdin.stdinNum}">
 				</td>
 				<td th:text="${wactrCount.count}"></td>
 				<td th:text="${stdin.stdinDt}"></td>

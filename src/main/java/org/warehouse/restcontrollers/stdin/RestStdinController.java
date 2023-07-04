@@ -11,6 +11,7 @@ import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 import org.warehouse.models.baseinfo.loc.LocVO;
 import org.warehouse.models.stdin.StdinVO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController("stdinAjaxController")
@@ -38,8 +39,18 @@ public class RestStdinController {
 		return stdinVO;
 	}
 
-	@GetMapping("modify")
-	public void modify(Long stdinnum) {
+	@GetMapping("getStdinSearch")
+	public List<StdinVO> getStdinSearch(LocalDate stdinDt, String clntNm, String status) {
+		return stdinDAO.getListByConditions(stdinDt, clntNm, status);
+	}
 
+	@GetMapping("delete")
+	public void delete(String stdinNum) {
+		String[] stdinNumList = stdinNum.split(",");
+
+		for(int i = 0; i < stdinNumList.length; i++) {
+			stdinDAO.deleteHeaderStdin(stdinNumList[i]);
+			stdinDAO.deleteDetailStdin(stdinNumList[i]);
+		}
 	}
 }
