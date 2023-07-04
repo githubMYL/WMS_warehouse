@@ -1,18 +1,25 @@
-function UpdateClnt(element) {
-    var clntcd = document.getElementById("clnt_cd");
-    clntcd.value = element.options[element.selectedIndex].text;
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const clnt = document.getElementById("clnt_tmp");
+    var selected = document.querySelector("select#clnt_sel")
 
-document.querySelector("form[name='frmJoin']").addEventListener("submit", function(event) {
-    var selectedValue = document.getElementById("clnt_tmp").value;
-    if (selectedValue === "") {
-        event.preventDefault(); // 제출을 중지합니다.
-        alert("드롭다운 값을 선택해주세요."); // 사용자에게 선택 필수 메시지를 알립니다.
-    }
+    clnt.addEventListener("change", UpdateClnt)
 });
 
-function maxLengthCheck(object) {
-    if (object.value.length > 8) {
-        object.value = object.value.slice(0, 8);
+function UpdateClnt(e) {
+    var evnt = e.currentTarget;
+    var selected = document.querySelector("select#clnt_sel")
+    var datalist = evnt.list;
+    var clntcd = document.getElementById("clnt_cd");
+
+    for(var j = 0; j < datalist.options.length; j++){
+        if(this.value == datalist.options[j].value) {
+            clntcd.value = datalist.options[j].label;
+        }
+    }
+}
+
+function maxLengthCheck(object){
+    if (object.value.length > object.maxLength){
+        object.value = object.value.slice(0, object.maxLength);
     }
 }

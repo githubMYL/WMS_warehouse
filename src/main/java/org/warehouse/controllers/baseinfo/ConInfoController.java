@@ -6,14 +6,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ConInfoDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
-import org.warehouse.models.baseinfo.coninf.ConInfoService;
-import org.warehouse.models.baseinfo.coninf.ConInfoVO;
-import org.warehouse.models.baseinfo.coninf.ConInfoValidator;
+import org.warehouse.models.baseinfo.coninfo.ConInfoService;
+import org.warehouse.models.baseinfo.coninfo.ConInfoVO;
+import org.warehouse.models.baseinfo.coninfo.ConInfoValidator;
 
 import java.util.List;
 
@@ -30,10 +31,22 @@ public class ConInfoController {
 
 	private final ClntDAO clntDAO;
 
-
 	@GetMapping("/coninfo")
-	public String conInfo(Model model) {
-		model.addAttribute("pageName", "baseinfo");
+	public String conInfo(@ModelAttribute("srchParams") ConInfoVO srchParam, Model model) {
+
+		if (srchParam.getClntNm() == null)
+			srchParam.setClntNm("");
+		System.out.println("srchParam ::: " + srchParam);
+		List<ConInfoVO> conInfoList = conInfoDAO.getConListSearch(srchParam);
+
+		model.addAttribute("conInfoList", conInfoList);
+
+		return "/baseinfo/coninfo";
+
+	}
+
+	@GetMapping("/coninfo/register")
+	public String conInfoRegister(Model model) {
 
 		ConInfoVO conInfoVO = new ConInfoVO();
 		//List<ConInfoVO> conInfoVOList = conInfoDAO.getConInfoList();
@@ -71,14 +84,5 @@ public class ConInfoController {
 
 		conInfoService.conInfoSave(conInfoVO);
 		return "redirect:/baseinfo/coninfo";
-	}
-
-	private void commonProcess(Model model) {
-		String Title = "기본정보::계약정보";
-		String menuCode = "coninfo";
-		String pageName = "baseinfo";
-		model.addAttribute("pageName", pageName);
-		model.addAttribute("Title", Title);
-		model.addAttribute("menuCode", menuCode);
 	}
 }
