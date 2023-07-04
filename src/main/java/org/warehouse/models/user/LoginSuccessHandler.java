@@ -28,7 +28,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		UserInfo userInfo = (UserInfo) authentication.getPrincipal();
 		session.setAttribute("userInfo", userInfo);
 
-		String url = request.getContextPath() + "/";
+		String url = request.getContextPath() + "/baseinfo/iteminfo";
 		response.sendRedirect(url);
 	}
 
