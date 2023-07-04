@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.ConInfoDAO">
+    <resultMap id="conMap" type="org.warehouse.models.baseinfo.coninfo.ConInfoVO">
+        <result property="clntCd" column="CLNT_CD" />
+        <result property="clntNm" column="CLNT_NM" />
+        <result property="mMin" column="M_MIN" />
+        <result property="pltFee" column="PLT_FEE" />
+        <result property="transSdt" column="TRAN_SDT" />
+        <result property="transEdt" column="TRAN_EDT" />
+        <result property="remark" column="REMK" />
+        <result property="regDt" column="REG_DT" />
+        <result property="regNm" column="REG_NM" />
+        <result property="modDt" column="MOD_DT" />
+        <result property="modNm" column="MOD_NM" />
+        <result property="delyn" column="DEL_YN" />
+    </resultMap>
+    <insert id="insertConInfo" parameterType="org.warehouse.models.baseinfo.coninfo.ConInfoVO">
+        <!-- 이 안에서 처리할 SQL문을 명시한다. -->
+        <!--INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)-->
+        INSERT INTO CON_INF
+        (NO, CLNT_CD, M_MIN, PLT_FEE, TRAN_SDT, TRAN_EDT, REMK, REG_DT, REG_NM)
+        VALUES
+        ((SELECT NVL(MAX(NO), 0) + 1 FROM CON_INF), #{clntCd}, #{mMin}, #{pltFee}, #{transSdt}, #{transEdt}, #{remark}, SYSDATE, #{regNm})
+    </insert>
+
+    <select id="getConListSearch" resultMap="conMap">
+        SELECT A.CLNT_CD
+             , B.CLNT_NM
+             , A.M_MIN
+             , A.PLT_FEE
+             , A.TRAN_SDT
+             , A.TRAN_EDT
+             , A.REMK
+        FROM CON_INF A
+        INNER JOIN CLNT B
+        ON A.CLNT_CD = B.CLNT_CD
+        WHERE A.DEL_YN = 'N'
+        <choose>
+            <when test='clntNm != ""'>
+                AND B.CLNT_NM LIKE '%'||#{clntNm}||'%'
+            </when>
+        </choose>
+        ORDER BY A.REG_DT DESC
+    </select>
+</mapper>
