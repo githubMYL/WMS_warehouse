@@ -7,8 +7,10 @@
 		<result property="userNm" column="USER_NM" />
 		<result property="userType" column="USER_TYPE" />
 		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
 		<result property="custCtrCd" column="CUST_CTR_CD" />
 		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
 		<result property="position" column="POSITION" />
 		<result property="tel" column="TEL" />
 		<result property="email" column="EMAIL" />
@@ -29,7 +31,9 @@
 
 	<select id="getUserList" resultMap="userMap">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		SELECT * FROM USER_MANAGE
+		SELECT U.*, CL.CLNT_NM, CS.CUST_NM FROM USER_MANAGE U
+			LEFT OUTER JOIN CLNT CL ON CL.CLNT_CD = U.CLNT_CD
+			LEFT OUTER JOIN CUST CS ON CS.CUST_CD = U.CUST_CD
 	</select>
 
 	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">

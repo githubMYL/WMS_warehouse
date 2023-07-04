@@ -4,6 +4,39 @@
 	  layout:decorate="~{layouts/front/main}">
 
 	<section layout:fragment="content">
-
+		<div class="table_wrapper">
+			<table id="user_table">
+				<tr>
+					<th> </th>
+					<th>순번</th>
+					<th>아이디</th>
+					<th>성명</th>
+					<th>사용자구분</th>
+					<th>고객사 명</th>
+					<th>납품처 명</th>
+					<th>직책</th>
+					<th>연락처</th>
+					<th>E-MAIL</th>
+					<th>비고</th>
+				</tr>
+				<tbody id="search">
+				<tr th:each="user, userCount : ${userList}" id="user_infos">
+					<td>
+						<input type="checkbox" name="chk" th:value="${user.userId}" id="chk">
+					</td>
+					<td th:text="${userCount.count}"></td>
+					<td th:text="${user.userId}"></td>
+					<td th:text="${user.userNm}"></td>
+					<td th:text="${user.userType}"></td>
+					<td th:text="${user.clntNm}"></td>
+					<td th:text="${user.custNm}"></td>
+					<td th:text="${user.position}"></td>
+					<td th:text="${user.tel}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.remark}"></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
 	</section>
 </html>
