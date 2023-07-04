@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	<head>
+		<title th:if="${Title != null}" th:text="${Title}"></title>
+		<link rel="shortcut icon"  href="images/favicon.png">
 		<meta name="_csrf" th:content="${_csrf.token}">
 		<meta name="_csrf_header" th:content="${_csrf.headerName}">
 		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
@@ -10,6 +12,7 @@
 		<th:block layout:fragment="addCss"></th:block>
 
 		<script th:src="@{/js/admin/common.js}"></script>
+		<script th:src="@{/js/admin/layer.js}"></script>
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script th:each="jsFile : ${addScript}"
 				th:src="@{/js/admin/{jsFile}.js(jsFile=${jsFile})}"></script>
@@ -18,12 +21,12 @@
 
 	<body>
 		<header th:replace="~{outlines/admin/header::common}"></header>
-			<main>
-				<aside th:replace="~{outlines/admin/side::menu}"></aside>
-				<section>
-					<section layout:fragment="content"></section>
-				</section>
-			</main>
+		<main>
+			<aside th:replace="~{outlines/admin/side::menu}"></aside>
+			<section>
+				<section layout:fragment="content"></section>
+			</section>
+		</main>
 		<footer th:replace="~{outlines/admin/footer::common}"></footer>
 		<iframe name="ifrmProcess" class="dn"></iframe>
 	</body>

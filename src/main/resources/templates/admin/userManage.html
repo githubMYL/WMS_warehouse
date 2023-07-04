@@ -1,9 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/front/main}">
+	  layout:decorate="~{layouts/admin/main}">
 
 	<section layout:fragment="content">
+		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+			<table class="table-cols" id="userSearch">
+				<tr>
+					<th>고객사 명</th>
+					<td>
+						<input type="text" name="clntNm" placeholder="고객사 명">
+					</td>
+
+					<th>아이디</th>
+					<td>
+						<input type="text" name="userId" placeholder="아이디">
+					</td>
+
+					<th>성명</th>
+					<td>
+						<input type="text" name="userNm" placeholder="성명">
+					</td>
+
+					<th>연락처</th>
+					<td>
+						<input type="text" name="tel" placeholder="연락처">
+					</td>
+				</tr>
+			</table>
+			<div class="btns" style="text-align:right;">
+				<button type="button" id="ajax_btn" class="sbtn">검색</button>
+				<button type="button" id="add" class="sbtn">추가</button>
+				<button type="button" id="del" class="sbtn blue">삭제</button>
+			</div>
+		</form>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const ajax_btn = document.getElementById('ajax_btn');
+				const add = document.getElementById('add');
+				const del = document.getElementById('del');
+
+				add.addEventListener("click", addItem);
+			});
+
+			function addItem(e) {
+				console.log('test');
+				url = 'join';
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			}
+		</script>
+
 		<div class="table_wrapper">
 			<table id="user_table">
 				<tr>

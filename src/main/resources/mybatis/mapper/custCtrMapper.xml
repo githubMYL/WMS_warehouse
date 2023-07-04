@@ -4,6 +4,7 @@
 	<resultMap id="custCtrMap" type="org.warehouse.models.admin.custctr.CustCtrVO">
 		<result property="custCtrCd" column="CUST_CTR_CD" />
 		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
 		<result property="custCtrNm" column="CUST_CTR_NM" />
 		<result property="custCtrAddr" column="CUST_CTR_ADDR" />
 		<result property="custCtrTel" column="CUST_CTR_TEL" />
@@ -18,7 +19,7 @@
 
 	<select id="getCustCtrList" resultMap="custCtrMap">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		SELECT * FROM CUST_CTR ORDER BY CUST_CTR_CD
+		SELECT C.CUST_CD, C.CUST_NM, CC.* FROM CUST_CTR CC LEFT OUTER JOIN CUST C ON C.CUST_CD = CC.CUST_CD ORDER BY CUST_CTR_CD
 	</select>
 
 	<select id="getCustCtrListByCustCd" resultMap="custCtrMap">

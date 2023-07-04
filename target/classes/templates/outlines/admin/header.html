@@ -1,5 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	<header th:fragment="common">
-	</header>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<header th:fragment="common">
+	<section class="left">
+		<a th:href="@{/baseinfo/iteminfo}"><img src="/images/로고.png" style="width: 200px; height: auto;"></a>
+	</section>
+	<section class="mid">
+		<th:block th:replace="~{layouts/admin/common/_submenu::menus}"></th:block>
+	</section>
+
+	<section class="right">
+		<th:block sec:authorize="isAuthenticated()">
+			<a th:href="@{/user/logout}" class="sbtn blue">로그아웃</a>
+		</th:block>
+		<th:block sec:authorize="isAnonymous()">
+			<a th:href="@{/user/login}" class="sbtn blue">로그인</a>
+		</th:block>
+	</section>
+</header>
 </html>
