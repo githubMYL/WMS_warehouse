@@ -4,24 +4,24 @@
       layout:decorate="~{layouts/front/main}">
 
     <section layout:fragment="content">
-        <form class="frmSearch" id="searchForm" onsubmit="return false" autocomplete="off">
+        <form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
             <table class="table-cols">
                 <tr>
                     <th>고객사명</th>
                     <td>
-                        <input type="text" id="clntNmSrch">
+                        <input type="text" th:field="*{clntNm}" id="clntNmSrch">
                     </td>
                     <th>상품코드</th>
                     <td>
-                        <input type="text" id="itemCdSrch">
+                        <input type="text" th:field="*{itemCd}" id="itemCdSrch">
                     </td>
                     <th>상품명</th>
                     <td>
-                        <input type="text" id="itemNmSrch">
+                        <input type="text" th:field="*{itemNm}" id="itemNmSrch">
                     </td>
                 </tr>
             </table>
-            <div class="btns" align="left">
+            <div class="btns" align="right">
                 <button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
                 <button class="sbtn" th:text="#{add_btn}"></button>
                 <button class="sbtn blue" th:text="#{delete_btn}"></button>
