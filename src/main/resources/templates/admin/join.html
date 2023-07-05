@@ -1,28 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
+	<style>
+		html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+	</style>
+</head>
 
-	<form name="frmJoin" method="post" th:action="@{/admin/join}" th:object="${joinForm}" autocomplete="off">
+	<h2>사용자등록 추가</h2>
+
+	<form name="frmJoin" method="post" th:action="@{/admin/join}" th:object="${joinForm}" autocomplete="off" class="_form">
 		<div>
+			<dt th:text="#{userId}" class="require_item"></dt>
 			<input type="text" name="userId" th:field="*{userId}" th:placeholder="#{userId}">
 			<div class="errors" th:each="err : ${#fields.errors('userId')}" th:text="${err}"></div>
 		</div>
 
 		<div>
+			<dt th:text="#{userPw}" class="require_item"></dt>
 			<input type="password" name="userPw" th:field="*{userPw}" th:placeholder="#{userPw}">
 			<div class="errors" th:each="err : ${#fields.errors('userPw')}" th:text="${err}"></div>
 		</div>
 
 		<div>
+			<dt th:text="#{userPwRe}" class="require_item"></dt>
 			<input type="password" name="userPwRe" th:field="*{userPwRe}" th:placeholder="#{userPwRe}">
 			<div class="errors" th:each="err : ${#fields.errors('userPwRe')}" th:text="${err}"></div>
 		</div>
 
+		<br>
 		<div>
+			<dt th:text="#{userNm}" class="require_item"></dt>
 			<input type="text" name="userNm" th:field="*{userNm}" th:placeholder="#{userNm}">
 			<div class="errors" th:each="err : ${#fields.errors('userNm')}" th:text="${err}"></div>
 		</div>
 
+		<br>
 		<div>
+			<dt th:text="#{userType}" class="require_item"></dt>
 			<select class="form-select" id="userType" name="userType" th:field="*{userType}" th:value="*{userType}">
 
 				<option th:value="ADMIN">관리자</option>
@@ -33,8 +48,10 @@
 			<div class="errors" th:each="err : ${#fields.errors('userType')}" th:text="${err}"></div>
 		</div>
 
+		<br>
 		<div>
-			<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly/>
+			<dt th:text="#{clnt}" class="require_item"></dt>
+			<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly style="background:#d5d5d5"/>
 			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명"/>
 			<datalist id="clnt">
 				<select id="clnt_sel">
@@ -67,8 +84,10 @@
 			}
 		</script>
 
+		<br>
 		<div>
-			<input type="text" id="cust_nm" th:field="*{custCd}" readonly/>
+			<dt th:text="#{cust}" class="require_item"></dt>
+			<input type="text" id="cust_nm" th:field="*{custCd}" readonly style="background:#d5d5d5"/>
 			<input type="text" list="cust_ctr_list" id="cust_ctr_nm" th:field="*{custCtrCd}" name="cust_ctr_tmp" placeholder="납품센터 명"/>
 			<datalist id="cust_ctr_list">
 				<select id="cust_ctr_sel">
@@ -110,26 +129,30 @@
 			}
 		</script>
 
+		<br>
 		<div>
+			<dt th:text="#{position}" class="require_item"></dt>
 			<input type="text" name="position" th:field="*{position}" th:placeholder="#{position}">
 			<div class="errors" th:each="err : ${#fields.errors('position')}" th:text="${err}"></div>
 		</div>
 
 
 		<div>
+			<dt th:text="#{email}" class="require_item"></dt>
 			<input type="text" name="email" th:field="*{email}" th:placeholder="#{email}">
 			<div class="errors" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
 		</div>
 
 		<div>
+			<dt th:text="#{mobile}" class="require_item"></dt>
 			<input type="text" name="mobile" th:field="*{tel}" th:placeholder="#{tel}">
 			<div class="errors" th:each="err : ${#fields.errors('tel')}" th:text="${err}"></div>
 		</div>
 
-		<button type="submit" th:text="#{user.action.join}"></button>
+		<br>
+		<div style="text-align:center;">
+			<button type="submit" th:text="#{user.action.join}" class="sbtn blue"></button>
+		</div>
+
 	</form>
-
-
-	<a th:href="@{/user/find_id}" onclick="window.open(this.href, '')"><i class="xi-search"></i>[[#{findId}]]</a>
-
 </html>

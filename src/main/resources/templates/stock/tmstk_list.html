@@ -47,7 +47,7 @@ function search(){
 				</tr>
 			</table>
 			<div class="btns" style="text-align:right;">
-				<button type="button" onclick="search()" class="sbtn">검색</button>
+				<button onclick="search()" class="sbtn">검색</button>
 			</div>
 		</form>
 
@@ -56,15 +56,15 @@ function search(){
 				<th style="width:50px;"></th>
 				<th style="width:50px;">물류센터명</th>
 				<th style="width:100px;">고객사명</th>
-				<th style="width:80px;">로케이션(코드)</th>
-				<th style="width:80px;">상품코드</th>
+				<th style="width:50px;">로케이션(코드)</th>
+				<th style="width:50px;">상품코드</th>
 				<th style="width:50px;">상품명</th>
-				<th>재고수량</th>
-				<th>불량수량</th>
+				<th style="width:50px;">재고수량</th>
+				<th style="width:50px;">불량수량</th>
 			</tr>
 
-			<tr th:each="list , Count: ${list}" th:object="${list}"class="loc_list">
-				<td th:text="&{Count.count}"></td>
+			<tr th:each="list , Count: ${list}" th:object="${list}">
+				<td th:text="${Count.count}"></td>
 				<td th:text="*{wactr_nm}"></td>
 				<td th:text="*{clnt_nm}"> </td>
 				<td th:text="*{loc_cd}"></td>

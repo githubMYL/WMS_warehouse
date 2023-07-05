@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserDAO {
 	List<UserVO> getUserList(); // UserManage 테이블 가져오기
 	void insertUser(UserVO user); // 회원 가입
+	void deleteUser(String userId);
 	UserVO getUserByEmail(String email); // 회원 정보 가져오기
 	UserVO getUserById(String userId);
 
