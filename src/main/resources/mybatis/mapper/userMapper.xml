@@ -38,8 +38,25 @@
 
 	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
+		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
 	</insert>
 
+	<select id="getListByConditions" resultMap="userMap">
+		SELECT * FROM USER_MANAGE U LEFT OUTER JOIN CLNT C ON C.CLNT_CD = U.CLNT_CD LEFT OUTER JOIN CUST CT ON CT.CUST_CD = U.CUST_CD
+		<where>
+			<if test="clntNm != ''">
+				C.CLNT_NM LIKE '%'||#{clntNm}||'%'
+			</if>
+			<if test="userId != ''">
+				AND U.USER_ID LIKE '%'||#{userId}||'%'
+			</if>
+			<if test="userNm != ''">
+				AND U.USER_NM LIKE '%'||#{userNm}||'%'
+			</if>
+			<if test="tel != ''">
+				AND U.TEL LIKE '%'||#{tel}||'%'
+			</if>
+		</where>
+	</select>
 
 </mapper>

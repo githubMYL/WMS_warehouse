@@ -96,36 +96,18 @@
 	</select>
 
 	<select id="getListByConditions" resultMap="stdinMap">
-		SELECT * FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD WHERE
-		<choose>
-			<when test='stdinDt != null and clntNm == "" and status == ""'>
+		SELECT * FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD
+		<where>
+			<if test="stdinDt != null">
 				H.STDIN_DT = #{stdinDt}
-			</when>
-			<when test='stdinDt == null and clntNm != "" and status == ""'>
-				C.CLNT_NM = #{clntNm}
-			</when>
-			<when test='stdinDt == null and clntNm == "" and status != ""'>
-				H.STATUS = #{status}
-			</when>
-
-			<when test='stdinDt != null and clntNm != "" and status == ""'>
-				H.STDIN_DT = #{stdinDt} AND
-				C.CLNT_NM = #{clntNm}
-			</when>
-			<when test='stdinDt != null and clntNm == "" and status != ""'>
-				H.STDIN_DT = #{stdinDt} AND
-				H.STATUS = #{status}
-			</when>
-			<when test='stdinDt == null and clntNm != "" and status != ""'>
-				C.CLNT_NM = #{clntNm} AND
-				H.STATUS = #{status}
-			</when>
-			<when test='stdinDt != null and clntNm != "" and status != ""'>
-				H.STDIN_DT = #{stdinDt} AND
-				C.CLNT_NM = #{clntNm} AND
-				H.STATUS = #{status}
-			</when>
-		</choose>
+			</if>
+			<if test="clntNm != ''">
+				AND C.CLNT_NM LIKE '%'||#{clntNm}||'%'
+			</if>
+			<if test="status != ''">
+				AND H.STATUS = #{status}
+			</if>
+		</where>
 	</select>
 
 	<update id="deleteHeaderStdin">

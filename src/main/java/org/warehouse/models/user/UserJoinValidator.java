@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.warehouse.configs.models.mapper.UserDAO;
-import org.warehouse.controllers.users.JoinForm;
+import org.warehouse.controllers.admins.JoinForm;
 
 @Component
 @RequiredArgsConstructor

@@ -41,7 +41,9 @@
 				const add = document.getElementById('add');
 				const del = document.getElementById('del');
 
+				ajax_btn.addEventListener("click", search);
 				add.addEventListener("click", addItem);
+
 			});
 
 			function addItem(e) {
@@ -49,6 +51,50 @@
 				url = 'join';
 				warehouse.popup.open(url, "테스트", 500, 800, true);
 			}
+
+			function search() {
+				var trEl = document.getElementsByName("clntNm");
+				var trEl2 = document.getElementsByName("userId");
+				var trEl3 = document.getElementsByName("userNm");
+				var trEl4 = document.getElementsByName("tel");
+
+				var clntNm = trEl[0].value;
+				var userId = trEl2[0].value;
+				var userNm = trEl3[0].value;
+				var tel = trEl4[0].value;
+
+				const params = { clntNm, userId, userNm, tel };
+
+				const url = `ajaxadmin/userSearch?clntNm=${clntNm}&userId=${userId}&userNm=${userNm}&tel=${tel}`;
+				commonLib.ajaxLoad(url)
+				.then((data) => {
+					var search = document.getElementById("search");
+					search.innerHTML='';
+					console.log(data);
+
+					data = JSON.parse(data);
+					var str = '';
+					for(var i = 0; i < data.length; i++) {
+						str += "<tr>";
+						str += "<td><input type='checkbox' name='check' data-userid=" + data[i].userId +" th:value=" + data[i].userId + " id='chk'></td>";
+						str += "<td>"+(i+1)+"</td>";
+						str += "<td>"+data[i].userId+"</td>";
+						str += "<td>"+data[i].userNm+"</td>";
+						str += "<td>"+data[i].userType+"</td>";
+						str += "<td>"+data[i].clntNm+"</td>";
+						str += "<td>"+data[i].custNm+"</td>";
+						str += "<td>"+data[i].position+"</td>";
+						str += "<td>"+data[i].tel+"</td>";
+						str += "<td>"+data[i].email+"</td>";
+						str += "<td>"+data[i].remark+"</td>";
+						str += '</tr>'
+					}
+					search.innerHTML=str;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			};
 		</script>
 
 		<div class="table_wrapper">

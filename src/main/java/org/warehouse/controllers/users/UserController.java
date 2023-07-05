@@ -14,20 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 	private final UserInfoService userInfoService;
 
-	@GetMapping("/join")
-	public String join(Model model) {
-		JoinForm joinForm = new JoinForm();
-		model.addAttribute("joinForm", joinForm);
-
-		return "user/join";
-	}
-
-	@PostMapping("/join")
-	public String joinPs(@Valid JoinForm joinForm, Model model) {
-
-		return null;
-	}
-
 	@GetMapping("/login")
 	public String login(Model model) {
 
