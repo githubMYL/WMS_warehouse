@@ -27,6 +27,11 @@
 		SELECT * FROM CLNT ORDER BY CLNT_CD
 	</select>
 
+	<select id="getClntByCd" resultMap="clntMap">
+		SELECT * FROM CLNT WHERE CLNT_CD = #{clntCd}
+	</select>
+
+
 	<!-- 고객사 존재유무 확인 -->
 	<select id="getClntByCdAndNm" resultMap="clntMap">
 		SELECT CLNT_CD

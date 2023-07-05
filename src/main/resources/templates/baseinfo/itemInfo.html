@@ -4,6 +4,58 @@
       layout:decorate="~{layouts/front/main}">
 
     <section layout:fragment="content">
+        <script>
+            function add() {
+                url = '/baseinfo/iteminfo/register';
+                warehouse.popup.open(url, '상품정보 추가', 500, 600, true);
+            };
+
+            function del() {
+                var checkBoxArr = [];
+                  $("input:checkbox[name='chkBox']:checked").each(function() {
+                  checkBoxArr.push($(this).val());     // 체크된 것만 값을 뽑아서 배열에 push
+                  console.log(checkBoxArr);
+                })
+
+                $.ajax({
+                    type: "POST",
+                    url: "<c:url value='/baseinfo/iteminfo/deleteItem'>",
+                    data: {
+                        check_data : check_data
+                    },
+                    success: function(result){
+                        console.log(result);
+                    },
+                    error: function(){
+                        alert("에러");
+                    }
+                });
+
+            }
+
+<!--            function del() {-->
+<!--                var chkBox = document.getElementsByName("chkBox")-->
+<!--                var chkBox_data = [];-->
+
+<!--                for(var i = 0; i < chkBox.length; i++) {-->
+<!--                    if(chkBox[i].checked == true){-->
+<!--                        chkBox_data.push(chkBox[i].value);-->
+<!--                    }-->
+<!--                }-->
+<!--                alert("chkBox_data" + chkBox_data);-->
+<!--                const url = 'iteminfo/deleteItem?idx=${chkBox_data}';-->
+
+<!--                commonLib.ajaxLoad(url)-->
+<!--					.then((data) => {-->
+<!--						console.log(data);-->
+<!--						location.reload();-->
+<!--					})-->
+<!--					.catch((err) => {-->
+<!--						console.error(err);-->
+<!--					});-->
+<!--            };-->
+
+        </script>
         <form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
             <table class="table-cols">
                 <tr>
@@ -23,8 +75,8 @@
             </table>
             <div class="btns" align="right">
                 <button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
-                <button class="sbtn" th:text="#{add_btn}"></button>
-                <button class="sbtn blue" th:text="#{delete_btn}"></button>
+                <button class="sbtn" th:onclick="add()" th:text="#{add_btn}"></button>
+                <button class="sbtn blue" th:onclick="del()" th:text="#{delete_btn}"></button>
             </div>
         </form>
         <script>
@@ -66,7 +118,7 @@
                 </tr>
                 <tr th:each="itemList : ${itemInfoList}">
                     <td align="center">
-                        <input th:type="checkbox">
+                        <input th:type="checkbox" id="chkBox" name="chkBox" th:value="${itemList.idx}">
                     </td>
                     <td align="center" th:text="${itemList.idx}"></td>
                     <td align="center" th:text="${itemList.wactrNm}"/>

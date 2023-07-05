@@ -12,6 +12,7 @@
 		<h2>입고등록 수정</h2>
 		<form name="stdinSave" method="post" th:action="@{/stdin/save}" autocomplete="off" th:object="${stdinForm}" class="_form">
 			<input type="hidden" name="flag" th:field="*{flag}" th:value="update">
+
 			<th:block th:replace="~{stdin/_form::stdinForm}"></th:block>
 			<div class="btns">
 				<button type="reset" th:text="#{admin.action.reset}"></button>

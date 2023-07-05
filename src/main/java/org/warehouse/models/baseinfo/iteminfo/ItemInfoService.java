@@ -12,8 +12,8 @@ public class ItemInfoService {
 
 	public void itemInfoSave(ItemInfoVO itemInfoVO){
 
+
 		System.out.println("service :: " + itemInfoVO);
 		itemInfoDAO.insertItemInfo(itemInfoVO);
 	}
-
 }

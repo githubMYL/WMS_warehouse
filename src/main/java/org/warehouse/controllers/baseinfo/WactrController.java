@@ -66,7 +66,7 @@ public class WactrController {
 
 		model.addAttribute("wactrForm", wactrForm);
 
-		return("admin/wactr/update");
+		return "admin/wactr/update";
 	}
 
 	@PostMapping("/admin/save")

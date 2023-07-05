@@ -42,7 +42,7 @@
 				const del = document.getElementById("delete");
 				del.addEventListener("click", deleteItem);
 
-				const trs = document.querySelectorAll('tr');
+				const trs = document.querySelectorAll('#stdin_h_table tr');
 				trs.forEach( (tr) => {
 					tr.addEventListener('click', getDetail);
 				});

@@ -10,5 +10,8 @@ import java.util.List;
 public interface ClntDAO {
 	List<ClntVO> getClntList();
 	void clntJoin(ClntVO clntVO);
+
+	ClntVO getClntByCd(String clntCd);
+
 	ClntVO getClntByCdAndNm(@Param("clntCd")String clntCd, @Param("clntNm")String clntNm); // 고객사 존재유무 확인
 }

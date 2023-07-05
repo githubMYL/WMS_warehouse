@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.StockDAO">
+	<resultMap id="stockMap" type="org.warehouse.models.stock.TmstkVO">
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="locCd" column="LOC_CD" />
+		<result property="wactrCd" column="WACTR_CD" />
+		<result property="stockAmt" column="STOCK_AMT" />
+		<result property="faultAmt" column="FAULT_AMT" />
+		<result property="stdinDt" column="STDIN_DT" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delYn" column="DEL_YN" />
+	</resultMap>
+
+	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM) VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
+	</insert>
+</mapper>

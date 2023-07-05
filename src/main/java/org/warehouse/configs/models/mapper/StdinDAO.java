@@ -9,6 +9,10 @@ import java.util.List;
 public interface StdinDAO {
 	void insertHeaderStdin(StdinVO stdinVO);
 	void insertDetailStdin(StdinVO stdinVO);
+
+	void updateHeaderStdin(StdinVO stdinVO);
+	void updateDetailStdin(StdinVO stdinVO);
+
 	List<StdinVO> getList();
 	List<StdinVO> getDetailList();
 	StdinVO getDetail(Long stdinNum);

@@ -1,14 +1,13 @@
 package org.warehouse.controllers.baseinfo;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
 import org.warehouse.configs.models.mapper.LocDAO;
@@ -84,7 +83,7 @@ public class ItemInfoController{
 
 		model.addAttribute("itemInfoVO", itemInfoVO);
 
-		return "baseinfo/iteminfo";
+		return "baseinfo/popup/itemInfoPop";
 	}
 
 	@PostMapping("/iteminfo")
@@ -95,7 +94,28 @@ public class ItemInfoController{
 		itemInfoValidator.validate(itemInfoVO, errors);
 
 		if(errors.hasErrors()) {
-			return "baseinfo/iteminfo";
+
+			/** 물류센터 코드 S */
+			List<WactrVO> wactrList = wactrDAO.getList();
+			model.addAttribute("wactrList", wactrList);
+			/** 물류센터 코드 E */
+
+			/** 고객사 코드 S */
+			List<ClntVO> clntList = clntDAO.getClntList();
+			model.addAttribute("clntList", clntList);
+			/** 고객사 코드 E */
+
+			/** 로케이션 코드 S */
+			List<LocVO> locList = locDAO.getLocList();
+			model.addAttribute("locList", locList);
+			/** 로케이션 코드 E */
+
+			/** 관리단위 S */
+			List<ItemInfoVO> codeList = itemInfoDAO.getCodeList();
+			model.addAttribute("codeList", codeList);
+			/** 관리단위 E */
+
+			return "baseinfo/popup/itemInfoPop";
 		}
 
 		itemInfoVO.setRegNm("session");
@@ -103,6 +123,28 @@ public class ItemInfoController{
 
 		return "redirect:/baseinfo/iteminfo";
 	}
+
+	@GetMapping("/iteminfo/deleteItem")
+	public String deleteItem(String idx) {
+
+		System.out.println("idx :: " + idx);
+		return "redirect:/baseinfo/iteminfo";
+	}
+//	@ResponseBody
+//	@RequestMapping(value="/folderDelete.do", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	public int folderDelete(HttpServletRequest request, @RequestParam(value="checkBoxArr[]") List<String> checkBoxArr, @ModelAttribute("archiveFolder") ArchiveFolder archiveFolder) throws Exception {
+//		int result = 0;
+//		String checkNum = "";
+//
+//		for(String str : checkBoxArr){
+//			checkNum = str;
+//			archiveFolder.setFolderSeq(checkNum);
+//			folderService.archiveFolderDelete(archiveFolder);
+//		}
+//		return result;
+//	}
+
+
 
 	private void commonProcess(Model model) {
 		String Title = "기본정보::상품정보";
