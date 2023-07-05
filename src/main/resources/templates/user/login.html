@@ -19,12 +19,12 @@ img { border: 0; }
 padding-top:18%;
 }
 #loginWrap{
-   padding:15px;
-   line-height: 2.5rem;
-   box-shadow: 3px 4px 3px 2px #9ab5e8;
-   border-radius:30px;
-   width:450px;
-   height:450px;
+	padding:15px;
+	line-height: 2.5rem;
+	box-shadow: 3px 4px 3px 2px #9ab5e8;
+	border-radius:30px;
+	width:450px;
+	height:450px;
 }
 
 input{
@@ -52,7 +52,7 @@ input{
 			<div>
 				<a th:href="@{/user/find_id}"><i class="xi-search"></i>[[#{findId}]]</a> |
 				<a th:href="@{/user/find_pw}"><i class="xi-search"></i>[[#{findPw}]]</a> |
-				<a th:href="@{/user/join}"><i class="xi-user-plus"></i>[[#{user.join}]]</a>
+				<a th:href="@{/admin/join}"><i class="xi-user-plus"></i>[[#{user.join}]]</a>
 			</div>
 
 			<div class="errors global" th:if="${session.global} != null" th:text="${session.global}"></div>

@@ -32,7 +32,17 @@ public class LocController {
 
 	private final HttpServletResponse response;
 
-	//loc 리스트
+
+	private void commonProcess(Model model) {
+		String Title = "기본정보::로케이션정보";
+		String menuCode = "loc";
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
+	}
+
+
 	//loc 리스트
 	@GetMapping("/loc")
 	public String loc(@RequestParam(name = "search_loc", required = false) String search_loc, Model model) {
@@ -188,12 +198,4 @@ public class LocController {
 	}
 
 
-	private void commonProcess(Model model) {
-		String Title = "기본정보::로케이션정보";
-		String menuCode = "loc";
-		String pageName = "baseinfo";
-		model.addAttribute("pageName", pageName);
-		model.addAttribute("Title", Title);
-		model.addAttribute("menuCode", menuCode);
-	}
 }

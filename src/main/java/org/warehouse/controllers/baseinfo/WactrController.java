@@ -33,7 +33,6 @@ public class WactrController {
 	private final WactrValidator validator;
 	private final WactrRegisterService registerService;
 
-	private final HttpServletRequest request;
 	private final HttpServletResponse response;
 
 	@GetMapping

@@ -38,7 +38,8 @@
 
 	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
+		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT)
+		VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
 	</insert>
 
 	<select id="getListByConditions" resultMap="userMap">
