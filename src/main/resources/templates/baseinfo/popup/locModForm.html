@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <style>
     span{
@@ -17,16 +16,17 @@
     }
     </style>
 
+
     <script>
-    function mod_loc(){
-
-    if(!confirm('선택한 항목을 수정하시겠습니까?')){
-    return;
-    }
-
-    form.submit();
-    }
-</script>
+        function closelayer(){
+        var parent = window.parent.document
+        var layerDim = parent.getElementById('layer_dim');
+        var layerPopup = parent.getElementById('layer_popup');
+        parent.body.removeChild(layerDim);
+        parent.body.removeChild(layerPopup);
+        parent.location.reload();
+        }
+    </script>
 </head>
 
 <main layout:fragment="content">
@@ -88,7 +88,7 @@
 
         <div>
             <div><span>로케이션 주소 : </span></div>
-            <input type="text" name="loc_addr" th:field="*{loc_addr}" >
+            <input type="text" name="loc_addr" onclick="mod_loc()" th:field="*{loc_addr}" >
             <div class="errors"th:each="err : ${#fields.errors('loc_addr')}" th:text="${err}"></div>
 
         </div>
@@ -107,7 +107,7 @@
         </div>
 
         <button type="submit" th:text="#{loc.action.update}"></button>
-        <button type="button" onClick="warehouse.popup.close()">취소</button>
+        <button type="button" onClick="closelayer()">취소</button>
     </form>
 
 

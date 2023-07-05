@@ -48,20 +48,15 @@
 	</select>
 
 	<select id="getListByNmScale" resultMap="wactrMap">
-		SELECT * FROM WACTR WHERE
-		<choose>
-			<when test='wactrNm != "" and scale != ""'>
-				"SCALE" = #{scale} AND WACTR_NM LIKE '%'||#{wactrNm}||'%'
-			</when>
-
-			<when test='wactrNm == "" and scale != ""'>
-				"SCALE" = #{scale}
-			</when>
-
-			<when test='wactrNm != "" and scale == ""'>
+		SELECT * FROM WACTR
+		<where>
+			<if test="wactrNm != ''">
 				WACTR_NM LIKE '%'||#{wactrNm}||'%'
-			</when>
-		</choose>
+			</if>
+			<if test="scale != ''">
+				AND "SCALE" = #{scale}
+			</if>
+		</where>
 	</select>
 
 	<!-- 물류센터 존재유무 확인 -->

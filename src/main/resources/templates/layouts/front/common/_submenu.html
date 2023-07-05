@@ -7,8 +7,7 @@
 		<a th:href="@{/stdin(pageName='stdin')}" th:classappend="${pageName} == 'stdin' ? 'on'">입고</a>
 		<a th:href="@{/}" th:classappend="${pageName} == 'rels' ? 'on'">출고</a>
 		<a th:href="@{/}" th:classappend="${pageName} == 'tmstk' ? 'on'">재고</a>
-		<a th:href="@{/}" th:classappend="${pageName} == '' ? 'on'">반품</a>
-		<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin}" th:text="#{adminPage}"></a>
+		<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/userManage(pageName='userManage')}" th:text="#{adminPage}"></a>
 	</nav>
 </th:block>
 </html>

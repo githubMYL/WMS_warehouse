@@ -18,6 +18,8 @@ public class UserJoinService {
 
 		userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
 
+		System.out.println(userVO);
+
 		userDAO.insertUser(userVO);
 	}
 

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/admin/main}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
     <section layout:fragment="content">
         <head>
@@ -62,6 +61,7 @@
             </div>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
+                alert("aa");
                     const clnt = document.getElementById("clnt_tmp");
                     var selected = document.querySelector("select#clnt_sel")
 

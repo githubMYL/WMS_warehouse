@@ -3,6 +3,7 @@ package org.warehouse.configs.models.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.warehouse.models.stdin.StdinVO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
@@ -13,7 +14,12 @@ public interface StdinDAO {
 	void updateHeaderStdin(StdinVO stdinVO);
 	void updateDetailStdin(StdinVO stdinVO);
 
+	void deleteHeaderStdin(String stdinNum);
+	void deleteDetailStdin(String stdinNum);
+
 	List<StdinVO> getList();
 	List<StdinVO> getDetailList();
 	StdinVO getDetail(Long stdinNum);
+
+	List<StdinVO> getListByConditions(LocalDate stdinDt, String clntNm, String status);
 }

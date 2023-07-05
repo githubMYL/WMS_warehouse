@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.warehouse.models.user.User;
+import org.warehouse.models.user.UserVO;
 
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
@@ -29,10 +29,10 @@ public class JoinForm {
 	private String tel;
 	private String email;
 
-	public static User of(JoinForm joinForm) {
+	public static UserVO of(JoinForm joinForm) {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setSkipNullEnabled(true);
-		return joinForm == null ? null : modelMapper.map(joinForm, User.class);
+		return joinForm == null ? null : modelMapper.map(joinForm, UserVO.class);
 	}
 
 }

@@ -11,11 +11,10 @@
             };
 
             function del() {
-
-                var check_data = [];
-                $("input:checkbox[name='chkBox']:checked").each(function() {
-                    check_data.push($(this).val());
-                    console.log(check_data);
+                var checkBoxArr = [];
+                  $("input:checkbox[name='chkBox']:checked").each(function() {
+                  checkBoxArr.push($(this).val());     // 체크된 것만 값을 뽑아서 배열에 push
+                  console.log(checkBoxArr);
                 })
 
                 $.ajax({
@@ -30,8 +29,6 @@
                     error: function(){
                         alert("에러");
                     }
-
-                }
                 });
 
             }

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/admin/main}">
+
+<section layout:fragment="content">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<table class="table-cols" id="clntSearch">
+			<tr>
+				<th>고객사 명</th>
+				<td>
+					<input type="text" name="clntNm" placeholder="고객사 명">
+				</td>
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button type="button" id="ajax_btn" class="sbtn">검색</button>
+			<button type="button" id="add" class="sbtn">추가</button>
+			<button type="button" id="del" class="sbtn blue">삭제</button>
+		</div>
+	</form>
+
+	<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const ajax_btn = document.getElementById('ajax_btn');
+				const add = document.getElementById('add');
+				const del = document.getElementById('del');
+
+				add.addEventListener("click", addItem);
+			});
+
+			function addItem(e) {
+				console.log('test');
+				url = 'join';
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			}
+		</script>
+
+	<div class="table_wrapper">
+		<table id="clnt_table">
+			<tr>
+				<th> </th>
+				<th>고객사 코드</th>
+				<th>고객사 명</th>
+				<th>영업 담당자</th>
+				<th>영업 담당자 연락처</th>
+				<th>TPL 담당자</th>
+				<th>TPL 연락처</th>
+				<th>TPL 이메일</th>
+				<th>업태</th>
+				<th>종목</th>
+				<th>사업자번호</th>
+				<th>대표자 명</th>
+				<th>대표자 연락처</th>
+				<th>사업자 주소</th>
+				<th>비고</th>
+			</tr>
+			<tbody id="search">
+			<tr th:each="clnt, clntCount : ${clntList}" id="clnt_infos">
+				<td>
+					<input type="checkbox" name="chk" th:value="${clnt.clntCd}" id="chk">
+				</td>
+				<td th:text="${clntCount.count}"></td>
+				<td th:text="${clnt.clntCd}"></td>
+				<td th:text="${clnt.clntNm}"></td>
+				<td th:text="${clnt.salesNm}"></td>
+				<td th:text="${clnt.salesTel}"></td>
+				<td th:text="${clnt.tplNm}"></td>
+				<td th:text="${clnt.tplTel}"></td>
+				<td th:text="${clnt.tplEmail}"></td>
+				<td th:text="${clnt.business}"></td>
+				<td th:text="${clnt.event}"></td>
+				<td th:text="${clnt.busiNum}"></td>
+				<td th:text="${clnt.ownerNm}"></td>
+				<td th:text="${clnt.ownerTel}"></td>
+				<td th:text="${clnt.busiAddr}"></td>
+				<td th:text="${clnt.remark}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+</html>
