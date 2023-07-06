@@ -19,16 +19,46 @@
 		<result property="custCtrNm" column="CUST_CTR_NM" />
 	</resultMap>
 
+	<insert id="insertCust" parameterType="org.warehouse.models.admin.cust.CustVO">
+		INSERT INTO CUST(CUST_CD, CUST_NM, BUSI_NUM, CUST_TEL, OWNER_NM, BUSI_ADDR, REMK, REG_NM, REG_DT)
+			VALUES(#{custCd}, #{custNm}, #{busiNum}, #{custTel}, #{ownerNm}, #{busiAddr}, #{remark}, #{regNm}, SYSDATE)
+	</insert>
+
+	<update id="updateCust" parameterType="org.warehouse.models.admin.cust.CustVO">
+		UPDATE CUST SET
+			BUSI_NUM = #{busiNum},
+			CUST_TEL = #{custTel},
+			OWNER_NM = #{ownerNm},
+			BUSI_ADDR = #{busiAddr},
+			REMK = #{remark},
+			MOD_NM = #{modNm},
+			MOD_DT = SYSDATE
+		WHERE CUST_CD = #{custCd}
+	</update>
+
+	<update id="deleteCust">
+		UPDATE CUST SET
+			DEL_YN = 'Y',
+			MOD_NM = #{modNm},
+			MOD_DT = SYSDATE
+		WHERE CUST_CD = #{custCd}
+	</update>
+
+
 	<select id="getCustList" resultMap="custMap">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		SELECT *
-		FROM CUST_CTR cc
-		LEFT OUTER JOIN CUST c
-		ON c.CUST_CD = cc.CUST_CD
-		ORDER BY CUST_CTR_CD
+		SELECT * FROM CUST WHERE DEL_YN = 'N' ORDER BY REG_DT DESC
 	</select>
 
 	<select id="getCustByCustNm" resultMap="custMap">
 		SELECT * FROM CUST WHERE CUST_NM=#{custNm}
+	</select>
+
+	<select id="getCustListByCustNm" resultMap="custMap">
+		SELECT * FROM CUST WHERE CUST_NM LIKE '%'||#{custNm}||'%'
+	</select>
+
+	<select id="getCustByCd" resultMap="custMap">
+		SELECT * FROM CUST WHERE CUST_CD=#{custCd}
 	</select>
 </mapper>

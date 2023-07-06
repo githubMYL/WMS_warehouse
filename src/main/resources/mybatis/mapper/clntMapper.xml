@@ -29,10 +29,6 @@
 			#{event}, #{busiNum}, #{ownerNm}, #{ownerTel}, #{busiAddr}, SYSDATE, #{regNm})
 	</insert>
 
-	<update id="deleteClnt">
-		UPDATE CLNT SET DEL_YN = 'Y' WHERE CLNT_CD = #{clntCd}
-	</update>
-
 	<update id="updateClnt">
 		UPDATE CLNT SET
 			SALES_NM = #{salesNm},
@@ -50,6 +46,16 @@
 			MOD_NM = #{modNm}
 		WHERE CLNT_CD = #{clntCd}
 	</update>
+
+	<update id="deleteClnt">
+		UPDATE CLNT SET
+		DEL_YN = 'Y',
+		MOD_NM = #{modNm},
+		MOD_DT = SYSDATE
+		WHERE CLNT_CD = #{clntCd}
+	</update>
+
+
 
 	<select id="getClntList" resultMap="clntMap">
 		SELECT * FROM CLNT WHERE DEL_YN = 'N' ORDER BY CLNT_CD

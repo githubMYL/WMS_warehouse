@@ -18,6 +18,8 @@ import org.warehouse.models.admin.clnt.ClntForm;
 import org.warehouse.models.admin.clnt.ClntService;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.admin.clnt.ClntValidator;
+import org.warehouse.models.admin.cust.CustForm;
+import org.warehouse.models.admin.cust.CustService;
 import org.warehouse.models.admin.cust.CustVO;
 import org.warehouse.models.admin.custctr.CustCtrVO;
 import org.warehouse.models.stdin.StdinForm;
@@ -38,6 +40,7 @@ public class AdminController {
 	private final UserJoinValidator joinValidator;
 	private final ClntService clntService;
 	private final ClntValidator clntValidator;
+	private final CustService custService;
 
 	private final UserDAO userDAO;
 	private final ClntDAO clntDAO;
@@ -63,11 +66,11 @@ public class AdminController {
 	public String join(Model model) {
 		JoinForm joinForm = new JoinForm();
 		List<ClntVO> clntList = clntDAO.getClntList();
-		List<CustVO> custList = custDAO.getCustList();
+		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
 
 		model.addAttribute("joinForm", joinForm);
 		model.addAttribute("clntList", clntList);
-		model.addAttribute("custList", custList);
+		model.addAttribute("custList", custCtrList);
 
 		return "admin/join";
 	}
@@ -78,10 +81,10 @@ public class AdminController {
 
 		if(errors.hasErrors()) {
 			List<ClntVO> clntList = clntDAO.getClntList();
-			List<CustVO> custList = custDAO.getCustList();
+			List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
 
 			model.addAttribute("clntList", clntList);
-			model.addAttribute("custList", custList);
+			model.addAttribute("custList", custCtrList);
 			return "admin/join";
 		}
 
@@ -150,8 +153,44 @@ public class AdminController {
 		List<CustVO> custList = custDAO.getCustList();
 
 		model.addAttribute("custList", custList);
-		return "admin/custManage";
+		return "admin/cust/custManage";
 	}
+
+	@GetMapping("/custManage/register")
+	public String custRegister(Model model) {
+		CustForm custForm = new CustForm();
+
+		model.addAttribute("custForm", custForm);
+
+		return "admin/cust/custRegister";
+	}
+
+	@GetMapping("/custManage/update/{custCd}")
+	public String custUpdate(@PathVariable String custCd, Model model) {
+		CustVO custVO = custDAO.getCustByCd(custCd);
+
+		CustForm custForm = new ModelMapper().map(custVO, CustForm.class);
+
+		model.addAttribute("custForm", custForm);
+
+		return("admin/cust/custUpdate");
+	}
+
+	@PostMapping("/custManage/save")
+	public String custSave(@Valid CustForm custForm, Errors errors, Model model) {
+		//validator
+		if(errors.hasErrors()) {
+			return "admin/cust/custRegister";
+		}
+
+		custService.register(custForm);
+
+		closeLayer(response);
+
+		return "close";
+	}
+
+
 	/** custManage E */
 
 	/** custCtrManage S */
@@ -162,7 +201,7 @@ public class AdminController {
 		System.out.println(custCtrList);
 
 		model.addAttribute("custCtrList", custCtrList);
-		return "admin/custCtrManage";
+		return "admin/custctr/custCtrManage";
 	}
 	/** custCtrManage E */
 
