@@ -153,7 +153,7 @@
 				commonLib.ajaxLoad(url)
 					.then((data) => {
 						data = JSON.parse(data);
-						str += '<td data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
+						str += '<td data-status= '+ data.status + ' data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
 						str += '<td>' + data.itemCd + '</td>';
 						str += '<td>' + data.itemNm + '</td>';
 						str += '<td>' + data.locCd + '</td>';
@@ -172,9 +172,15 @@
 			function updateTable() {
 				const td = document.querySelector('#stdin_d_infos td')
 				const stdinnum = td.dataset.stdinnum;
+				const status = td.dataset.status;
+				console.log(status);
 
-				url = 'stdin/update/' + stdinnum;
-				warehouse.popup.open(url, "테스트", 500, 800, true);
+				if(status == '1') {
+					url = 'stdin/update/' + stdinnum;
+					warehouse.popup.open(url, "테스트", 500, 800, true);
+				}
+
+
 			};
 		</script>
 	<div class="table_wrapper">
