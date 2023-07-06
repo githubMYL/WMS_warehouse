@@ -52,7 +52,7 @@
 		where loc_cd = #{ori_loc_cd}
 	</update>
 
-
+	<!-- loc 삭제 -->
 	<delete id="deleteLoc" parameterType="String">
 		delete from loc where loc_cd = #{loc_cd}
 	</delete>

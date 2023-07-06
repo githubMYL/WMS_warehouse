@@ -22,9 +22,37 @@
 		<result property="modNm" column="MOD_NM" />
 		<result property="delyn" column="DEL_YN" />
 	</resultMap>
+	<insert id="insertClnt" parameterType="org.warehouse.models.admin.clnt.ClntVO">
+		INSERT INTO CLNT(CLNT_CD, CLNT_NM, SALES_NM, SALES_TEL, TPL_NM, TPL_TEL, TPL_EMAIL, BUSINESS,
+		EVENT, BUSI_NUM, OWNER_NM, OWNER_TEL, BUSI_ADDR, REG_DT, REG_NM)
+			VALUES(#{clntCd}, #{clntNm}, #{salesNm}, #{salesTel}, #{tplNm}, #{tplTel}, #{tplEmail}, #{business},
+			#{event}, #{busiNum}, #{ownerNm}, #{ownerTel}, #{busiAddr}, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="deleteClnt">
+		UPDATE CLNT SET DEL_YN = 'Y' WHERE CLNT_CD = #{clntCd}
+	</update>
+
+	<update id="updateClnt">
+		UPDATE CLNT SET
+			SALES_NM = #{salesNm},
+			SALES_TEL = #{salesTel},
+			TPL_NM = #{tplNm},
+			TPL_TEL = #{tplTel},
+			TPL_EMAIL = #{tplEmail},
+			BUSINESS = #{business},
+			EVENT = #{event},
+			BUSI_NUM = #{busiNum},
+			OWNER_NM = #{ownerNm},
+			OWNER_TEL = #{ownerTel},
+			BUSI_aDDR = #{busiAddr},
+			MOD_DT = SYSDATE,
+			MOD_NM = #{modNm}
+		WHERE CLNT_CD = #{clntCd}
+	</update>
 
 	<select id="getClntList" resultMap="clntMap">
-		SELECT * FROM CLNT ORDER BY CLNT_CD
+		SELECT * FROM CLNT WHERE DEL_YN = 'N' ORDER BY CLNT_CD
 	</select>
 
 	<select id="getClntByCd" resultMap="clntMap">
@@ -39,6 +67,10 @@
 		FROM CLNT
 		WHERE CLNT_CD = #{clntCd}
 		AND CLNT_NM = #{clntNm}
+	</select>
+
+	<select id="getClntListByNm" resultMap="clntMap">
+		SELECT * FROM CLNT WHERE CLNT_NM LIKE '%'||#{clntNm}||'%'
 	</select>
 
 </mapper>

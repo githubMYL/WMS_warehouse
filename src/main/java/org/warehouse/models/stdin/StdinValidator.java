@@ -37,14 +37,29 @@ public class StdinValidator implements Validator {
 		StdinForm stdinForm = (StdinForm)target;
 
 		/**
+		 * 0. null값 체크
 		 * 1. 입고일자가 현재 날짜보다 앞선 경우
 		 * 2. 고객사, 상품, 로케이션 존재 검증
 		 * 3. 입고 수량 검증 - 총 입고 수량 = 정상 수량 + 불량 수량
 		 */
 
+		// 0. null값 체크
+		if(stdinForm.getStdinDt() == null) {
+			errors.rejectValue("stdinDt", "Validation.null.stdinDt");
+		}
+		if(stdinForm.getClntCd() == null) {
+			errors.rejectValue("clntCd", "Validation.null.clntCd");
+		}
+		if(stdinForm.getItemCd() == null) {
+			errors.rejectValue("itemCd", "Validation.null.itemCd");
+		}
+		if(stdinForm.getLocCd() == null) {
+			errors.rejectValue("locCd", "Validation.null.locCd");
+		}
+
 		// 1. 입고일자가 현재 날짜보다 앞선 경우
 		LocalDate stdinDt = stdinForm.getStdinDt();
-		if(stdinDt.isBefore(LocalDate.now())) {
+		if(stdinDt != null && stdinDt.isBefore(LocalDate.now())) {
 			errors.rejectValue("stdinDt", "Validation.isBefore.stdinDt");
 		}
 
@@ -63,7 +78,7 @@ public class StdinValidator implements Validator {
 
 
 		// 3. 입고 수량 검증
-		if(!(stdinForm.getBeforeStdin() == (stdinForm.getFault() + stdinForm.getNormal()))){
+		if(stdinForm.getBeforeStdin() != null && !(stdinForm.getBeforeStdin() == (stdinForm.getFault() + stdinForm.getNormal()))){
 			errors.rejectValue("beforeStdin", "Validation.incorrect.beforeStdin");
 		}
 	}

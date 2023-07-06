@@ -16,6 +16,6 @@ public interface LocDAO {
 	void insertLoc(LocVO loc); 						//로케이션 등록
 	void deleteLoc(String loc_cd); 					// 로케이션 삭제
 
-	LocVO modLoc(String loc_cd_array); 				// 수정
+	void modLoc(LocVO loc); 				// 수정
 	LocVO getLocByCd(@Param("loc_cd")String locCd);	// 로케이션 코드에 따른 로케이션 정보 가져오기
 }

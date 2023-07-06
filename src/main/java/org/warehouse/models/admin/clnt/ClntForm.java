@@ -5,7 +5,7 @@ import lombok.Data;
 import org.warehouse.models.BaseEntity;
 
 @Data
-public class ClntVO extends BaseEntity {
+public class ClntForm extends BaseEntity {
 	@NotBlank
 	private String clntCd;
 	@NotBlank
@@ -24,5 +24,8 @@ public class ClntVO extends BaseEntity {
 
 	private String ownerNm;
 	private String ownerTel;
+
 	private String busiAddr;
+
+	private String flag;
 }

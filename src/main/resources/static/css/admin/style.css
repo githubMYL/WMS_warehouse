@@ -1,12 +1,18 @@
 /** 사이트 공통 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 * { box-sizing: border-box; font-family: 'Noto Sans KR', sans-serif; color: #000; outline: none; }
-html { font-size: 13px; }
+html { font-size: 13px; max-width: 1300px; min-width: 1100px; margin: 0 auto; padding: 0 10px;}
 ul, ol { list-style: none; margin:0; padding:0; }
 dl, dt, dd { margin:0; padding: 0; }
 a { text-decoration: none; }
-body { margin: 0; }
+body { margin: 0; background: linear-gradient(-20deg, #d1e6f7a6, white); }
 img { border: 0; }
+
+.errors {
+	font-size : 0.9rem;
+	color:#F84A71;
+	margin-left:5px;
+}
 
 /** 기준 너비 */
 .layout_width { max-width: 1300px; min-width: 1100px; margin: 0 auto; padding: 0 10px; }
@@ -17,12 +23,7 @@ input[type='number'],
 input[type='password'],
 input[type='email'],
 input[type='date'] { border: 1px solid #d5d5d5; width: 100%; height: 45px; padding: 0 10px; border-radius: 3px; }
-
-.errors {
-	font-size : 0.9rem;
-	color:#F84A71;
-	margin-left:5px;
-}
+select { border: 1px solid #d5d5d5; width: 100%; height: 45px; padding: 0 10px; border-radius: 3px; }
 
 .dn { display: none !important; }
 
@@ -36,8 +37,19 @@ input[type='date'] { border: 1px solid #d5d5d5; width: 100%; height: 45px; paddi
 /** 기본 레이아웃 스타일 */
 header { height: 80px; background: #fff; display: flex; align-items: center; }
 header > .left { width: 208px; text-align: center; }
-header > .mid {text-align:center;}
+header > .mid {flex-grow : 2;text-align:center;}
 header > .right { flex-grow: 1; text-align: right; padding: 10px; }
+
+main { min-width: 1100px; min-height: 800px; display: flex; }
+main > aside { min-width: 200px; height: 400px; margin-top:250px;}
+main > section { flex-grow:1; margin: 50px; max-width:900px}
+
+aside li > a { display: block; height: 71px; line-height: 71px; color: #596b99; font-size: 18px; text-align: center; position: relative; }
+aside li > a * { color: #596b99; font-size: 18px; }
+aside li > a:hover,
+aside li > a.on { font-weight: bold; }
+aside li > a:hover:after,
+aside li > a.on:after { content: ''; display: block; position: absolute; width: 8px; height: 100%; right: 0; top: 0; }
 
 /** 기본 버튼 스타일 */
 .sbtn { display: inline-block; border: 1px solid #596b99; color: #596b99; min-width: 90px; padding: 0 20px; height: 28px; line-height: 26px; text-align: center; border-radius: 5px; }
@@ -49,10 +61,33 @@ nav.submenus { background: #fff; box-shadow: 1px 1px 5px #cdced5; margin-bottom:
 nav.submenus a.on { width:100%; background: #596b99; color: #fff; }
 nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px; }
 
-._form input[type=text] {width:300px;}
+/** 테이블 */
+.table_wrapper {width: 900px; overflow:auto;}
+.table_wrapper > table { width: 100%; border-spacing: 0; padding: 0; margin-bottom: 20px; white-space:nowrap; }
+.table_wrapper th { background: #f8f8f8; width: 160px; padding: 10px 20px; text-align: left; }
+.table_wrapper td { background: #fff; padding: 10px 15px; }
+
+.table-cols {margin-bottom:20px;}
+
+._form input[type=text],input[type='number'],input[type='password'],input[type='email'],input[type='date'] {width:300px;}
+._form select {width : 300px;}
 
 .frmSearch {margin-bottom:15px;}
 .frmSearch td{ padding-right:50px; }
 .frmSearch th {padding-right: 10px;}
 
 .table-cols {margin-bottom:20px;}
+
+
+/** userSearch */
+#userSearch {
+	width: 100%;
+}
+#userSearch td {
+	width : 170px;
+	padding-right : 30px;
+}
+
+#userSearch td:last-child {
+	padding-right : 0px;
+}

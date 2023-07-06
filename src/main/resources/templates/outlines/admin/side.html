@@ -29,23 +29,45 @@
 		</li>
 	</ul>
 
+	<ul th:case="admin">
+		<li>
+			<a th:href="@{/admin/userManage}" th:classappend="${menuCode} == 'userManage' ? 'on'">
+				<i class="xi-view-list"></i>
+				사용자 관리
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/admin/clntManage}" th:classappend="${menuCode} == 'clntManage' ? 'on'">
+				<i class="xi-view-list"></i>
+				고객사 관리
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/admin/custManage}" th:classappend="${menuCode} == 'custManage' ? 'on'">
+				<i class="xi-view-list"></i>
+				납품처 관리
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/admin/custCtrManage}" th:classappend="${menuCode} == 'custCtrManage' ? 'on'">
+				<i class="xi-view-list"></i>
+				납품센터 관리
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/admin/carManage}" th:classappend="${menuCode} == 'carManage' ? 'on'">
+				<i class="xi-view-list"></i>
+				차량 관리
+			</a>
+		</li>
+	</ul>
+
 	<ul th:case="stdin">
 		<li>
 			<a>사이드</a>
 		</li>
 	</ul>
 
-	<!-- 재고 사이드 탭 -->
-	<ul th:case="tmstk">
-		<li>
-			<a th:href="@{/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
-				<i class="xi-view-list"></i>
-				시점재고
-			</a>
-		</li>
-		<li>
-			<a>일수불</a>
-		</li>
-	</ul>
+
 </aside>
 </html>

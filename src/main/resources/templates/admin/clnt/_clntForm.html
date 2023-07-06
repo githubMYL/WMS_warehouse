@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<th:block th:fragment="clntForm" th:object="${clntForm}">
+		<div><h3>고객사정보</h3>
+			<dt th:text="#{clntCd}" class="require_item"></dt>
+			<input type="text" name="clntCd" th:field="*{clntCd}" th:placeholder="#{clntCd}">
+			<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{clntNm}" class="require_item"></dt>
+			<input type="text" name="clntNm" th:field="*{clntNm}" th:placeholder="#{clntNm}">
+			<div class="errors" th:each="err : ${#fields.errors('clntNm')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+		<div><h3>영업정보</h3>
+			<dt th:text="#{sales}" class="require_item"></dt>
+			<input type="text" name="salesNm" th:field="*{salesNm}" th:placeholder="#{salesNm}">
+			<input type="text" name="salesTel" th:field="*{salesTel}" th:placeholder="#{salesTel}">
+		</div>
+
+		<br>
+		<div><h3>TPL정보</h3>
+			<dt th:text="#{tpl}" class="require_item"></dt>
+			<input type="text" name="tplNm" th:field="*{tplNm}" th:placeholder="#{tplNm}">
+			<input type="text" name="tplTel" th:field="*{tplTel}" th:placeholder="#{tplTel}">
+			<input type="text" name="tplEmail" th:field="*{tplEmail}" th:placeholder="#{tplEmail}">
+		</div>
+
+		<br>
+		<div><h3>업소정보</h3>
+			<div>
+				<dt th:text="#{business}" class="require_item"></dt>
+				<input type="text" name="business" th:field="*{business}" th:placeholder="#{business}">
+			</div>
+			<div>
+				<dt th:text="#{event}" class="require_item"></dt>
+				<input type="text" name="event" th:field="*{event}" th:placeholder="#{event}">
+			</div>
+			<div>
+				<dt th:text="#{busiNum}" class="require_item"></dt>
+				<input type="text" name="busiNum" th:field="*{busiNum}" th:placeholder="#{busiNum}">
+			</div>
+		</div>
+
+		<br>
+		<div>
+			<dt th:text="#{owner}" class="require_item"></dt>
+			<input type="text" name="ownerNm" th:field="*{ownerNm}" th:placeholder="#{ownerNm}">
+			<input type="text" name="ownerTel" th:field="*{ownerTel}" th:placeholder="#{ownerTel}">
+		</div>
+
+
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script>
+			function execDaumPostcode() {
+				new daum.Postcode( {
+					oncomplete: function( data ) {
+						console.log(data);
+						var addr = document.getElementById("addr");
+						addr.value=data.address;
+						addr.focus();
+					}
+				} ).open();
+			}
+		</script>
+		<br>
+		<div>
+			<dt th:text="#{busiAddr}" class="require_item"></dt>
+			<input type="text" style="width:300px;" name="addr" id="addr" th:field="*{busiAddr}" th:placeholder="#{busiAddr}">
+			<input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="sbtn" style="height: 45px;"><br>
+			<div class="errors" th:each="err : ${#fields.errors('busiAddr')}" th:text="${err}"></div>
+		</div>
+	</th:block>
+</html>

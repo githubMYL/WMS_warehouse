@@ -94,5 +94,29 @@
 	<select id="getDetail" resultMap="stdinMap">
 		SELECT * FROM STDIN_D D LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD WHERE STDIN_NUM = #{stdinNum}
 	</select>
+
+	<select id="getListByConditions" resultMap="stdinMap">
+		SELECT * FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD
+		<where>
+			<if test="stdinDt != null">
+				H.STDIN_DT = #{stdinDt}
+			</if>
+			<if test="clntNm != ''">
+				AND C.CLNT_NM LIKE '%'||#{clntNm}||'%'
+			</if>
+			<if test="status != ''">
+				AND H.STATUS = #{status}
+			</if>
+		</where>
+	</select>
+
+	<update id="deleteHeaderStdin">
+		UPDATE STDIN_H SET DEL_YN = 'Y' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
+	<update id="deleteDetailStdin">
+		UPDATE STDIN_D SET DEL_YN = 'Y' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
 </mapper>
 

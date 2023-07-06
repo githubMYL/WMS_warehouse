@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.warehouse.configs.models.mapper.UserMapper">
-	<resultMap id="userMap" type="org.warehouse.models.user.User">
+<mapper namespace="org.warehouse.configs.models.mapper.UserDAO">
+	<resultMap id="userMap" type="org.warehouse.models.user.UserVO">
 		<result property="userId" column="USER_ID" />
 		<result property="userPw" column="USER_PW" />
 		<result property="userNm" column="USER_NM" />
 		<result property="userType" column="USER_TYPE" />
 		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
 		<result property="custCtrCd" column="CUST_CTR_CD" />
 		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
 		<result property="position" column="POSITION" />
 		<result property="tel" column="TEL" />
 		<result property="email" column="EMAIL" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
 	</resultMap>
 	<select id="getUserById" resultMap="userMap"> <!--  회원 정보  -->
 		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE WHERE USER_ID=#{userId}
@@ -23,13 +31,38 @@
 
 	<select id="getUserList" resultMap="userMap">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		SELECT USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL FROM USER_MANAGE ORDER BY memNo DESC
+		SELECT U.*, CL.CLNT_NM, CS.CUST_NM FROM USER_MANAGE U
+			LEFT OUTER JOIN CLNT CL ON CL.CLNT_CD = U.CLNT_CD
+			LEFT OUTER JOIN CUST CS ON CS.CUST_CD = U.CUST_CD
+			WHERE U.DEL_YN = 'N'
 	</select>
 
-	<insert id="insertUser" parameterType="org.warehouse.models.user.User" keyProperty="userId">
+	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL) VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email})
+		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT)
+		VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE)
 	</insert>
 
+	<select id="getListByConditions" resultMap="userMap">
+		SELECT * FROM USER_MANAGE U LEFT OUTER JOIN CLNT C ON C.CLNT_CD = U.CLNT_CD LEFT OUTER JOIN CUST CT ON CT.CUST_CD = U.CUST_CD
+		<where>
+			<if test="clntNm != ''">
+				C.CLNT_NM LIKE '%'||#{clntNm}||'%'
+			</if>
+			<if test="userId != ''">
+				AND U.USER_ID LIKE '%'||#{userId}||'%'
+			</if>
+			<if test="userNm != ''">
+				AND U.USER_NM LIKE '%'||#{userNm}||'%'
+			</if>
+			<if test="tel != ''">
+				AND U.TEL LIKE '%'||#{tel}||'%'
+			</if>
+		</where>
+	</select>
+
+	<update id="deleteUser">
+		UPDATE USER_MANAGE SET DEL_YN = 'Y' WHERE USER_ID = #{userId}
+	</update>
 
 </mapper>

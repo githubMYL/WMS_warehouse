@@ -85,6 +85,15 @@ public class StdinController {
 		validator.validate(stdinForm, errors);
 
 		if(errors.hasErrors()) {
+			List<ClntVO> list = clntDAO.getClntList();
+			model.addAttribute("clntList", list);
+
+			List<ItemInfoVO> item_list = itemInfoDAO.getItemList();
+			model.addAttribute("itemList", item_list);
+
+			List<LocVO> loc_list = locDAO.getLocList();
+			model.addAttribute("locList", loc_list);
+
 			return "stdin/register";
 		}
 

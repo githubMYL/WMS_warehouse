@@ -3,82 +3,134 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/front/main}">
 
-    <section layout:fragment="content">
-        <form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
-            <table class="table-cols">
-                <tr>
-                    <th>고객사명</th>
-                    <td>
-                        <input type="text" th:field="*{clntNm}" id="clntNmSrch">
-                    </td>
-                    <th>상품코드</th>
-                    <td>
-                        <input type="text" th:field="*{itemCd}" id="itemCdSrch">
-                    </td>
-                    <th>상품명</th>
-                    <td>
-                        <input type="text" th:field="*{itemNm}" id="itemNmSrch">
-                    </td>
-                </tr>
-            </table>
-            <div class="btns" align="right">
-                <button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
-                <button class="sbtn" th:text="#{add_btn}"></button>
-                <button class="sbtn blue" th:text="#{delete_btn}"></button>
-            </div>
-        </form>
-        <script>
-                // 페이지이동
-                function movePage(page){
+<section layout:fragment="content">
+    <script>
+            function add() {
+                url = '/baseinfo/iteminfo/register';
+                warehouse.popup.open(url, '상품정보 추가', 500, 600, true);
+            };
 
-                    // 검색 조건을 form 에 넣어줌
-                    const form = document.getElementById('searchForm');
+            function del() {
+                var checkBoxArr = [];
+                  $("input:checkbox[name='chkBox']:checked").each(function() {
+                  checkBoxArr.push($(this).val());     // 체크된 것만 값을 뽑아서 배열에 push
+                  console.log(checkBoxArr);
+                })
 
-                    // form 에 들어있는 검색조건을 queryParams에 넣어줌.
-                    const queryParams = {
-                        page: (page) ? page: 1,
-                        recordSize: 10,
-                        pageSize: 10,
-                        clntNm: form.clntNmSrch.value,
-                        itemCd: form.itemCdSrch.value,
-                        itemNm: form.itemNmSrch.value
+                $.ajax({
+                    type: "POST",
+                    url: "<c:url value='/baseinfo/iteminfo/deleteItem'>",
+                    data: {
+                        check_data : check_data
+                    },
+                    success: function(result){
+                        console.log(result);
+                    },
+                    error: function(){
+                        alert("에러");
                     }
-                    // location.pathname :: 페이지의 URI를 의미함.
-                    // new URLSearchParams(queryParams).toString() :: queryParams 의 모든 값을 쿼리스트링으로 변환
-                    location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
-                }
-            </script>
-        <div class="table_wrapper">
-            <table class="table-cols">
-                <tr>
-                    <th align="center">
-                        <input th:type="checkbox">
-                    </th>
-                    <th>순번</th>
-                    <th>물류센터명</th>
-                    <th>고객사코드</th>
-                    <th>고객사명</th>
-                    <th>상품코드</th>
-                    <th>상품명</th>
-                    <th>관리단위</th>
-                    <th>파렛트 당<br/>박스 수</th>
-                    <th>비고</th>
-                </tr>
-                <tr th:each="itemList : ${itemInfoList}">
-                    <td align="center">
-                        <input th:type="checkbox">
-                    </td>
-                    <td align="center" th:text="${itemList.idx}"></td>
-                    <td align="center" th:text="${itemList.wactrNm}"/>
-                    <td align="center" th:text="${itemList.clntCd}"/>
-                    <td th:text="${itemList.clntNm}"/>
-                    <td th:text="${itemList.itemCd}"></td>
-                    <td th:text="${itemList.itemNm}"></td>
-                    <td align="center" th:text="${itemList.boxUnit}"></td>
-                    <td align="center" th:text="${itemList.pltInBox}"></td>
-                    <td th:text="${itemList.remk}"></td>
-                </tr>
-            </table>
+                });
+
+            }
+
+<!--            function del() {-->
+<!--                var chkBox = document.getElementsByName("chkBox")-->
+<!--                var chkBox_data = [];-->
+
+<!--                for(var i = 0; i < chkBox.length; i++) {-->
+<!--                    if(chkBox[i].checked == true){-->
+<!--                        chkBox_data.push(chkBox[i].value);-->
+<!--                    }-->
+<!--                }-->
+<!--                alert("chkBox_data" + chkBox_data);-->
+<!--                const url = 'iteminfo/deleteItem?idx=${chkBox_data}';-->
+
+<!--                commonLib.ajaxLoad(url)-->
+<!--					.then((data) => {-->
+<!--						console.log(data);-->
+<!--						location.reload();-->
+<!--					})-->
+<!--					.catch((err) => {-->
+<!--						console.error(err);-->
+<!--					});-->
+<!--            };-->
+
+        </script>
+    <form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
+        <table class="table-cols">
+            <tr>
+                <th>고객사명</th>
+                <td>
+                    <input type="text" th:field="*{clntNm}" id="clntNmSrch">
+                </td>
+                <th>상품코드</th>
+                <td>
+                    <input type="text" th:field="*{itemCd}" id="itemCdSrch">
+                </td>
+                <th>상품명</th>
+                <td>
+                    <input type="text" th:field="*{itemNm}" id="itemNmSrch">
+                </td>
+            </tr>
+        </table>
+        <div class="btns" align="right">
+            <button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
+            <button class="sbtn" th:onclick="add()" th:text="#{add_btn}"></button>
+            <button class="sbtn blue" th:onclick="del()" th:text="#{delete_btn}"></button>
         </div>
-    </section>
+    </form>
+    <script>
+            // 페이지이동
+            function movePage(page){
+
+                // 검색 조건을 form 에 넣어줌
+                const form = document.getElementById('searchForm');
+
+                // form 에 들어있는 검색조건을 queryParams에 넣어줌.
+                const queryParams = {
+                    page: (page) ? page: 1,
+                    recordSize: 10,
+                    pageSize: 10,
+                    clntNm: form.clntNmSrch.value,
+                    itemCd: form.itemCdSrch.value,
+                    itemNm: form.itemNmSrch.value
+                }
+                // location.pathname :: 페이지의 URI를 의미함.
+                // new URLSearchParams(queryParams).toString() :: queryParams 의 모든 값을 쿼리스트링으로 변환
+                location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+            }
+        </script>
+    <div class="table_wrapper">
+        <table class="table-cols">
+            <tr>
+                <th align="center">
+                    <input th:type="checkbox">
+                </th>
+                <th>순번</th>
+                <th>물류센터명</th>
+                <th>고객사코드</th>
+                <th>고객사명</th>
+                <th>상품코드</th>
+                <th>상품명</th>
+                <th>관리단위</th>
+                <th>파렛트 당<br/>박스 수</th>
+                <th>비고</th>
+            </tr>
+            <tr th:each="itemList : ${itemInfoList}">
+                <td align="center">
+                    <input th:type="checkbox" id="chkBox" name="chkBox" th:value="${itemList.idx}">
+                </td>
+                <td align="center" th:text="${itemList.idx}"></td>
+                <td align="center" th:text="${itemList.wactrNm}"/>
+                <td align="center" th:text="${itemList.clntCd}"/>
+                <td th:text="${itemList.clntNm}"/>
+                <td th:text="${itemList.itemCd}"></td>
+                <td th:text="${itemList.itemNm}"></td>
+                <td align="center" th:text="${itemList.boxUnit}"></td>
+                <td align="center" th:text="${itemList.pltInBox}"></td>
+                <td th:text="${itemList.remk}"></td>
+            </tr>
+        </table>
+    </div>
+</section>
 </html>

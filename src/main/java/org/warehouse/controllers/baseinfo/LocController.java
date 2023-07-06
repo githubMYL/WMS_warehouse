@@ -1,5 +1,6 @@
 package org.warehouse.controllers.baseinfo;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.warehouse.models.baseinfo.loc.LocVO;
 import org.warehouse.models.baseinfo.wactr.WactrVO;
 import org.springframework.ui.Model;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
@@ -27,9 +30,23 @@ public class LocController {
 	private final HttpSession session;
 	private final LocJoinValidator validator;
 
+	private final HttpServletResponse response;
+
+
+	private void commonProcess(Model model) {
+		String Title = "기본정보::로케이션정보";
+		String menuCode = "loc";
+		String pageName = "baseinfo";
+		model.addAttribute("pageName", pageName);
+		model.addAttribute("Title", Title);
+		model.addAttribute("menuCode", menuCode);
+	}
+
+
 	//loc 리스트
 	@GetMapping("/loc")
 	public String loc(@RequestParam(name = "search_loc", required = false) String search_loc, Model model) {
+
 		commonProcess(model);
 
 		if (search_loc != null) {
@@ -53,12 +70,12 @@ public class LocController {
 
 		model.addAttribute("locVO",locVO);
 		model.addAttribute("wactr_list", waclist);
-		return "baseinfo/locForm";
+		return "baseinfo/popup/locForm";
 	}
 
 	// loc 등록
 	@PostMapping("/locjoin")
-	public String locJoin(@Valid LocVO loc, Errors errors, Model model) {
+	public String locJoin(@Valid LocVO loc,Errors errors,Model model) {
 
 		validator.validate(loc, errors);
 
@@ -70,7 +87,7 @@ public class LocController {
 
 			System.out.println(loc.toString());
 
-			return "baseinfo/locForm";
+			return "baseinfo/popup/locForm";
 
 		}
 
@@ -82,10 +99,10 @@ public class LocController {
 		loc.setReg_nm(userInfo.getUserNm());
 
 
-		System.out.println(loc.toString());
+
 		locDAO.insertLoc(loc);
 
-
+		closeLayer(response);
 		return "redirect:/baseinfo/loc";
 	}
 
@@ -119,7 +136,7 @@ public class LocController {
 
 
 
-		return "baseinfo/locModForm";
+		return "baseinfo/popup/locModForm";
 	}
 
 
@@ -137,7 +154,7 @@ public class LocController {
 
 
 
-			return "baseinfo/locModForm";
+			return "baseinfo/popup/locModForm";
 
 		}
 
@@ -153,18 +170,32 @@ public class LocController {
 
 
 
-		//locDAO.modLoc(loc);
+		locDAO.modLoc(loc);
 
+		closeLayer(response);
 		return "redirect:/baseinfo/loc";
 	}
 
 
-	private void commonProcess(Model model) {
-		String Title = "기본정보::로케이션정보";
-		String menuCode = "loc";
-		String pageName = "baseinfo";
-		model.addAttribute("pageName", pageName);
-		model.addAttribute("Title", Title);
-		model.addAttribute("menuCode", menuCode);
+
+
+	// 레이어 팝업닫기
+	private void closeLayer(HttpServletResponse response) {
+		response.setContentType("text/html; charset=euc-kr");
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			out.println("<script>var parent = window.parent.document;" +
+					"var layerDim = parent.getElementById('layer_dim');" +
+					"var layerPopup = parent.getElementById('layer_popup');" +
+					"parent.body.removeChild(layerDim);" +
+					"parent.body.removeChild(layerPopup);" +
+					"parent.location.reload();</script>");
+			out.flush();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
+
+
 }
