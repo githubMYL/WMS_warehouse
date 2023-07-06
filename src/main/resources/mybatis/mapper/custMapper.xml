@@ -47,7 +47,7 @@
 
 	<select id="getCustList" resultMap="custMap">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		SELECT * FROM CUST WHERE DEL_YN = 'N' ORDER BY REG_DT DESC
+		SELECT * FROM CUST WHERE DEL_YN = 'N' ORDER BY CUST_CD
 	</select>
 
 	<select id="getCustByCustNm" resultMap="custMap">

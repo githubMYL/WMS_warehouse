@@ -8,10 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
 import org.warehouse.models.admin.clnt.ClntForm;
@@ -21,6 +18,8 @@ import org.warehouse.models.admin.clnt.ClntValidator;
 import org.warehouse.models.admin.cust.CustForm;
 import org.warehouse.models.admin.cust.CustService;
 import org.warehouse.models.admin.cust.CustVO;
+import org.warehouse.models.admin.custctr.CustCtrForm;
+import org.warehouse.models.admin.custctr.CustCtrService;
 import org.warehouse.models.admin.custctr.CustCtrVO;
 import org.warehouse.models.stdin.StdinForm;
 import org.warehouse.models.stdin.StdinVO;
@@ -41,6 +40,7 @@ public class AdminController {
 	private final ClntService clntService;
 	private final ClntValidator clntValidator;
 	private final CustService custService;
+	private final CustCtrService custCtrService;
 
 	private final UserDAO userDAO;
 	private final ClntDAO clntDAO;
@@ -203,6 +203,45 @@ public class AdminController {
 		model.addAttribute("custCtrList", custCtrList);
 		return "admin/custctr/custCtrManage";
 	}
+
+	@GetMapping("/custCtrManage/register")
+	public String custCtrRegister(Model model) {
+		List<CustVO> custList = custDAO.getCustList();
+		CustCtrForm custCtrForm = new CustCtrForm();
+
+		model.addAttribute("custList", custList);
+		model.addAttribute("custCtrForm", custCtrForm);
+
+		return "admin/custctr/custCtrRegister";
+	}
+
+	@GetMapping("/custCtrManage/update")
+	public String custCtrUpdate(@RequestParam(value="custCd") String custCd, @RequestParam(value="custCtrCd")String custCtrCd, Model model) {
+		CustCtrVO custCtrVO = custCtrDAO.getCustCtrByCd(custCd, custCtrCd);
+		System.out.println(custCtrVO);
+
+		CustCtrForm custCtrForm = new ModelMapper().map(custCtrVO, CustCtrForm.class);
+
+		model.addAttribute("custCtrForm", custCtrForm);
+
+		return("admin/custctr/custCtrUpdate");
+	}
+
+
+	@PostMapping("/custCtrManage/save")
+	public String custCtrSave(@Valid CustCtrForm custCtrForm, Errors errors, Model model) {
+		//validator
+		if(errors.hasErrors()) {
+			return "admin/custCtr/custCtrRegister";
+		}
+
+		custCtrService.register(custCtrForm);
+
+		closeLayer(response);
+
+		return "close";
+	}
+
 	/** custCtrManage E */
 
 	/** carManage S */
