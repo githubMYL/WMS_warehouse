@@ -24,7 +24,9 @@ public class JoinForm {
 
 	private String clntCd;
 	private String custCtrCd;
+	private String custCtrNm;
 	private String custCd;
+	private String custNm;
 	private String position;
 	private String tel;
 	private String email;
@@ -35,4 +37,5 @@ public class JoinForm {
 		return joinForm == null ? null : modelMapper.map(joinForm, UserVO.class);
 	}
 
+	private String flag;
 }

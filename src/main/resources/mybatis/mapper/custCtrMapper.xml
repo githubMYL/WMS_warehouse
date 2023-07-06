@@ -72,4 +72,8 @@
 		SELECT * FROM CUST_CTR CC LEFT OUTER JOIN CUST C ON C.CUST_CD = CC.CUST_CD WHERE CC.CUST_CD = #{custCd} AND CC.CUST_CTR_CD = #{custCtrCd}
 	</select>
 
+	<select id="getCustCtrByNm" resultMap="custCtrMap">
+		SELECT * FROM CUST_CTR WHERE CUST_CTR_NM = #{custCtrNm}
+	</select>
+
 </mapper>

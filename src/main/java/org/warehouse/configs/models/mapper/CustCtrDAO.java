@@ -14,6 +14,7 @@ public interface CustCtrDAO {
 
 	List<CustCtrVO> getCustCtrList();
 	CustCtrVO getCustCtrByCd(String custCd, String custCtrCd);
+	CustCtrVO getCustCtrByNm(String custCtrNm);
 	List<CustCtrVO> getCustCtrListByCustCd(String custCd);
 	CustCtrVO getCustCtrByCustCdCustCtrNm(String custCd, String custCtrNm);
 	List<CustCtrVO> getListByCustNmCustCtrNm(String custNm, String custCtrNm);

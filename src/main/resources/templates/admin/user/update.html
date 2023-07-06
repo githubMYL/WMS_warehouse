@@ -8,11 +8,11 @@
 	</head>
 
 
-	<h2>납품처등록 수정</h2>
-	<form name="custForm" method="post" th:action="@{/admin/custManage/save}" autocomplete="off" th:object="${custForm}" class="_form">
+	<h2>사용자 수정</h2>
+	<form name="joinForm" method="post" th:action="@{/admin/userManage/join}" autocomplete="off" th:object="${joinForm}" class="_form">
 		<input type="hidden" name="flag" th:field="*{flag}" th:value="update">
 
-		<th:block th:replace="~{admin/cust/_custForm::custForm}"></th:block>
+		<th:block th:replace="~{admin/user/_joinForm::joinForm}"></th:block>
 		<br>
 		<div class="btns" style="text-align:center;">
 			<button type="reset" th:text="#{admin.action.reset}" class="sbtn"></button>

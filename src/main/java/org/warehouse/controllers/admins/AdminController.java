@@ -59,10 +59,10 @@ public class AdminController {
 
 		model.addAttribute("userList", userList);
 
-		return "admin/userManage";
+		return "admin/user/userManage";
 	}
 
-	@GetMapping("/join")
+	@GetMapping("/userManage/join")
 	public String join(Model model) {
 		JoinForm joinForm = new JoinForm();
 		List<ClntVO> clntList = clntDAO.getClntList();
@@ -72,11 +72,28 @@ public class AdminController {
 		model.addAttribute("clntList", clntList);
 		model.addAttribute("custList", custCtrList);
 
-		return "admin/join";
+		return "admin/user/join";
 	}
 
-	@PostMapping("/join")
+	@GetMapping("/userManage/update/{userId}")
+	public String update(@PathVariable String userId, Model model) {
+		UserVO userVO = userDAO.getUserById(userId);
+		JoinForm joinForm = new ModelMapper().map(userVO, JoinForm.class);
+
+		List<ClntVO> clntList = clntDAO.getClntList();
+		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
+
+
+		model.addAttribute("joinForm", joinForm);
+		model.addAttribute("clntList", clntList);
+		model.addAttribute("custList", custCtrList);
+
+		return "admin/user/update";
+	}
+
+	@PostMapping("/userManage/join")
 	public String joinPs(@Valid JoinForm joinForm, Errors errors, Model model) {
+		System.out.println(joinForm);
 		joinValidator.validate(joinForm, errors);
 
 		if(errors.hasErrors()) {
@@ -85,7 +102,7 @@ public class AdminController {
 
 			model.addAttribute("clntList", clntList);
 			model.addAttribute("custList", custCtrList);
-			return "admin/join";
+			return "admin/user/join";
 		}
 
 		joinService.join(joinForm);
