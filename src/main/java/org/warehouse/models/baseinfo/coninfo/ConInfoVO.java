@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @NoArgsConstructor @AllArgsConstructor
 public class ConInfoVO extends BaseEntity { // 계약정보
 
-	@NotBlank
 	private String clntCd;  	// 고객사코드
 
 	private String clntNm;		// 고객사 명

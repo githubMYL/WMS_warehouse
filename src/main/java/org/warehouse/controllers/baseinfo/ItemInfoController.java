@@ -83,7 +83,7 @@ public class ItemInfoController{
 
 		model.addAttribute("itemInfoVO", itemInfoVO);
 
-		return "baseinfo/iteminfo";
+		return "baseinfo/iteminfo/register";
 	}
 
 	@PostMapping("/iteminfo")

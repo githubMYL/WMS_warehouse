@@ -33,7 +33,7 @@ public class ConInfoController {
 
 	@GetMapping("/coninfo")
 	public String conInfo(@ModelAttribute("srchParams") ConInfoVO srchParam, Model model) {
-
+		System.out.println("#################################################");
 		if (srchParam.getClntNm() == null)
 			srchParam.setClntNm("");
 		System.out.println("srchParam ::: " + srchParam);
@@ -41,7 +41,7 @@ public class ConInfoController {
 
 		model.addAttribute("conInfoList", conInfoList);
 
-		return "/baseinfo/coninfo";
+		return "baseinfo/conInfo";
 
 	}
 
@@ -50,28 +50,31 @@ public class ConInfoController {
 
 		ConInfoVO conInfoVO = new ConInfoVO();
 		//List<ConInfoVO> conInfoVOList = conInfoDAO.getConInfoList();
-		/** 고객사 코드 S */
+
+		/** 고객사 명 S */
 		List<ClntVO> clntList = clntDAO.getClntList();
 		model.addAttribute("clntList", clntList);
-		/** 고객사 코드 E */
+		/** 고객사 명 E */
 
 		model.addAttribute("conInfoVO", conInfoVO);
 
-		return "/baseinfo/coninfo";
+		return "/baseinfo/popup/conInfoPop";
 
 	}
 
 	@PostMapping("/coninfo")
 	public String conInfoPs(@Valid ConInfoVO conInfoVO, Errors errors, Model model) {
 
-		System.out.println("여기서 시작 :: " + conInfoVO);
-
 		validator.validate(conInfoVO, errors);
-		System.out.println("여기서 멈춤 :: " + conInfoVO);
 
-		System.out.println(errors);
 		if(errors.hasErrors()) {
-			return "/baseinfo/coninfo";
+
+			/** 고객사 명 S */
+			List<ClntVO> clntList = clntDAO.getClntList();
+			model.addAttribute("clntList", clntList);
+			/** 고객사 명 E */
+
+			return "/baseinfo/popup/conInfoPop";
 		}
 		System.out.println("Controller :: clntCd :: " + conInfoVO);
 		System.out.println("Base  ::  remk :: " + conInfoVO.getRemark());
