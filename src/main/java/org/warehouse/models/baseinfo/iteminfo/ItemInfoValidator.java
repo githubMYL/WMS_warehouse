@@ -39,7 +39,6 @@ public class ItemInfoValidator implements Validator {
          */
         ItemInfoVO itemInfoVO = (ItemInfoVO) target;;
 
-        System.out.println(":: Validation :: " + itemInfoVO);
 
         // 물류센터
         String wactrCd = itemInfoVO.getWactrCd();
@@ -53,10 +52,8 @@ public class ItemInfoValidator implements Validator {
         WactrVO wactrChk = null;
         if(wactrCd != "" && wactrCd != null
             && wactrNm != "" && wactrNm != null){
-            System.out.println("======================================================= 11 ");
             wactrChk = wactrDAO.getWactrByCdAndNm(wactrCd, wactrNm);
         }else {
-            System.out.println("======================================================= 22 ");
             errors.rejectValue("wactrCd", "Validation.notExist.wactr");
         }
         ClntVO clntChk = clntDAO.getClntByCdAndNm(clntCd, clntNm);

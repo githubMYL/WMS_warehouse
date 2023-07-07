@@ -101,4 +101,11 @@
     <select id="getItem" resultMap="itemMap">
         SELECT * FROM ITEM WHERE ITEM_CD = #{itemCd}
     </select>
+
+    <update id="deleteItem" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
+        UPDATE ITEM
+            SET DEL_YN = 'Y'
+        WHERE WACTR_CD || CLNT_CD || LOC_CD || ITEM_CD = #{keyVal}
+    </update>
+
 </mapper>

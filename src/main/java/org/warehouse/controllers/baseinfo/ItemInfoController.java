@@ -20,7 +20,10 @@ import org.warehouse.models.baseinfo.loc.LocVO;
 import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -124,27 +127,19 @@ public class ItemInfoController{
 		return "redirect:/baseinfo/iteminfo";
 	}
 
-	@GetMapping("/iteminfo/deleteItem")
-	public String deleteItem(String idx) {
+	@GetMapping("iteminfo/deleteItem")
+	public String deleteItem(String chkArr) {
 
-		System.out.println("idx :: " + idx);
+		// 문자열 구분자 ,
+		String[] chkData = chkArr.split(",");
+
+		// DEL_YN = 'Y' UPDATE
+		for(int i = 0; i < chkData.length; i++){
+
+			itemInfoDAO.deleteItem(chkData[i]);
+		}
 		return "redirect:/baseinfo/iteminfo";
 	}
-//	@ResponseBody
-//	@RequestMapping(value="/folderDelete.do", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-//	public int folderDelete(HttpServletRequest request, @RequestParam(value="checkBoxArr[]") List<String> checkBoxArr, @ModelAttribute("archiveFolder") ArchiveFolder archiveFolder) throws Exception {
-//		int result = 0;
-//		String checkNum = "";
-//
-//		for(String str : checkBoxArr){
-//			checkNum = str;
-//			archiveFolder.setFolderSeq(checkNum);
-//			folderService.archiveFolderDelete(archiveFolder);
-//		}
-//		return result;
-//	}
-
-
 
 	private void commonProcess(Model model) {
 		String Title = "기본정보::상품정보";
