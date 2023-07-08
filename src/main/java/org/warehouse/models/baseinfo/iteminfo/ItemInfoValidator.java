@@ -41,6 +41,7 @@ public class ItemInfoValidator implements Validator {
          */
         ItemInfoVO itemInfoVO = (ItemInfoVO) target;;
 
+
         // 물류센터
         String wactrCd = itemInfoVO.getWactrCd();
         String wactrNm = itemInfoVO.getWactrNm();
@@ -50,7 +51,13 @@ public class ItemInfoValidator implements Validator {
         // 로케이션
         String locCd = itemInfoVO.getLocCd();
 
-        WactrVO wactrChk = wactrDAO.getWactrByCdAndNm(wactrCd, wactrNm);
+        WactrVO wactrChk = null;
+        if(wactrCd != "" && wactrCd != null
+                && wactrNm != "" && wactrNm != null){
+            wactrChk = wactrDAO.getWactrByCdAndNm(wactrCd, wactrNm);
+        }else {
+            errors.rejectValue("wactrCd", "Validation.notExist.wactr");
+        }
         ClntVO clntChk = clntDAO.getClntByCdAndNm(clntCd, clntNm);
         LocVO LocChk = locDAO.getLocByCd(locCd);
         ItemInfoVO itemChk = itemInfoDAO.getItemEqualsChk(itemInfoVO);

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.ClntDAO;
@@ -15,6 +16,7 @@ import org.warehouse.models.baseinfo.coninf.ConInfoService;
 import org.warehouse.models.baseinfo.coninf.ConInfoVO;
 import org.warehouse.models.baseinfo.coninf.ConInfoValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,35 +32,55 @@ public class ConInfoController {
 
 	private final ClntDAO clntDAO;
 
-
 	@GetMapping("/coninfo")
-	public String conInfo(Model model) {
-		model.addAttribute("pageName", "baseinfo");
+	public String conInfo(@ModelAttribute("srchParams") ConInfoVO srchParam, Model model) {
+		System.out.println("#################################################");
+
+		commonProcess(model);
+		List<ConInfoVO> conInfoList = new ArrayList<>();
+		System.out.println("srchParam ::: " + srchParam);
+
+		if (srchParam.getClntNm() != null) {
+			conInfoList = conInfoDAO.getConListSearch(srchParam);
+		}
+
+		model.addAttribute("conInfoList", conInfoList);
+
+		return "baseinfo/conInfo";
+
+	}
+
+
+	@GetMapping("/coninfo/register")
+	public String conInfoRegister(Model model) {
 
 		ConInfoVO conInfoVO = new ConInfoVO();
 		//List<ConInfoVO> conInfoVOList = conInfoDAO.getConInfoList();
-		/** 고객사 코드 S */
+
+		/** 고객사 명 S */
 		List<ClntVO> clntList = clntDAO.getClntList();
 		model.addAttribute("clntList", clntList);
-		/** 고객사 코드 E */
+		/** 고객사 명 E */
 
 		model.addAttribute("conInfoVO", conInfoVO);
 
-		return "/baseinfo/coninfo";
+		return "/baseinfo/popup/conInfoPop";
 
 	}
 
 	@PostMapping("/coninfo")
 	public String conInfoPs(@Valid ConInfoVO conInfoVO, Errors errors, Model model) {
 
-		System.out.println("여기서 시작 :: " + conInfoVO);
-
 		validator.validate(conInfoVO, errors);
-		System.out.println("여기서 멈춤 :: " + conInfoVO);
 
-		System.out.println(errors);
 		if(errors.hasErrors()) {
-			return "/baseinfo/coninfo";
+
+			/** 고객사 명 S */
+			List<ClntVO> clntList = clntDAO.getClntList();
+			model.addAttribute("clntList", clntList);
+			/** 고객사 명 E */
+
+			return "/baseinfo/popup/conInfoPop";
 		}
 		System.out.println("Controller :: clntCd :: " + conInfoVO);
 		System.out.println("Base  ::  remk :: " + conInfoVO.getRemark());
@@ -71,11 +93,11 @@ public class ConInfoController {
 
 		conInfoService.conInfoSave(conInfoVO);
 		return "redirect:/baseinfo/coninfo";
-	}
 
+	}
 	private void commonProcess(Model model) {
 		String Title = "기본정보::계약정보";
-		String menuCode = "coninfo";
+		String menuCode = "conInfo";
 		String pageName = "baseinfo";
 		model.addAttribute("pageName", pageName);
 		model.addAttribute("Title", Title);
