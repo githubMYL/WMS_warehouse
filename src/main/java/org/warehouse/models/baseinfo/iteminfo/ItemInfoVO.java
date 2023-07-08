@@ -37,5 +37,6 @@ public class ItemInfoVO extends BaseEntity {
 
     /** 물류, 고객, 로케, 상품 코드 */
     private String keyVal;
-
+    /** 추가, 수정 유무 확인 */
+    private String updYn;
 }

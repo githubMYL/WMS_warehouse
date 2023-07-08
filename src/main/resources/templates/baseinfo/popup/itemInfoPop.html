@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
@@ -12,21 +11,132 @@
             </style>
 		<script th:src="@{/js/front/layer.js}"></script>
 	</head>
+
 	<form autocomplete="off" method="post" name="itemInfo" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}">
-		<div>
-			<th:block th:text="#{wactrCd}"></th:block>
-			<input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
-			<th:block th:text="#{wactrNm}"></th:block>
-			<input id="wactr_tmp" list="wactr" name="wactr_tmp" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
-			<datalist id="wactr">
-				<select id="wactr_sel">
-					<option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
-					</option>
+		<th:block th:unless="*{updYn} == 'Y'">
+			<div>
+				<th:block th:text="#{wactrCd}"></th:block>
+				<input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
+				<th:block th:text="#{wactrNm}"></th:block>
+				<input id="wactr_tmp" list="wactr" name="wactr_tmp" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
+				<datalist id="wactr">
+					<select id="wactr_sel">
+						<option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
+			</div>
+			<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const wactr = document.getElementById("wactr_tmp");
+                        var selected = document.querySelector("select#wactr_sel")
+
+                        wactr.addEventListener("change", UpdateWactr)
+                    });
+                    function UpdateWactr(e) {
+                        var evnt = e.currentTarget;
+                        var selected = document.querySelector("select#wactr_sel")
+                        var datalist = evnt.list;
+                        var wactrCd = document.getElementById("wactr_cd");
+
+                        for(var j = 0; j < datalist.options.length; j++){
+                            if(this.value == datalist.options[j].value) {
+                                wactrCd.value = datalist.options[j].label;
+                            }
+                        }
+                    }
+                </script>
+			<div>
+				<th:block th:text="#{clntCd}"></th:block>
+				<input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
+				<th:block th:text="#{clntNm}"></th:block>
+				<input id="clnt_tmp" list="clnt" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
+				<datalist id="clnt">
+					<select id="clnt_sel">
+						<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
+			</div>
+			<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+
+                        const clnt = document.getElementById("clnt_tmp");
+                        var selected = document.querySelector("select#clnt_sel")
+
+                        clnt.addEventListener("change", UpdateClnt)
+                    });
+
+                    function UpdateClnt(e) {
+                        var evnt = e.currentTarget;
+                        var selected = document.querySelector("select#clnt_sel")
+                        var datalist = evnt.list;
+                        var clntcd = document.getElementById("clnt_cd");
+
+                        for(var j = 0; j < datalist.options.length; j++){
+                            if(this.value == datalist.options[j].value) {
+                                clntcd.value = datalist.options[j].label;
+                            }
+                        }
+                    }
+                </script>
+			<div>
+				<th:block th:text="#{locCd}"></th:block>
+				<input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
+				<datalist id="loc">
+					<select id="loc_sel">
+						<option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
+			</div>
+			<div>
+				<th:block th:text="#{itemCd}"></th:block>
+				<input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
+				<div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
+			</div>
+			<div>
+				<th:block th:text="#{itemNm}"></th:block>
+				<input th:field="*{itemNm}" th:placeholder="#{itemNm}" type="text">
+			</div>
+			<br />
+			<div>
+				<select th:field="*{boxUnit}" th:value="*{boxUnit}">
+					<option value="" th:text="#{boxUnit}"></option>
+					<option th:each="code : ${codeList}" th:text="${code.itemValue}" th:value="${code.itemCode}"></option>
 				</select>
-			</datalist>
-			<div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
-		</div>
-		<script>
+			</div>
+			<div>
+				<th:block th:text="#{pltInBox}"></th:block>
+				<input th:field=*{pltInBox} th:placeholder="#{pltInBox}" type="number">
+				<div class="errors" th:each="err : ${#fields.errors('pltInBox')}" th:text="${err}"></div>
+			</div>
+			<div>
+				<th:block th:text="#{remk}"></th:block>
+				<input th:field="*{remk}" th:placeholder="#{remk}" type="text">
+			</div>
+			<button type="submit">저장하기</button>
+		</th:block>
+
+		<!-- ################################## update ################################## -->
+		<th:block th:if="*{updYn} == 'Y'">
+			<div>
+				<th:block th:text="#{wactrCd}"></th:block>
+				<input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
+				<th:block th:text="#{wactrNm}"></th:block>
+				<input id="wactr_tmp" list="wactr" name="wactr_tmp" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
+				<datalist id="wactr">
+					<select id="wactr_sel">
+						<option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
+			</div>
+			<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const wactr = document.getElementById("wactr_tmp");
                     var selected = document.querySelector("select#wactr_sel")
@@ -46,78 +156,83 @@
                     }
                 }
             </script>
-		<div>
-			<th:block th:text="#{clntCd}"></th:block>
-			<input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
-			<th:block th:text="#{clntNm}"></th:block>
-			<input id="clnt_tmp" list="clnt" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
-			<datalist id="clnt">
-				<select id="clnt_sel">
-					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
-					</option>
-				</select>
-			</datalist>
-			<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
-		</div>
-		<script>
-                document.addEventListener('DOMContentLoaded', function() {
+			<div>
+				<th:block th:text="#{clntCd}"></th:block>
+				<input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
+				<th:block th:text="#{clntNm}"></th:block>
+				<input id="clnt_tmp" list="clnt" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
+				<datalist id="clnt">
+					<select id="clnt_sel">
+						<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
+			</div>
+			<script>
+                    document.addEventListener('DOMContentLoaded', function() {
 
-                    const clnt = document.getElementById("clnt_tmp");
-                    var selected = document.querySelector("select#clnt_sel")
+                        const clnt = document.getElementById("clnt_tmp");
+                        var selected = document.querySelector("select#clnt_sel")
 
-                    clnt.addEventListener("change", UpdateClnt)
-                });
+                        clnt.addEventListener("change", UpdateClnt)
+                    });
 
-                function UpdateClnt(e) {
-                    var evnt = e.currentTarget;
-                    var selected = document.querySelector("select#clnt_sel")
-                    var datalist = evnt.list;
-                    var clntcd = document.getElementById("clnt_cd");
+                    function UpdateClnt(e) {
+                        var evnt = e.currentTarget;
+                        var selected = document.querySelector("select#clnt_sel")
+                        var datalist = evnt.list;
+                        var clntcd = document.getElementById("clnt_cd");
 
-                    for(var j = 0; j < datalist.options.length; j++){
-                        if(this.value == datalist.options[j].value) {
-                            clntcd.value = datalist.options[j].label;
+                        for(var j = 0; j < datalist.options.length; j++){
+                            if(this.value == datalist.options[j].value) {
+                                clntcd.value = datalist.options[j].label;
+                            }
                         }
                     }
-                }
                 </script>
-		<div>
-			<th:block th:text="#{locCd}"></th:block>
-			<input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
-			<datalist id="loc">
-				<select id="loc_sel">
-					<option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
-					</option>
+			<div>
+				<th:block th:text="#{locCd}"></th:block>
+				<input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
+				<datalist id="loc">
+					<select id="loc_sel">
+						<option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
+			</div>
+			<div>
+				<th:block th:text="#{itemCd}"></th:block>
+				<input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
+				<div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
+			</div>
+			<div>
+				<th:block th:text="#{itemNm}"></th:block>
+				<input th:field="*{itemNm}" th:placeholder="#{itemNm}" type="text">
+			</div>
+			<br />
+			<div>
+				<select th:field="*{boxUnit}" th:value="*{boxUnit}">
+					<option value="" th:text="#{boxUnit}"></option>
+					<option th:each="code : ${codeList}" th:text="${code.itemValue}" th:value="${code.itemCode}"></option>
 				</select>
-			</datalist>
-			<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
-		</div>
-		<div>
-			<th:block th:text="#{itemCd}"></th:block>
-			<input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
-			<div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
-		</div>
-		<div>
-			<th:block th:text="#{itemNm}"></th:block>
-			<input th:field="*{itemNm}" th:placeholder="#{itemNm}" type="text">
-		</div>
-		<br />
-		<div>
-			<select th:field="*{boxUnit}" th:value="*{boxUnit}">
-				<option value="" th:text="#{boxUnit}"></option>
-				<option th:each="code : ${codeList}" th:text="${code.itemValue}" th:value="${code.itemCode}"></option>
-			</select>
-		</div>
-		<div>
-			<th:block th:text="#{pltInBox}"></th:block>
-			<input th:field=*{pltInBox} th:placeholder="#{pltInBox}" type="number">
-			<div class="errors" th:each="err : ${#fields.errors('pltInBox')}" th:text="${err}"></div>
-		</div>
-		<div>
-			<th:block th:text="#{remk}"></th:block>
-			<input th:field="*{remk}" th:placeholder="#{remk}" type="text">
-		</div>
-		<button type="submit">저장하기</button>
+			</div>
+			<div>
+				<th:block th:text="#{pltInBox}"></th:block>
+				<input th:field=*{pltInBox} th:placeholder="#{pltInBox}" type="number">
+				<div class="errors" th:each="err : ${#fields.errors('pltInBox')}" th:text="${err}"></div>
+			</div>
+			<div>
+				<th:block th:text="#{remk}"></th:block>
+				<input th:field="*{remk}" th:placeholder="#{remk}" type="text">
+			</div>
+			<div>
+				<input type="hidden" th:field="*{updYn}" th:value="*{updYn}">
+				<input type="text" th:field="*{keyVal}" th:value="*{keyVal}">
+			</div>
+			<button type="submit">저장하기</button>
+		</th:block>
 	</form>
 </section>
 </html>
