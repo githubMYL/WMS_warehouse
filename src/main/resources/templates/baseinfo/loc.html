@@ -19,20 +19,75 @@
     }
 
 
+<!-- 체크박스 전체선택 -->
+function checkAll(){
+    var checkAll = document.getElementById('checkAll');
+
+    <!--체크한 값 담을 input-->
+    var checked_input = document.getElementById("checked_input");
+    var checked_wactr = document.getElementById("checked_wactr");
+
+    var check = document.getElementsByClassName("check");
+
+    <!--wactr_cd가 담겨있는 td-->
+    var wactr_cd_td = document.getElementsByClassName("wactr_cd");
+
+
+    var loc_cd = [];
+    var wactr_cd = [];
+
+     if (checkAll.checked) {
+
+        for (var i = 0; i < check.length; i++) {
+            check[i].checked = true;
+
+            loc_cd.push(check[i].value);
+            wactr_cd.push(wactr_cd_td[i].textContent);
+
+        }
+
+        checked_input.value = loc_cd;
+        checked_wactr.value = wactr_cd;
+
+    } else {
+
+        for (var i = 0; i < check.length; i++) {
+            check[i].checked = false;
+            var loc_cd = [];
+            var wactr_cd = [];
+        }
+
+        checked_input.value = loc_cd;
+        checked_wactr.value = wactr_cd;
+
+
+
+    }
+
+} <!--checkAll()-->
+
+
 
 <!--    delete를 위해 체크한 것의 loc_cd 가져오기-->
     function che() {
 		  var checked_input = document.getElementById("checked_input");
 		  var check = document.getElementsByClassName("check");
+		  var wactr_cd_td = document.getElementsByClassName("wactr_cd");
+          var checked_wactr = document.getElementById("checked_wactr");
+
           var loc_cd = [];
+          var wactr_cd = [];
 
 
         for( var i = 0; i < check.length; i++){
 
            if(check[i].checked){
            loc_cd.push(check[i].value);
+           wactr_cd.push(wactr_cd_td[i].textContent);
+
            }
             checked_input.value = loc_cd;
+            checked_wactr.value = wactr_cd;
 
         }
 
@@ -41,8 +96,9 @@
     function delete_loc(){
         var form = document.getElementById("search");
         var checked_input = document.getElementById("checked_input").value.trim();
+        var checked_wactr = document.getElementById("checked_wactr").value.trim();
 
-        if(checked_input == "" ){
+        if(checked_input == "" ||  checked_wactr == ""){
          alert("삭제할 목록에 체크해주세요")
          retrun;
         }
@@ -69,9 +125,12 @@
         var clicked = event.currentTarget;
         var checkbox = clicked.querySelector('.check');
         var loc_cd = checkbox.value;
+        var wactr_cd = clicked.querySelector('.wactr_cd').textContent;
 
-        url = 'locMod' + '/' + loc_cd;
-        title = '( ' + loc_cd + ' ) ' + '정보 수정';
+<!--        console.log(clicked.querySelector('.wactr_cd').textContent)-->
+
+        url = 'locMod' + '/' + loc_cd +'?' + 'wactr_cd=' + wactr_cd;
+        title = '( ' + wactr_cd + ' :: ' + loc_cd + ' ) ' + '정보 수정';
        warehouse.popup.open(url, title, 500, 500,true);
     }
 
@@ -91,7 +150,10 @@
                     <form id="search"  >
                         <input type="text"  id="search_loc" name="search_loc" th:placeholder="로케이션검색" style="width:30%;">
                         <!-- 체크상태의 loc_cd 문자열-->
-                        <input type="hidden" id="checked_input" name="loc_cd_array">
+
+                        <input type="text" id="checked_input" name="loc_cd_array">
+                        <input type="text" id="checked_wactr" name="wactr_cd_array">
+
                     </form>
                 </td>
             </tr>
@@ -101,11 +163,14 @@
                 <td colspan="7" align="right">
                     <button th:text="#{search_btn}" onclick="search_loc()" class="sbtn"></button>
                     <button onclick="add_loc()"th:text="#{add_btn}" class="sbtn"></button>
+                    <button th:text="#{add_btn}" onclick="add_loc()" class="sbtn"></button>
                     <button th:text="#{delete_btn}" onclick="delete_loc()" class="sbtn blue"></button>
                 </td>
             </tr>
             <tr>
-                <th style="width:50px;"></th>
+                <th style="width:40px;">
+                    <input type="checkbox" id="checkAll" onclick="checkAll()">전체선택
+                </th>
                 <th style="width:50px;">순번</th>
                 <th style="width:100px;">물류센터명</th>
                 <th style="width:80px;">로케이션명</th>
@@ -116,10 +181,10 @@
 
             <tr th:each="list,listCount : ${loc_list}"  ondblclick="double(event)" class="loc_list">
                 <td>
-                    <input type="checkbox" id="locCheckBok-${listCount.count}" class="check" th:value="${list.loc_cd}" onclick="che()">
+                    <input type="checkbox" class="check" th:value="${list.loc_cd}" onclick="che()">
                 </td>
                 <td th:text="${listCount.count}"></td>
-                <td th:text="${list.wactr_cd}"></td>
+                <td th:text="${list.wactr_cd}" class="wactr_cd"></td>
                 <td th:text="${list.loc_nm}"></td>
                 <td th:text="${list.loc_addr}"></td>
                 <td th:text="${list.rac_num}"></td>

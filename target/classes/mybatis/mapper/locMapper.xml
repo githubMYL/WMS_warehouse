@@ -16,6 +16,7 @@
 		select l.* , w.wactr_nm from loc l
 		join wactr w on l.wactr_cd = w.wactr_cd
 		where loc_cd = #{loc_cd}
+		and l.wactr_cd = #{wactr_cd}
 	</select>
 
 	<select id="getLocListByItemCd" resultType="org.warehouse.models.baseinfo.loc.LocVO" parameterType="String">
@@ -52,9 +53,12 @@
 		where loc_cd = #{ori_loc_cd}
 	</update>
 
-
+	<!-- loc 삭제 -->
 	<delete id="deleteLoc" parameterType="String">
-		delete from loc where loc_cd = #{loc_cd}
+		delete from loc
+		where
+		loc_cd = #{loc_cd}
+		and wactr_cd = #{wactr_cd}
 	</delete>
 
 	<select id="getLocByCd" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">

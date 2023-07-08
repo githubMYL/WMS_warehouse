@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="custCtrForm" th:object="${custCtrForm}">
+	<h5>납품처</h5>
+	<div>
+		<dt th:text="#{cust}" class="require_item"></dt>
+		<input type="text" name="custCd" id="custCd" th:field="*{custCd}" th:placeholder="#{custCd}" readonly>
+		<input type="text" list=cust_list name="custNm" th:field="*{custNm}" th:placeholder="#{custNm}" id="custNm">
+		<datalist id="cust_list">
+			<select id="cust_sel">
+				<option th:each="cust : ${custList}" th:value="${cust.custNm +'('+cust.custCd+')'}" >
+				</option>
+			</select>
+		</datalist>
+		<div class="errors" th:each="err : ${#fields.errors('custCd')}" th:text="${err}"></div>
+	</div>
+	<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const custNm = document.getElementById("custNm");
+				custNm.addEventListener("change", UpdateCust)
+			});
+
+			function UpdateCust(e) {
+				var custNm = document.getElementById("custNm");
+				var custCd = document.getElementById("custCd");
+
+				if(this.value.indexOf(')') != -1) {
+					var slice_cust_nm = this.value.substr(0, this.value.indexOf('('));
+					var slice_cust_cd = this.value.slice(this.value.indexOf('(') +1, this.value.indexOf(')'));
+
+					custCd.value=slice_cust_cd;
+					this.value=slice_cust_nm;
+				}
+			}
+		</script>
+
+
+	<h5>납품센터</h5>
+	<div>
+		<dt th:text="#{custCtrCd}" class="require_item"></dt>
+		<input type="text" name="custCtrCd" th:field="*{custCtrCd}" th:placeholder="#{custCtrCd}">
+		<div class="errors" th:each="err : ${#fields.errors('custCtrCd')}" th:text="${err}"></div>
+	</div>
+	<div>
+		<dt th:text="#{custCtrNm}" class="require_item"></dt>
+		<input type="text" name="custCtrNm" th:field="*{custCtrNm}" th:placeholder="#{custCtrNm}">
+		<div class="errors" th:each="err : ${#fields.errors('custCtrNm')}" th:text="${err}"></div>
+	</div>
+
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+			function execDaumPostcode() {
+				new daum.Postcode( {
+					oncomplete: function( data ) {
+						console.log(data);
+						var addr = document.getElementById("addr");
+						addr.value=data.address;
+						addr.focus();
+					}
+				} ).open();
+			}
+		</script>
+	<br>
+	<div>
+		<dt th:text="#{custCtrAddr}" class="require_item"></dt>
+		<input type="text" style="width:300px;" name="custCtrAddr" id="addr" th:field="*{custCtrAddr}" th:placeholder="#{custCtrAddr}">
+		<input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="sbtn" style="height: 45px;"><br>
+		<div class="errors" th:each="err : ${#fields.errors('custCtrAddr')}" th:text="${err}"></div>
+	</div>
+
+	<div>
+		<dt th:text="#{custCtrTel}" class="require_item"></dt>
+		<input type="text" name="custCtrTel" th:field="*{custCtrTel}" th:placeholder="#{custCtrTel}">
+	</div>
+
+	<div>
+		<dt th:text="#{manager}" class="require_item"></dt>
+		<input type="text" name="manager" th:field="*{manager}" th:placeholder="#{manager}">
+	</div>
+
+
+	<div>
+		<dt th:text="#{remark}" class="require_item"></dt>
+		<textarea rows="5" cols="23" name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
+		<div class="errors" th:each="err : ${#fields.errors('remark')}" th:text="${err}"></div>
+	</div>
+</th:block>
+</html>

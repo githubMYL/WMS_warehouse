@@ -20,7 +20,7 @@ input[type='date'] { border: 1px solid #d5d5d5; width: 100%; height: 45px; paddi
 select { border: 1px solid #d5d5d5; width: 100%; height: 45px; padding: 0 10px; border-radius: 3px; }
 
 
-.error {font-size : 0.9rem; color:#F84A71; margin-left:5px;}
+.errors {font-size : 0.9rem; color:#F84A71; margin-left:5px;}
 
 .dn { display: none !important; }
 

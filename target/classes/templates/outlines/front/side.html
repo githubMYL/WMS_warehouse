@@ -35,6 +35,17 @@
 		</li>
 	</ul>
 
-
+	<!-- 재고 사이드 탭 -->
+	<ul th:case="tmstk">
+		<li>
+			<a th:href="@{/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
+				<i class="xi-view-list"></i>
+				시점재고
+			</a>
+		</li>
+		<li>
+			<a>일수불</a>
+		</li>
+	</ul>
 </aside>
 </html>

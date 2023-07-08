@@ -77,13 +77,10 @@
 			}
 		</script>
 
-
-
         <div>
             <div><span>로케이션 이름 : </span></div>
             <input type="text" name="loc_nm" th:field="*{loc_nm}">
             <div class="errors"th:each="err : ${#fields.errors('loc_nm')}" th:text="${err}"></div>
-
         </div>
 
         <div>

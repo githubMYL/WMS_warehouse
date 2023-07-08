@@ -92,7 +92,11 @@
 	</select>
 
 	<select id="getDetail" resultMap="stdinMap">
-		SELECT * FROM STDIN_D D LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD WHERE STDIN_NUM = #{stdinNum}
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		WHERE D.STDIN_NUM = #{stdinNum}
 	</select>
 
 	<select id="getListByConditions" resultMap="stdinMap">

@@ -17,6 +17,57 @@
 	</resultMap>
 
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
-		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM) VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
+		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
+			VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
 	</insert>
+
+	<select id="tmstkList" resultType="org.warehouse.models.stock.TmstkVO">
+		select w.wactr_nm , c.clnt_nm , l.loc_cd , i.item_cd , i.item_nm , t.* from tmstk t
+		join wactr w on w.wactr_cd = t.wactr_cd
+		join clnt c on c.clnt_cd = t.clnt_cd
+		join loc l on l.loc_cd = t.loc_cd
+		join item i on i.item_cd = t.item_cd
+		where t.del_yn = 'N'
+		ORDER BY t.REG_DT DESC
+	</select>
+
+	<!-- 검색 조건 -->
+	<select id="getSearchList" resultType="org.warehouse.models.stock.TmstkVO" parameterType="String">
+		select w.wactr_nm , c.clnt_nm , l.loc_cd , i.item_cd , i.item_nm , t.* from tmstk t
+		join wactr w on w.wactr_cd = t.wactr_cd
+		join clnt c on c.clnt_cd = t.clnt_cd
+		join loc l on l.loc_cd = t.loc_cd
+		join item i on i.item_cd = t.item_cd
+		where t.del_yn = 'N'
+		<choose>
+			<when test='search_clntNm != "" and search_itemCd == "" and search_itemNm == ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+			</when>
+			<when test='search_clntNm == "" and search_itemCd != "" and search_itemNm == ""'>
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+			</when>
+			<when test='search_clntNm == "" and search_itemCd == "" and search_itemNm != ""'>
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+			<when test='search_clntNm != "" and search_itemCd != "" and search_itemNm == ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+			</when>
+			<when test='search_clntNm != "" and search_itemCd == "" and search_itemNm != ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+			<when test='search_clntNm == "" and search_itemCd != "" and search_itemNm != ""'>
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+			<when test='search_clntNm != "" and search_itemCd != "" and search_itemNm != ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+		</choose>
+		ORDER BY t.REG_DT DESC
+	</select>
+	<!-- 검색 조건 -->
 </mapper>

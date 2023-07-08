@@ -46,23 +46,17 @@ public class UserJoinValidator implements Validator {
 		String email = joinForm.getEmail();
 		 */
 
+		if(joinForm.getFlag() == null) {
+			//1. 아이디 중복 여부
+			if(userId != null && !userId.isBlank() && (userMapper.getUserById(userId) != null)){
+				errors.rejectValue("userId", "Validation.duplicate.userId");
+			}
+			//2. 비밀번호 복잡성 체크 - 우선은 빼고 진행
 
-
-		//1. 아이디 중복 여부
-		if(userId != null && !userId.isBlank() && (userMapper.getUserById(userId) != null)){
-			errors.rejectValue("userId", "Validation.duplicate.userId");
+			//3. 비밀번호와 비밀번호 확인란 일치
+			if(userPw != null && !userPw.isBlank() && userPwRe != null && !userPwRe.isBlank() && !userPw.equals(userPwRe)){
+				errors.rejectValue("userPwRe", "Validation.incorrect.userPwRe");
+			}
 		}
-
-
-
-		//2. 비밀번호 복잡성 체크 - 우선은 빼고 진행
-
-		//3. 비밀번호와 비밀번호 확인란 일치
-		if(userPw != null && !userPw.isBlank() && userPwRe != null && !userPwRe.isBlank() && !userPw.equals(userPwRe)){
-			errors.rejectValue("userPwRe", "Validation.incorrect.userPwRe");
-		}
-
-
-
 	}
 }

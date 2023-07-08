@@ -40,15 +40,19 @@
 				const ajax_btn = document.getElementById('ajax_btn');
 				const add = document.getElementById('add');
 				const del = document.getElementById('del');
+				const trs = document.querySelectorAll('tr');
 
 				ajax_btn.addEventListener("click", search);
 				add.addEventListener("click", addItem);
-
+				del.addEventListener("click", deleteItem);
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', updateTable)
+				});
 			});
 
 			function addItem(e) {
 				console.log('test');
-				url = 'join';
+				url = 'userManage/join';
 				warehouse.popup.open(url, "테스트", 500, 800, true);
 			}
 
@@ -95,6 +99,38 @@
 					console.error(err);
 				});
 			};
+
+			function deleteItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log("data" + chk_data);
+
+				const url = `ajaxadmin/userDelete?userId=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateTable(e) {
+				const event_tr = e.target.parentNode;
+				const input = event_tr.querySelector('td input');
+				const userId = input.dataset.userid;
+
+				url = 'userManage/update/' + userId;
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			};
 		</script>
 
 		<div class="table_wrapper">
@@ -115,7 +151,7 @@
 				<tbody id="search">
 				<tr th:each="user, userCount : ${userList}" id="user_infos">
 					<td>
-						<input type="checkbox" name="chk" th:value="${user.userId}" id="chk">
+						<input type="checkbox" name="chk" th:value="${user.userId}" id="chk" th:data-userid="${user.userId}">
 					</td>
 					<td th:text="${userCount.count}"></td>
 					<td th:text="${user.userId}"></td>

@@ -142,8 +142,9 @@
 			}
 
 			function getDetail(e) {
+				var evnt = e.target.parentNode;
+				const stdinNum = evnt.querySelector('#chk').dataset.stdinnum;
 				var stdin_d_table = document.querySelector("#stdin_d_table > tbody");
-				const stdinNum = document.querySelector('#chk').dataset.stdinnum;
 				var str = '<tr><th>순번</th><th>상품코드</th><th>상품명</th><th>로케이션</th><th>입고예정수량</th><th>정상수량</th><th>불량수량</th><th>비고</th></tr>';
 
 				str += '<tr id="stdin_d_infos">';
@@ -152,7 +153,7 @@
 				commonLib.ajaxLoad(url)
 					.then((data) => {
 						data = JSON.parse(data);
-						str += '<td data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
+						str += '<td data-status= '+ data.status + ' data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
 						str += '<td>' + data.itemCd + '</td>';
 						str += '<td>' + data.itemNm + '</td>';
 						str += '<td>' + data.locCd + '</td>';
@@ -171,9 +172,15 @@
 			function updateTable() {
 				const td = document.querySelector('#stdin_d_infos td')
 				const stdinnum = td.dataset.stdinnum;
+				const status = td.dataset.status;
+				console.log(status);
 
-				url = 'stdin/update/' + stdinnum;
-				warehouse.popup.open(url, "테스트", 500, 800, true);
+				if(status == '1') {
+					url = 'stdin/update/' + stdinnum;
+					warehouse.popup.open(url, "테스트", 500, 800, true);
+				}
+
+
 			};
 		</script>
 	<div class="table_wrapper">

@@ -1,38 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/admin/main}">
+	  layout:decorate="~{layouts/front/main}">
 
 <section layout:fragment="content">
-	<script th:src="@{/js/front/conInfo.js}"></script>
-	<form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
-		계약정보 페이지
-		<div>
-			<input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly/>
-			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
-			<datalist id="clnt">
-				<select id="clnt_sel">
-					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
-					</option>
-				</select>
-			</datalist>
+	<script>
+            function add(){
+                url = '/baseinfo/coninfo/register';
+                warehouse.popup.open(url, '계약정보추가', 500, 600, true);
+            };
+        </script>
+	<form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
+		<table class="table-cols">
+			<tr>
+				<th>고객사명</th>
+				<td>
+					<!--                        <input type="text" th:field="*{clntNm}" id="clntNmSrch">-->
+				</td>
+			</tr>
+		</table>
+		<div class="btns" th:align="right">
+			<button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
+			<button class="sbtn" th:onclick="add()" th:text="#{add_btn}"></button>
+			<button class="sbtn blue" th:text="#{delete_btn}"></button>
 		</div>
-		<div>
-			<input type="number" th:field="*{mMin}" th:placeholder="#{mMin}">
-		</div>
-		<div>
-			<input type="number" th:field="*{pltFee}" th:placeholder="#{pltFee}">
-		</div>
-		<div>
-			<input type="text" th:field="*{transSdt}" th:placeholder="#{transSdt}">
-		</div>
-		<div>
-			<input type="text" th:field="*{transEdt}" th:placeholder="#{transEdt}">
-		</div>
-		<div>
-			<input type="text" th:field="*{remark}" th:placeholder="#{remk}">
-		</div>
-		<button type="submit" th:text="#{conInfo.action.submit}"></button>
 	</form>
+	<script>
+            // 페이지 이동
+            function movePage(page) {
+
+                // 검색조건을 form 에 넣어줌
+                const form = document.getElementById('searchForm');
+
+                // form 에 들어있는 검색조건을 queryParams 에 넣어줌.
+                const queryParams = {
+                    page : (page) ? page : 1,
+                    recordSize : 10,
+                    pageSize : 10,
+                    clntNm : form.clntNmSrch.value
+                }
+                // location.pathName :: 페이지의 URI 를 의미함
+                // new URLSearchParams(queryParams).toString() :: queryParams 의 모든 값을 쿼리스트링으로 변환
+                location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+            }
+        </script>
+	<div class="table_Wrapper">
+		<table class="table-cols">
+			<tr>
+				<th th:align="center">
+					<input th:type="checkbox">
+				</th>
+				<th>순번</th>
+				<th>고객사명</th>
+				<th>월미니멈</th>
+				<th>파렛트보관료</th>
+				<th>거래시작일</th>
+				<th>거래만료일</th>
+				<th>비고</th>
+			</tr>
+			<tr th:each="conInfo, rowCount : ${conInfoList}">
+				<td th:align="center">
+					<input th:type="checkbox">
+				</td>
+				<td th:text="${rowCount.count}"></td>
+				<td th:text="${conInfo.clntCd}"></td>
+				<td th:text="${conInfo.clntNm}"></td>
+				<td th:text="${conInfo.MMin}"></td>
+				<td th:text="${conInfo.pltFee}"></td>
+				<td th:text="${conInfo.transSdt}"></td>
+				<td th:text="${conInfo.transEdt}"></td>
+				<td th:text="${conInfo.remark}"></td>
+			</tr>
+		</table>
+	</div>
 </section>
 </html>
