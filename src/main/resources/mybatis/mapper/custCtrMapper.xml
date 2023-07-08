@@ -65,6 +65,7 @@
 			<if test="custCtrNm != ''">
 				AND CC.CUST_CTR_NM LIKE '%'||#{custCtrNm}||'%'
 			</if>
+			AND CC.DEL_YN = 'N'
 		</where>
 	</select>
 

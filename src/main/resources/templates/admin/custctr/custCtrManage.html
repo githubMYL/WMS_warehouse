@@ -38,6 +38,9 @@
 				trs.forEach( (tr) => {
 					tr.addEventListener('dblclick', updateTable)
 				});
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
 			});
 
 			function search() {
@@ -119,12 +122,22 @@
 				console.log(url);
 				warehouse.popup.open(url, "테스트", 500, 800, true);
 			};
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("chk");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+				}
+			}
 		</script>
 
 	<div class="table_wrapper">
 		<table id="custCtr_table">
 			<tr>
-				<th> </th>
+				<th>
+					<input type="checkbox" id="chkAll">
+				</th>
 				<th>순번</th>
 				<th>납품처 코드</th>
 				<th>납품처 명</th>

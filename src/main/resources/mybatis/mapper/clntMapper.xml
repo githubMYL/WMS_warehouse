@@ -76,7 +76,7 @@
 	</select>
 
 	<select id="getClntListByNm" resultMap="clntMap">
-		SELECT * FROM CLNT WHERE CLNT_NM LIKE '%'||#{clntNm}||'%'
+		SELECT * FROM CLNT WHERE CLNT_NM LIKE '%'||#{clntNm}||'%' AND DEL_YN='N'
 	</select>
 
 </mapper>
