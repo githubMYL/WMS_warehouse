@@ -12,8 +12,13 @@ public class ItemInfoService {
 
 	public void itemInfoSave(ItemInfoVO itemInfoVO){
 
-
-		System.out.println("service :: " + itemInfoVO);
+		System.out.println("service Insert :: " + itemInfoVO);
 		itemInfoDAO.insertItemInfo(itemInfoVO);
+	}
+
+	public void itemInfoUpdate(ItemInfoVO itemInfoVO){
+
+		System.out.println("service Update :: " + itemInfoVO);
+		itemInfoDAO.updateItemInfo(itemInfoVO);
 	}
 }

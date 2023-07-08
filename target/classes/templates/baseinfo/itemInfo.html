@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/front/main}">
 
     <section layout:fragment="content">
-        <form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
+        <form method="get" class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
             <table class="table-cols">
                 <tr>
                     <th>고객사명</th>
@@ -64,9 +64,9 @@
                     <th>파렛트 당<br/>박스 수</th>
                     <th>비고</th>
                 </tr>
-                <tr th:each="itemList : ${itemInfoList}">
+                <tr id="id_item_table" class="itemTable" th:each="itemList : ${itemInfoList}">
                     <td align="center">
-                        <input th:type="checkbox" name="chk" th:value="${itemList.wactrCd} +','+ ${itemList.clntCd} +','+ ${itemList.LocCd} +','+ ${itemList.itemCd}">
+                        <input th:type="checkbox" name="chk" id="chk" th:value="${itemList.wactrCd} +','+ ${itemList.clntCd} +','+ ${itemList.LocCd} +','+ ${itemList.itemCd}">
                     </td>
                     <td align="center" th:text="${itemList.idx}"></td>
                     <td align="center" th:text="${itemList.wactrNm}"/>
@@ -85,6 +85,22 @@
                 url = '/baseinfo/iteminfo/register';
                 warehouse.popup.open(url, '상품정보 추가', 500, 600, true);
             };
+
+            document.addEventListener('DOMContentLoaded', function() {
+				const trs = document.querySelectorAll('tr');
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', editForm)
+				});
+			});
+
+			function editForm(e) {
+				console.log(e.target);
+				var tr = e.target.parentNode;
+				var keyVal = tr.querySelector('#chk').value.replaceAll(",", "");
+                alert(keyVal);
+				url = '/baseinfo/iteminfo/' + keyVal + '/update';
+				warehouse.popup.open(url, "상품정보 수정", 500, 800, true);
+			}
 
             document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
                 e.preventDefault();
@@ -113,6 +129,13 @@
 						console.error(err);
 					});
             }
+
+<!--            function rowClick() {-->
+<!--                // 현재 클릭된 Row(<tr>)-->
+<!--                var checkbox = $(this).find('td:chk :checkbox');-->
+<!--                checkbox.attr('checked', !checkbox.is(':checked'));-->
+<!--            };-->
+
         </script>
     </section>
 </html>
