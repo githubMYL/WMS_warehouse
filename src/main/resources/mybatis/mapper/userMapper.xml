@@ -80,6 +80,7 @@
 			<if test="tel != ''">
 				AND U.TEL LIKE '%'||#{tel}||'%'
 			</if>
+			AND U.DEL_YN = 'N'
 		</where>
 	</select>
 

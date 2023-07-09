@@ -1,11 +1,8 @@
 package org.warehouse.controllers.baseinfo;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,16 +16,13 @@ import org.warehouse.models.baseinfo.iteminfo.ItemInfoService;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoValidator;
 import org.warehouse.models.baseinfo.loc.LocVO;
-import org.warehouse.models.baseinfo.wactr.WactrForm;
 import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -48,7 +42,6 @@ public class ItemInfoController{
 
 		commonProcess(model);
 
-		System.out.println("sechParams ::: " + srchParams);
 		if(srchParams.getClntNm() == null && srchParams.getItemCd() == null && srchParams.getItemNm() == null){
 			srchParams.setClntNm("");
 			srchParams.setItemCd("");

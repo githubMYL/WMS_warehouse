@@ -149,5 +149,4 @@
             ) A
         WHERE WACTR_CD || CLNT_CD || LOC_CD || ITEM_CD = #{keyVal}
     </select>
-
 </mapper>

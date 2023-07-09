@@ -22,3 +22,4 @@ public class ItemInfoService {
 		itemInfoDAO.updateItemInfo(itemInfoVO);
 	}
 }
+

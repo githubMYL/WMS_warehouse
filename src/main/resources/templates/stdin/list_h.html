@@ -58,7 +58,7 @@
 					data = JSON.parse(data);
 					var str = '';
 					for(var i = 0; i < data.length; i++) {
-						str += "<tr onclick='getDetail()'>";
+						str += "<tr onclick='getDetail(event)'>";
 						str += "<td><input type='checkbox' name='check' data-stdinnum=" + data[i].stdinNum +" th:value=" + data[i].stdinNum + " id='chk'></td>";
 						str += "<td>"+(i+1)+"</td>";
 						str += "<td>"+data[i].stdinDt+"</td>";
@@ -88,6 +88,9 @@
 				trs.forEach( (tr) => {
 					tr.addEventListener('click', getDetail);
 				});
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
 			});
 
 			function addItem(e) {
@@ -97,7 +100,7 @@
 			}
 
 			function deleteItem(e) {
-				var chk = document.getElementsByName("chk");
+				var chk = document.getElementsByName("check");
 				var chk_data = [];
 
 				for(var i = 0; i < chk.length; i++) {
@@ -142,7 +145,8 @@
 			}
 
 			function getDetail(e) {
-				var evnt = e.target.parentNode;
+				console.log(e);
+				const evnt = e.target.parentNode;
 				const stdinNum = evnt.querySelector('#chk').dataset.stdinnum;
 				var stdin_d_table = document.querySelector("#stdin_d_table > tbody");
 				var str = '<tr><th>순번</th><th>상품코드</th><th>상품명</th><th>로케이션</th><th>입고예정수량</th><th>정상수량</th><th>불량수량</th><th>비고</th></tr>';
@@ -182,12 +186,22 @@
 
 
 			};
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("check");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+				}
+			}
 		</script>
 	<div class="table_wrapper">
 		<h1>입고 헤더</h1>
 		<table id="stdin_h_table">
 			<tr>
-				<th> </th>
+				<th>
+					<input type="checkbox" id="chkAll">
+				</th>
 				<th>순번</th>
 				<th>입고일자</th>
 				<th>고객사 코드</th>
@@ -198,7 +212,7 @@
 			<tbody id="search" style="cursor:pointer;">
 			<tr th:each="stdin, wactrCount : ${stdin_list}" id="stdin_infos">
 				<td>
-					<input type="checkbox" name="chk" th:value="${stdin.stdinNum}" id="chk" th:data-stdinnum="${stdin.stdinNum}">
+					<input type="checkbox" name="check" th:value="${stdin.stdinNum}" id="chk" th:data-stdinnum="${stdin.stdinNum}">
 				</td>
 				<td th:text="${wactrCount.count}"></td>
 				<td th:text="${stdin.stdinDt}"></td>

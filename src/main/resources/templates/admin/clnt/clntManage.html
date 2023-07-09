@@ -33,6 +33,9 @@
 				trs.forEach( (tr) => {
 					tr.addEventListener('dblclick', updateTable)
 				});
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
 			});
 
 			function addItem(e) {
@@ -118,12 +121,22 @@
 				url = 'clntManage/update/' + clntcd;
 				warehouse.popup.open(url, "테스트", 500, 800, true);
 			};
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("chk");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+				}
+			}
 		</script>
 
 	<div class="table_wrapper">
 		<table id="clnt_table">
 			<tr>
-				<th> </th>
+				<th>
+					<input type="checkbox" id="chkAll">
+				</th>
 				<th>순번</th>
 				<th>고객사 코드</th>
 				<th>고객사 명</th>

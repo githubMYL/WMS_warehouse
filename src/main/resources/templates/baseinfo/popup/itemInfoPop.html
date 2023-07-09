@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
@@ -138,25 +137,25 @@
                     <div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
                 </div>
                 <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const wactr = document.getElementById("wactr_tmp");
-                    var selected = document.querySelector("select#wactr_sel")
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const wactr = document.getElementById("wactr_tmp");
+                        var selected = document.querySelector("select#wactr_sel")
 
-                    wactr.addEventListener("change", UpdateWactr)
-                });
-                function UpdateWactr(e) {
-                    var evnt = e.currentTarget;
-                    var selected = document.querySelector("select#wactr_sel")
-                    var datalist = evnt.list;
-                    var wactrCd = document.getElementById("wactr_cd");
+                        wactr.addEventListener("change", UpdateWactr)
+                    });
+                    function UpdateWactr(e) {
+                        var evnt = e.currentTarget;
+                        var selected = document.querySelector("select#wactr_sel")
+                        var datalist = evnt.list;
+                        var wactrCd = document.getElementById("wactr_cd");
 
-                    for(var j = 0; j < datalist.options.length; j++){
-                        if(this.value == datalist.options[j].value) {
-                            wactrCd.value = datalist.options[j].label;
+                        for(var j = 0; j < datalist.options.length; j++){
+                            if(this.value == datalist.options[j].value) {
+                                wactrCd.value = datalist.options[j].label;
+                            }
                         }
                     }
-                }
-            </script>
+                </script>
                 <div>
                     <th:block th:text="#{clntCd}"></th:block>
                     <input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>

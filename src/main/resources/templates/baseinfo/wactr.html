@@ -48,7 +48,7 @@
 					var str = '';
 					for(var i = 0; i < data.length; i++) {
 						str += '<tr>'
-						str += "<td><input type='checkbox' name='check'></td>";
+						str += "<td><input type='checkbox' name='check' value=" +data[i].wactrCd+ "></td>";
 						str += "<td>"+(i+1)+"</td>";
 						str += "<td>"+data[i].wactrNm+"</td>";
 						str += "<td>"+data[i].addr+"</td>";
@@ -73,7 +73,9 @@
 		<div class="table_wrapper">
 			<table id="wactr_table">
 				<tr>
-					<th> </th>
+					<th>
+						<input type="checkbox" id="chkAll">
+					</th>
 					<th>순번</th>
 					<th>물류센터명</th>
 					<th>주소</th>
@@ -90,7 +92,7 @@
 				<tbody id="search">
 					<tr th:each="wactr, wactrCount : ${list}" id="wactr_infos">
 						<td>
-							<input type="checkbox" name="chk" th:value="${wactr.wactrCd}" id="chk">
+							<input type="checkbox" name="check" th:value="${wactr.wactrCd}" id="chk">
 						</td>
 						<td th:text="${wactrCount.count}"></td>
 						<td th:text="${wactr.wactrNm}"></td>
@@ -115,6 +117,9 @@
 
 				const del = document.getElementById("delete");
 				del.addEventListener("click", deleteItem);
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
 			});
 
 			function addItem(e) {
@@ -124,7 +129,7 @@
 			}
 
 			function deleteItem(e) {
-				var chk = document.getElementsByName("chk");
+				var chk = document.getElementsByName("check");
 				var chk_data = [];
 
 				for(var i = 0; i < chk.length; i++) {
@@ -182,6 +187,14 @@
 				var cd = tr.querySelector('#chk').value;
 				url = 'wactr/admin/' + cd + '/update';
 				warehouse.popup.open(url, "테스트", 500, 800, true);
+			}
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("check");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+				}
 			}
 		</script>
 	</section>

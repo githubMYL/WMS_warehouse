@@ -55,7 +55,7 @@
 	</select>
 
 	<select id="getCustListByCustNm" resultMap="custMap">
-		SELECT * FROM CUST WHERE CUST_NM LIKE '%'||#{custNm}||'%'
+		SELECT * FROM CUST WHERE CUST_NM LIKE '%'||#{custNm}||'%' AND DEL_YN = 'N'
 	</select>
 
 	<select id="getCustByCd" resultMap="custMap">
