@@ -35,6 +35,19 @@
 		</li>
 	</ul>
 
+	<!-- 출고 사이드 탭 -->
+	<ul th:case="rels">
+		<li>
+			<a th:href="@{/rels}" th:classappend="${menuCode} == 'rels' ? 'on'">
+				<i class="xi-view-list"></i>
+				출고등록
+			</a>
+		</li>
+		<li>
+			<a>출고조회</a>
+		</li>
+	</ul>
+
 	<!-- 재고 사이드 탭 -->
 	<ul th:case="tmstk">
 		<li>

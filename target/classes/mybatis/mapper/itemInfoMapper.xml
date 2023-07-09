@@ -61,22 +61,24 @@
         SELECT ROWNUM idx, A.*
             FROM (
                  SELECT A.WACTR_CD
-                 , B.WACTR_NM
-                 , A.CLNT_CD
-                 , C.CLNT_NM
-                 , A.LOC_CD
-                 , A.ITEM_CD
-                 , A.ITEM_NM
-                 , A.BOX_UNIT
-                 , A.PLT_IN_BOX
-                 , A.REMK
-                    FROM ITEM A
+                      , B.WACTR_NM
+                      , A.CLNT_CD
+                      , C.CLNT_NM
+                      , A.LOC_CD
+                      , A.ITEM_CD
+                      , A.ITEM_NM
+                      , E.ITEM_VALUE BOX_UNIT
+                      , A.PLT_IN_BOX
+                      , A.REMK
+                FROM ITEM A
                 INNER JOIN WACTR B
                     ON A.WACTR_CD = B.WACTR_CD
                 INNER JOIN CLNT C
                     ON A.CLNT_CD = C.CLNT_CD
                 INNER JOIN LOC D
                     ON A.LOC_CD = D.LOC_CD
+                INNER JOIN ITEM_CODE E
+                    ON A.BOX_UNIT = E.ITEM_CODE
                 WHERE A.DEL_YN  = 'N'
                 ORDER BY A.REG_DT DESC
             ) A

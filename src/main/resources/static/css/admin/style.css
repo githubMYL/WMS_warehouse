@@ -22,7 +22,7 @@ input[type='text'],
 input[type='number'],
 input[type='password'],
 input[type='email'],
-input[type='date'] { border: 1px solid #d5d5d5; width: 100%; height: 45px; padding: 0 10px; border-radius: 3px; }
+input[type='date'] { border: 1px solid #d5d5d5; width: 100%; height: 45px; padding: 0 1px; border-radius: 3px; }
 select { border: 1px solid #d5d5d5; width: 100%; height: 45px; padding: 0 10px; border-radius: 3px; }
 
 .dn { display: none !important; }

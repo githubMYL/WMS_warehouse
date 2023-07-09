@@ -186,9 +186,9 @@ public class ItemInfoController{
 		String Title = "기본정보::상품정보";
 		String menuCode = "iteminfo";
 		String pageName = "baseinfo";
-		model.addAttribute("pageName", pageName);
 		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
+		model.addAttribute("pageName", pageName);
 	}
 
 	private void closeLayer(HttpServletResponse response) {
