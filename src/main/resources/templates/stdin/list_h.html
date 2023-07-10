@@ -91,6 +91,9 @@
 
 				var chkAll = document.getElementById("chkAll");
 				chkAll.addEventListener("change", checkAll);
+
+				const confirm = document.getElementById("confirm");
+				confirm.addEventListener("click", confirmItem);
 			});
 
 			function addItem(e) {
@@ -194,9 +197,36 @@
 					chk.checked = all.checked;
 				}
 			}
+
+			function confirmItem() {
+				var chk = document.getElementsByName("check");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						chk_data.push(chk[i].value);
+					}
+				}
+
+				const url = `stdin/ajaxstdin/confirm?stdinNum=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
 		</script>
 	<div class="table_wrapper">
-		<h1>입고 헤더</h1>
+		<div style="display: flex; justify-content: space-between;align-items: center;">
+			<div>
+				<h1>입고 헤더</h1>
+			</div>
+
+			<button type="button" class="sbtn blue" id="confirm">입고 확정</button>
+		</div>
 		<table id="stdin_h_table">
 			<tr>
 				<th>
@@ -210,17 +240,17 @@
 				<th>비고</th>
 			</tr>
 			<tbody id="search" style="cursor:pointer;">
-			<tr th:each="stdin, wactrCount : ${stdin_list}" id="stdin_infos">
-				<td>
-					<input type="checkbox" name="check" th:value="${stdin.stdinNum}" id="chk" th:data-stdinnum="${stdin.stdinNum}">
-				</td>
-				<td th:text="${wactrCount.count}"></td>
-				<td th:text="${stdin.stdinDt}"></td>
-				<td th:text="${stdin.clntCd}"></td>
-				<td th:text="${stdin.clntNm}"></td>
-				<td th:text="${stdin.status}"></td>
-				<td th:text="${stdin.remark}"></td>
-			</tr>
+				<tr th:each="stdin, wactrCount : ${stdin_list}" id="stdin_infos">
+					<td>
+						<input type="checkbox" name="check" th:value="${stdin.stdinNum}" id="chk" th:data-stdinnum="${stdin.stdinNum}">
+					</td>
+					<td th:text="${wactrCount.count}"></td>
+					<td th:text="${stdin.stdinDt}"></td>
+					<td th:text="${stdin.clntCd}"></td>
+					<td th:text="${stdin.clntNm}"></td>
+					<td th:text="${stdin.status}"></td>
+					<td th:text="${stdin.remark}"></td>
+				</tr>
 			</tbody>
 		</table>
 

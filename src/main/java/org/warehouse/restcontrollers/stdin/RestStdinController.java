@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
 import org.warehouse.configs.models.mapper.LocDAO;
 import org.warehouse.configs.models.mapper.StdinDAO;
+import org.warehouse.configs.models.mapper.StockDAO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 import org.warehouse.models.baseinfo.loc.LocVO;
 import org.warehouse.models.stdin.StdinVO;
+import org.warehouse.models.stock.TmstkVO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +23,7 @@ public class RestStdinController {
 	private final ItemInfoDAO itemInfoDAO;
 	private final LocDAO locDAO;
 	private final StdinDAO stdinDAO;
+	private final StockDAO stockDAO;
 
 	@GetMapping
 	public List<ItemInfoVO> getItemList(String clntCd) {
@@ -34,7 +37,7 @@ public class RestStdinController {
 	}
 
 	@GetMapping("getDetail")
-	public StdinVO getDetail(Long stdinNum) {
+	public StdinVO getDetail(String stdinNum) {
 		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
 		return stdinVO;
 	}
@@ -51,6 +54,35 @@ public class RestStdinController {
 		for(int i = 0; i < stdinNumList.length; i++) {
 			stdinDAO.deleteHeaderStdin(stdinNumList[i]);
 			stdinDAO.deleteDetailStdin(stdinNumList[i]);
+		}
+	}
+
+	@GetMapping("detail/search")
+	public List<StdinVO> detailSearch(LocalDate stdinDt, String clntNm, String itemCd, String itemNm) {
+		return stdinDAO.getDetailListByConditions(stdinDt, clntNm, itemCd, itemNm);
+	}
+
+	@GetMapping("confirm")
+	public void confirm(String stdinNum) {
+		String[] stdinNumList = stdinNum.split(",");
+
+		for(int i = 0; i < stdinNumList.length; i++) {
+			stdinDAO.confirmItems(stdinNum);
+		}
+
+		/* 입고 확정 후 재고 반영 */
+		// 1. 기존 재고 테이블의 존재여부 확인(물류센터, 고객사코드, 상품코드, 로케이션)
+		// 2-1. 컬럼명 조건이 일치하는 재고 테이블이 존재할 경우, 기존값을 가져와 새로운 값을 추가하여 UPDATE
+		// 2-2. 컬럼명 조건이 일치하는 재고 테이블이 존재하지 않을 경우, 재고 테이블애 새로운 값으로 INSERT
+		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
+		TmstkVO tmstk = stockDAO.getTmstkByConditions(stdinVO.getWactrCd(), stdinVO.getClntCd(), stdinVO.getItemCd(), stdinVO.getLocCd());
+
+		if(tmstk == null) {		// 2-1. 재고 테이블이 존재하지 않을 경우
+			stockDAO.insertStdin(stdinVO);
+		} else {				// 2-2. 재고 테이블이 존재할 경우
+			stdinVO.setFault(tmstk.getFault_amt() + stdinVO.getFault());
+			stdinVO.setBeforeStdin(tmstk.getStock_amt() + stdinVO.getBeforeStdin());
+			stockDAO.updateStdin(stdinVO);
 		}
 	}
 }

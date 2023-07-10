@@ -56,13 +56,6 @@ public class StdinService {
 			stdinDAO.updateHeaderStdin(stdinVO);
 			//insert STDIN_D
 			stdinDAO.updateDetailStdin(stdinVO);
-
-			if(stdinVO.getStatus().equals("2")) {
-				//insert TMSTK
-				System.out.println("변경됩니다!");
-				stdinVO.setRegNm(userInfo.getUserNm());
-				stockDAO.insertStdin(stdinVO);
-			}
 		}
 	}
 }
