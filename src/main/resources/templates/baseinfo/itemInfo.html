@@ -107,7 +107,6 @@
 
             chks.forEach(element => element.addEventListener('click', function(e){
 
-                alert(e.target.checked);
                 if(e.target.checked == true){
                     e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
                 }else {
@@ -118,9 +117,11 @@
             // 모든 체크박스 체크
             document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
                 e.preventDefault();
+
                 var list = document.querySelectorAll("input[name=chk]");
                 for (var i = 0; i < list.length; i++) {
                     list[i].checked = this.checked;
+                    // 체크값 색상 입히기
                     if(this.checked == true){
                         list[i].parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
                     }else if(this.checked == false) {

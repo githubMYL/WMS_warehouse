@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.RelsDAO;
 import org.warehouse.models.rels.relsAction.RelsVO;
@@ -21,12 +22,16 @@ public class RelsController {
     private final RelsDAO relsDAO;
 
     @GetMapping()
-    private String rels(Model model){
+    private String rels(@ModelAttribute() Model model){
 
         commonProcess(model);
 
         List<RelsVO> relsList = relsDAO.relsList();
         model.addAttribute("relsList", relsList);
+
+//        List<RelsVO> relsDetailList = relsDAO.relsDetailList();
+
+//        List<RelsVO> relsSubDetailList = relsDAO.relsSubDetailList();
 
         return "rels/rels";
     }
