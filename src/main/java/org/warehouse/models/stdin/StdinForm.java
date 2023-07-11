@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 public class StdinForm extends BaseEntity {
-	@NotNull @Future
+	@NotNull
 	private LocalDate stdinDt;
 	@NotBlank
 	private String clntCd;

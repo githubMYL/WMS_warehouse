@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.warehouse.configs.models.mapper.CustCtrDAO;
 import org.warehouse.configs.models.mapper.CustDAO;
 import org.warehouse.configs.models.mapper.UserDAO;
 import org.warehouse.controllers.admins.JoinForm;
@@ -15,6 +16,7 @@ import org.warehouse.controllers.users.UserInfo;
 public class UserJoinService {
 	private final UserDAO userDAO;
 	private final CustDAO custDAO;
+	private final CustCtrDAO custCtrDAO;
 	private final PasswordEncoder passwordEncoder;
 	private final HttpSession session;
 
@@ -23,11 +25,20 @@ public class UserJoinService {
 
 		UserVO userVO = new ModelMapper().map(joinForm, UserVO.class);
 
-		userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
-		userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustCd()).getCustCd());
-		userVO.setRegNm(userInfo.getUserNm());
+		if(joinForm.getFlag() == null) {
+			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
+			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
+			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
+			userVO.setRegNm(userInfo.getUserNm());
 
-		userDAO.insertUser(userVO);
+			userDAO.insertUser(userVO);
+		} else {
+			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
+			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
+			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
+			userVO.setModNm(userInfo.getUserNm());
+
+			userDAO.updateUser(userVO);
+		}
 	}
-
 }

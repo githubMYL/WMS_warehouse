@@ -1,5 +1,6 @@
 package org.warehouse.controllers.baseinfo;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.warehouse.models.baseinfo.coninfo.ConInfoService;
 import org.warehouse.models.baseinfo.coninfo.ConInfoVO;
 import org.warehouse.models.baseinfo.coninfo.ConInfoValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,6 +32,8 @@ public class ConInfoController {
 	private final ConInfoDAO conInfoDAO;
 
 	private final ClntDAO clntDAO;
+
+	private final HttpServletResponse response;
 
 	@GetMapping("/coninfo")
 	public String conInfo(@ModelAttribute("srchParams") ConInfoVO srchParam, Model model) {
@@ -46,9 +50,6 @@ public class ConInfoController {
 		return "baseinfo/conInfo";
 
 	}
-
-
-
 
 	@GetMapping("/coninfo/register")
 	public String conInfoRegister(Model model) {
@@ -91,8 +92,25 @@ public class ConInfoController {
 		conInfoVO.setRegNm("session");
 
 		conInfoService.conInfoSave(conInfoVO);
+
+//		closeLayer(response);
 		return "redirect:/baseinfo/coninfo";
 
+	}
+
+	@GetMapping("coninfo/deleteItem")
+	public String deleteItem(String chkArr) {
+
+		System.out.println("chkArr : " + chkArr);
+		// 문자열 구분자 ,
+		String[] chkData = chkArr.split(",");
+		System.out.println("chkData.length :: " + chkData.length);
+		// DEL_YN = 'Y' UPDATE
+		for(int i = 0; i < chkData.length; i++){
+			System.out.println("chkData.length :: " + chkData.length);
+			conInfoDAO.deleteConInfo(chkData[i]);
+		}
+		return "redirect:/baseinfo/coninfo";
 	}
 	private void commonProcess(Model model) {
 		String Title = "기본정보::계약정보";
@@ -102,4 +120,21 @@ public class ConInfoController {
 		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
 	}
+
+//	private void closeLayer(HttpServletResponse response) {
+//		response.setContentType("text/html; charset=euc-kr");
+//		PrintWriter out = null;
+//		try {
+//			out = response.getWriter();
+//			out.println("<script>var parent = window.parent.document;" +
+//					"var layerDim = parent.getElementById('layer_dim');" +
+//					"var layerPopup = parent.getElementById('layer_popup');" +
+//					"parent.body.removeChild(layerDim);" +
+//					"parent.body.removeChild(layerPopup);" +
+//					"parent.location.reload();</script>");
+//			out.flush();
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 }

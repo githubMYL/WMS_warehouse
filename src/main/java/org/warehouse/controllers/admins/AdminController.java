@@ -8,17 +8,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
 import org.warehouse.models.admin.clnt.ClntForm;
 import org.warehouse.models.admin.clnt.ClntService;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.admin.clnt.ClntValidator;
+import org.warehouse.models.admin.cust.CustForm;
+import org.warehouse.models.admin.cust.CustService;
 import org.warehouse.models.admin.cust.CustVO;
+import org.warehouse.models.admin.custctr.CustCtrForm;
+import org.warehouse.models.admin.custctr.CustCtrService;
 import org.warehouse.models.admin.custctr.CustCtrVO;
 import org.warehouse.models.stdin.StdinForm;
 import org.warehouse.models.stdin.StdinVO;
@@ -38,6 +39,8 @@ public class AdminController {
 	private final UserJoinValidator joinValidator;
 	private final ClntService clntService;
 	private final ClntValidator clntValidator;
+	private final CustService custService;
+	private final CustCtrService custCtrService;
 
 	private final UserDAO userDAO;
 	private final ClntDAO clntDAO;
@@ -51,38 +54,55 @@ public class AdminController {
 	/** userManage S */
 	@GetMapping("/userManage")
 	public String userManage(Model model) {
-		commonProcess(model);
+		commonProcess(model, "userManage", "사용자관리");
 		List<UserVO> userList = userDAO.getUserList();
 
 		model.addAttribute("userList", userList);
 
-		return "admin/userManage";
+		return "admin/user/userManage";
 	}
 
-	@GetMapping("/join")
+	@GetMapping("/userManage/join")
 	public String join(Model model) {
 		JoinForm joinForm = new JoinForm();
 		List<ClntVO> clntList = clntDAO.getClntList();
-		List<CustVO> custList = custDAO.getCustList();
+		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
 
 		model.addAttribute("joinForm", joinForm);
 		model.addAttribute("clntList", clntList);
-		model.addAttribute("custList", custList);
+		model.addAttribute("custList", custCtrList);
 
-		return "admin/join";
+		return "admin/user/join";
 	}
 
-	@PostMapping("/join")
+	@GetMapping("/userManage/update/{userId}")
+	public String update(@PathVariable String userId, Model model) {
+		UserVO userVO = userDAO.getUserById(userId);
+		JoinForm joinForm = new ModelMapper().map(userVO, JoinForm.class);
+
+		List<ClntVO> clntList = clntDAO.getClntList();
+		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
+
+
+		model.addAttribute("joinForm", joinForm);
+		model.addAttribute("clntList", clntList);
+		model.addAttribute("custList", custCtrList);
+
+		return "admin/user/update";
+	}
+
+	@PostMapping("/userManage/join")
 	public String joinPs(@Valid JoinForm joinForm, Errors errors, Model model) {
+		System.out.println(joinForm);
 		joinValidator.validate(joinForm, errors);
 
 		if(errors.hasErrors()) {
 			List<ClntVO> clntList = clntDAO.getClntList();
-			List<CustVO> custList = custDAO.getCustList();
+			List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
 
 			model.addAttribute("clntList", clntList);
-			model.addAttribute("custList", custList);
-			return "admin/join";
+			model.addAttribute("custList", custCtrList);
+			return "admin/user/join";
 		}
 
 		joinService.join(joinForm);
@@ -98,7 +118,7 @@ public class AdminController {
 	/** clntManage S */
 	@GetMapping("/clntManage")
 	public String clntManage(Model model) {
-		commonProcess(model, "clntManage");
+		commonProcess(model, "clntManage", "고객사관리");
 		List<ClntVO> clntList = clntDAO.getClntList();
 
 		model.addAttribute("clntList", clntList);
@@ -146,24 +166,99 @@ public class AdminController {
 	/** custManage S */
 	@GetMapping("/custManage")
 	public String custManage(Model model) {
-		commonProcess(model, "custManage");
+		commonProcess(model, "custManage", "납품처관리");
 		List<CustVO> custList = custDAO.getCustList();
 
 		model.addAttribute("custList", custList);
-		return "admin/custManage";
+		return "admin/cust/custManage";
 	}
+
+	@GetMapping("/custManage/register")
+	public String custRegister(Model model) {
+		CustForm custForm = new CustForm();
+
+		model.addAttribute("custForm", custForm);
+
+		return "admin/cust/custRegister";
+	}
+
+	@GetMapping("/custManage/update/{custCd}")
+	public String custUpdate(@PathVariable String custCd, Model model) {
+		CustVO custVO = custDAO.getCustByCd(custCd);
+
+		CustForm custForm = new ModelMapper().map(custVO, CustForm.class);
+
+		model.addAttribute("custForm", custForm);
+
+		return("admin/cust/custUpdate");
+	}
+
+	@PostMapping("/custManage/save")
+	public String custSave(@Valid CustForm custForm, Errors errors, Model model) {
+		//validator
+		if(errors.hasErrors()) {
+			return "admin/cust/custRegister";
+		}
+
+		custService.register(custForm);
+
+		closeLayer(response);
+
+		return "close";
+	}
+
+
 	/** custManage E */
 
 	/** custCtrManage S */
 	@GetMapping("/custCtrManage")
 	public String custCtrManage(Model model) {
-		commonProcess(model, "custCtrManage");
+		commonProcess(model, "custCtrManage", "납품센터관리");
 		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
 		System.out.println(custCtrList);
 
 		model.addAttribute("custCtrList", custCtrList);
-		return "admin/custCtrManage";
+		return "admin/custctr/custCtrManage";
 	}
+
+	@GetMapping("/custCtrManage/register")
+	public String custCtrRegister(Model model) {
+		List<CustVO> custList = custDAO.getCustList();
+		CustCtrForm custCtrForm = new CustCtrForm();
+
+		model.addAttribute("custList", custList);
+		model.addAttribute("custCtrForm", custCtrForm);
+
+		return "admin/custctr/custCtrRegister";
+	}
+
+	@GetMapping("/custCtrManage/update")
+	public String custCtrUpdate(@RequestParam(value="custCd") String custCd, @RequestParam(value="custCtrCd")String custCtrCd, Model model) {
+		CustCtrVO custCtrVO = custCtrDAO.getCustCtrByCd(custCd, custCtrCd);
+		System.out.println(custCtrVO);
+
+		CustCtrForm custCtrForm = new ModelMapper().map(custCtrVO, CustCtrForm.class);
+
+		model.addAttribute("custCtrForm", custCtrForm);
+
+		return("admin/custctr/custCtrUpdate");
+	}
+
+
+	@PostMapping("/custCtrManage/save")
+	public String custCtrSave(@Valid CustCtrForm custCtrForm, Errors errors, Model model) {
+		//validator
+		if(errors.hasErrors()) {
+			return "admin/custCtr/custCtrRegister";
+		}
+
+		custCtrService.register(custCtrForm);
+
+		closeLayer(response);
+
+		return "close";
+	}
+
 	/** custCtrManage E */
 
 	/** carManage S */
@@ -175,16 +270,16 @@ public class AdminController {
 
 	/** commonMethod S */
 	private void commonProcess(Model model) {
-		commonProcess(model, "userManage");
+		commonProcess(model, "userManage", null);
 	}
 
-	private void commonProcess(Model model, String menuCode) {
-		String Title = "관리자::사용자관리";
+	private void commonProcess(Model model, String menuCode, String Title) {
+		String title = "관리자::"+Title;
 		String pageName = "admin";
 
 		model.addAttribute("menuCode", menuCode);
 		model.addAttribute("pageName", pageName);
-		model.addAttribute("Title", Title);
+		model.addAttribute("Title", title);
 		model.addAttribute("menuCode", menuCode);
 	}
 	/** commonMethod E*/

@@ -108,16 +108,15 @@ public class LocController {
 
 	// 체크한 loc삭제
 	@GetMapping("locDelte")
-	public String loc_delete(String loc_cd_array) {
+	public String loc_delete(String loc_cd_array , String wactr_cd_array) {
 
-		System.out.println(loc_cd_array);
+//		System.out.println(loc_cd_array);
+//		System.out.println(checked_wactr);
 		String[] loc_cd = loc_cd_array.split(",");
-
+		String[] wactr_cd = wactr_cd_array.split(",");
 
 		for (int i = 0; i < loc_cd.length; i++) {
-
-			locDAO.deleteLoc(loc_cd[i]);
-
+			locDAO.deleteLoc(loc_cd[i],wactr_cd[i]);
 		}
 
 
@@ -126,12 +125,15 @@ public class LocController {
 
 	// 더블클릭한 loc_cd의 정보 수정페이지
 	@GetMapping("/locMod/{loc_cd}")
-	public String locModForm(@PathVariable String loc_cd, Model model) {
+	public String locModForm(@PathVariable String loc_cd, @RequestParam String wactr_cd, Model model) {
 
 		List<WactrVO> waclist = wactrDAO.getList();
 		model.addAttribute("wactr_list", waclist);
 
-		LocVO vo = locDAO.locCdVo(loc_cd);
+		// 로케이션이 같을 경우 wactr_cd까지 가져와서 확인해야한다
+//		System.out.println(wactr_cd);
+
+		LocVO vo = locDAO.locCdVo(loc_cd ,wactr_cd);
 		model.addAttribute("locVO",vo);
 
 

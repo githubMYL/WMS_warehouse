@@ -7,9 +7,7 @@
 	</style>
 </head>
 
-	<h2>사용자등록 추가</h2>
-
-	<form name="frmJoin" method="post" th:action="@{/admin/join}" th:object="${joinForm}" autocomplete="off" class="_form">
+	<th:block th:fragment="joinForm" th:object="${joinForm}">
 		<div>
 			<dt th:text="#{userId}" class="require_item"></dt>
 			<input type="text" name="userId" th:field="*{userId}" th:placeholder="#{userId}">
@@ -87,8 +85,8 @@
 		<br>
 		<div>
 			<dt th:text="#{cust}" class="require_item"></dt>
-			<input type="text" id="cust_nm" th:field="*{custCd}" readonly style="background:#d5d5d5"/>
-			<input type="text" list="cust_ctr_list" id="cust_ctr_nm" th:field="*{custCtrCd}" name="cust_ctr_tmp" placeholder="납품센터 명"/>
+			<input type="text" id="cust_nm" th:field="*{custNm}" th:value="*{custNm}" readonly style="background:#d5d5d5"/>
+			<input type="text" list="cust_ctr_list" id="cust_ctr_nm" th:field="*{custCtrNm}" th:value="*{custCtrNm}" name="cust_ctr_tmp" placeholder="납품센터 명"/>
 			<datalist id="cust_ctr_list">
 				<select id="cust_ctr_sel">
 					<option th:each="cust : ${custList}" th:value="${cust.custCtrNm +'('+cust.custNm + ')'}" >
@@ -150,9 +148,6 @@
 		</div>
 
 		<br>
-		<div style="text-align:center;">
-			<button type="submit" th:text="#{user.action.join}" class="sbtn blue"></button>
-		</div>
+	</th:block>
 
-	</form>
 </html>

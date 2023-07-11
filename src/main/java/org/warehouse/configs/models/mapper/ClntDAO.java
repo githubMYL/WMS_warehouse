@@ -11,8 +11,8 @@ import java.util.List;
 public interface ClntDAO {
 	List<ClntVO> getClntList();
 	void insertClnt(ClntVO clntVO);
-	void deleteClnt(String clntCd);
 	void updateClnt(ClntVO clntVO);
+	void deleteClnt(String clntCd, String modNm);
 
 	ClntVO getClntByCd(String clntCd);
 	List<ClntVO> getClntListByNm(String clntNm);

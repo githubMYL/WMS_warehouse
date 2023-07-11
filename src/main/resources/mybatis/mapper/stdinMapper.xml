@@ -88,11 +88,43 @@
 	</select>
 
 	<select id="getDetailList" resultMap="stdinMap">
-		SELECT I.ITEM_CD, I.ITEM_NM, D.LOC_CD, D.BEFORE_STDIN, D.NORMAL, D.FAULT, D.REMK FROM STDIN_D D LEFT OUTER JOIN ITEM I ON D.ITEM_CD = I.ITEM_CD WHERE D.DEL_YN = 'N'
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		WHERE D.DEL_YN = 'N' AND H.STATUS = '2'
+		ORDER BY D.STDIN_DT
 	</select>
 
+	<select id="getDetailListByConditions" resultMap="stdinMap">
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		<where>
+			<if test="stdinDt != null">
+				H.STDIN_DT = #{stdinDt}
+			</if>
+			<if test="clntNm != ''">
+				AND C.CLNT_NM LIKE '%'||#{clntNm}||'%'
+			</if>
+			<if test="itemCd != ''">
+				AND I.ITEM_CD LIKE '%'||#{itemCd}||'%'
+			</if>
+			<if test="itemNm != ''">
+				AND I.ITEM_NM LIKE '%'||#{itemNm}||'%'
+			</if>
+			AND D.DEL_YN = 'N'
+		</where>
+	</select>
+
+
 	<select id="getDetail" resultMap="stdinMap">
-		SELECT * FROM STDIN_D D LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD WHERE STDIN_NUM = #{stdinNum}
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		WHERE D.STDIN_NUM = #{stdinNum}
 	</select>
 
 	<select id="getListByConditions" resultMap="stdinMap">
@@ -116,6 +148,10 @@
 
 	<update id="deleteDetailStdin">
 		UPDATE STDIN_D SET DEL_YN = 'Y' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
+	<update id="confirmItems">
+		UPDATE STDIN_H SET STATUS = '2' WHERE STDIN_NUM = #{stdinNum}
 	</update>
 
 </mapper>

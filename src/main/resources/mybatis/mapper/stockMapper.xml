@@ -17,8 +17,17 @@
 	</resultMap>
 
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
-		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM) VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
+		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
+			VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
 	</insert>
+
+	<update id="updateStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		UPDATE TMSTK SET
+			STOCK_AMT = #{beforeStdin},
+			FAULT_AMT = #{fault},
+			STDIN_DT = #{stdinDt}
+		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+	</update>
 
 	<select id="tmstkList" resultType="org.warehouse.models.stock.TmstkVO">
 		select w.wactr_nm , c.clnt_nm , l.loc_cd , i.item_cd , i.item_nm , t.* from tmstk t
@@ -69,4 +78,9 @@
 		ORDER BY t.REG_DT DESC
 	</select>
 	<!-- 검색 조건 -->
+
+	<select id="getTmstkByConditions" resultType="org.warehouse.models.stock.TmstkVO">
+		SELECT * FROM TMSTK
+		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+	</select>
 </mapper>

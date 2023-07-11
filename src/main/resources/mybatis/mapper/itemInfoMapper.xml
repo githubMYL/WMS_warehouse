@@ -6,22 +6,36 @@
         <result property="wactrNm" column="WACTR_NM" />
         <result property="clntCd" column="CLNT_CD" />
         <result property="clntNm" column="CLNT_NM" />
-        <result property="locCd" column="LOC_CD" />
         <result property="itemCd" column="ITEM_CD" />
         <result property="itemNm" column="ITEM_NM" />
         <result property="boxUnit" column="BOX_UNIT" />
         <result property="pltInBox" column="PLT_IN_BOX" />
         <result property="remk" column="REMK" />
         <result property="regNm" column="REG_NM" />
+        <result property="modNm" column="MOD_NM" />
 
         <result property="itemCode" column="ITEM_CODE" />
         <result property="itemValue" column="ITEM_VALUE" />
     </resultMap>
 
     <insert id="insertItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
-        INSERT INTO ITEM (WACTR_CD, CLNT_CD, LOC_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
-        VALUES (#{wactrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
+        INSERT INTO ITEM (WACTR_CD, CLNT_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
+        VALUES (#{wactrCd}, #{clntCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
+
+    <update id="updateItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
+        UPDATE ITEM SET
+        WACTR_CD = #{wactrCd}
+        , CLNT_CD = #{clntCd}
+        , ITEM_CD = #{itemCd}
+        , ITEM_NM = #{itemNm}
+        , BOX_UNIT = #{boxUnit}
+        , PLT_IN_BOX = #{pltInBox}
+        , REMK = #{remk}
+        , MOD_DT = SYSDATE
+        , MOD_NM = #{modNm}
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal}
+    </update>
 
     <!-- 관리단위 조회-->
     <select id="getCodeList" resultMap="itemMap">
@@ -48,7 +62,6 @@
         , B.WACTR_NM
         , A.CLNT_CD
         , C.CLNT_NM
-        , A.LOC_CD
         , A.ITEM_CD
         , A.ITEM_NM
         , A.BOX_UNIT
@@ -59,8 +72,6 @@
         ON A.WACTR_CD = B.WACTR_CD
         INNER JOIN CLNT C
         ON A.CLNT_CD = C.CLNT_CD
-        INNER JOIN LOC D
-        ON A.LOC_CD = D.LOC_CD
         WHERE A.DEL_YN  = 'N'
         ORDER BY A.REG_DT DESC
         ) A
@@ -100,6 +111,35 @@
 
     <select id="getItem" resultMap="itemMap">
         SELECT * FROM ITEM WHERE ITEM_CD = #{itemCd}
+    </select>
+
+    <update id="deleteItem" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
+        UPDATE ITEM
+        SET DEL_YN = 'Y'
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal}
+    </update>
+
+    <select id="getKeyCd" resultMap="itemMap">
+        SELECT ROWNUM idx, A.*
+        FROM (
+        SELECT A.WACTR_CD
+        , B.WACTR_NM
+        , A.CLNT_CD
+        , C.CLNT_NM
+        , A.ITEM_CD
+        , A.ITEM_NM
+        , A.BOX_UNIT
+        , A.PLT_IN_BOX
+        , A.REMK
+        FROM ITEM A
+        INNER JOIN WACTR B
+        ON A.WACTR_CD = B.WACTR_CD
+        INNER JOIN CLNT C
+        ON A.CLNT_CD = C.CLNT_CD
+        WHERE A.DEL_YN  = 'N'
+        ORDER BY A.REG_DT DESC
+        ) A
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal}
     </select>
 
 </mapper>
