@@ -12,8 +12,8 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/tmstk")
-public class TmstkController {
+@RequestMapping("/stock")
+public class StockController {
 
 	private final StockDAO stockDAO;
 
@@ -21,12 +21,12 @@ public class TmstkController {
 	private void commonProcess(Model model) {
 		String Title = "재고::시점재고";
 		String menuCode = "tmstk";
-		String pageName = "tmstk";
+		String pageName = "stock";
 		model.addAttribute("pageName", pageName);
 		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
 	}
-	@GetMapping
+	@GetMapping("/tmstk")
 	public String tmstkList(Model model , String search_clntNm ,String search_itemCd,String search_itemNm){
 
 		commonProcess(model);
@@ -41,4 +41,40 @@ public class TmstkController {
 
 		return "stock/tmstk_list";
 	}
+
+
+	@GetMapping("/stkadj")
+	public String stkadj(Model model){
+		model.addAttribute("pageName", "stock");
+		model.addAttribute("Title", "재고::재고조정");
+		model.addAttribute("menuCode", "stkadj");
+
+
+
+
+
+		return "stock/stkadj_list";
+	}
+
+
+
+
+	@GetMapping("/stktransf")
+	public String stktransf(Model model){
+		model.addAttribute("pageName", "stock");
+		model.addAttribute("Title", "재고::재고이동");
+		model.addAttribute("menuCode", "stktransf");
+
+		List<TmstkVO> tmstkList = stockDAO.tmstkList();
+		model.addAttribute("list", tmstkList);
+
+
+
+
+
+		return "stock/stktransf_list";
+	}
+
+
+
 }

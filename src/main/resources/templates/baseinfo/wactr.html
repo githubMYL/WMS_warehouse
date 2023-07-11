@@ -124,6 +124,16 @@
 				chkAll.addEventListener("change", checkAll);
 			});
 
+			var chks = document.getElementsByName("check");
+
+            chks.forEach(element => element.addEventListener('click', function(e){
+                if(e.target.checked == true){
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
+                }else {
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
+                }
+            }));
+
 			function addItem(e) {
 
 				url = 'wactr/admin/register';
@@ -196,6 +206,18 @@
 				const chkList = document.getElementsByName("check");
 				for( chk of chkList) {
 					chk.checked = all.checked;
+					if(all.checked) {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "#D8D8D8", "important");
+						})
+					} else {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "white", "important");
+						})
+					}
+
 				}
 			}
 		</script>

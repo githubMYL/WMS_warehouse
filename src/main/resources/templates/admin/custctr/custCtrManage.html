@@ -41,7 +41,32 @@
 
 				var chkAll = document.getElementById("chkAll");
 				chkAll.addEventListener("change", checkAll);
+
+				var checkList = document.getElementsByName("check");
+
+				for( chk of checkList) {
+					chk.addEventListener("change", function(e) {
+						if(e.target.checked) {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
+					});
+				}
 			});
+
+
+
+
 
 			function search() {
 				var trEl = document.getElementsByName("custNm");
@@ -63,7 +88,7 @@
 					var str = '';
 					for(var i = 0; i < data.length; i++) {
 						str += "<tr id='custCtr_infos'>";
-						str += "<td><input type='checkbox' name='check' data-custctrcd=" + data[i].custCtrCd +" th:value=" + data[i].custCtrCd + " id='chk'></td>";
+						str += "<td><input type='checkbox' name='check' data-custctrcd=" + data[i].custCtrCd +" th:value=" + data[i].custCtrCd + " id='chk' onclick=c(this)></td>";
 						str += "<td>"+(i+1)+"</td>";
 						str += "<td>"+data[i].custCd+"</td>";
 						str += "<td>"+data[i].custNm+"</td>";
@@ -88,7 +113,7 @@
 			}
 
 			function deleteItem(e) {
-				var chk = document.getElementsByName("chk");
+				var chk = document.getElementsByName("check");
 				var chk_data = [];
 
 				for(var i = 0; i < chk.length; i++) {
@@ -125,10 +150,39 @@
 
 			function checkAll() {
 				const all = document.getElementById("chkAll");
-				const chkList = document.getElementsByName("chk");
+				const chkList = document.getElementsByName("check");
 				for( chk of chkList) {
 					chk.checked = all.checked;
+					if(all.checked) {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "#D8D8D8", "important");
+						})
+					} else {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "white", "important");
+						})
+					}
+
 				}
+			}
+			function c(e) {
+				console.log(e);
+				if(e.checked) {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
 			}
 		</script>
 
@@ -151,7 +205,7 @@
 			<tbody id="search">
 			<tr th:each="custCtr, custCtrCount : ${custCtrList}" id="custCtr_infos">
 				<td>
-					<input type="checkbox" name="chk" th:value="${custCtr.custCtrCd}" id="chk" th:data-custctrcd="${custCtr.custCtrCd}" th:data-custcd="${custCtr.custCd}">
+					<input type="checkbox" name="check" th:value="${custCtr.custCtrCd}" id="chk" th:data-custctrcd="${custCtr.custCtrCd}" th:data-custcd="${custCtr.custCd}">
 				</td>
 				<td th:text="${custCtrCount.count}"></td>
 				<td th:text="${custCtr.custCd}"></td>

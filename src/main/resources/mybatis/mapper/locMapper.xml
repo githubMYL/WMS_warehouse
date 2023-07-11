@@ -73,4 +73,9 @@
 		WHERE LOC_CD = #{loc_cd}
 		AND DEL_YN = 'N'
 	</select>
+
+
+	<select id="getLocListByWactrCd" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
+		SELECT * FROM LOC WHERE WACTR_CD = #{wactrCd}
+	</select>
 </mapper>

@@ -33,7 +33,9 @@ public class RestStdinController {
 
 	@GetMapping("getLoc")
 	public List<LocVO> getLocList(String itemCd) {
-		return locDAO.getLocListByItemCd(itemCd);
+		ItemInfoVO itemInfoVO = itemInfoDAO.getItem(itemCd);
+
+		return locDAO.getLocListByWactrCd(itemInfoVO.getWactrCd());
 	}
 
 	@GetMapping("getDetail")

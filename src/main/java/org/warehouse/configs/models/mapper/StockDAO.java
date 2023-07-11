@@ -2,6 +2,7 @@ package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.warehouse.models.stdin.StdinVO;
+import org.warehouse.models.stock.StkadjVO;
 import org.warehouse.models.stock.TmstkVO;
 
 import java.util.List;
@@ -15,4 +16,8 @@ public interface StockDAO {
 	List<TmstkVO> getSearchList(String search_clntNm,String search_itemCd ,String search_itemNm);
 
 	TmstkVO getTmstkByConditions(String wactrCd, String clntCd, String itemCd, String locCd);
+
+
+
+	List<StkadjVO> stkadjList();
 }

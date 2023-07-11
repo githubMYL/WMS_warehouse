@@ -82,17 +82,7 @@
                         }
                     }
                 </script>
-			<div>
-				<th:block th:text="#{locCd}"></th:block>
-				<input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
-				<datalist id="loc">
-					<select id="loc_sel">
-						<option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
-						</option>
-					</select>
-				</datalist>
-				<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
-			</div>
+
 			<div>
 				<th:block th:text="#{itemCd}"></th:block>
 				<input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
@@ -191,17 +181,7 @@
                         }
                     }
                 </script>
-			<div>
-				<th:block th:text="#{locCd}"></th:block>
-				<input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
-				<datalist id="loc">
-					<select id="loc_sel">
-						<option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
-						</option>
-					</select>
-				</datalist>
-				<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
-			</div>
+
 			<div>
 				<th:block th:text="#{itemCd}"></th:block>
 				<input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">

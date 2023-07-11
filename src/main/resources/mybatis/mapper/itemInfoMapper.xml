@@ -64,7 +64,6 @@
         , B.WACTR_NM
         , A.CLNT_CD
         , C.CLNT_NM
-        , A.LOC_CD
         , A.ITEM_CD
         , A.ITEM_NM
         , A.BOX_UNIT
@@ -75,8 +74,6 @@
         ON A.WACTR_CD = B.WACTR_CD
         INNER JOIN CLNT C
         ON A.CLNT_CD = C.CLNT_CD
-        INNER JOIN LOC D
-        ON A.LOC_CD = D.LOC_CD
         WHERE A.DEL_YN  = 'N'
         ORDER BY A.REG_DT DESC
         ) A
@@ -121,7 +118,7 @@
     <update id="deleteItem" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         UPDATE ITEM
         SET DEL_YN = 'Y'
-        WHERE WACTR_CD || CLNT_CD || LOC_CD || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD || 'null' || ITEM_CD = #{keyVal}
     </update>
 
     <select id="getKeyCd" resultMap="itemMap">
@@ -131,7 +128,6 @@
         , B.WACTR_NM
         , A.CLNT_CD
         , C.CLNT_NM
-        , A.LOC_CD
         , A.ITEM_CD
         , A.ITEM_NM
         , A.BOX_UNIT
@@ -142,12 +138,10 @@
         ON A.WACTR_CD = B.WACTR_CD
         INNER JOIN CLNT C
         ON A.CLNT_CD = C.CLNT_CD
-        INNER JOIN LOC D
-        ON A.LOC_CD = D.LOC_CD
         WHERE A.DEL_YN  = 'N'
         ORDER BY A.REG_DT DESC
         ) A
-        WHERE WACTR_CD || CLNT_CD || LOC_CD || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD || 'null' || ITEM_CD = #{keyVal}
     </select>
 
 </mapper>
