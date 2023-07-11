@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
 		<style>
-				header {height:0px;}
-			</style>
+				html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+		</style>
 	</head>
 
 
@@ -11,7 +12,7 @@
 		<form name="stdinSave" method="post" th:action="@{/stdin/save}" autocomplete="off" th:object="${stdinForm}" class="_form">
 			<input type="hidden" name="flag" th:field="*{flag}" th:value="update">
 
-			<th:block th:replace="~{stdin/_form::stdinForm}"></th:block>
+			<th:block th:replace="~{stdin/_updateForm::stdinUpdateForm}"></th:block>
 			<div class="btns">
 				<button type="reset" th:text="#{admin.action.reset}"></button>
 				<button type="submit" th:text="#{admin.action.update}"></button>

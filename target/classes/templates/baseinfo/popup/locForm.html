@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<style>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+    <style>
     span{
     font-weight:bold;
     font-size:18px;
@@ -13,7 +15,24 @@
     font-size:12px;
     color:red;
     }
+
+    body{
+    height:97%;
+    }
+    main{
+    padding:0;
+    margin:0;
+    min-width:0px;
+    min-height:0px;
+    justify-content: center;
+    }
+
+    html{
+    min-width:0;
+    height:100%;
+    }
     </style>
+</head>
 
 <h2 align="center">로케이션 추가</h2>
 <!--    <div>로그인정보 : <span th:text="${session.userInfo.username}"></span></div>-->
@@ -46,7 +65,7 @@
     <div>
         <input type="hidden" id="wactr_cd" th:field="*{wactr_cd}"name="wactr_cd">
         <div><span>물류센터 명 : </span></div>
-        <input type="text" list="wactr" th:field="*{wactr_nm}"id="wactr_nm" placeholder="물류센터 명"/>
+        <input style="width:160px" type="text" list="wactr" th:field="*{wactr_nm}"id="wactr_nm" placeholder="물류센터 명"/>
         <div class="errors"th:each="err : ${#fields.errors('wactr_nm')}" th:text="${err}"></div>
         <datalist id="wactr">
             <select id="wactr_sel" class="inline-option-label">
@@ -62,22 +81,16 @@
 
     <div>
         <div><span>로케이션 이름 : </span></div>
-        <input type="text" name="loc_nm" th:field="*{loc_nm}"th:placeholder="#{loc_nm}">
+        <input style="width:160px"  type="text" name="loc_nm" th:field="*{loc_nm}"th:placeholder="#{loc_nm}">
         <div class="errors"th:each="err : ${#fields.errors('loc_nm')}" th:text="${err}"></div>
     </div>
 
     <div>
         <div><span>로케이션 주소 : </span></div>
-        <input type="text" name="loc_addr" th:field="*{loc_addr}"th:placeholder="#{loc_addr}">
+        <input style="width:160px"  type="text" name="loc_addr" th:field="*{loc_addr}"th:placeholder="#{loc_addr}">
         <div class="errors"th:each="err : ${#fields.errors('loc_addr')}" th:text="${err}"></div>
     </div>
 
-
-    <div>
-        <div><span>랙 수 : </span></div>
-        <input type="text" name="rac_num" th:field="*{rac_num}" th:placeholder="#{rac_num}">
-        <div class="errors"th:each="err : ${#fields.errors('rac_num')}" th:text="${err}"></div>
-    </div>
 
     <div>
         <div><span>비고</span></div><textarea rows="5" cols="23" th:field="*{remk}"name="remk" th:placeholder="비고"></textarea>
@@ -88,4 +101,3 @@
 
 </html>
 
-</html>

@@ -13,6 +13,7 @@ public interface LocDAO {
 	LocVO locCdVo(String loc_cd , String wactr_cd);					// loc_cd 에 따른 하나의 정보 조회
 	List<LocVO> getLocListByItemCd(String itemCd);	// 상품코드에 따른 로케이션 리스트 가져오기
 	void insertLoc(LocVO loc); 						//로케이션 등록
+	void delYnUpdate(String loc_cd,String wactr_cd); // del_yn 'Y' 로 삭제처리
 	void deleteLoc(String loc_cd , String wactr_cd); 					// 로케이션 삭제
 
 	void modLoc(LocVO loc); 				// 수정

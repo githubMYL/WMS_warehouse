@@ -3,13 +3,14 @@
 
     <section layout:fragment="content">
         <head>
-            <style>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+                    <style>
+                html { font-size: 13px; max-width: 1300px; min-width: 0px;}
                 #equipments div{
                     display:inline-block;
                 }
                 header {height:0px;}
             </style>
-            <script th:src="@{/js/front/layer.js}"></script>
         </head>
 
         <form autocomplete="off" method="post" name="itemInfo" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}">
@@ -229,7 +230,7 @@
                 </div>
                 <div>
                     <input type="hidden" th:field="*{updYn}" th:value="*{updYn}">
-                    <input type="text" th:field="*{keyVal}" th:value="*{keyVal}">
+                    <input type="hidden" th:field="*{keyVal}" th:value="*{keyVal}">
                 </div>
                 <button type="submit">저장하기</button>
             </th:block>

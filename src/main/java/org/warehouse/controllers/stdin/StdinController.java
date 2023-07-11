@@ -70,7 +70,7 @@ public class StdinController {
 	}
 
 	@GetMapping("/update/{stdinNum}")
-	public String update(@PathVariable Long stdinNum, Model model) {
+	public String update(@PathVariable String stdinNum, Model model) {
 		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
 
 		StdinForm stdinForm = new ModelMapper().map(stdinVO, StdinForm.class);
@@ -82,6 +82,7 @@ public class StdinController {
 
 	@PostMapping("/save")
 	public String stdinRegisterPs(@Valid StdinForm stdinForm, Errors errors, Model model) {
+		System.out.println(stdinForm);
 		validator.validate(stdinForm, errors);
 
 		if(errors.hasErrors()) {
@@ -107,7 +108,7 @@ public class StdinController {
 
 	@GetMapping
 	public String stdin(Model model) {
-		commonProcess(model);
+		commonProcess(model, "stdin_h");
 		
 		List<ClntVO> clnt_list = clntDAO.getClntList();
 		model.addAttribute("clnt_list", clnt_list);
@@ -122,14 +123,13 @@ public class StdinController {
 
 	@GetMapping("/detail")
 	public String stdin_detail(Model model) {
-		commonProcess(model);
+		commonProcess(model, "stdin_d");
 		model.addAttribute("detailList", stdinDAO.getDetailList());
 		return "stdin/list_d";
 	}
 
-	private void commonProcess(Model model) {
+	private void commonProcess(Model model, String menuCode) {
 		String Title = "입고";
-		String menuCode = "";
 		String pageName = "stdin";
 		model.addAttribute("pageName", pageName);
 		model.addAttribute("Title", Title);

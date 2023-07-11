@@ -40,6 +40,8 @@ function checkAll(){
 
         for (var i = 0; i < check.length; i++) {
             check[i].checked = true;
+            console.log(check[i])
+            check[i].parentNode.parentNode.style.backgroundColor = '#d3d3d3';
 
             loc_cd.push(check[i].value);
             wactr_cd.push(wactr_cd_td[i].textContent);
@@ -53,6 +55,7 @@ function checkAll(){
 
         for (var i = 0; i < check.length; i++) {
             check[i].checked = false;
+            check[i].parentNode.parentNode.style.backgroundColor = 'inherit';
             var loc_cd = [];
             var wactr_cd = [];
         }
@@ -82,9 +85,15 @@ function checkAll(){
         for( var i = 0; i < check.length; i++){
 
            if(check[i].checked){
+
+           check[i].parentNode.parentNode.style = 'background-color : #d3d3d3'
+
+
            loc_cd.push(check[i].value);
            wactr_cd.push(wactr_cd_td[i].textContent);
 
+           } else{
+           check[i].parentNode.parentNode.style.backgroundColor = 'inherit';
            }
             checked_input.value = loc_cd;
             checked_wactr.value = wactr_cd;
@@ -116,7 +125,7 @@ function checkAll(){
 
     function add_loc(){
      url = 'locjoin';
-    warehouse.popup.open(url, '로케이션 추가', 500, 600, true);
+    warehouse.popup.open(url, '로케이션 추가', 500, 700, true);
     }
 
 
@@ -131,51 +140,47 @@ function checkAll(){
 
         url = 'locMod' + '/' + loc_cd +'?' + 'wactr_cd=' + wactr_cd;
         title = '( ' + wactr_cd + ' :: ' + loc_cd + ' ) ' + '정보 수정';
-       warehouse.popup.open(url, title, 500, 500,true);
+       warehouse.popup.open(url, title, 500, 700, true);
     }
 
 
     </script>
-
-
-
 </head>
 <section layout:fragment="content">
 
-    <div  align="center" class="table_wrapper">
-        <table>
+    <form id="search"  class="frmSearch">
+        <table class="table-cols">
             <tr align="left">
-                <th style="width:80px;">로케이션 코드</th>
+                <th style="width:100px;">로케이션 코드</th>
                 <td >
-                    <form id="search"  >
-                        <input type="text"  id="search_loc" name="search_loc" th:placeholder="로케이션검색" style="width:30%;">
-                        <!-- 체크상태의 loc_cd 문자열-->
+                    <input type="text"  id="search_loc" name="search_loc" th:placeholder="로케이션검색" >
+                    <!-- 체크상태의 loc_cd 문자열-->
 
-                        <input type="text" id="checked_input" name="loc_cd_array">
-                        <input type="text" id="checked_wactr" name="wactr_cd_array">
-
-                    </form>
+                    <input type="hidden" id="checked_input" name="loc_cd_array">
+                    <input type="hidden" id="checked_wactr" name="wactr_cd_array">
                 </td>
             </tr>
         </table>
+
+
+        <div class="btns" style="text-align:right;">
+            <button th:text="#{search_btn}" onclick="search_loc()" class="sbtn"></button>
+            <button type="button" th:text="#{add_btn}" onclick="add_loc()" class="sbtn"></button>
+            <button type="button" th:text="#{delete_btn}" onclick="delete_loc()" class="sbtn blue"></button>
+        </div>
+    </form>
+
+
+    <div class="table_wrapper">
         <table>
             <tr>
-                <td colspan="7" align="right">
-                    <button th:text="#{search_btn}" onclick="search_loc()" class="sbtn"></button>
-                    <button onclick="add_loc()"th:text="#{add_btn}" class="sbtn"></button>
-                    <button th:text="#{add_btn}" onclick="add_loc()" class="sbtn"></button>
-                    <button th:text="#{delete_btn}" onclick="delete_loc()" class="sbtn blue"></button>
-                </td>
-            </tr>
-            <tr>
                 <th style="width:40px;">
-                    <input type="checkbox" id="checkAll" onclick="checkAll()">전체선택
+                    <input type="checkbox" id="checkAll" onclick="checkAll()"> 전체선택
                 </th>
                 <th style="width:50px;">순번</th>
                 <th style="width:100px;">물류센터명</th>
                 <th style="width:80px;">로케이션명</th>
                 <th style="width:80px;">로케이션주소</th>
-                <th style="width:50px;">랙 수</th>
                 <th>비고</th>
             </tr>
 
@@ -187,12 +192,11 @@ function checkAll(){
                 <td th:text="${list.wactr_cd}" class="wactr_cd"></td>
                 <td th:text="${list.loc_nm}"></td>
                 <td th:text="${list.loc_addr}"></td>
-                <td th:text="${list.rac_num}"></td>
                 <td th:text="${list.remk}"></td>
             </tr>
 
         </table>
-
     </div>
+
 </section>
 </html>

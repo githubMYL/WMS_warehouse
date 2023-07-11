@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.ClntStdinDAO">
+	<resultMap id="clntStdinMap" type="org.warehouse.models.admin.clnt.ClntStdinVO">
+		<result property="itemCd" column="PRODUCT_CD" />
+		<result property="beforeStdin" column="AMT" />
+		<result property="status" column="STATUS" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+		<result property="wactrCd" column="WACTR_CD" />
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
+		<result property="locCd" column="LOC_CD" />
+	</resultMap>
+
+	<select id="getList" resultMap="clntStdinMap">
+		SELECT C.PRODUCT_CD, C.AMT, C.STATUS, CL.CLNT_NM, I.* FROM CLNT_STDIN C
+			LEFT OUTER JOIN ITEM I ON C.PRODUCT_CD = I.ITEM_CD
+			LEFT OUTER JOIN CLNT CL ON I.CLNT_CD = CL.CLNT_CD
+		WHERE C.STATUS='N'
+	</select>
+
+	<update id="updateStatus">
+		UPDATE CLNT_STDIN SET STATUS = 'Y' WHERE STATUS = 'N'
+	</update>
+</mapper>

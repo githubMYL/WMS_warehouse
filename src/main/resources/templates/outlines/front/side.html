@@ -31,7 +31,10 @@
 
 	<ul th:case="stdin">
 		<li>
-			<a>사이드</a>
+			<a th:href="@{/stdin}" th:classappend="${menuCode} == 'stdin_h' ? 'on'">입고 등록/상세내역</a>
+		</li>
+		<li>
+			<a th:href="@{/stdin/detail}" th:classappend="${menuCode} == 'stdin_d' ? 'on'">입고 조회</a>
 		</li>
 	</ul>
 

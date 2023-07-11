@@ -54,7 +54,7 @@ public class AdminController {
 	/** userManage S */
 	@GetMapping("/userManage")
 	public String userManage(Model model) {
-		commonProcess(model);
+		commonProcess(model, "userManage", "사용자관리");
 		List<UserVO> userList = userDAO.getUserList();
 
 		model.addAttribute("userList", userList);
@@ -118,7 +118,7 @@ public class AdminController {
 	/** clntManage S */
 	@GetMapping("/clntManage")
 	public String clntManage(Model model) {
-		commonProcess(model, "clntManage");
+		commonProcess(model, "clntManage", "고객사관리");
 		List<ClntVO> clntList = clntDAO.getClntList();
 
 		model.addAttribute("clntList", clntList);
@@ -166,7 +166,7 @@ public class AdminController {
 	/** custManage S */
 	@GetMapping("/custManage")
 	public String custManage(Model model) {
-		commonProcess(model, "custManage");
+		commonProcess(model, "custManage", "납품처관리");
 		List<CustVO> custList = custDAO.getCustList();
 
 		model.addAttribute("custList", custList);
@@ -213,7 +213,7 @@ public class AdminController {
 	/** custCtrManage S */
 	@GetMapping("/custCtrManage")
 	public String custCtrManage(Model model) {
-		commonProcess(model, "custCtrManage");
+		commonProcess(model, "custCtrManage", "납품센터관리");
 		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();
 		System.out.println(custCtrList);
 
@@ -270,16 +270,16 @@ public class AdminController {
 
 	/** commonMethod S */
 	private void commonProcess(Model model) {
-		commonProcess(model, "userManage");
+		commonProcess(model, "userManage", null);
 	}
 
-	private void commonProcess(Model model, String menuCode) {
-		String Title = "관리자::사용자관리";
+	private void commonProcess(Model model, String menuCode, String Title) {
+		String title = "관리자::"+Title;
 		String pageName = "admin";
 
 		model.addAttribute("menuCode", menuCode);
 		model.addAttribute("pageName", pageName);
-		model.addAttribute("Title", Title);
+		model.addAttribute("Title", title);
 		model.addAttribute("menuCode", menuCode);
 	}
 	/** commonMethod E*/

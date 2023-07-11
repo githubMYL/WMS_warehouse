@@ -57,11 +57,13 @@ public class StdinValidator implements Validator {
 			errors.rejectValue("locCd", "Validation.null.locCd");
 		}
 
+		/*
 		// 1. 입고일자가 현재 날짜보다 앞선 경우
 		LocalDate stdinDt = stdinForm.getStdinDt();
 		if(stdinDt != null && stdinDt.isBefore(LocalDate.now())) {
 			errors.rejectValue("stdinDt", "Validation.isBefore.stdinDt");
 		}
+		 */
 
 
 		// 2. 고객사, 상품, 로케이션 존재 검증

@@ -10,3 +10,4 @@ public interface RelsDAO {
 
     List<RelsVO> relsList();    // 출고등록 헤더 리스트
 }
+
