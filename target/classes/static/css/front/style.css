@@ -65,7 +65,8 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 .table_wrapper {width: 900px; overflow:auto;}
 .table_wrapper > table { width: 100%; border-spacing: 0; padding: 0; margin-bottom: 20px; white-space:nowrap; }
 .table_wrapper th { background: #f8f8f8; width: 160px; padding: 10px 20px; text-align: left; }
-.table_wrapper td { background: #fff; padding: 10px 15px; }
+.table_wrapper tr { background: #fff; padding: 10px 15px; }
+.table_wrapper td { background: inherit; padding: 10px 15px; }
 
 /** 출고 테이블 */
 .table_rels_wrapper {width: 900px; height: 330px; overflow:auto;}
@@ -73,7 +74,9 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 .table_rels_wrapper th { background: #f8f8f8; width: 160px; padding: 10px 20px; text-align: left; }
 .table_rels_wrapper td { background: #fff; padding: 10px 15px; }
 /** 출고 헤더고정 */
-#relsTable th { position: sticky; top: 0px; align:center; !important; }
+#relsHTable th { position: sticky; top: 0px; !important; }
+#relsDTable th { position: sticky; top: 0px; !important; }
+#relsSTable th { position: sticky; top: 0px; !important; }
 
 .table-cols {margin-bottom:20px;}
 
