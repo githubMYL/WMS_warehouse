@@ -52,7 +52,7 @@
         <table class="table-cols">
             <tr>
                 <th align="center">
-                    <input th:type="checkbox" name="chkAll">
+                    <input th:type="checkbox" id="chkAll" name="chkAll">
                 </th>
                 <th>순번</th>
                 <th>물류센터명</th>
@@ -81,11 +81,12 @@
         </table>
     </div>
     <script>
+            // 추가
             function add() {
                 url = '/baseinfo/iteminfo/register';
                 warehouse.popup.open(url, '상품정보 추가', 500, 600, true);
             };
-
+            // 더블클릭 수정
             document.addEventListener('DOMContentLoaded', function() {
 				const trs = document.querySelectorAll('tr');
 				trs.forEach( (tr) => {
@@ -102,14 +103,33 @@
 				warehouse.popup.open(url, "상품정보 수정", 500, 800, true);
 			}
 
+            var chks = document.getElementsByName("chk");
+
+            chks.forEach(element => element.addEventListener('click', function(e){
+
+                alert(e.target.checked);
+                if(e.target.checked == true){
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
+                }else {
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
+                }
+            }));
+
+            // 모든 체크박스 체크
             document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
                 e.preventDefault();
                 var list = document.querySelectorAll("input[name=chk]");
                 for (var i = 0; i < list.length; i++) {
                     list[i].checked = this.checked;
+                    if(this.checked == true){
+                        list[i].parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
+                    }else if(this.checked == false) {
+                        list[i].parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
+                    }
                 }
             });
 
+            // 체크된 데이터 삭제
             function deleteItem(e){
 
                 // 체크된 값 가져오기
@@ -129,13 +149,6 @@
 						console.error(err);
 					});
             }
-
-<!--            function rowClick() {-->
-<!--                // 현재 클릭된 Row(<tr>)-->
-<!--                var checkbox = $(this).find('td:chk :checkbox');-->
-<!--                checkbox.attr('checked', !checkbox.is(':checked'));-->
-<!--            };-->
-
         </script>
 </section>
 </html>
