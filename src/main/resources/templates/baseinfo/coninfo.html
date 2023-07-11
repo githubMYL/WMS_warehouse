@@ -15,7 +15,7 @@
 			<tr>
 				<th>고객사명</th>
 				<td>
-					<!--                        <input type="text" th:field="*{clntNm}" id="clntNmSrch">-->
+					<input type="text" th:field="*{clntNm}" id="clntNmSrch">
 				</td>
 			</tr>
 		</table>
@@ -44,8 +44,8 @@
                 location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
             }
         </script>
-	<div class="table_Wrapper">
-		<table class="table-cols">
+	<div class="table_wrapper">
+		<table>
 			<tr>
 				<th th:align="center">
 					<input th:type="checkbox">
