@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <aside th:fragment="menu" th:switch="${pageName}">
+
+	<!-- 기본정보 사이드 탭 -->
 	<ul th:case="baseinfo">
 		<li>
 			<a th:href="@{/baseinfo/iteminfo}" th:classappend="${menuCode} == 'iteminfo' ? 'on'">
@@ -29,6 +31,8 @@
 		</li>
 	</ul>
 
+
+
 	<ul th:case="stdin">
 		<li>
 			<a th:href="@{/stdin}" th:classappend="${menuCode} == 'stdin_h' ? 'on'">입고 등록/상세내역</a>
@@ -38,6 +42,7 @@
 		</li>
 	</ul>
 
+<<<<<<< HEAD
 	<!-- 출고 사이드 탭 -->
 	<ul th:case="rels">
 		<li>
@@ -50,18 +55,40 @@
 			<a>출고조회</a>
 		</li>
 	</ul>
+=======
+>>>>>>> 98786d88b8c83a8f0b556e833dc7b26194930d03
 
 	<!-- 재고 사이드 탭 -->
-	<ul th:case="tmstk">
+	<ul th:case="stock">
 		<li>
-			<a th:href="@{/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
+			<a th:href="@{/stock/stkadj}" th:classappend="${menuCode} == 'stkadj' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고조정
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/stktransf}" th:classappend="${menuCode} == 'stktransf' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고이동
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
 				<i class="xi-view-list"></i>
 				시점재고
 			</a>
 		</li>
 		<li>
-			<a>일수불</a>
+			<a th:classappend="${menuCode} == 'dlycnp' ? 'on'">
+				<i class="xi-view-list"></i>
+				일수불
+			</a>
 		</li>
 	</ul>
+
+
+
+
+
 </aside>
 </html>

@@ -18,4 +18,6 @@ public interface LocDAO {
 
 	void modLoc(LocVO loc); 				// 수정
 	LocVO getLocByCd(@Param("loc_cd")String locCd);	// 로케이션 코드에 따른 로케이션 정보 가져오기
+
+	List<LocVO> getLocListByWactrCd(String wactrCd);
 }

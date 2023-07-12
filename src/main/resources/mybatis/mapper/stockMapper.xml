@@ -30,13 +30,12 @@
 	</update>
 
 	<select id="tmstkList" resultType="org.warehouse.models.stock.TmstkVO">
-		select w.wactr_nm , c.clnt_nm , l.loc_cd , i.item_cd , i.item_nm , t.* from tmstk t
-		join wactr w on w.wactr_cd = t.wactr_cd
-		join clnt c on c.clnt_cd = t.clnt_cd
-		join loc l on l.loc_cd = t.loc_cd
-		join item i on i.item_cd = t.item_cd
-		where t.del_yn = 'N'
-		ORDER BY t.REG_DT DESC
+		SELECT T.*, W.WACTR_NM, C.CLNT_NM, I.ITEM_NM  FROM TMSTK T LEFT OUTER JOIN WACTR W ON T.WACTR_CD = W.WACTR_CD
+			LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
+			LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
+			LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
+		WHERE L.WACTR_CD = W.WACTR_CD
+		ORDER BY T.REG_DT DESC
 	</select>
 
 	<!-- 검색 조건 -->
