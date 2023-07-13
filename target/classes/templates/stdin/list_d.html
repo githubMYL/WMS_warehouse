@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/front/main}">
+
+<section layout:fragment="content">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<table class="table-cols">
+			<tr>
+				<th>입고일자</th>
+				<td>
+					<input type="date" name="stdinDt" placeholder="입고일자">
+				</td>
+
+				<th>고객사 명</th>
+				<td>
+					<input type="text" name="clntNm" placeholder="고객사 명">
+				</td>
+
+
+				<th>상품코드</th>
+				<td>
+					<input type="text" name="itemCd" placeholder="상품코드">
+				</td>
+
+				<th>상품명</th>
+				<td style="padding-right: 0;" >
+					<input type="text" name="itemNm" placeholder="상품명">
+				</td>
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button type="button" id="ajax_btn" class="sbtn">검색</button>
+		</div>
+	</form>
+	<script>
+		var btn = document.getElementById("ajax_btn");
+		btn.addEventListener("click", () => {
+			var trEl = document.getElementsByName("stdinDt");
+			var trEl2 = document.getElementsByName("clntNm");
+			var trEl3 = document.getElementsByName("itemCd");
+			var trEl4 = document.getElementsByName("itemNm");
+
+			const stdinDt = trEl[0].value;
+			const clntNm = trEl2[0].value;
+			const itemCd = trEl3[0].value;
+			const itemNm = trEl4[0].value;
+
+			const params = { stdinDt, clntNm, itemCd, itemNm };
+
+			const url = `ajaxstdin/detail/search?stdinDt=${stdinDt}&clntNm=${clntNm}&itemCd=${itemCd}&itemNm=${itemNm}`;
+				commonLib.ajaxLoad(url)
+				.then((data) => {
+					var search = document.getElementById("search");
+					search.innerHTML='';
+					console.log(data);
+
+					data = JSON.parse(data);
+					var str = '';
+					for(var i = 0; i < data.length; i++) {
+						str += "<tr>";
+						str += "<td>"+(i+1)+"</td>";
+						str += "<td>"+data[i].stdinDt+"</td>";
+						str += "<td>"+data[i].clntCd+"</td>";
+						str += "<td>"+data[i].clntNm+"</td>";
+						str += "<td>"+data[i].itemCd+"</td>";
+						str += "<td>"+data[i].itemNm+"</td>";
+						str += "<td>"+data[i].locCd+"</td>";
+						str += "<td>"+data[i].beforeStdin+"</td>";
+						str += "<td>"+data[i].normal+"</td>";
+						str += "<td>"+data[i].fault+"</td>";
+						str += "<td>"+data[i].remark+"</td>";
+						str += '</tr>'
+					}
+					search.innerHTML=str;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			});
+	</script>
+
+	<div class="table_wrapper">
+		<table id="stdin_d_table">
+			<tr>
+				<th>순번</th>
+				<th>입고일자</th>
+				<th>고객사코드</th>
+				<th>고객사명</th>
+				<th>상품코드</th>
+				<th>상품명</th>
+				<th>로케이션</th>
+				<th>입고예정수량</th>
+				<th>정상수량</th>
+				<th>불량수량</th>
+				<th>비고</th>
+			</tr>
+			<tbody id="search">
+			<tr th:each="stdin, stdinCount : ${detailList}" id="stdin_d_infos">
+				<td th:text="${stdinCount.count}"></td>
+				<td th:text="${stdin.stdinDt}"></td>
+				<td th:text="${stdin.clntCd}"></td>
+				<td th:text="${stdin.clntNm}"></td>
+				<td th:text="${stdin.itemCd}"></td>
+				<td th:text="${stdin.itemNm}"></td>
+				<td th:text="${stdin.locCd}"></td>
+				<td th:text="${stdin.beforeStdin}"></td>
+				<td th:text="${stdin.normal}"></td>
+				<td th:text="${stdin.fault}"></td>
+				<td th:text="${stdin.remark}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/front/main}">
+
+    <section layout:fragment="content">
+        <script>
+            function add(){
+                url = '/baseinfo/coninfo/register';
+                warehouse.popup.open(url, '계약정보추가', 500, 600, true);
+            };
+        </script>
+        <form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
+            <table class="table-cols">
+                <tr>
+                    <th>고객사명</th>
+                    <td>
+                        <input type="text" th:field="*{clntNm}" id="clntNmSrch">
+                    </td>
+                </tr>
+            </table>
+            <div class="btns" th:align="right">
+                <button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
+                <button class="sbtn" th:onclick="add()" th:text="#{add_btn}"></button>
+                <button class="sbtn blue" th:onclick="deleteCon()" th:text="#{delete_btn}"></button>
+            </div>
+        </form>
+        <div class="table_wrapper">
+            <table class="table-cols">
+                <tr>
+                    <th th:align="center">
+                        <input th:type="checkbox" id="chkAll" name="chkAll">
+                    </th>
+                    <th>순번</th>
+                    <th>고객사명</th>
+                    <th>월미니멈</th>
+                    <th>파렛트보관료</th>
+                    <th>거래시작일</th>
+                    <th>거래만료일</th>
+                    <th>비고</th>
+                </tr>
+                <tr th:each="conInfo, rowCount : ${conInfoList}">
+                    <td th:align="center">
+                        <input th:type="checkbox" name="chk" id="chk" th:value="${conInfo.no}">
+                    </td>
+                    <td th:text="${rowCount.count}"></td>
+                    <td th:text="${conInfo.clntCd}"></td>
+                    <td th:text="${conInfo.clntNm}"></td>
+                    <td th:text="${conInfo.MMin}"></td>
+                    <td th:text="${conInfo.pltFee}"></td>
+                    <td th:text="${conInfo.transSdt}"></td>
+                    <td th:text="${conInfo.transEdt}"></td>
+                    <td th:text="${conInfo.remark}"></td>
+                </tr>
+            </table>
+            <script>
+                // 더블클릭 이벤트
+                document.addEventListener('DOMContentLoaded', function() {
+                    const trs = document.querySelectorAll('tr');
+                    trs.forEach( (tr) => {
+                        tr.addEventListener('dblclick', editForm)
+                    });
+                });
+
+                function editForm(e) {
+                    console.log(e.target);
+                    var tr = e.target.parentNode;
+                    var keyVal = tr.querySelector('#chk').value;
+
+                    url = '/baseinfo/coninfo/' + keyVal + '/update';
+                    warehouse.popup.open(url, "계약정보 수정", 500, 600, true);
+                }
+                // 페이지 이동
+                function movePage(page) {
+
+                    // 검색조건을 form 에 넣어줌
+                    const form = document.getElementById('searchForm');
+
+                    // form 에 들어있는 검색조건을 queryParams 에 넣어줌.
+                    const queryParams = {
+                        page : (page) ? page : 1,
+                        recordSize : 10,
+                        pageSize : 10,
+                        clntNm : form.clntNmSrch.value
+                    }
+                    // location.pathName :: 페이지의 URI 를 의미함
+                    // new URLSearchParams(queryParams).toString() :: queryParams 의 모든 값을 쿼리스트링으로 변환
+                    location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+                }
+
+                function deleteCon(e){
+
+                    // 체크된 값 가져오기
+                    var checkbox = document.querySelectorAll("input[name=chk]:checked");
+                    var chkArr = [];
+                    checkbox.forEach(function (chkData){
+                        chkArr.push(chkData.value.replaceAll(",", ""));
+                    });
+
+                    const url = `/baseinfo/coninfo/deleteCon?chkArr=${chkArr}`;
+                    commonLib.ajaxLoad(url)
+                        .then((data) => {
+                            console.log(data);
+                            location.reload();
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                }
+            </script>
+        </div>
+    </section>
+</html>

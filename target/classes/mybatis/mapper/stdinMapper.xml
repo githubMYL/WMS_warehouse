@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.StdinDAO">
+	<resultMap id="stdinMap" type="org.warehouse.models.stdin.StdinVO">
+		<result property="stdinDt" column="STDIN_DT" />
+		<result property="stdinNum" column="STDIN_NUM" />
+		<result property="stdinNo" column="STDIN_NO" />
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="status" column="STATUS" />
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
+		<result property="locCd" column="LOC_CD" />
+		<result property="wactrCd" column="WACTR_CD" />
+		<result property="beforeStdin" column="BEFORE_STDIN" />
+		<result property="normal" column="NORMAL" />
+		<result property="fault" column="FAULT" />
+		<result property="stdin_after_amt" column="STDIN_AFTER_AMT" />
+		<result property="stdin_fault" column="STDIN_FAULT" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+
+		<result property="itemNm" column="ITEM_NM" />
+	</resultMap>
+
+	<insert id="insertHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		INSERT INTO STDIN_H H(H.STDIN_DT, H.STDIN_NUM, H.CLNT_CD, H.STATUS, H.REMK, H.REG_DT, H.REG_NM) VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd}, #{status}, #{remark}, SYSDATE, #{regNm})
+	</insert>
+
+	<insert id="insertDetailStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		INSERT INTO STDIN_D D(D.STDIN_NO, D.STDIN_DT, D.STDIN_NUM, D.ITEM_CD, D.CLNT_CD, D.LOC_CD, D.WACTR_CD, D.BEFORE_STDIN, D.NORMAL, D.FAULT, D.REMK, D.REG_DT, D.REG_NM) VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{normal}, #{fault}, #{remark}, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="updateHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		UPDATE STDIN_H H SET
+			H.STDIN_DT = #{stdinDt},
+			H.CLNT_CD = #{clntCd},
+			H.STATUS = #{status},
+			H.REMK = #{remark},
+			H.MOD_DT = SYSDATE,
+			H.MOD_NM = #{modNm},
+			<choose>
+				<when test="delyn == true">
+					H.DEL_YN = 'Y'
+					WHERE H.STDIN_NUM = #{stdinNum}
+				</when>
+				<when test="delyn == false">
+					H.DEL_YN = 'N'
+					WHERE H.STDIN_NUM = #{stdinNum}
+				</when>
+			</choose>
+	</update>
+
+	<update id="updateDetailStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		UPDATE STDIN_D D SET
+			D.STDIN_DT= #{stdinDt},
+			D.ITEM_CD = #{itemCd},
+			D.CLNT_CD = #{clntCd},
+			D.LOC_CD = #{locCd},
+			D.WACTR_CD = #{wactrCd},
+			D.BEFORE_STDIN = #{beforeStdin},
+			D.NORMAL = #{normal},
+			D.FAULT = #{fault},
+			D.REMK = #{remark},
+			D.MOD_DT = SYSDATE,
+			D.MOD_NM = #{modNm},
+			<choose>
+				<when test="delyn == true">
+					D.DEL_YN = 'Y'
+					WHERE D.STDIN_NUM = #{stdinNum}
+				</when>
+				<when test="delyn == false">
+					D.DEL_YN = 'N'
+					WHERE D.STDIN_NUM = #{stdinNum}
+				</when>
+			</choose>
+	</update>
+
+
+
+	<select id="getList" resultMap="stdinMap">
+		SELECT H.STDIN_NUM, H.STDIN_DT, C.CLNT_CD, C.CLNT_NM, H.STATUS FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD WHERE H.DEL_YN = 'N' ORDER BY STDIN_DT
+	</select>
+
+	<select id="getDetailList" resultMap="stdinMap">
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		WHERE D.DEL_YN = 'N' AND H.STATUS = '2'
+		ORDER BY D.STDIN_DT
+	</select>
+
+	<select id="getDetailListByConditions" resultMap="stdinMap">
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		<where>
+			<if test="stdinDt != null">
+				H.STDIN_DT = #{stdinDt}
+			</if>
+			<if test="clntNm != ''">
+				AND C.CLNT_NM LIKE '%'||#{clntNm}||'%'
+			</if>
+			<if test="itemCd != ''">
+				AND I.ITEM_CD LIKE '%'||#{itemCd}||'%'
+			</if>
+			<if test="itemNm != ''">
+				AND I.ITEM_NM LIKE '%'||#{itemNm}||'%'
+			</if>
+			AND D.DEL_YN = 'N'
+		</where>
+	</select>
+
+
+	<select id="getDetail" resultMap="stdinMap">
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		WHERE D.STDIN_NUM = #{stdinNum}
+	</select>
+
+	<select id="getListByConditions" resultMap="stdinMap">
+		SELECT * FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD
+		<where>
+			<if test="stdinDt != null">
+				H.STDIN_DT = #{stdinDt}
+			</if>
+			<if test="clntNm != ''">
+				AND C.CLNT_NM LIKE '%'||#{clntNm}||'%'
+			</if>
+			<if test="status != ''">
+				AND H.STATUS = #{status}
+			</if>
+		</where>
+	</select>
+
+	<update id="deleteHeaderStdin">
+		UPDATE STDIN_H SET DEL_YN = 'Y' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
+	<update id="deleteDetailStdin">
+		UPDATE STDIN_D SET DEL_YN = 'Y' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
+	<update id="confirmItems">
+		UPDATE STDIN_H SET STATUS = '2' WHERE STDIN_NUM = #{stdinNum}
+	</update>
+
+</mapper>
+

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.CustCtrDAO">
+	<resultMap id="custCtrMap" type="org.warehouse.models.admin.custctr.CustCtrVO">
+		<result property="custCtrCd" column="CUST_CTR_CD" />
+		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
+		<result property="custCtrNm" column="CUST_CTR_NM" />
+		<result property="custCtrAddr" column="CUST_CTR_ADDR" />
+		<result property="custCtrTel" column="CUST_CTR_TEL" />
+		<result property="manager" column="MANAGER" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+	</resultMap>
+
+	<insert id="insertCustCtr" parameterType="org.warehouse.models.admin.custctr.CustCtrVO">
+		INSERT INTO CUST_CTR(CUST_CTR_CD, CUST_CD, CUST_CTR_NM, CUST_CTR_ADDR, CUST_CTR_TEL, MANAGER, REMK, REG_DT, REG_NM)
+			VALUES(#{custCtrCd}, #{custCd}, #{custCtrNm}, #{custCtrAddr}, #{custCtrTel}, #{manager}, #{remark}, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="updateCustCtr" parameterType="org.warehouse.models.admin.custctr.CustCtrVO">
+		UPDATE CUST_CTR SET
+			CUST_CTR_ADDR = #{custCtrAddr},
+			CUST_CTR_TEL = #{custCtrTel},
+			MANAGER = #{manager},
+			REMK = #{remark},
+			MOD_DT = SYSDATE,
+			MOD_NM = #{modNm}
+		WHERE CUST_CTR_CD = #{custCtrCd} AND CUST_CD = #{custCd}
+	</update>
+
+	<update id="deleteCustCtr">
+		UPDATE CUST_CTR SET
+			DEL_YN = 'Y',
+			MOD_DT = SYSDATE,
+			MOD_NM = #{modNm}
+		WHERE CUST_CTR_CD = #{custCtrCd}
+	</update>
+
+	<select id="getCustCtrList" resultMap="custCtrMap">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		SELECT C.CUST_CD, C.CUST_NM, CC.* FROM CUST_CTR CC LEFT OUTER JOIN CUST C ON C.CUST_CD = CC.CUST_CD WHERE CC.DEL_YN = 'N' ORDER BY CUST_CTR_CD
+	</select>
+
+	<select id="getCustCtrListByCustCd" resultMap="custCtrMap">
+
+		SELECT * FROM CUST_CTR WHERE CUST_CD=#{custCd}
+
+	</select>
+
+	<select id="getCustCtrByCustCdCustCtrNm" resultMap="custCtrMap">
+		SELECT * FROM CUST_CTR WHERE CUST_CD=#{custCd} AND CUST_CTR_NM=#{custCtrNm}
+	</select>
+
+	<select id="getListByCustNmCustCtrNm" resultMap="custCtrMap">
+		SELECT * FROM CUST_CTR CC LEFT OUTER JOIN CUST C ON C.CUST_CD = CC.CUST_CD
+		<where>
+			<if test="custNm != ''">
+				C.CUST_NM LIKE '%'||#{custNm}||'%'
+			</if>
+			<if test="custCtrNm != ''">
+				AND CC.CUST_CTR_NM LIKE '%'||#{custCtrNm}||'%'
+			</if>
+			AND CC.DEL_YN = 'N'
+		</where>
+	</select>
+
+	<select id="getCustCtrByCd" resultMap="custCtrMap">
+		SELECT * FROM CUST_CTR CC LEFT OUTER JOIN CUST C ON C.CUST_CD = CC.CUST_CD WHERE CC.CUST_CD = #{custCd} AND CC.CUST_CTR_CD = #{custCtrCd}
+	</select>
+
+	<select id="getCustCtrByNm" resultMap="custCtrMap">
+		SELECT * FROM CUST_CTR WHERE CUST_CTR_NM = #{custCtrNm}
+	</select>
+
+</mapper>

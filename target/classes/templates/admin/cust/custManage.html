@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/admin/main}">
+
+<section layout:fragment="content">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<table class="table-cols" id="custSearch">
+			<tr>
+				<th>납품처 명</th>
+				<td>
+					<input type="text" name="custNm" placeholder="납품처 명">
+				</td>
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button type="button" id="ajax_btn" class="sbtn">검색</button>
+			<button type="button" id="add" class="sbtn">추가</button>
+			<button type="button" id="del" class="sbtn blue">삭제</button>
+		</div>
+	</form>
+
+	<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const ajax_btn = document.getElementById('ajax_btn');
+				const add = document.getElementById('add');
+				const del = document.getElementById('del');
+				const trs = document.querySelectorAll('tr');
+
+				ajax_btn.addEventListener("click", search);
+				add.addEventListener("click", addItem);
+				del.addEventListener("click", deleteItem);
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', updateTable)
+				});
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
+			});
+
+
+			function addItem(e) {
+				url = 'custManage/register';
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			}
+
+			function search() {
+				var trEl = document.getElementsByName("custNm");
+
+				var custNm = trEl[0].value;
+
+				const params = { custNm };
+				const url = `ajaxadmin/custSearch?custNm=${custNm}`;
+
+				commonLib.ajaxLoad(url)
+				.then((data) => {
+					var search = document.getElementById("search");
+					search.innerHTML='';
+					console.log(data);
+
+					data = JSON.parse(data);
+					var str = '';
+					for(var i = 0; i < data.length; i++) {
+						str += "<tr id='cust_infos'>";
+						str += "<td><input type='checkbox' name='check' data-custcd=" + data[i].custCd +" th:value=" + data[i].custCd + " id='chk'></td>";
+						str += "<td>"+(i+1)+"</td>";
+						str += "<td>"+data[i].custCd+"</td>";
+						str += "<td>"+data[i].custNm+"</td>";
+						str += "<td>"+data[i].busiNum+"</td>";
+						str += "<td>"+data[i].custTel+"</td>";
+						str += "<td>"+data[i].ownerNm+"</td>";
+						str += "<td>"+data[i].busiAddr+"</td>";
+						str += "<td>"+data[i].remark+"</td>";
+						str += '</tr>'
+					}
+					search.innerHTML=str;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			};
+
+			function deleteItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log("data" + chk_data);
+
+				const url = `ajaxadmin/custDelete?custCd=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateTable(e) {
+				const event_tr = e.target.parentNode;
+				const input = event_tr.querySelector('td input');
+				const custcd = input.dataset.custcd;
+
+				url = 'custManage/update/' + custcd;
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			};
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("chk");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+				}
+			}
+		</script>
+
+	<div class="table_wrapper">
+		<table id="cust_table">
+			<tr>
+				<th>
+					<input type="checkbox" id="chkAll">
+				</th>
+				<th>순번</th>
+				<th>납품처 코드</th>
+				<th>납품처 명</th>
+				<th>사업자번호</th>
+				<th>연락처</th>
+				<th>대표자 명</th>
+				<th>납품처 주소</th>
+				<th>비고</th>
+			</tr>
+			<tbody id="search">
+			<tr th:each="cust, custCount : ${custList}" id="cust_infos">
+				<td>
+					<input type="checkbox" name="chk" th:value="${cust.custCd}" id="chk"  th:data-custcd="${cust.custCd}">
+				</td>
+				<td th:text="${custCount.count}"></td>
+				<td th:text="${cust.custCd}"></td>
+				<td th:text="${cust.custNm}"></td>
+				<td th:text="${cust.busiNum}"></td>
+				<td th:text="${cust.custTel}"></td>
+				<td th:text="${cust.ownerNm}"></td>
+				<td th:text="${cust.busiAddr}"></td>
+				<td th:text="${cust.remark}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+</html>

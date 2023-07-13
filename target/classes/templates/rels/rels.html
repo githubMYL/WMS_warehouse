@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/front/main}">
+
+<section layout:fragment="content">
+	<div class="table_rels_wrapper">
+		<table id="relsTable" class="table-cols">
+			<tr>
+				<th align="center">
+					<input type="checkbox">
+				</th>
+				<th>순번</th>
+				<th>출고일자</th>
+				<th>고객사코드</th>
+				<th>고객사명</th>
+				<th>진행상태</th>
+				<!-- th>확정일자</th -->
+				<th>비고</th>
+			</tr>
+			<tr th:each="relsData, rowCnt : ${relsList}">
+				<td align="center">
+					<input type="checkbox">
+				</td>
+				<td align="center" th:text="${rowCnt.count}"></td>
+				<td align="center" th:text="${relsData.relsDt}"></td>
+				<td align="center" th:text="${relsData.clntCd}"></td>
+				<td th:text="${relsData.clntNm}"></td>
+				<td align="center" th:text="${relsData.status}"></td>
+				<!-- td th:text="${relsData.confDt}"></td -->
+				<td th:text="${relsData.remk}"></td>
+			</tr>
+		</table>
+	</div>
+	<br/>
+	<div class="table_rels_wrapper">
+		<table id="relsTable" class="table-cols">
+			<tr>
+				<th align="center">
+					<input type="checkbox">
+				</th>
+				<th>순번</th>
+				<th>출고일자</th>
+				<th>고객사코드</th>
+				<th>고객사명</th>
+				<th>진행상태</th>
+				<!-- th>확정일자</th -->
+				<th>비고</th>
+			</tr>
+			<tr th:each="relsData, rowCnt : ${relsList}">
+				<td align="center">
+					<input type="checkbox">
+				</td>
+				<td align="center" th:text="${rowCnt.count}"></td>
+				<td align="center" th:text="${relsData.relsDt}"></td>
+				<td align="center" th:text="${relsData.clntCd}"></td>
+				<td th:text="${relsData.clntNm}"></td>
+				<td align="center" th:text="${relsData.status}"></td>
+				<!-- td th:text="${relsData.confDt}"></td -->
+				<td th:text="${relsData.remk}"></td>
+			</tr>
+		</table>
+	</div>
+	<br/>
+	<div class="table_rels_wrapper">
+		<table id="relsTable" class="table-cols">
+			<tr>
+				<th align="center">
+					<input type="checkbox">
+				</th>
+				<th>순번</th>
+				<th>출고일자</th>
+				<th>고객사코드</th>
+				<th>고객사명</th>
+				<th>진행상태</th>
+				<!-- th>확정일자</th -->
+				<th>비고</th>
+			</tr>
+			<tr th:each="relsData, rowCnt : ${relsList}">
+				<td align="center">
+					<input type="checkbox">
+				</td>
+				<td align="center" th:text="${rowCnt.count}"></td>
+				<td align="center" th:text="${relsData.relsDt}"></td>
+				<td align="center" th:text="${relsData.clntCd}"></td>
+				<td th:text="${relsData.clntNm}"></td>
+				<td align="center" th:text="${relsData.status}"></td>
+				<!-- td th:text="${relsData.confDt}"></td -->
+				<td th:text="${relsData.remk}"></td>
+			</tr>
+		</table>
+	</div>
+</section>
+</html>

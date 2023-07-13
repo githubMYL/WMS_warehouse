@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <style>
+    span{
+    font-weight:bold;
+    font-size:18px;
+    }
+    div{
+    margin-bottom:5px;
+    }
+     .errors{
+    font-size:12px;
+    color:red;
+    }
+    </style>
+
+
+    <script>
+        function closelayer(){
+        var parent = window.parent.document
+        var layerDim = parent.getElementById('layer_dim');
+        var layerPopup = parent.getElementById('layer_popup');
+        parent.body.removeChild(layerDim);
+        parent.body.removeChild(layerPopup);
+        parent.location.reload();
+        }
+    </script>
+</head>
+
+<main layout:fragment="content">
+
+
+    <form name="locMod" method="post" th:action="@{/baseinfo/locMod/update}"  th:object="${locVO}" align="center"  autocomplete="off">
+
+        <div>
+            <div><span>물류센터 명 : </span></div>
+            <input type="hidden" name="ori_loc_cd" th:value="${locVO.loc_cd}">
+            <!--            <input type="hidden" id="wactr_cd" name="wactr_cd" th:value="*{wactr_cd}">-->
+            <input type="hidden" id="wactr_cd" name="wactr_cd" th:field="*{wactr_cd}" >
+            <input type="text" list="wactr" id="wactr_nm" th:field="*{wactr_nm}" />
+            <datalist id="wactr">
+                <select id="wactr_sel" class="inline-option-label">
+                    <option th:each="wactr : ${wactr_list}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
+                    </option>
+                </select>
+            </datalist>
+        </div>
+
+        <script>
+
+			document.addEventListener('DOMContentLoaded', function() {
+				const wactr = document.getElementById("wactr_nm");
+
+				var selected = document.querySelector("select#wactr_sel")
+
+				wactr.addEventListener("change", UpdateWactr)
+			});
+
+
+			function UpdateWactr(e) {
+
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#wactr_sel")
+				var datalist = evnt.list;
+				var wactr_cd = document.getElementById("wactr_cd");
+
+                console.log(wactr_cd.value);
+
+				for(var j = 0; j < datalist.options.length; j++){
+					if(this.value == datalist.options[j].value) {
+						wactr_cd.value = datalist.options[j].label;
+
+					}
+				}
+			}
+		</script>
+
+        <div>
+            <div><span>로케이션 이름 : </span></div>
+            <input type="text" name="loc_nm" th:field="*{loc_nm}">
+            <div class="errors"th:each="err : ${#fields.errors('loc_nm')}" th:text="${err}"></div>
+        </div>
+
+        <div>
+            <div><span>로케이션 주소 : </span></div>
+            <input type="text" name="loc_addr" onclick="mod_loc()" th:field="*{loc_addr}" >
+            <div class="errors"th:each="err : ${#fields.errors('loc_addr')}" th:text="${err}"></div>
+
+        </div>
+
+
+        <div>
+            <div><span>랙 수 : </span></div>
+            <input type="text" name="rac_num"  th:field="*{rac_num}" >
+            <div class="errors"th:each="err : ${#fields.errors('rac_num')}" th:text="${err}"></div>
+
+        </div>
+
+        <div>
+            <div><span>비고</span></div>
+            <textarea rows="5" cols="22" name="remk" th:field="*{remk}" th:text="*{remk}"></textarea>
+        </div>
+
+        <button type="submit" th:text="#{loc.action.update}"></button>
+        <button type="button" onClick="closelayer()">취소</button>
+    </form>
+
+
+
+</main>
+</html>

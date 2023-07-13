@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<th:block th:fragment="custForm" th:object="${custForm}">
+		<div>
+			<dt th:text="#{custCd}" class="require_item"></dt>
+			<input type="text" name="custCd" th:field="*{custCd}" th:placeholder="#{custCd}">
+			<div class="errors" th:each="err : ${#fields.errors('custCd')}" th:text="${err}"></div>
+		</div>
+		<div>
+			<dt th:text="#{custNm}" class="require_item"></dt>
+			<input type="text" name="custNm" th:field="*{custNm}" th:placeholder="#{custNm}">
+			<div class="errors" th:each="err : ${#fields.errors('custNm')}" th:text="${err}"></div>
+		</div>
+		<div>
+			<dt th:text="#{busiNum}" class="require_item"></dt>
+			<input type="text" name="busiNum" th:field="*{busiNum}" th:placeholder="#{busiNum}">
+			<div class="errors" th:each="err : ${#fields.errors('busiNum')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{custTel}" class="require_item"></dt>
+			<input type="text" name="custTel" th:field="*{custTel}" th:placeholder="#{custTel}">
+		</div>
+
+		<div>
+			<dt th:text="#{ownerNm}" class="require_item"></dt>
+			<input type="text" name="ownerNm" th:field="*{ownerNm}" th:placeholder="#{ownerNm}">
+		</div>
+
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script>
+			function execDaumPostcode() {
+				new daum.Postcode( {
+					oncomplete: function( data ) {
+						console.log(data);
+						var addr = document.getElementById("addr");
+						addr.value=data.address;
+						addr.focus();
+					}
+				} ).open();
+			}
+		</script>
+		<br>
+		<div>
+			<dt th:text="#{busiAddr}" class="require_item"></dt>
+			<input type="text" style="width:300px;" name="addr" id="addr" th:field="*{busiAddr}" th:placeholder="#{busiAddr}">
+			<input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="sbtn" style="height: 45px;"><br>
+			<div class="errors" th:each="err : ${#fields.errors('busiAddr')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{remark}" class="require_item"></dt>
+			<textarea rows="5" cols="23" name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
+			<div class="errors" th:each="err : ${#fields.errors('remark')}" th:text="${err}"></div>
+		</div>
+	</th:block>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
+		<style>
+			html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+		</style>
+	</head>
+
+
+	<h2>납품처등록 수정</h2>
+	<form name="custForm" method="post" th:action="@{/admin/custManage/save}" autocomplete="off" th:object="${custForm}" class="_form">
+		<input type="hidden" name="flag" th:field="*{flag}" th:value="update">
+
+		<th:block th:replace="~{admin/cust/_custForm::custForm}"></th:block>
+		<br>
+		<div class="btns" style="text-align:center;">
+			<button type="reset" th:text="#{admin.action.reset}" class="sbtn"></button>
+			<button type="submit" th:text="#{admin.action.update}" class="sbtn blue"></button>
+		</div>
+	</form>
+</html>

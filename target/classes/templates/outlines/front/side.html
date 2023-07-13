@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<aside th:fragment="menu" th:switch="${pageName}">
+	<ul th:case="baseinfo">
+		<li>
+			<a th:href="@{/baseinfo/iteminfo}" th:classappend="${menuCode} == 'iteminfo' ? 'on'">
+				<i class="xi-view-list"></i>
+				상품정보
+			</a>
+		</li>
+
+		<li>
+			<a th:href="@{/baseinfo/wactr}" th:classappend="${menuCode} == 'wactr' ? 'on'">
+				<i class="xi-view-list"></i>
+				물류센터정보
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/baseinfo/loc}" th:classappend="${menuCode} == 'loc' ? 'on'">
+				<i class="xi-view-list"></i>
+				로케이션 정보
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/baseinfo/coninfo}" th:classappend="${menuCode} == 'coninfo' ? 'on'">
+				<i class="xi-view-list"></i>
+				계약정보
+			</a>
+		</li>
+	</ul>
+
+	<ul th:case="stdin">
+		<li>
+			<a th:href="@{/stdin}" th:classappend="${menuCode} == 'stdin_h' ? 'on'">입고 등록/상세내역</a>
+		</li>
+		<li>
+			<a th:href="@{/stdin/detail}" th:classappend="${menuCode} == 'stdin_d' ? 'on'">입고 조회</a>
+		</li>
+	</ul>
+
+	<!-- 재고 사이드 탭 -->
+	<ul th:case="tmstk">
+		<li>
+			<a th:href="@{/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
+				<i class="xi-view-list"></i>
+				시점재고
+			</a>
+		</li>
+		<li>
+			<a>일수불</a>
+		</li>
+	</ul>
+</aside>
+</html>

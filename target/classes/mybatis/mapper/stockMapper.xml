@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.StockDAO">
+	<resultMap id="stockMap" type="org.warehouse.models.stock.TmstkVO">
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="locCd" column="LOC_CD" />
+		<result property="wactrCd" column="WACTR_CD" />
+		<result property="stockAmt" column="STOCK_AMT" />
+		<result property="faultAmt" column="FAULT_AMT" />
+		<result property="stdinDt" column="STDIN_DT" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delYn" column="DEL_YN" />
+	</resultMap>
+
+	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
+			VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="updateStdin" parameterType="org.warehouse.models.stdin.StdinVO">
+		UPDATE TMSTK SET
+			STOCK_AMT = #{beforeStdin},
+			FAULT_AMT = #{fault},
+			STDIN_DT = #{stdinDt}
+		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+	</update>
+
+	<select id="tmstkList" resultType="org.warehouse.models.stock.TmstkVO">
+		select w.wactr_nm , c.clnt_nm , l.loc_cd , i.item_cd , i.item_nm , t.* from tmstk t
+		join wactr w on w.wactr_cd = t.wactr_cd
+		join clnt c on c.clnt_cd = t.clnt_cd
+		join loc l on l.loc_cd = t.loc_cd
+		join item i on i.item_cd = t.item_cd
+		where t.del_yn = 'N'
+		ORDER BY t.REG_DT DESC
+	</select>
+
+	<!-- 검색 조건 -->
+	<select id="getSearchList" resultType="org.warehouse.models.stock.TmstkVO" parameterType="String">
+		select w.wactr_nm , c.clnt_nm , l.loc_cd , i.item_cd , i.item_nm , t.* from tmstk t
+		join wactr w on w.wactr_cd = t.wactr_cd
+		join clnt c on c.clnt_cd = t.clnt_cd
+		join loc l on l.loc_cd = t.loc_cd
+		join item i on i.item_cd = t.item_cd
+		where t.del_yn = 'N'
+		<choose>
+			<when test='search_clntNm != "" and search_itemCd == "" and search_itemNm == ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+			</when>
+			<when test='search_clntNm == "" and search_itemCd != "" and search_itemNm == ""'>
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+			</when>
+			<when test='search_clntNm == "" and search_itemCd == "" and search_itemNm != ""'>
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+			<when test='search_clntNm != "" and search_itemCd != "" and search_itemNm == ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+			</when>
+			<when test='search_clntNm != "" and search_itemCd == "" and search_itemNm != ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+			<when test='search_clntNm == "" and search_itemCd != "" and search_itemNm != ""'>
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+			<when test='search_clntNm != "" and search_itemCd != "" and search_itemNm != ""'>
+				and c.clnt_nm like '%'||#{search_clntNm}||'%'
+				and i.item_cd like '%'||#{search_itemCd}||'%'
+				and i.item_nm like '%'||#{search_itemNm}||'%'
+			</when>
+		</choose>
+		ORDER BY t.REG_DT DESC
+	</select>
+	<!-- 검색 조건 -->
+
+	<select id="getTmstkByConditions" resultType="org.warehouse.models.stock.TmstkVO">
+		SELECT * FROM TMSTK
+		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+	</select>
+</mapper>

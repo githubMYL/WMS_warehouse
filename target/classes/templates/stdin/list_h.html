@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/front/main}">
+
+<section layout:fragment="content">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<table class="table-cols">
+			<tr>
+				<th>입고일자</th>
+				<td>
+					<input type="date" name="stdinDt" placeholder="입고일자">
+				</td>
+
+				<th>고객사 명</th>
+				<td>
+					<input type="text" name="clntNm" placeholder="고객사 명">
+				</td>
+
+
+				<th>진행상태</th>
+				<td>
+					<select name="status">
+						<option th:value="01">01 - 등록</option>
+						<option th:value="02">02 - 확정</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button type="button" id="ajax_btn" class="sbtn">검색</button>
+			<button type="button" id="add" class="sbtn">추가</button>
+			<button type="button" id="delete" class="sbtn blue">삭제</button>
+		</div>
+	</form>
+
+	<script>
+			var btn = document.getElementById("ajax_btn");
+
+			btn.addEventListener("click", () => {
+				var trEl = document.getElementsByName("stdinDt");
+				var trEl2 = document.getElementsByName("clntNm");
+				var trEl3 = document.getElementsByName("status");
+
+				var stdinDt = trEl[0].value;
+				var clntNm = trEl2[0].value;
+				var status = trEl3[0].value;
+
+				const params = { stdinDt, clntNm, status };
+
+				const url = `stdin/ajaxstdin/getStdinSearch?stdinDt=${stdinDt}&clntNm=${clntNm}&status=${status}`;
+				commonLib.ajaxLoad(url)
+				.then((data) => {
+					var search = document.getElementById("search");
+					search.innerHTML='';
+					console.log(data);
+
+					data = JSON.parse(data);
+					var str = '';
+					for(var i = 0; i < data.length; i++) {
+						str += "<tr onclick='getDetail(event)'>";
+						str += "<td><input type='checkbox' name='check' data-stdinnum=" + data[i].stdinNum +" th:value=" + data[i].stdinNum + " id='chk'></td>";
+						str += "<td>"+(i+1)+"</td>";
+						str += "<td>"+data[i].stdinDt+"</td>";
+						str += "<td>"+data[i].clntCd+"</td>";
+						str += "<td>"+data[i].clntNm+"</td>";
+						str += "<td>"+data[i].status+"</td>";
+						str += "<td>"+data[i].remark+"</td>";
+						str += '</tr>'
+					}
+					search.innerHTML=str;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			});
+		</script>
+
+	<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const add = document.getElementById("add");
+				add.addEventListener("click", addItem);
+
+				const del = document.getElementById("delete");
+				del.addEventListener("click", deleteItem);
+
+				const trs = document.querySelectorAll('#stdin_h_table tr');
+				trs.forEach( (tr) => {
+					tr.addEventListener('click', getDetail);
+				});
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
+
+				const confirm = document.getElementById("confirm");
+				confirm.addEventListener("click", confirmItem);
+
+				var checkList = document.getElementsByName("check");
+
+				for( chk of checkList) {
+					chk.addEventListener("change", function(e) {
+						if(e.target.checked) {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "red", "important");
+							})
+						}
+						else {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
+					});
+				}
+			});
+
+			function addItem(e) {
+
+				url = 'stdin/register';
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			}
+
+			function deleteItem(e) {
+				var chk = document.getElementsByName("check");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log("data" + chk_data);
+
+				const url = `stdin/ajaxstdin/delete?stdinNum=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++){
+					if(chk[i].checked == true) {
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log(chk_data);
+
+				if(chk_data.length > 1) {
+					alert("수정은 하나씩만 가능합니다.");
+
+				} else if(chk_data.length == 0) {
+					alert("수정할 항목을 선택해주세요.");
+				} else {
+					url = 'wactr/admin/' + chk_data[0] + '/update';
+					warehouse.popup.open(url, "테스트", 500, 800);
+				}
+			}
+
+			function getDetail(e) {
+				const evnt = e.target.parentNode;
+				const stdinNum = evnt.querySelector('#chk').dataset.stdinnum;
+				var stdin_d_table = document.querySelector("#stdin_d_table > tbody");
+				var str = '<tr><th>순번</th><th>상품코드</th><th>상품명</th><th>로케이션</th><th>입고예정수량</th><th>정상수량</th><th>불량수량</th><th>비고</th></tr>';
+
+				str += '<tr id="stdin_d_infos">';
+
+				const url = `/stdin/ajaxstdin/getDetail?stdinNum=${stdinNum}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						data = JSON.parse(data);
+						str += '<td data-status= '+ data.status + ' data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
+						str += '<td>' + data.itemCd + '</td>';
+						str += '<td>' + data.itemNm + '</td>';
+						str += '<td>' + data.locCd + '</td>';
+						str += '<td>' + data.beforeStdin + '</td>';
+						str += '<td>' + data.normal + '</td>';
+						str += '<td>' + data.fault + '</td>';
+						str += '<td>' + data.remark + '</td>';
+						str += '</tr>';
+						stdin_d_table.innerHTML = str;
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateTable() {
+				const td = document.querySelector('#stdin_d_infos td')
+				const stdinnum = td.dataset.stdinnum;
+				const status = td.dataset.status;
+				console.log(status);
+
+				if(status == '1') {
+					url = 'stdin/update/' + stdinnum;
+					warehouse.popup.open(url, "테스트", 500, 800, true);
+				}
+
+
+			};
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("check");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+					if(all.checked) {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "red", "important");
+						})
+					} else {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "white", "important");
+						})
+					}
+
+				}
+			}
+
+			function confirmItem() {
+				var chk = document.getElementsByName("check");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						chk_data.push(chk[i].value);
+					}
+				}
+
+				const url = `stdin/ajaxstdin/confirm?stdinNum=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+		</script>
+	<div class="table_wrapper">
+		<div style="display: flex; justify-content: space-between;align-items: center;">
+			<div>
+				<h1>입고 헤더</h1>
+			</div>
+
+			<button type="button" class="sbtn blue" id="confirm">입고 확정</button>
+		</div>
+		<table id="stdin_h_table">
+			<tr>
+				<th>
+					<input type="checkbox" id="chkAll">
+				</th>
+				<th>순번</th>
+				<th>입고일자</th>
+				<th>고객사 코드</th>
+				<th>고객사 명</th>
+				<th>진행상태</th>
+				<th>비고</th>
+			</tr>
+			<tbody id="search" style="cursor:pointer;">
+				<tr th:each="stdin, wactrCount : ${stdin_list}" id="stdin_infos">
+					<td>
+						<input type="checkbox" name="check" th:value="${stdin.stdinNum}" id="chk" th:data-stdinnum="${stdin.stdinNum}">
+					</td>
+					<td th:text="${wactrCount.count}"></td>
+					<td th:text="${stdin.stdinDt}"></td>
+					<td th:text="${stdin.clntCd}"></td>
+					<td th:text="${stdin.clntNm}"></td>
+					<td th:text="${stdin.status}"></td>
+					<td th:text="${stdin.remark}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h1>입고 상세</h1>
+		<table id="stdin_d_table" ondblclick="updateTable()">
+			<tr>
+				<th>순번</th>
+				<th>상품코드</th>
+				<th>상품명</th>
+				<th>로케이션</th>
+				<th>입고예정수량</th>
+				<th>정상수량</th>
+				<th>불량수량</th>
+				<th>비고</th>
+			</tr>
+			<tbody>
+			<tr th:each="stdin, stdinCount : ${detailList}" id="stdin_d_infos">
+				<td th:text="${stdinCount.count}"></td>
+				<td th:text="${stdin.itemCd}"></td>
+				<td th:text="${stdin.itemNm}"></td>
+				<td th:text="${stdin.locCd}"></td>
+				<td th:text="${stdin.beforeStdin}"></td>
+				<td th:text="${stdin.normal}"></td>
+				<td th:text="${stdin.fault}"></td>
+				<td th:text="${stdin.remark}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+</section>
+</html>

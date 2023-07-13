@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/admin/main}">
+
+	<section layout:fragment="content">
+		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+			<table class="table-cols" id="userSearch">
+				<tr>
+					<th>고객사 명</th>
+					<td>
+						<input type="text" name="clntNm" placeholder="고객사 명">
+					</td>
+
+					<th>아이디</th>
+					<td>
+						<input type="text" name="userId" placeholder="아이디">
+					</td>
+
+					<th>성명</th>
+					<td>
+						<input type="text" name="userNm" placeholder="성명">
+					</td>
+
+					<th>연락처</th>
+					<td>
+						<input type="text" name="tel" placeholder="연락처">
+					</td>
+				</tr>
+			</table>
+			<div class="btns" style="text-align:right;">
+				<button type="button" id="ajax_btn" class="sbtn">검색</button>
+				<button type="button" id="add" class="sbtn">추가</button>
+				<button type="button" id="del" class="sbtn blue">삭제</button>
+			</div>
+		</form>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const ajax_btn = document.getElementById('ajax_btn');
+				const add = document.getElementById('add');
+				const del = document.getElementById('del');
+				const trs = document.querySelectorAll('tr');
+
+				ajax_btn.addEventListener("click", search);
+				add.addEventListener("click", addItem);
+				del.addEventListener("click", deleteItem);
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', updateTable)
+				});
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
+			});
+
+			function addItem(e) {
+				console.log('test');
+				url = 'userManage/join';
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			}
+
+			function search() {
+				var trEl = document.getElementsByName("clntNm");
+				var trEl2 = document.getElementsByName("userId");
+				var trEl3 = document.getElementsByName("userNm");
+				var trEl4 = document.getElementsByName("tel");
+
+				var clntNm = trEl[0].value;
+				var userId = trEl2[0].value;
+				var userNm = trEl3[0].value;
+				var tel = trEl4[0].value;
+
+				const params = { clntNm, userId, userNm, tel };
+
+				const url = `ajaxadmin/userSearch?clntNm=${clntNm}&userId=${userId}&userNm=${userNm}&tel=${tel}`;
+				commonLib.ajaxLoad(url)
+				.then((data) => {
+					var search = document.getElementById("search");
+					search.innerHTML='';
+					console.log(data);
+
+					data = JSON.parse(data);
+					var str = '';
+					for(var i = 0; i < data.length; i++) {
+						str += "<tr>";
+						str += "<td><input type='checkbox' name='check' data-userid=" + data[i].userId +" th:value=" + data[i].userId + " id='chk'></td>";
+						str += "<td>"+(i+1)+"</td>";
+						str += "<td>"+data[i].userId+"</td>";
+						str += "<td>"+data[i].userNm+"</td>";
+						str += "<td>"+data[i].userType+"</td>";
+						str += "<td>"+data[i].clntNm+"</td>";
+						str += "<td>"+data[i].custNm+"</td>";
+						str += "<td>"+data[i].position+"</td>";
+						str += "<td>"+data[i].tel+"</td>";
+						str += "<td>"+data[i].email+"</td>";
+						str += "<td>"+data[i].remark+"</td>";
+						str += '</tr>'
+					}
+					search.innerHTML=str;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			};
+
+			function deleteItem(e) {
+				var chk = document.getElementsByName("chk");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log("data" + chk_data);
+
+				const url = `ajaxadmin/userDelete?userId=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateTable(e) {
+				const event_tr = e.target.parentNode;
+				const input = event_tr.querySelector('td input');
+				const userId = input.dataset.userid;
+
+				url = 'userManage/update/' + userId;
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			};
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("chk");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+				}
+			}
+		</script>
+
+		<div class="table_wrapper">
+			<table id="user_table">
+				<tr>
+					<th>
+						<input type="checkbox" id="chkAll">
+					</th>
+					<th>순번</th>
+					<th>아이디</th>
+					<th>성명</th>
+					<th>사용자구분</th>
+					<th>고객사 명</th>
+					<th>납품처 명</th>
+					<th>직책</th>
+					<th>연락처</th>
+					<th>E-MAIL</th>
+					<th>비고</th>
+				</tr>
+				<tbody id="search">
+				<tr th:each="user, userCount : ${userList}" id="user_infos">
+					<td>
+						<input type="checkbox" name="chk" th:value="${user.userId}" id="chk" th:data-userid="${user.userId}">
+					</td>
+					<td th:text="${userCount.count}"></td>
+					<td th:text="${user.userId}"></td>
+					<td th:text="${user.userNm}"></td>
+					<td th:text="${user.userType}"></td>
+					<td th:text="${user.clntNm}"></td>
+					<td th:text="${user.custNm}"></td>
+					<td th:text="${user.position}"></td>
+					<td th:text="${user.tel}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.remark}"></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
+</html>
