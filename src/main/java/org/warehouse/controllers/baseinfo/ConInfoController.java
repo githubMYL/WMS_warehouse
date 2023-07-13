@@ -6,16 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ConInfoDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.baseinfo.coninfo.ConInfoService;
 import org.warehouse.models.baseinfo.coninfo.ConInfoVO;
 import org.warehouse.models.baseinfo.coninfo.ConInfoValidator;
+import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +66,34 @@ public class ConInfoController {
 
 	}
 
+	// 팝업 설정
+	@GetMapping("/coninfo/{keyVal}/update")
+	public String conInfoUpdate(@PathVariable String keyVal, Model model) {
+
+		ConInfoVO conInfoVO = new ConInfoVO();
+		//List<ConInfoVO> conInfoVOList = conInfoDAO.getConInfoList();
+		System.out.println("controller keyVal : " + keyVal);
+		/** 고객사 명 S */
+		List<ClntVO> clntList = clntDAO.getClntList();
+		model.addAttribute("clntList", clntList);
+		/** 고객사 명 E */
+
+		model.addAttribute("conInfoVO", conInfoVO);
+
+		if(conInfoVO.getNo() == null)
+			conInfoVO.setNo("0");
+
+		//conInfoVO.setNo("Y");
+		//conInfoVO.setNo(keyVal);
+		model.addAttribute("conInfoVO", conInfoVO);
+
+		return "/baseinfo/popup/conInfoUpdatePop";
+
+	}
+
+	// 계약정보 수정
+	//public String update()
+
 	@PostMapping("/coninfo")
 	public String conInfoPs(@Valid ConInfoVO conInfoVO, Errors errors, Model model) {
 
@@ -98,8 +124,8 @@ public class ConInfoController {
 
 	}
 
-	@GetMapping("coninfo/deleteItem")
-	public String deleteItem(String chkArr) {
+	@GetMapping("coninfo/deleteCon")
+	public String deleteCon(String chkArr) {
 
 		System.out.println("chkArr : " + chkArr);
 		// 문자열 구분자 ,
