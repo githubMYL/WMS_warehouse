@@ -88,6 +88,16 @@
                     location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
                 }
 
+                // 체크박스 전체선택
+                document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
+                    e.preventDefault();
+                    var list = document.querySelectorAll("input[name=chk]");
+                    for (var i = 0; i < list.length; i++) {
+                        list[i].checked = this.checked;
+                    }
+                });
+
+                // delete 처리
                 function deleteCon(e){
 
                     // 체크된 값 가져오기

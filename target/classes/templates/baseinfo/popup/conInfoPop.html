@@ -13,8 +13,8 @@
             <script th:src="@{/js/front/conInfo.js}"></script>
             <script th:src="@{/js/front/layer.js}"></script>
         </head>
-        <form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
-            계약정보 팝업
+        <form name="frmJoin" method="get" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
+            계약정보등록 팝업
             <div>
                 <input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly />
                 <input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
@@ -26,7 +26,7 @@
             </div>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    alert("aa");
+
                     const clnt = document.getElementById("clnt_tmp");
                     var selected = document.querySelector("select#clnt_sel")
 

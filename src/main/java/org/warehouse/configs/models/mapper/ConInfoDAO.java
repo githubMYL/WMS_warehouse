@@ -16,5 +16,7 @@ public interface ConInfoDAO {
 
 	List<ConInfoVO> getConListSearch(ConInfoVO srchParam);
 
-	void deleteConInfo(String deleteVal);	// 	삭제여부 갱신
+	void deleteConInfo(String deleteVal);	// 삭제여부 갱신
+
+	ConInfoVO updateConInfo(String keyVal);	// 계약정보 수정 팝업 데이터
 }

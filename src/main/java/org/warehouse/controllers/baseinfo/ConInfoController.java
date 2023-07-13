@@ -13,9 +13,7 @@ import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.baseinfo.coninfo.ConInfoService;
 import org.warehouse.models.baseinfo.coninfo.ConInfoVO;
 import org.warehouse.models.baseinfo.coninfo.ConInfoValidator;
-import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -70,21 +68,14 @@ public class ConInfoController {
 	@GetMapping("/coninfo/{keyVal}/update")
 	public String conInfoUpdate(@PathVariable String keyVal, Model model) {
 
-		ConInfoVO conInfoVO = new ConInfoVO();
-		//List<ConInfoVO> conInfoVOList = conInfoDAO.getConInfoList();
 		System.out.println("controller keyVal : " + keyVal);
 		/** 고객사 명 S */
 		List<ClntVO> clntList = clntDAO.getClntList();
 		model.addAttribute("clntList", clntList);
 		/** 고객사 명 E */
 
-		model.addAttribute("conInfoVO", conInfoVO);
+		ConInfoVO conInfoVO = conInfoDAO.updateConInfo(keyVal);
 
-		if(conInfoVO.getNo() == null)
-			conInfoVO.setNo("0");
-
-		//conInfoVO.setNo("Y");
-		//conInfoVO.setNo(keyVal);
 		model.addAttribute("conInfoVO", conInfoVO);
 
 		return "/baseinfo/popup/conInfoUpdatePop";

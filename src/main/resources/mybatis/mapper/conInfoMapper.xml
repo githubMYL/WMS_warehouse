@@ -51,4 +51,20 @@
         </choose>
         ORDER BY A.REG_DT DESC
     </select>
+
+    <select id="updateConInfo" resultMap="conMap">
+        SELECT A.NO
+             , A.CLNT_CD
+             , B.CLNT_NM
+             , A.M_MIN
+             , A.PLT_FEE
+             , A.TRAN_SDT
+             , A.TRAN_EDT
+             , A.REMK
+        FROM CON_INF A
+                 INNER JOIN CLNT B
+                            ON A.CLNT_CD = B.CLNT_CD
+        WHERE A.DEL_YN = 'N'
+          AND A.NO = #{keyVal}
+    </select>
 </mapper>
