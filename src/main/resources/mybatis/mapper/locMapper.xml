@@ -74,6 +74,9 @@
 		AND DEL_YN = 'N'
 	</select>
 
+	<select id="getLocByLocCd" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
+		SELECT * FROM LOC WHERE LOC_CD = #{locCd} AND DEL_YN = 'N'
+	</select>
 
 	<select id="getLocListByWactrCd" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
 		SELECT * FROM LOC WHERE WACTR_CD = #{wactrCd}

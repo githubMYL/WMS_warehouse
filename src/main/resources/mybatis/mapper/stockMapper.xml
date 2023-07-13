@@ -15,6 +15,25 @@
 		<result property="modNm" column="MOD_NM" />
 		<result property="delYn" column="DEL_YN" />
 	</resultMap>
+	<resultMap id="stktransfMap" type="org.warehouse.models.stock.StktransfVO">
+		<result property="moveDt" column="MOVE_DT" />
+		<result property="no" column="NO" />
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="itemNm" column="ITEM_NM" />
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="waCtrCdFrom" column="WACTR_CD_FROM" />
+		<result property="locCdFrom" column="LOC_CD_FROM" />
+		<result property="waCtrCdTo" column="WACTR_CD_TO" />
+		<result property="locCdTo" column="LOC_CD_TO" />
+		<result property="runtimeStock" column="RUNTIME_STOCK" />
+		<result property="moveAmt" column="MOVE_AMT" />
+		<result property="reason" column="REASON" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+	</resultMap>
 
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
@@ -81,5 +100,38 @@
 	<select id="getTmstkByConditions" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT * FROM TMSTK
 		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+	</select>
+
+	<select id="getTmstkByLocCdItemCd" resultType="org.warehouse.models.stock.TmstkVO">
+		SELECT * FROM TMSTK
+		WHERE ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+	</select>
+
+	<insert id="insertTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
+		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
+			VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, SYSDATE, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="updateTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
+		UPDATE TMSTK SET STOCK_AMT = #{stock_amt}, MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
+	</update>
+
+	<update id="deleteTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
+		UPDATE TMSTK SET DEL_YN = 'Y', MOD_DT = SYSDATE
+		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
+	</update>
+
+	<insert id="insertStktransf" parameterType="org.warehouse.models.stock.StktransfVO">
+		INSERT INTO STKTRANSF F(F.MOVE_DT, F.NO, F.ITEM_CD, F.CLNT_CD, F.WACTR_CD_FROM, F.LOC_CD_FROM, F.WACTR_CD_TO, F.LOC_CD_TO, F.RUNTIME_STOCK, F.MOVE_AMT, F.REASON, F.REG_DT, F.REG_NM)
+		VALUES(SYSDATE,(SELECT COUNT(*) FROM STKTRANSF FF WHERE FF.MOVE_DT = SYSDATE), #{itemCd}, #{clntCd}, #{waCtrCdFrom}, #{locCdFrom}, #{waCtrCdTo}, #{locCdTo}, #{runtimeStock}, #{moveAmt}, #{reason}, SYSDATE, #{regNm})
+
+	</insert>
+
+	<select id="getStktransfList" resultMap="stktransfMap">
+		SELECT F.*, I.ITEM_NM FROM STKTRANSF F
+			LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
+		WHERE F.DEL_YN = 'N'
+		ORDER BY F.MOVE_DT ASC
 	</select>
 </mapper>
