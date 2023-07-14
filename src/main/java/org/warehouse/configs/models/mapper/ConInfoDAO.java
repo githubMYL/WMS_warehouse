@@ -18,5 +18,7 @@ public interface ConInfoDAO {
 
 	void deleteConInfo(String deleteVal);	// 삭제여부 갱신
 
-	ConInfoVO updateConInfo(String keyVal);	// 계약정보 수정 팝업 데이터
+	ConInfoVO updateConInfo(String keyVal);	// 계약정보 수정불러오기 팝업 데이터
+
+	void update(ConInfoVO conInfoVO); // 계약정보 수정
 }

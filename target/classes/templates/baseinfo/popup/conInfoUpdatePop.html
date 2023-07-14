@@ -16,35 +16,9 @@
         <form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
             계약정보 수정 팝업
             <div>
-                <input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly />
-                <input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
-                <datalist id="clnt">
-                    <select id="clnt_sel">
-                        <option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}"></option>
-                    </select>
-                </datalist>
+                <input type="hidden" th:field="*{clntCd}" th:style="'background:#D8D8D8'" readonly/>
+                <input type="text" th:field="*{clntNm}" th:style="'background:#D8D8D8'" readonly/>
             </div>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const clnt = document.getElementById("clnt_tmp");
-                    var selected = document.querySelector("select#clnt_sel")
-
-                    clnt.addEventListener("change", UpdateClnt)
-                });
-
-                function UpdateClnt(e) {
-                    var evnt = e.currentTarget;
-                    var selected = document.querySelector("select#clnt_sel")
-                    var datalist = evnt.list;
-                    var clntcd = document.getElementById("clnt_cd");
-
-                    for(var j = 0; j < datalist.options.length; j++){
-                        if(this.value == datalist.options[j].value) {
-                            clntcd.value = datalist.options[j].label;
-                        }
-                    }
-                }
-            </script>
             <div>
                 <input type="number" th:field="*{MMin}" th:placeholder="#{mMin}" maxlength="8" oninput="maxLengthCheck(this)"/>
                 <div class="errors" th:each="err : ${#fields.errors('MMin')}" th:text="${err}"></div>
@@ -63,6 +37,9 @@
             </div>
             <div>
                 <input type="text" th:field="*{remark}" th:placeholder="#{remk}">
+            </div>
+            <div>
+                <input type="hidden" th:field="*{no}">
             </div>
             <button type="submit" th:text="#{conInfo.action.submit}" class="layer_close"></button>
         </form>

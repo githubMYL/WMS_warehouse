@@ -3,6 +3,7 @@ package org.warehouse.controllers.baseinfo;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,6 +15,9 @@ import org.warehouse.models.baseinfo.coninfo.ConInfoService;
 import org.warehouse.models.baseinfo.coninfo.ConInfoVO;
 import org.warehouse.models.baseinfo.coninfo.ConInfoValidator;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -64,7 +68,7 @@ public class ConInfoController {
 
 	}
 
-	// 팝업 설정
+	// 수정 팝업 설정 시 값 유지
 	@GetMapping("/coninfo/{keyVal}/update")
 	public String conInfoUpdate(@PathVariable String keyVal, Model model) {
 
@@ -75,6 +79,8 @@ public class ConInfoController {
 		/** 고객사 명 E */
 
 		ConInfoVO conInfoVO = conInfoDAO.updateConInfo(keyVal);
+
+		System.out.println("conInfoVO keyVal >>>>>>>>>>>>>>>>>>>>>>>>>>: " + conInfoVO);
 
 		model.addAttribute("conInfoVO", conInfoVO);
 
@@ -106,9 +112,8 @@ public class ConInfoController {
 //        System.out.println("Controller :: transSdt :: " + conInfoVO.getTransSdt());
 //        System.out.println("Controller :: transEdt :: " + conInfoVO.getTransEdt());
 
-		conInfoVO.setRegNm("session");
-
 		conInfoService.conInfoSave(conInfoVO);
+		closeLayer(response);
 
 //		closeLayer(response);
 		return "redirect:/baseinfo/coninfo";
@@ -138,20 +143,20 @@ public class ConInfoController {
 		model.addAttribute("menuCode", menuCode);
 	}
 
-//	private void closeLayer(HttpServletResponse response) {
-//		response.setContentType("text/html; charset=euc-kr");
-//		PrintWriter out = null;
-//		try {
-//			out = response.getWriter();
-//			out.println("<script>var parent = window.parent.document;" +
-//					"var layerDim = parent.getElementById('layer_dim');" +
-//					"var layerPopup = parent.getElementById('layer_popup');" +
-//					"parent.body.removeChild(layerDim);" +
-//					"parent.body.removeChild(layerPopup);" +
-//					"parent.location.reload();</script>");
-//			out.flush();
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
+	private void closeLayer(HttpServletResponse response) {
+		response.setContentType("text/html; charset=euc-kr");
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			out.println("<script>var parent = window.parent.document;" +
+					"var layerDim = parent.getElementById('layer_dim');" +
+					"var layerPopup = parent.getElementById('layer_popup');" +
+					"parent.body.removeChild(layerDim);" +
+					"parent.body.removeChild(layerPopup);" +
+					"parent.location.reload();</script>");
+			out.flush();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
