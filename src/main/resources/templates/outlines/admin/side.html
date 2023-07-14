@@ -64,7 +64,37 @@
 
 	<ul th:case="stdin">
 		<li>
-			<a>사이드</a>
+			<a th:href="@{/stdin}" th:classappend="${menuCode} == 'stdin_h' ? 'on'">입고 등록/상세내역</a>
+		</li>
+		<li>
+			<a th:href="@{/stdin/detail}" th:classappend="${menuCode} == 'stdin_d' ? 'on'">입고 조회</a>
+		</li>
+	</ul>
+
+	<ul th:case="stock">
+		<li>
+			<a th:href="@{/stock/stkadj}" th:classappend="${menuCode} == 'stkadj' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고조정
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/stktransf}" th:classappend="${menuCode} == 'stktransf' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고이동
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
+				<i class="xi-view-list"></i>
+				시점재고
+			</a>
+		</li>
+		<li>
+			<a th:classappend="${menuCode} == 'dlycnp' ? 'on'">
+				<i class="xi-view-list"></i>
+				일수불
+			</a>
 		</li>
 	</ul>
 

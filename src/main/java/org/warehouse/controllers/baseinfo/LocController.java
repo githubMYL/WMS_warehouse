@@ -70,6 +70,7 @@ public class LocController {
 
 		model.addAttribute("locVO",locVO);
 		model.addAttribute("wactr_list", waclist);
+
 		return "baseinfo/popup/locForm";
 	}
 
@@ -106,7 +107,8 @@ public class LocController {
 		return "redirect:/baseinfo/loc";
 	}
 
-	// 체크한 loc삭제
+	// 체크한 loc삭제 x
+	// 체크한 loc delYn 'y' 로 처리
 	@GetMapping("locDelte")
 	public String loc_delete(String loc_cd_array , String wactr_cd_array) {
 
@@ -116,7 +118,9 @@ public class LocController {
 		String[] wactr_cd = wactr_cd_array.split(",");
 
 		for (int i = 0; i < loc_cd.length; i++) {
-			locDAO.deleteLoc(loc_cd[i],wactr_cd[i]);
+//			locDAO.deleteLoc(loc_cd[i],wactr_cd[i]); // delete문
+			locDAO.delYnUpdate(loc_cd[i],wactr_cd[i]); // update문(삭제여부 Y로 변경)
+
 		}
 
 
