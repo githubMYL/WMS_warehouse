@@ -21,7 +21,7 @@
                 </tr>
                 <tr th:each="relsData, rowCnt : ${relsList}">
                     <td align="center">
-                        <input type="checkbox">
+                        <input type="checkbox" id="selRow" name="selRow" th:data-relsDt="${relsData.relsDt}" th:data-relsNo="${relsData.relsNo}">
                     </td>
                     <td align="center" th:text="${rowCnt.count}"></td>
                     <td align="center" th:text="${relsData.relsDt}"></td>
@@ -34,6 +34,7 @@
             </table>
         </div>
         <script>
+
 
         </script>
         <br/>

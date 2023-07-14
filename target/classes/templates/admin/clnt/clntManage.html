@@ -36,7 +36,38 @@
 
 				var chkAll = document.getElementById("chkAll");
 				chkAll.addEventListener("change", checkAll);
+
+				var checkList = document.getElementsByName("check");
+
+				for( chk of checkList) {
+					chk.addEventListener("change", function(e) {
+						if(e.target.checked) {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
+					});
+				}
 			});
+
+			var chks = document.getElementsByName("check");
+
+            chks.forEach(element => element.addEventListener('click', function(e){
+                if(e.target.checked == true){
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
+                }else {
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
+                }
+            }));
 
 			function addItem(e) {
 				console.log('test');
@@ -63,7 +94,7 @@
 					var str = '';
 					for(var i = 0; i < data.length; i++) {
 						str += "<tr id='clnt_infos'>";
-						str += "<td><input type='checkbox' name='check' data-clntcd=" + data[i].clntCd +" th:value=" + data[i].clntCd + " id='chk'></td>";
+						str += "<td><input type='checkbox' name='check' data-clntcd=" + data[i].clntCd +" th:value=" + data[i].clntCd + " id='chk' onclick=c(this)></td>";
 						str += "<td>"+(i+1)+"</td>";
 						str += "<td>"+data[i].clntCd+"</td>";
 						str += "<td>"+data[i].clntNm+"</td>";
@@ -89,10 +120,10 @@
 			};
 
 			function deleteItem(e) {
-				var chk = document.getElementsByName("chk");
+				var chk = document.getElementsByName("check");
 				var chk_data = [];
 
-				for(var i = 0; i < chk.length; i++) {
+				for(var i = 0; i < check.length; i++) {
 					if(chk[i].checked == true) {
 						console.log(chk[i].value);
 						chk_data.push(chk[i].value);
@@ -124,10 +155,40 @@
 
 			function checkAll() {
 				const all = document.getElementById("chkAll");
-				const chkList = document.getElementsByName("chk");
+				const chkList = document.getElementsByName("check");
 				for( chk of chkList) {
 					chk.checked = all.checked;
+					if(all.checked) {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "#D8D8D8", "important");
+						})
+					} else {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "white", "important");
+						})
+					}
+
 				}
+			}
+
+			function c(e) {
+				console.log(e);
+				if(e.checked) {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
 			}
 		</script>
 
@@ -156,7 +217,7 @@
 			<tbody id="search">
 			<tr th:each="clnt, clntCount : ${clntList}" id="clnt_infos">
 				<td>
-					<input type="checkbox" name="chk" th:value="${clnt.clntCd}" id="chk" th:data-clntcd="${clnt.clntCd}">
+					<input type="checkbox" name="check" th:value="${clnt.clntCd}" id="chk" th:data-clntcd="${clnt.clntCd}">
 				</td>
 				<td th:text="${clntCount.count}"></td>
 				<td th:text="${clnt.clntCd}"></td>

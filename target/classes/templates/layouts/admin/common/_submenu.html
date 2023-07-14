@@ -6,7 +6,7 @@
 		<a th:href="@{/baseinfo/iteminfo(pageName='baseinfo')}" th:classappend="${pageName} == 'baseinfo' ? 'on'">기본정보</a>
 		<a th:href="@{/stdin(pageName='stdin')}" th:classappend="${pageName} == 'stdin' ? 'on'">입고</a>
 		<a th:href="@{/rels(pageName='rels')}" th:classappend="${pageName} == 'rels' ? 'on'">출고</a>
-		<a th:href="@{/tmstk(pageName='tmstk')}" th:classappend="${pageName} == 'tmstk' ? 'on'">재고</a>
+		<a th:href="@{/stock/tmstk(pageName='stock')}" th:classappend="${pageName} == 'stock' ? 'on'">재고</a>
 		<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/userManage(pageName='userManage')}" th:text="#{adminPage}" th:classappend="${pageName} == 'admin' ? 'on'"></a>
 	</nav>
 </th:block>

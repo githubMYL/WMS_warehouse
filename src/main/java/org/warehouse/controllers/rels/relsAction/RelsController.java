@@ -10,19 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.RelsDAO;
 import org.warehouse.models.rels.relsAction.RelsVO;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
-@RequestMapping("/rels")
 @RequiredArgsConstructor
+@RequestMapping("/rels")
 public class RelsController {
 
     private final RelsDAO relsDAO;
 
     @GetMapping()
-    private String rels(@ModelAttribute() Model model){
+    private String rels(Model model){
 
         commonProcess(model);
 
@@ -30,8 +28,10 @@ public class RelsController {
         model.addAttribute("relsList", relsList);
 
 //        List<RelsVO> relsDetailList = relsDAO.relsDetailList();
+//        model.addAttribute("relsDetailList", relsDetailList);
 
 //        List<RelsVO> relsSubDetailList = relsDAO.relsSubDetailList();
+//        model.addAttribute("relsSubDetailList", relsSubDetailList);
 
         return "rels/rels";
     }
@@ -45,20 +45,5 @@ public class RelsController {
         model.addAttribute("pageName", pageName);
     }
 
-    private void closeLayer(HttpServletResponse response) {
-        response.setContentType("text/html; charset=euc-kr");
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
-            out.println("<script>var parent = window.parent.document;" +
-                    "var layerDim = parent.getElementById('layer_dim');" +
-                    "var layerPopup = parent.getElementById('layer_popup');" +
-                    "parent.body.removeChild(layerDim);" +
-                    "parent.body.removeChild(layerPopup);" +
-                    "parent.location.reload();</script>");
-            out.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }

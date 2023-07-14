@@ -49,7 +49,7 @@
             }
         </script>
         <div class="table_wrapper">
-            <table class="table-cols">
+            <table class="table-cols" id="itemInfoTable">
                 <tr>
                     <th align="center">
                         <input th:type="checkbox" id="chkAll" name="chkAll">
@@ -64,7 +64,7 @@
                     <th>파렛트 당<br/>박스 수</th>
                     <th>비고</th>
                 </tr>
-                <tr id="id_item_table" class="itemTable" th:each="itemList : ${itemInfoList}">
+                <tr id="id_item_table" class="itemTable" th:each="itemList : ${itemInfoList}" th:onclick="rowClicked()">
                     <td align="center">
                         <input th:type="checkbox" name="chk" id="chk" th:value="${itemList.wactrCd} +','+ ${itemList.clntCd} +','+ ${itemList.LocCd} +','+ ${itemList.itemCd}">
                     </td>
@@ -81,12 +81,13 @@
             </table>
         </div>
         <script>
-            // 추가
+            // 추가 ======================================================
             function add() {
                 url = '/baseinfo/iteminfo/register';
                 warehouse.popup.open(url, '상품정보 추가', 500, 600, true);
             };
-            // 더블클릭 수정
+
+            // 더블클릭 수정 ===============================================
             document.addEventListener('DOMContentLoaded', function() {
 				const trs = document.querySelectorAll('tr');
 				trs.forEach( (tr) => {
@@ -103,6 +104,7 @@
 				warehouse.popup.open(url, "상품정보 수정", 500, 600, true);
 			}
 
+            // 체크박스 선택 시 행 색변환 ======================================
             var chks = document.getElementsByName("chk");
 
             chks.forEach(element => element.addEventListener('click', function(e){
@@ -114,7 +116,7 @@
                 }
             }));
 
-            // 모든 체크박스 체크
+            // 모든 체크박스 체크 ==============================================
             document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
                 e.preventDefault();
 
@@ -130,7 +132,7 @@
                 }
             });
 
-            // 체크된 데이터 삭제
+            // 체크 데이터 삭제 =================================================
             function deleteItem(e){
 
                 // 체크된 값 가져오기
@@ -149,7 +151,9 @@
 					.catch((err) => {
 						console.error(err);
 					});
-            }
+            };
+
+           
         </script>
     </section>
 </html>
