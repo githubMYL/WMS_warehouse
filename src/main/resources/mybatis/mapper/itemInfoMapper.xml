@@ -28,7 +28,6 @@
         UPDATE ITEM SET
         WACTR_CD = #{wactrCd}
         , CLNT_CD = #{clntCd}
-        , LOC_CD = #{locCd}
         , ITEM_CD = #{itemCd}
         , ITEM_NM = #{itemNm}
         , BOX_UNIT = #{boxUnit}
