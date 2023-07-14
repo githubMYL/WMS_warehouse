@@ -3,7 +3,6 @@ package org.warehouse.controllers.baseinfo;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,7 +16,6 @@ import org.warehouse.models.baseinfo.coninfo.ConInfoValidator;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -88,9 +86,6 @@ public class ConInfoController {
 
 	}
 
-	// 계약정보 수정
-	//public String update()
-
 	@PostMapping("/coninfo")
 	public String conInfoPs(@Valid ConInfoVO conInfoVO, Errors errors, Model model) {
 
@@ -107,15 +102,10 @@ public class ConInfoController {
 		}
 		System.out.println("Controller :: clntCd :: " + conInfoVO);
 		System.out.println("Base  ::  remk :: " + conInfoVO.getRemark());
-//        System.out.println("Controller :: mMin :: " + conInfoVO.getMMin());
-//        System.out.println("Controller :: pltFee :: " + conInfoVO.getPltFee());
-//        System.out.println("Controller :: transSdt :: " + conInfoVO.getTransSdt());
-//        System.out.println("Controller :: transEdt :: " + conInfoVO.getTransEdt());
 
 		conInfoService.conInfoSave(conInfoVO);
 		closeLayer(response);
 
-//		closeLayer(response);
 		return "redirect:/baseinfo/coninfo";
 
 	}

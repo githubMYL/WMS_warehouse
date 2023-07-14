@@ -4,11 +4,11 @@
 
 	<!--    로케이션 리스트-->
 	<select id="getLocList" resultType="org.warehouse.models.baseinfo.loc.LocVO">
-		SELECT * FROM loc ORDER BY loc_cd
+		SELECT * FROM loc where del_yn='N' ORDER BY loc_cd
 	</select>
 
 	<select id="getSearchList" resultType="org.warehouse.models.baseinfo.loc.LocVO" parameterType="String">
-		select * from loc where loc_cd like '%'||#{loc_cd}||'%'
+		select * from loc where del_yn='N' and loc_cd like '%'||#{loc_cd}||'%'
 	</select>
 
 	<!--loc_cd에따른 정보하나-->
@@ -26,13 +26,12 @@
 
 	<!--    로케이션 등록-->
 	<insert id="insertLoc" parameterType="org.warehouse.models.baseinfo.loc.LocVO">
-		insert into loc(loc_cd, wactr_cd, loc_nm, loc_addr, rac_num, remk, reg_dt , reg_nm)
+		insert into loc(loc_cd, wactr_cd, loc_nm, loc_addr, remk, reg_dt , reg_nm)
 		VALUES (
 		#{loc_cd},
 		#{wactr_cd},
 		#{loc_nm},
 		#{loc_addr},
-		#{rac_num},
 		#{remk},
 		sysdate,
 		#{reg_nm}
@@ -46,11 +45,18 @@
 		wactr_cd = #{wactr_cd},
 		loc_nm = #{loc_nm},
 		loc_addr = #{loc_addr},
-		rac_num = #{rac_num},
 		remk = #{remk},
 		mod_dt = sysdate,
 		mod_nm = #{mod_nm}
 		where loc_cd = #{ori_loc_cd}
+	</update>
+
+
+	<!-- 삭제여부 Y 로  삭제처리 -->
+	<update id="delYnUpdate" parameterType="String">
+		update loc set del_yn = 'Y'
+		where loc_cd = #{loc_cd}
+		and wactr_cd = #{wactr_cd}
 	</update>
 
 	<!-- loc 삭제 -->
@@ -66,5 +72,13 @@
 		FROM LOC
 		WHERE LOC_CD = #{loc_cd}
 		AND DEL_YN = 'N'
+	</select>
+
+	<select id="getLocByLocCd" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
+		SELECT * FROM LOC WHERE LOC_CD = #{locCd} AND DEL_YN = 'N'
+	</select>
+
+	<select id="getLocListByWactrCd" parameterType="String" resultType="org.warehouse.models.baseinfo.loc.LocVO">
+		SELECT * FROM LOC WHERE WACTR_CD = #{wactrCd}
 	</select>
 </mapper>

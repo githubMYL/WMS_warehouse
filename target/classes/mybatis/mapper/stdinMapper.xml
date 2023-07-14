@@ -32,7 +32,8 @@
 	</insert>
 
 	<insert id="insertDetailStdin" parameterType="org.warehouse.models.stdin.StdinVO">
-		INSERT INTO STDIN_D D(D.STDIN_NO, D.STDIN_DT, D.STDIN_NUM, D.ITEM_CD, D.CLNT_CD, D.LOC_CD, D.WACTR_CD, D.BEFORE_STDIN, D.NORMAL, D.FAULT, D.REMK, D.REG_DT, D.REG_NM) VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{normal}, #{fault}, #{remark}, SYSDATE, #{regNm})
+		INSERT INTO STDIN_D D(D.STDIN_NO, D.STDIN_DT, D.STDIN_NUM, D.ITEM_CD, D.CLNT_CD, D.LOC_CD, D.WACTR_CD, D.BEFORE_STDIN, D.NORMAL, D.FAULT, D.REMK, D.REG_DT, D.REG_NM)
+		VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{normal}, #{fault}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<script th:src="@{/js/front/layer.js}"></script>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
+		<style>
+			html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+
+			#flexWrap div {
+				padding-right : 10px;
+				padding-bottom : 40px;
+			}
+		</style>
+	</head>
+
+
+
+	<form name="transfForm" method="post" th:action="@{/stock/_transfForm}" th:object="${stktransfVO}" autocomplete="off">
+		<div style="display : flex; flex-wrap: wrap;" id="flexWrap">
+			<input type="hidden" th:value="${tmstkVO.item_cd}" name="itemCd">
+			<div >
+				로케이션 FROM
+				<br>
+				<input type="text" style="width : 150px; background:#d5d5d5;" readonly th:value="${tmstkVO.loc_cd}" name="locCdFrom">
+			</div>
+
+			<div>
+				이동 전 수량
+				<br>
+				<input type="number" style="width : 110px; background:#d5d5d5;" readonly th:value="${tmstkVO.stock_amt}" id="runtimeAmt">
+			</div>
+
+			<div>
+				이동 후 수량
+				<br>
+				<input type="number" style="width : 110px; background:#d5d5d5;" readonly id="leftAmt">
+			</div>
+
+			<div>
+				로케이션 TO
+				<br>
+				<input type="text" list="locList" style="width:150px;" name="locCdTo">
+				<datalist id="locList">
+					<select>
+						<option th:each="loc : ${locList}" th:label="${loc.loc_cd}" th:value="${loc.loc_cd}">
+						</option>
+					</select>
+				</datalist>
+			</div>
+
+			<div>
+				이동수량
+				<br>
+				<input type="number" style="width : 110px;" onchange="amtChange(this)" id="moveAmt" th:field="${stktransfVO.moveAmt}">
+			</div>
+			<script>
+				function amtChange() {
+				}
+			</script>
+
+			<div style="padding-bottom : 3px;">
+				이동 사유
+				<br>
+				<textarea rows="5" cols="52" style="border:1px solid #d5d5d5; width:100%;" th:field="${stktransfVO.reason}"></textarea>
+			</div>
+			<script>
+		function amtChange() {
+			var moveAmt = document.getElementById('moveAmt');
+			const runtimeAmt = document.getElementById('runtimeAmt').value;
+			var leftAmt = document.getElementById('leftAmt');
+
+			if(runtimeAmt-moveAmt.value < 0) {
+				console.log('err!');
+				alert('이동할 수량이 부족합니다!');
+				leftAmt.value = runtimeAmt;
+				moveAmt.value = 0;
+			} else if(moveAmt.value < 0) {
+				alert('이동수량은 음수일 수 없습니다!');
+				leftAmt.value = runtimeAmt;
+				moveAmt.value = 0;
+			}
+			else {
+				leftAmt.value=runtimeAmt-moveAmt.value;
+			}
+		}
+	</script>
+
+		</div>
+		<div style="text-align: center;">
+			<button type="submit" class="sbtn blue">재고이동</button>
+		</div>
+	</form>
+</html>

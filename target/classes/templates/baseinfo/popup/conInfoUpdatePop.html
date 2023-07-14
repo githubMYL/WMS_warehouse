@@ -28,11 +28,11 @@
                 <div class="errors" th:each="err : ${#fields.errors('pltFee')}" th:text="${err}"></div>
             </div>
             <div>
-                <input type="date" th:field="*{transSdt}" th:placeholder="#{transSdt}">
+                <input type="date" name="transSdt" th:value="${#temporals.format(conInfoVO.transSdt, 'yyyy-MM-dd')}"  th:placeholder="#{transSdt}">
                 <div class="errors" th:each="err : ${#fields.errors('transSdt')}" th:text="${err}"></div>
             </div>
             <div>
-                <input type="date" th:field="*{transEdt}" th:placeholder="#{transEdt}">
+                <input type="date" name="transEdt" th:value="${#temporals.format(conInfoVO.transEdt, 'yyyy-MM-dd')}"  th:placeholder="#{transEdt}">
                 <div class="errors" th:each="err : ${#fields.errors('transSdt')}" th:text="${err}"></div>
             </div>
             <div>

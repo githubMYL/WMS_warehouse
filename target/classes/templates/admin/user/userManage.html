@@ -51,6 +51,27 @@
 
 				var chkAll = document.getElementById("chkAll");
 				chkAll.addEventListener("change", checkAll);
+
+				var checkList = document.getElementsByName("check");
+
+				for( chk of checkList) {
+					chk.addEventListener("change", function(e) {
+						if(e.target.checked) {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
+					});
+				}
 			});
 
 			function addItem(e) {
@@ -83,7 +104,7 @@
 					var str = '';
 					for(var i = 0; i < data.length; i++) {
 						str += "<tr>";
-						str += "<td><input type='checkbox' name='check' data-userid=" + data[i].userId +" th:value=" + data[i].userId + " id='chk'></td>";
+						str += "<td><input type='checkbox' name='check' data-userid=" + data[i].userId +" th:value=" + data[i].userId + " id='chk' onclick=c(this)></td>";
 						str += "<td>"+(i+1)+"</td>";
 						str += "<td>"+data[i].userId+"</td>";
 						str += "<td>"+data[i].userNm+"</td>";
@@ -104,7 +125,7 @@
 			};
 
 			function deleteItem(e) {
-				var chk = document.getElementsByName("chk");
+				var chk = document.getElementsByName("check");
 				var chk_data = [];
 
 				for(var i = 0; i < chk.length; i++) {
@@ -137,10 +158,39 @@
 
 			function checkAll() {
 				const all = document.getElementById("chkAll");
-				const chkList = document.getElementsByName("chk");
+				const chkList = document.getElementsByName("check");
 				for( chk of chkList) {
 					chk.checked = all.checked;
+					if(all.checked) {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "#D8D8D8", "important");
+						})
+					} else {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "white", "important");
+						})
+					}
+
 				}
+			}
+			function c(e) {
+				console.log(e);
+				if(e.checked) {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
 			}
 		</script>
 
@@ -164,7 +214,7 @@
 				<tbody id="search">
 				<tr th:each="user, userCount : ${userList}" id="user_infos">
 					<td>
-						<input type="checkbox" name="chk" th:value="${user.userId}" id="chk" th:data-userid="${user.userId}">
+						<input type="checkbox" name="check" th:value="${user.userId}" id="chk" th:data-userid="${user.userId}">
 					</td>
 					<td th:text="${userCount.count}"></td>
 					<td th:text="${user.userId}"></td>
