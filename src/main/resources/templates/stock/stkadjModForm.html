@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+	<style>
+    span{
+    font-weight:bold;
+    font-size:16px;
+    }
+    div{
+    margin-bottom:5px;
+    }
+    .errors{
+    font-size:12px;
+    color:red;
+    }
+
+    body{
+    height:97%;
+    }
+    main{
+    padding:0;
+    margin:0;
+    min-width:0px;
+    min-height:0px;
+    justify-content: center;
+    }
+
+    html{
+    min-width:0;
+    height:100%;
+    }
+    </style>
+
+	<script>
+        function closelayer(){
+        var parent = window.parent.document
+        var layerDim = parent.getElementById('layer_dim');
+        var layerPopup = parent.getElementById('layer_popup');
+        parent.body.removeChild(layerDim);
+        parent.body.removeChild(layerPopup);
+        parent.location.reload();
+        }
+    </script>
+</head>
+
+<h2 align="center">재고현황</h2>
+<!--    <div>로그인정보 : <span th:text="${session.userInfo.username}"></span></div>-->
+<form method="post" th:action="@{/stock/stkadjMod}" th:object="${vo}" autocomplete="off" align="left">
+	<div>
+		<input type="hidden" th:field="*{clnt_cd}">
+		<input type="hidden" th:field="*{item_cd}">
+		<input type="hidden" th:field="*{wactr_cd}">
+		<input type="hidden" th:field="*{loc_cd}">
+		<div>
+			<span>총 재고 :</span>
+			<input style="width:40px"  type="text" th:field="*{stock_amt}" readonly>
+		</div>
+
+		<div>
+			<span>정상수량:</span>
+			<input style="width:40px"  type="text" th:value="${vo.stock_amt - vo.fault_amt}" readonly>
+			<span>불량수량:</span>
+			<input style="width:40px"  type="text" th:field="*{fault_amt}" readonly>
+			<span>출고할당수량:</span>
+			<input style="width:40px"  type="text" th:field="*{allo_amt}" readonly>
+		</div>
+
+		<div>
+			<span>가용수량 :</span>
+			<input style="width:40px"  type="text"  th:value="${vo.stock_amt - vo.fault_amt - vo.allo_amt}">
+		</div>
+	</div>
+
+
+	<br><br>
+
+
+	<h2 align="center">재고조정</h2>
+
+	<input type="hidden" name="before_adj_stock" th:value="${vo.stock_amt - vo.fault_amt - vo.allo_amt}">
+	<div>
+		<span>정상수량 조정</span>
+		<input style="width:140px"  type="number" name="modNomalAmt" th:value="${vo.stock_amt - vo.fault_amt}"placeholder="수량을 입력해주세요">
+	</div>
+	<div>
+		<span>불량수량 조정</span>
+		<input style="width:140px"  type="number" name="modFaultAmt" th:value="*{fault_amt}" placeholder="수량을 입력해주세요" >
+	</div>
+	<br>
+
+	<div>
+		<div><span>조정사유</span></div>
+		<textarea rows="3" cols="23" th:field="*{adj_reason}" placeholder="조정 사유"></textarea>
+	</div>
+
+	<button type="submit" th:text="재고조정" class="sbtn"></button>
+	<button type="button" onClick="closelayer()" class="sbtn">취소</button>
+</form>
+
+</html>
