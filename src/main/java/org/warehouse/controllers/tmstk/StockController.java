@@ -7,19 +7,20 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
 import org.warehouse.models.baseinfo.loc.LocVO;
-import org.warehouse.models.baseinfo.wactr.WactrVO;
-import org.warehouse.models.stdin.StdinVO;
-import org.warehouse.models.stock.StkadjVO;
+import org.warehouse.models.stock.StkadjModService;
 import org.warehouse.models.stock.StktransfVO;
 import org.warehouse.models.stock.TmstkVO;
+import org.warehouse.models.stock.StkadjForm;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -28,10 +29,11 @@ import java.util.List;
 public class StockController {
 	private final StockDAO stockDAO;
 	private final LocDAO locDAO;
-	private final ItemInfoDAO itemInfoDAO;
+	private final StkadjModService modService;
 
-	private final HttpServletResponse response;
 	private final HttpSession session;
+	private final HttpServletResponse response;
+
 
 	private void commonProcess(Model model) {
 		String Title = "재고::시점재고";
@@ -41,6 +43,8 @@ public class StockController {
 		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
 	}
+
+	/* tmstk S */
 	@GetMapping("/tmstk")
 	public String tmstkList(Model model , String search_clntNm ,String search_itemCd,String search_itemNm){
 
@@ -56,24 +60,81 @@ public class StockController {
 
 		return "stock/tmstk_list";
 	}
+	/* tmstk E */
 
 
+	/* stkadj S */
 	@GetMapping("/stkadj")
 	public String stkadj(Model model){
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::재고조정");
 		model.addAttribute("menuCode", "stkadj");
 
+		List <StkadjForm> stkadjList = stockDAO.stkadjList();
 
-
-
+		model.addAttribute("stkadjList",stkadjList);
 
 		return "stock/stkadj_list";
 	}
 
 
+	@GetMapping("/stkadjMod/{tmstkCd}")
+	public String stkadjModForm(@PathVariable String[] tmstkCd , Model model) {
+		// 재고 조정을 위해 더블클릭 정보하나 가져오기
+
+		// String 배열을 HashMap으로 변환
+		HashMap<String, String> tmstkCdMap = new HashMap<>();
+
+		tmstkCdMap.put("clnt_cd", tmstkCd[0]);
+		tmstkCdMap.put("item_cd", tmstkCd[1]);
+		tmstkCdMap.put("wactr_cd", tmstkCd[2]);
+		tmstkCdMap.put("loc_cd", tmstkCd[3]);
+
+//        System.out.println("확인" + tmstkCdMap.toString());
+
+		StkadjForm stkadjFormOne = stockDAO.stkadjOne(tmstkCdMap);
 
 
+		model.addAttribute("vo",stkadjFormOne);
+
+		return "stock/stkadjModForm";
+	}
+
+
+	// 재고 조정 후 stkadj 정보입력 , tmstk 재고 update
+	@PostMapping("/stkadjMod")
+	public String stkadjMod(StkadjForm vo) {
+
+		System.out.println(vo.toString());
+		// 조정후 수량 체크
+		Long after_adj_stock = vo.getModNomalAmt() - vo.getModFaultAmt() - vo.getAllo_amt();
+		// tmstk 전체재고 update 수량 체크
+		Long modTmstkStockAmt = (vo.getModNomalAmt() + vo.getModFaultAmt()) - vo.getStock_amt();
+		// tmstk 불량재고 update 수량
+		Long modTmstkFaultAmt = vo.getModFaultAmt() - vo.getFault_amt();
+
+
+		System.out.println("조정전 : " + vo.getBefore_adj_stock()
+				+ " 조정 후 : " + after_adj_stock
+				+ " 전체재고 차이 : " + modTmstkStockAmt
+				+ " 불량재고 차이 : " + modTmstkFaultAmt);
+
+
+		vo.setAfter_adj_stock(after_adj_stock);
+		vo.setModTmstkStockAmt(modTmstkStockAmt);
+		vo.setModTmstkFaultAmt(modTmstkFaultAmt);
+
+
+		modService.stkadjMod(vo);
+
+		closeLayer(response);
+
+		return "redirect:/stock/stkadj";
+	}
+	/* stkadj E */
+
+
+	/* stktransf S */
 	@GetMapping("/stktransf")
 	public String stktransf(Model model){
 		List<TmstkVO> tmstkList = stockDAO.tmstkList();
@@ -127,7 +188,7 @@ public class StockController {
 			// 기존 로케이션의 재고 값을 수정한다.
 			tmstkVO.setStock_amt(tmstkVO.getStock_amt()-stktransfVO.getMoveAmt());
 			tmstkVO.setModNm(userInfo.getUserNm());
-			stockDAO.updateTmstk(tmstkVO);
+			stockDAO.updateTmstkAmt(tmstkVO);
 
 			// 이동할 로케이션의 재고 값을 수정한다.
 			// 만약, 옮겨갈 로케이션이 기존에 재고가 존재할 경우, 값을 추가하여 수정,
@@ -136,7 +197,7 @@ public class StockController {
 				existTmstk.setStock_amt(existTmstk.getStock_amt() + stktransfVO.getMoveAmt());
 				existTmstk.setModNm(userInfo.getUserNm());
 
-				stockDAO.updateTmstk(existTmstk);
+				stockDAO.updateTmstkAmt(existTmstk);
 			}
 			// 옮겨갈 로케이션이 기존에 재고가 존재하지 않을 경우, 새로운 열을 추가
 			else {
@@ -169,7 +230,7 @@ public class StockController {
 				existTmstk.setStock_amt(existTmstk.getStock_amt() + stktransfVO.getMoveAmt());
 				existTmstk.setModNm(userInfo.getUserNm());
 
-				stockDAO.updateTmstk(existTmstk);
+				stockDAO.updateTmstkAmt(existTmstk);
 			}
 			// 옮겨갈 로케이션이 기존에 재고가 존재하지 않을 경우, 새로운 열을 추가
 			else {
@@ -211,4 +272,5 @@ public class StockController {
 			throw new RuntimeException(e);
 		}
 	}
+	/* stktransf E */
 }
