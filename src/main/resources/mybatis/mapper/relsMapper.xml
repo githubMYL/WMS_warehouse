@@ -34,6 +34,7 @@
         <result property="alloAfterStock" column="ALLO_AFTER_STOCK" />
     </resultMap>
 
+    <!-- 출고등록 H -->
     <select id="relsList" resultMap="relsMap">
         SELECT A.RELS_DT
              , A.RELS_NO
@@ -46,6 +47,43 @@
             ON A.CLNT_CD = B.CLNT_CD
         INNER JOIN RELS_CODE C
             ON A.STATUS = C.RELS_CODE
+        ORDER BY A.REG_DT DESC
+    </select>
+
+    <!-- 출고등록 D -->
+    <select id="relsDetailList" resultMap="relsMap">
+        SELECT A.RELS_DT
+            , A.RELS_NO
+            , A.CLNT_CD
+            , D.CLNT_NM
+            , E.RELS_VALUE STATUS
+            , A.REMK
+        FROM RELS_H A
+        LEFT OUTER JOIN RELS_D B
+            ON A.RELS_DT = B.RELS_DT
+            AND A.RELS_NO = B.RELS_NO
+        INNER JOIN CLNT D
+            ON A.CLNT_CD = D.CLNT_CD
+        INNER JOIN RELS_CODE E
+            ON A.STATUS = E.RELS_CODE
+        WHERE A.RELS_DT = '20230710'
+            AND A.RELS_NO = 1
+        ORDER BY A.REG_DT DESC
+    </select>
+
+    <!-- 출고등록 S -->
+    <select id="relsSubDetailList" resultMap="relsMap">
+        SELECT A.RELS_DT
+        , A.RELS_NO
+        , A.CLNT_CD
+        , B.CLNT_NM
+        , C.RELS_VALUE STATUS
+        , A.REMK
+        FROM RELS_H A
+        INNER JOIN CLNT B
+        ON A.CLNT_CD = B.CLNT_CD
+        INNER JOIN RELS_CODE C
+        ON A.STATUS = C.RELS_CODE
         ORDER BY A.REG_DT DESC
     </select>
 </mapper>

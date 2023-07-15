@@ -2,54 +2,194 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/front/main}">
-
 <head>
 	<script>
-<!--    검색조건에따라 리스트 바뀐다-->
-function search(){
-        <!--검증이 필요하면 사용-->
-        var search_clntNm = document.getElementById("clnt_nm").value.trim();
-        var search_itemCd = document.getElementById("item_cd").value.trim();
-        var search_itemNm = document.getElementById("item_nm").value.trim();
-        <!--검증이 필요하면 사용-->
+<!--더블릭으로 수정 S-->
+    function double(event) {
+    var clicked = event.currentTarget;
+    var clnt_cd = clicked.querySelector('.clnt_cd').textContent;
+    var item_cd = clicked.querySelector('.item_cd').textContent;
+    var wactr_cd = clicked.querySelector('.wactr_cd').textContent;
+    var loc_cd = clicked.querySelector('.loc_cd').textContent;
 
+    var tmstkCd = [];
 
-        var form = document.getElementById("search");
+    tmstkCd.push(clnt_cd, item_cd, wactr_cd, loc_cd);
 
-
-        // 폼 서버로 제출
-         form.method="get";
-         form.action="/tmstk"
-         form.submit();
+    url = 'stkadjMod' + '/' + tmstkCd;
+    title = ' (  ) ' + '재고 조정';
+    warehouse.popup.open(url, title, 500, 700, true);
     };
-</script>
+<!--더블릭으로 수정 E-->
+
+
+<!--클릭하면 조정내역 보기 S-->
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tmstkTr = document.querySelectorAll('#tmstkTr');
+
+    tmstkTr.forEach( (tr) => {
+        tr.addEventListener('click', getDetail);
+    });
+
+  });
+
+
+    function getDetail(e) {
+				const evnt = e.target.parentNode;
+                var clnt_cd = evnt.querySelector('.clnt_cd').textContent;
+                var item_cd = evnt.querySelector('.item_cd').textContent;
+                var wactr_cd = evnt.querySelector('.wactr_cd').textContent;
+                var loc_cd = evnt.querySelector('.loc_cd').textContent;
+
+                <!--숨겨진검색바-->
+                var searchBar = document.getElementById('searchBar');
+
+	            <!--파라미터로 넘길 값-->
+				var tmstkCd = [];
+                tmstkCd.push(clnt_cd, item_cd, wactr_cd, loc_cd);
+
+
+				var stkadjListTable = document.querySelector("#stkadjListTable > tbody");
+
+
+
+				const url = `/stkadj/ajaxstkadj/getDetail?tmstkCd=${tmstkCd}`;
+                commonLib.ajaxLoad(url).then((data) => {
+                        data = JSON.parse(data);
+                        var str = '';
+                        console.log(data)
+
+                    if(data.length > 0) {
+
+                        <!--정보가있을때만 검색바 보이기-->
+                        searchBar.style.display="block";
+                        <!--검색을 위해 tmstkCd 를 가져간다-->
+                        searchBar.dataset.searchData=tmstkCd;
+
+                        <!--넘어온 데이터가 리스트이기 때문에 for문 돌려서 있는만큼 뽑기-->
+                        for (var i = 0; i < data.length; i++) {
+                            var vo = data[i];
+
+                            str += '<tr>';
+                            str += '<td>' + vo.no + '</td>';
+                            str += '<td>' + vo.adj_dt + '</td>';
+                            str += '<td>' + vo.before_adj_stock + '</td>';
+                            str += '<td>' + vo.after_adj_stock + '</td>';
+                            str += '<td>' + vo.adj_reason + '</td>';
+                            str += '<td>' + vo.mod_nm + '</td>';
+                            str += '</tr>';
+                        }
+
+                        stkadjListTable.innerHTML = str;
+
+                    } else {
+
+                         <!--정보가없으면 다시 검색바 숨기기-->
+                        searchBar.style.display="none";
+
+                         str += '<tr>';
+                         str += '<td colspan="6" align="center" style="height:100px; font-size:20px; font-weight:bold;">' + '조정 내역이 없습니다' + '</td>';
+                         str += '</tr>';
+                        stkadjListTable.innerHTML = str;
+
+                    }
+
+
+
+                    })
+
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+<!--클릭하면 조정내역 보기 E-->
+
+
+
+<!--날짜조회 S-->
+
+    function search(){
+
+                var mod_dt_start = document.getElementById('mod_dt_start').value;
+                var mod_dt_end = document.getElementById('mod_dt_end').value;
+
+                if(mod_dt_start =="" || mod_dt_end==""){
+                    alert("조회하실 날짜를 선택해주세요");
+                    return;
+                }
+
+                if(mod_dt_start > mod_dt_end){
+                    alert("조회종료일은 시작일보다 커야합니다");
+                    return;
+                }
+
+                var searchBar = document.getElementById('searchBar');
+
+                console.log( searchBar.dataset.searchData);
+
+                <!--getDetail에서 추가한 dataset 속성을 가져온다-->
+                var searchData = searchBar.dataset.searchData;
+                searchData+= "," + mod_dt_start + "," + mod_dt_end;
+
+                console.log(searchData);
+
+
+				var stkadjListTable = document.querySelector("#stkadjListTable > tbody");
+
+	            const url = `/stkadj/ajaxstkadj/getSearch?searchData=${searchData}`;
+
+
+                commonLib.ajaxLoad(url).then((data) => {
+                        data = JSON.parse(data);
+                        var str = '';
+                        console.log(data)
+
+                    if(data.length > 0) {
+                        <!--넘어온 데이터가 리스트이기 때문에 for문 돌려서 있는만큼 뽑기-->
+                        for (var i = 0; i < data.length; i++) {
+                            var vo = data[i];
+
+                            str += '<tr>';
+                            str += '<td>' + vo.no + '</td>';
+                            str += '<td>' + vo.adj_dt + '</td>';
+                            str += '<td>' + vo.before_adj_stock + '</td>';
+                            str += '<td>' + vo.after_adj_stock + '</td>';
+                            str += '<td>' + vo.adj_reason + '</td>';
+                            str += '<td>' + vo.mod_nm + '</td>';
+                            str += '</tr>';
+                        }
+
+                        stkadjListTable.innerHTML = str;
+
+                    } else {
+                         str += '<tr>';
+                         str += '<td colspan="6" align="center" style="height:100px; font-size:20px; font-weight:bold;">' + '조회 내역이 없습니다' + '</td>';
+                         str += '</tr>';
+                        stkadjListTable.innerHTML = str;
+
+                    }
+
+
+
+                    })
+
+					.catch((err) => {
+						console.error(err);
+					});
+
+        }<!--search()-->
+
+<!--    날짜조회 E-->
+
+
+    </script>
 </head>
 <section layout:fragment="content">
+	<h2>재고조정</h2><br>
+
 	<div  align="center" class="table_wrapper">
-
-		<form id="search" autocomplete="off" class="frmSearch">
-			<table class="table-cols">
-
-				<tr>
-					<th style="width:80px;">고객사명</th>
-					<td>
-						<input type="text" id="clnt_nm" name="search_clntNm" placeholder="고객사명" style="width:100%;">
-					</td>
-
-					<th style="width:80px;">상품코드</th>
-					<td>
-						<input type="text" id="item_cd" name="search_itemCd" placeholder="상품코드" style="width:100%;">
-					</td>
-					<th style="width:80px;">상품명</th>
-					<td>
-						<input type="text" id="item_nm" name="search_itemNm" placeholder="상품명" style="width:100%;">
-					</td>
-				</tr>
-			</table>
-			<div class="btns" style="text-align:right;">
-				<button onclick="search()" class="sbtn">검색</button>
-			</div>
-		</form>
 
 		<table>
 			<tr>
@@ -63,8 +203,8 @@ function search(){
 				<th style="width:50px;">불량수량</th>
 			</tr>
 
-			<tr th:each="list , Count: ${list}" th:object="${list}">
-				<td th:text="${Count.count}"></td>
+			<tr th:each="list, count : ${stkadjList}" th:ondblclick="double(event)"  id="tmstkTr" th:object="${list}" class="list_hover">
+				<td th:text="${count.count}"></td>
 				<td th:text="*{wactr_nm}"></td>
 				<td th:text="*{clnt_nm}"> </td>
 				<td th:text="*{loc_cd}"></td>
@@ -72,9 +212,59 @@ function search(){
 				<td th:text="*{item_nm}"></td>
 				<td th:text="*{stock_amt}"></td>
 				<td th:text="*{fault_amt}"></td>
+
+				<!--조회를 위한 코드(hidden)-->
+				<td hidden="hidden" th:text="*{clnt_cd}" class="clnt_cd"></td>
+				<td hidden="hidden" th:text="*{item_cd}" class="item_cd"></td>
+				<td hidden="hidden" th:text="*{wactr_cd}" class="wactr_cd"></td>
+				<td hidden="hidden" th:text="*{loc_cd}" class="loc_cd"></td>
+				<!--조회를 위한 코드(hidden)-->
 			</tr>
 
 		</table>
+
+	</div>
+	<br><br>
+
+	<h2>조정 내역</h2>
+	<div id="stkadjList" >
+		<div  align="left" class="table_wrapper">
+
+			<div id="searchBar" style="display:none;">
+				<table class="table-cols">
+					<tr>
+						<th style="width:100px;">조회시작일</th>
+						<td style="padding:0;">
+							<input type="date" id="mod_dt_start">
+						</td>
+						<th style="width:100px;">조회종료일</th>
+						<td style="padding:0;">
+							<input type="date" id="mod_dt_end">
+						</td>
+						<td style="padding:0;">
+							<button type="button" onclick="search()" class="sbtn">검색</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<table id="stkadjListTable">
+				<thead>
+				<tr>
+					<th style="width:40px">순번</th>
+					<th style="width:180px">조정일자</th>
+					<th style="width:40px">조정전 재고</th>
+					<th style="width:40px">조정후 재고</th>
+					<th >조정사유</th>
+					<th >수정자</th>
+				</tr>
+				</thead>
+
+				<tbody>
+				</tbody>
+
+			</table>
+		</div>
 
 	</div>
 </section>

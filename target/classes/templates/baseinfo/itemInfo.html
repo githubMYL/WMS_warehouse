@@ -64,7 +64,7 @@
                     <th>파렛트 당<br/>박스 수</th>
                     <th>비고</th>
                 </tr>
-                <tr id="id_item_table" class="itemTable" th:each="itemList : ${itemInfoList}" th:onclick="rowClicked()">
+                <tr id="id_item_table" class="itemTable" th:each="itemList : ${itemInfoList}">
                     <td align="center">
                         <input th:type="checkbox" name="chk" id="chk" th:value="${itemList.wactrCd} +','+ ${itemList.clntCd} +','+ ${itemList.LocCd} +','+ ${itemList.itemCd}">
                     </td>
@@ -110,6 +110,7 @@
             chks.forEach(element => element.addEventListener('click', function(e){
 
                 if(e.target.checked == true){
+                alert(e.target.value);
                     e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
                 }else {
                     e.target.parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
@@ -153,24 +154,24 @@
 					});
             };
 
-            function rowClicked() {
-                var itemInfoTable = document.getElementById('itemInfoTable');
-                var rowList = itemInfoTable.rows;
-                var selector = document.querySelectorAll("input[name=chk]");
-                alert(selector[2].value);
-                for(i = 1; i < rowList.length; i++){ // td 데이터만 반복문
-                    var row = rowList[i];
-                    var tdsNum = row.childElementCount; // td 갯수 카운팅
+<!--            function rowClicked() {-->
+<!--                var itemInfoTable = document.getElementById('itemInfoTable');-->
+<!--                var rowList = itemInfoTable.rows;-->
+<!--                var selector = document.querySelectorAll("input[name=chk]");-->
+<!--                alert(selector[2].value);-->
+<!--                for(i = 1; i < rowList.length; i++){ // td 데이터만 반복문-->
+<!--                    var row = rowList[i];-->
+<!--                    var tdsNum = row.childElementCount; // td 갯수 카운팅-->
 
-                    document.getElementById("chk").checked = true;
+<!--                    document.getElementById("chk").checked = true;-->
 
 <!--                    row.onclick = function(){-->
 <!--                        return function(){-->
 <!--                            -->
 <!--                        }-->
 <!--                    }(row);-->
-                }
-            }
+<!--                }-->
+<!--            }-->
         </script>
     </section>
 </html>

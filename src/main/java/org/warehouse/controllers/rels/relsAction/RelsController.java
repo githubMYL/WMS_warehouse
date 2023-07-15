@@ -27,11 +27,11 @@ public class RelsController {
         List<RelsVO> relsList = relsDAO.relsList();
         model.addAttribute("relsList", relsList);
 
-//        List<RelsVO> relsDetailList = relsDAO.relsDetailList();
-//        model.addAttribute("relsDetailList", relsDetailList);
+        List<RelsVO> relsDetailList = relsDAO.relsDetailList();
+        model.addAttribute("relsDetailList", relsDetailList);
 
-//        List<RelsVO> relsSubDetailList = relsDAO.relsSubDetailList();
-//        model.addAttribute("relsSubDetailList", relsSubDetailList);
+        List<RelsVO> relsSubDetailList = relsDAO.relsSubDetailList();
+        model.addAttribute("relsSubDetailList", relsSubDetailList);
 
         return "rels/rels";
     }
