@@ -1,15 +1,14 @@
 package org.warehouse.controllers.rels.relsAction;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.RelsDAO;
 import org.warehouse.models.rels.relsAction.RelsVO;
+import org.warehouse.models.stdin.StdinVO;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -19,7 +18,8 @@ public class RelsController {
 
     private final RelsDAO relsDAO;
 
-    @GetMapping()
+    /** 출고등록 */
+    @GetMapping
     private String rels(Model model){
 
         commonProcess(model);
@@ -27,14 +27,36 @@ public class RelsController {
         List<RelsVO> relsList = relsDAO.relsList();
         model.addAttribute("relsList", relsList);
 
-        List<RelsVO> relsDetailList = relsDAO.relsDetailList();
-        model.addAttribute("relsDetailList", relsDetailList);
-
         List<RelsVO> relsSubDetailList = relsDAO.relsSubDetailList();
         model.addAttribute("relsSubDetailList", relsSubDetailList);
 
         return "rels/rels";
     }
+
+    /** 출고등록 D */
+    @ResponseBody
+    @GetMapping("relsDetail")
+    public List<RelsVO> relsDetail(String relsDt, String relsNo) {
+
+        HashMap<String,String> relsDetailMap = new HashMap<>();
+
+        System.out.println("====== init ======");
+        relsDt = relsDt.replaceAll("-", "");
+        System.out.println("relsDt :: " + relsDt);
+        System.out.println("relsNo :: " + relsNo);
+
+        relsDetailMap.put("relsDt", relsDt);
+        relsDetailMap.put("relsNo", relsNo);
+        System.out.println(relsDetailMap);
+        List<RelsVO> relsDetList = relsDAO.relsDetailList(relsDetailMap);
+        //List<RelsVO> relsDetList = relsDAO.relsDetailList(relsDt, relsNo);
+        System.out.println("relsDetList : " + relsDetList);
+        System.out.println("====== init END ======");
+        return relsDetList;
+    }
+
+    /** 출고등록 S (할당) */
+
 
     private void commonProcess(Model model) {
         String Title = "출고::출고등록";

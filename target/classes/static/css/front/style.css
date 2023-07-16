@@ -69,7 +69,7 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 .table_wrapper td { background: inherit; padding: 10px 15px; }
 
 /** 출고 테이블 */
-.table_rels_wrapper {width: 900px; height: 330px; overflow:auto;}
+.table_rels_wrapper {width: 900px; overflow:auto;}
 .table_rels_wrapper > table { width: 100%; border-spacing: 0; padding: 0; margin-bottom: 20px; white-space:nowrap; }
 .table_rels_wrapper th { background: #f8f8f8; width: 160px; padding: 10px 20px; text-align: left; }
 .table_rels_wrapper td { background: #fff; padding: 10px 15px; }

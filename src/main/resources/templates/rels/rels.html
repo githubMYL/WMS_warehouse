@@ -8,6 +8,9 @@
         <div class="table_rels_wrapper">
             <table id="relsHTable" class="table-cols">
                 <tr>
+                    <th align="center">
+                        <input type="checkbox">
+                    </th>
                     <th>순번</th>
                     <th>출고일자</th>
                     <th>고객사코드</th>
@@ -17,6 +20,9 @@
                     <th>비고</th>
                 </tr>
                 <tr th:each="relsData, rowCnt : ${relsList}">
+                    <td align="center">
+                        <input type="checkbox" name="chk" id="chk"  th:data-relsdt="${relsData.relsDt}" th:data-relsno="${relsData.relsNo}">
+                    </td>
                     <td align="center" th:text="${rowCnt.count}"></td>
                     <td align="center" th:text="${relsData.relsDt}"></td>
                     <td align="center" th:text="${relsData.clntCd}"></td>
@@ -28,109 +34,124 @@
             </table>
         </div>
         <script>
-            // relsHTable 의 tr태그를 찾음
-            const trs = document.querySelectorAll('#relsHTable tr');
-				trs.forEach( (tr) => {
-					tr.addEventListener('click', getDetail);
-				});
+            document.addEventListener('DOMContentLoaded', function() {
+                // relsHTable 의 tr태그를 찾음
+                const trs = document.querySelectorAll('#relsHTable tr');
+                trs.forEach( (tr) => {
+                    tr.addEventListener('click', getDetail);
+                });
+            });
 
             function getDetail(e) {
-    alert("getDetail Function init");
 				const evnt = e.target.parentNode;
-				const relsDt = evnt.querySelector('#chk').dataset.relsDt;
-				const relsNo = evnt.querySelector('#chk').dataset.relsNo;
-				var relsDTable = document.querySelector("#relsDTable > tbody");
-				var str = '<tr><th>순번</th><th>상품코드</th><th>상품명</th><th>로케이션</th><th>입고예정수량</th><th>정상수량</th><th>불량수량</th><th>비고</th></tr>';
+				// dataset 데이터 변수에 넣기
+				const relsDt = evnt.querySelector('#chk').dataset.relsdt;
+				const relsNo = evnt.querySelector('#chk').dataset.relsno;
 
-				str += '<tr id="relsDTable">';
+                // detailList 테이블 id
+                var relsDTable = document.querySelector("#relsDTable > tbody");
 
-				const url = `/stdin/ajaxstdin/getDetail?stdinNum=${stdinNum}`;
-				commonLib.ajaxLoad(url)
-                .then((data) => {
+                // 쿼리스트링
+                const url = `rels/relsDetail?relsDt=${relsDt}&relsNo=${relsNo}`;
+                commonLib.ajaxLoad(url).then((data) => {
+                    // JSON 문자열을 javaScript 객체로 변환 :: 반대 :: stringify()
                     data = JSON.parse(data);
-                    str += '<td data-status= '+ data.status + ' data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
-                    str += '<td>' + data.itemCd + '</td>';
-                    str += '<td>' + data.itemNm + '</td>';
-                    str += '<td>' + data.locCd + '</td>';
-                    str += '<td>' + data.beforeStdin + '</td>';
-                    str += '<td>' + data.normal + '</td>';
-                    str += '<td>' + data.fault + '</td>';
-                    str += '<td>' + data.remark + '</td>';
-                    str += '</tr>';
-                    stdin_d_table.innerHTML = str;
+                    var str = '';
+
+                    for(var i = 0; i < data.length; i++) {
+
+                        if(data[i].itemNm == null) data[i].itemNm = "";                 // 상품명 null 공백처리
+                        if(data[i].regInAmt == null) data[i].regInAmt = 0;              // 출고지시수량 null 0처리
+                        if(data[i].relsCnt == null) data[i].relsCnt = 0;                // 출고수량 null 0처리
+                        if(data[i].deliRequestDt == null) data[i].deliRequestDt = "";   // 납품요청일 null 공백처리
+                        if(data[i].plt == null) data[i].plt = 0;                        // 파렛트 null 0처리
+                        if(data[i].box == null) data[i].box = 0;                        // 박스 null 0처리
+                        if(data[i].remk == null) data[i].remk = "";                     // 비고 null 공백처리
+                        str += '<tr>';
+                        str += '<td>' + data[i].rowCnt + '</td>'
+                        str += '<td>' + data[i].custNm + '</td>';
+                        str += '<td>' + data[i].custCtrNm + '</td>';
+                        str += '<td>' + data[i].itemCd + '</td>';
+                        str += '<td>' + data[i].itemNm + '</td>';
+                        str += '<td align="right">' + data[i].regInAmt + '</td>';
+                        str += '<td align="right">' + data[i].relsCnt + '</td>';
+                        str += '<td>' + data[i].deliRequestDt + '</td>';
+                        str += '<td align="right">' + data[i].plt + '</td>';
+                        str += '<td align="right">' + data[i].box + '</td>';
+                        str += '<td>' + data[i].remk + '</td>';
+                        str += '</tr>';
+                    }
+                    relsDTable.innerHTML = str;
                 })
                 .catch((err) => {
                     console.error(err);
                 });
-			}
-
+            }
         </script>
         <br/>
         <!--########## detail ##########-->
-        <div class="table_rels_wrapper">
+        <div class="table_rels_wrapper" id="relsDetailList">
             <table id="relsDTable" class="table-cols">
-                <tr>
-                    <th align="center">
-                        <input type="checkbox">
-                    </th>
-                    <th>순번</th>
-                    <th>납품처명</th>
-                    <th>납품센터명</th>
-                    <th>상품코드</th>
-                    <th>상품명</th>
-                    <th>출고지시수량</th>
-                    <th>출고수량</th>
-                    <th>납품요청일</th>
-                    <th>파렛트</th>
-                    <th>박스</th>
-                    <th>비고</th>
-                </tr>
-                <tr th:each="relsDetailData, rowCnt : ${relsDetailList}">
-                    <td align="center">
-                        <input type="checkbox">
-                    </td>
-                    <td th:text="${rowCnt.count}"></td>
-                    <th th:text="${relsDetailData.custNm}"></th>
-                    <th th:text="${relsDetailData.custCtrNm}"></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>순번</th>
+                        <th>납품처명</th>
+                        <th>납품센터명</th>
+                        <th>상품코드</th>
+                        <th>상품명</th>
+                        <th>출고지시수량</th>
+                        <th>출고수량</th>
+                        <th>납품요청일</th>
+                        <th>파렛트</th>
+                        <th>박스</th>
+                        <!-- th>출고후수량</th -->
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+<!--                    <tr th:each="relsDtData, rowCnt : ${relsDetailList}" id="relsDetData">-->
+<!--                        <td th:text="${rowCnt.count}"></td>-->
+<!--                        <td th:text="${relsDtData.custNm}"></td>-->
+<!--                        <td th:text="${relsDtData.custCtrNm}"></td>-->
+<!--                        <td th:text="${relsDtData.itemCd}"></td>-->
+<!--                        <td th:text="${relsDtData.itemNm}"></td><th></th>-->
+<!--                        <td th:text="${relsDtData.regInAmt}"></td>-->
+<!--                        <td th:text="${relsDtData.relsCnt}"></td>-->
+<!--                        <td th:text="${relsDtData.deliRequestDt}"></td>-->
+<!--                        <td th:text="${relsDtData.plt}"></td>-->
+<!--                        <td th:text="${relsDtData.box}"></td>-->
+<!--                        &lt;!&ndash; td th:text="${relsDtData.relsAfterAmt}"></th &ndash;&gt;-->
+<!--                        <td th:text="${relsDtData.remk}"></td>-->
+<!--                    </tr>-->
+                </tbody>
             </table>
         </div>
         <br/>
         <!--########## subdetail ##########-->
         <div class="table_rels_wrapper">
             <table id="relsSTable" class="table-cols">
-                <tr>
-                    <th align="center">
-                        <input type="checkbox">
-                    </th>
-                    <th>순번</th>
-                    <th>상품코드</th>
-                    <th>상품명</th>
-                    <th>로케이션</th>
-                    <th>할당수량</th>
-                    <th>할당후재고</th>
-                    <th>비고</th>
-                </tr>
-                <tr th:each="relsSubData, rowCnt : ${relsSubDetailList}">
-                    <td align="center">
-                        <input type="checkbox">
-                    </td>
-                    <td align="center" th:text="${rowCnt.count}"></td>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>순번</th>
+                        <th>상품코드</th>
+                        <th>상품명</th>
+                        <th>로케이션</th>
+                        <th>할당수량</th>
+                        <th>할당후재고</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="relsSubData, rowCnt : ${relsSubDetailList}">
+                        <td align="center" th:text="${rowCnt.count}"></td>
+                        <td th:text="${relsSubData.itemCd}"></td>
+                        <td th:text="${relsSubData.itemNm}"></td>
+                        <td th:text="${relsSubData.locCd}"></td>
+                        <td th:text="${relsSubData.alloAmt}"></td>
+                        <td th:text="${relsSubData.alloAfterStock}"></td>
+                        <td th:text="${relsSubData.remk}"></td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </section>
