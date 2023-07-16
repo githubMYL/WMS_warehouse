@@ -4,6 +4,50 @@
       layout:decorate="~{layouts/front/main}">
 
     <section layout:fragment="content">
+        <form method="get" class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
+<!--            <table class="table-cols">-->
+<!--                <tr>-->
+<!--                    <th>고객사명</th>-->
+<!--                    <td>-->
+<!--                        <input type="text" th:field="*{clntNm}" id="clntNmSrch">-->
+<!--                    </td>-->
+<!--                    <th>상품코드</th>-->
+<!--                    <td>-->
+<!--                        <input type="text" th:field="*{itemCd}" id="itemCdSrch">-->
+<!--                    </td>-->
+<!--                    <th>상품명</th>-->
+<!--                    <td>-->
+<!--                        <input type="text" th:field="*{itemNm}" id="itemNmSrch">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </table>-->
+            <div class="btns" align="right">
+                <button class="sbtn" th:text="#{search_btn}" onclick="movePage(1)"></button>
+                <button class="sbtn" th:onclick="add()" th:text="#{add_btn}"></button>
+                <button class="sbtn blue" th:onclick="deleteItem()" th:text="#{delete_btn}"></button>
+            </div>
+        </form>
+<!--        <script>-->
+<!--            // 페이지이동-->
+<!--            function movePage(page){-->
+
+<!--                // 검색 조건을 form 에 넣어줌-->
+<!--                const form = document.getElementById('searchForm');-->
+
+<!--                // form 에 들어있는 검색조건을 queryParams에 넣어줌.-->
+<!--                const queryParams = {-->
+<!--                    page: (page) ? page: 1,-->
+<!--                    recordSize: 10,-->
+<!--                    pageSize: 10,-->
+<!--                    clntNm: form.clntNmSrch.value,-->
+<!--                    itemCd: form.itemCdSrch.value,-->
+<!--                    itemNm: form.itemNmSrch.value-->
+<!--                }-->
+<!--                // location.pathname :: 페이지의 URI를 의미함.-->
+<!--                // new URLSearchParams(queryParams).toString() :: queryParams 의 모든 값을 쿼리스트링으로 변환-->
+<!--                location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();-->
+<!--            }-->
+<!--        </script>-->
         <!--########## header ##########-->
         <div class="table_rels_wrapper">
             <table id="relsHTable" class="table-cols">
@@ -154,5 +198,12 @@
                 </tbody>
             </table>
         </div>
+        <script>
+            // 추가 ======================================================
+            function add() {
+                url = '/rels/register';
+                warehouse.popup.open(url, '출고등록 추가', 500, 600, true);
+            };
+        </script>
     </section>
 </html>

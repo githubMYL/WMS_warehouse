@@ -58,6 +58,15 @@ public class RelsController {
     /** 출고등록 S (할당) */
 
 
+    /** 출고등록 추가 팝업  */
+    @GetMapping("/register")
+    private String relsRegister(Model model){
+
+
+
+        return "rels/popup/relsPopup";
+    }
+
     private void commonProcess(Model model) {
         String Title = "출고::출고등록";
         String menuCode = "rels";
