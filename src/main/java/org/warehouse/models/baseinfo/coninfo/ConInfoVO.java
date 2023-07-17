@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @NoArgsConstructor @AllArgsConstructor
 public class ConInfoVO extends BaseEntity { // 계약정보
 
+	private String no;
+
 	private String clntCd;  	// 고객사코드
 
 	private String clntNm;		// 고객사 명
@@ -25,5 +27,7 @@ public class ConInfoVO extends BaseEntity { // 계약정보
 	private LocalDate transSdt; // 거래시작일
 
 	private LocalDate transEdt; // 거래만료일
+
+	private String deleteVal;
 
 }

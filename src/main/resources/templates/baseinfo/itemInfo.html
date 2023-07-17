@@ -49,7 +49,7 @@
             }
         </script>
     <div class="table_wrapper">
-        <table class="table-cols">
+        <table class="table-cols" id="itemInfoTable">
             <tr>
                 <th align="center">
                     <input th:type="checkbox" id="chkAll" name="chkAll">
@@ -81,12 +81,13 @@
         </table>
     </div>
     <script>
-            // 추가
+            // 추가 ======================================================
             function add() {
                 url = '/baseinfo/iteminfo/register';
                 warehouse.popup.open(url, '상품정보 추가', 500, 600, true);
             };
-            // 더블클릭 수정
+
+            // 더블클릭 수정 ===============================================
             document.addEventListener('DOMContentLoaded', function() {
 				const trs = document.querySelectorAll('tr');
 				trs.forEach( (tr) => {
@@ -100,27 +101,30 @@
 				var keyVal = tr.querySelector('#chk').value.replaceAll(",", "");
 
 				url = '/baseinfo/iteminfo/' + keyVal + '/update';
-				warehouse.popup.open(url, "상품정보 수정", 500, 800, true);
+				warehouse.popup.open(url, "상품정보 수정", 500, 600, true);
 			}
 
+            // 체크박스 선택 시 행 색변환 ======================================
             var chks = document.getElementsByName("chk");
 
             chks.forEach(element => element.addEventListener('click', function(e){
 
-                alert(e.target.checked);
                 if(e.target.checked == true){
+                alert(e.target.value);
                     e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
                 }else {
                     e.target.parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
                 }
             }));
 
-            // 모든 체크박스 체크
+            // 모든 체크박스 체크 ==============================================
             document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
                 e.preventDefault();
+
                 var list = document.querySelectorAll("input[name=chk]");
                 for (var i = 0; i < list.length; i++) {
                     list[i].checked = this.checked;
+                    // 체크값 색상 입히기
                     if(this.checked == true){
                         list[i].parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
                     }else if(this.checked == false) {
@@ -129,7 +133,7 @@
                 }
             });
 
-            // 체크된 데이터 삭제
+            // 체크 데이터 삭제 =================================================
             function deleteItem(e){
 
                 // 체크된 값 가져오기
@@ -148,7 +152,26 @@
 					.catch((err) => {
 						console.error(err);
 					});
-            }
+            };
+
+<!--            function rowClicked() {-->
+<!--                var itemInfoTable = document.getElementById('itemInfoTable');-->
+<!--                var rowList = itemInfoTable.rows;-->
+<!--                var selector = document.querySelectorAll("input[name=chk]");-->
+<!--                alert(selector[2].value);-->
+<!--                for(i = 1; i < rowList.length; i++){ // td 데이터만 반복문-->
+<!--                    var row = rowList[i];-->
+<!--                    var tdsNum = row.childElementCount; // td 갯수 카운팅-->
+
+<!--                    document.getElementById("chk").checked = true;-->
+
+<!--                    row.onclick = function(){-->
+<!--                        return function(){-->
+<!--                            -->
+<!--                        }-->
+<!--                    }(row);-->
+<!--                }-->
+<!--            }-->
         </script>
 </section>
 </html>

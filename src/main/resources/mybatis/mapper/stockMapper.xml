@@ -135,12 +135,46 @@
 		t.WACTR_CD , w.WACTR_NM,
 		t.LOC_CD ,
 		t.STOCK_AMT,t.FAULT_AMT,
+		t.reg_dt,t.del_yn,
 		NVL(r.ALLO_AMT, 0) ALLO_AMT
 		FROM TMSTK T
 		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
 		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
 		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
 		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
+		where T.del_yn = 'N'
+		ORDER BY t.reg_dt DESC
+	</select>
+
+	<!--검색조건-->
+	<select id="search_stkadjList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
+		SELECT
+		t.ITEM_CD, i.ITEM_NM,
+		t.CLNT_CD , c.CLNT_NM,
+		t.WACTR_CD , w.WACTR_NM,
+		t.LOC_CD ,
+		t.STOCK_AMT,t.FAULT_AMT,
+		t.reg_dt,t.del_yn,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT
+		FROM TMSTK T
+		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
+		where T.del_yn = 'N'
+		<if test='search_tmstk_wactrNm != ""'>
+			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
+		</if>
+		<if test='search_tmstk_itemNm != ""'>
+			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
+		</if>
+		<if test='search_tmstk_clntNm != ""'>
+			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
+		</if>
+		<if test='search_tmstk_locCd != ""'>
+			and t.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
+		</if>
+		ORDER BY t.reg_dt DESC
 	</select>
 
 
@@ -191,6 +225,11 @@
 		fault_amt = fault_amt + #{modTmstkFaultAmt},
 		mod_dt = sysdate,
 		mod_nm = #{mod_nm}
+		where
+		loc_cd = #{loc_cd} and
+		wactr_cd = #{wactr_cd} and
+		clnt_cd = #{clnt_cd} and
+		item_cd = #{item_cd}
 	</update>
 
 
@@ -201,6 +240,7 @@
 		wactr_cd = #{wactr_cd} and
 		clnt_cd = #{clnt_cd} and
 		item_cd = #{item_cd}
+		order by adj_dt desc
 	</select>
 
 	<!--조정한 날짜 사이로 검색-->
@@ -211,6 +251,7 @@
 		clnt_cd = #{clnt_cd} and
 		item_cd = #{item_cd} and
 		adj_dt BETWEEN TO_DATE(#{mod_dt_start}, 'YYYY-MM-DD') AND TO_DATE(#{mod_dt_end}, 'YYYY-MM-DD') + 1
+		order by adj_dt desc
 	</select>
 	<!--	stkadj E	-->
 

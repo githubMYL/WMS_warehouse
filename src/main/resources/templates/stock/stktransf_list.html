@@ -55,12 +55,12 @@ function search(){
 		});
 
 		function transfForm(e) {
-			console.log(e.target.parentNode);
-			console.log(e.target.parentNode.children[4]);
 			const locCd = e.target.parentNode.children[3].innerText;
 			const itemCd = e.target.parentNode.children[4].innerText;
+			const wactrCd = e.target.parentNode.children[8].innerText;
+			console.log(wactrCd);
 
-			const url = '_transfForm?locCd='+locCd+'&itemCd='+itemCd;
+			const url = '_transfForm?locCd='+locCd+'&itemCd='+itemCd+'&wactrCd='+wactrCd;
 			console.log(url);
 			warehouse.popup.open(url, "테스트", 460, 460, true);
 		}
@@ -90,6 +90,7 @@ function search(){
 					<td th:text="*{item_nm}"></td>
 					<td th:text="*{stock_amt}"></td>
 					<td th:text="*{fault_amt}"></td>
+					<td style="display : none;" th:text="*{wactr_cd}"></td>
 				</tr>
 
 			</table>

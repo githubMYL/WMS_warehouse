@@ -21,6 +21,7 @@ import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.util.List;
 
 @Controller
@@ -36,12 +37,12 @@ public class ItemInfoController{
 	private final ItemInfoValidator itemInfoValidator;
 	private final HttpServletResponse response;
 
+	/** 상품정보 리스트 */
 	@GetMapping("/iteminfo")
 	public String iteminfo(@ModelAttribute("srchParams") ItemInfoVO srchParams, Model model){
 
 		commonProcess(model);
 
-		System.out.println("sechParams ::: " + srchParams);
 		if(srchParams.getClntNm() == null && srchParams.getItemCd() == null && srchParams.getItemNm() == null){
 			srchParams.setClntNm("");
 			srchParams.setItemCd("");
@@ -54,6 +55,8 @@ public class ItemInfoController{
 
 		return "baseinfo/iteminfo";
 	}
+
+	/** 상품정보 수정 팝업 */
 	@GetMapping("/iteminfo/{keyVal}/update")
 	public String update(@PathVariable String keyVal, Model model) {
 		commonProcess(model);
@@ -89,6 +92,8 @@ public class ItemInfoController{
 
 		return "baseinfo/popup/itemInfoPop";
 	}
+
+	/** 상품정보 추가 팝업 */
 	@GetMapping("/iteminfo/register")
 	public String register(Model model) {
 
@@ -122,6 +127,7 @@ public class ItemInfoController{
 		return "baseinfo/popup/itemInfoPop";
 	}
 
+	/** 상품정보 저장 & 수정 처리 */
 	@PostMapping("/iteminfo")
 	public String iteminfoPs(@Valid ItemInfoVO itemInfoVO, Errors errors, Model model) {
 
@@ -168,6 +174,7 @@ public class ItemInfoController{
 		return "redirect:/baseinfo/iteminfo";
 	}
 
+	/** 상품정보 삭제 처리 (DEL_YN UPDATE) */
 	@GetMapping("iteminfo/deleteItem")
 	public String deleteItem(String chkArr) {
 
@@ -186,9 +193,9 @@ public class ItemInfoController{
 		String Title = "기본정보::상품정보";
 		String menuCode = "iteminfo";
 		String pageName = "baseinfo";
-		model.addAttribute("pageName", pageName);
 		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
+		model.addAttribute("pageName", pageName);
 	}
 
 	private void closeLayer(HttpServletResponse response) {

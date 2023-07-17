@@ -1,26 +1,25 @@
 package org.warehouse.controllers.rels.relsAction;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.RelsDAO;
 import org.warehouse.models.rels.relsAction.RelsVO;
+import org.warehouse.models.stdin.StdinVO;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
-@RequestMapping("/rels")
 @RequiredArgsConstructor
+@RequestMapping("/rels")
 public class RelsController {
 
 	private final RelsDAO relsDAO;
 
-	@GetMapping()
+	/** 출고등록 */
+	@GetMapping
 	private String rels(Model model){
 
 		commonProcess(model);
@@ -28,7 +27,44 @@ public class RelsController {
 		List<RelsVO> relsList = relsDAO.relsList();
 		model.addAttribute("relsList", relsList);
 
+		List<RelsVO> relsSubDetailList = relsDAO.relsSubDetailList();
+		model.addAttribute("relsSubDetailList", relsSubDetailList);
+
 		return "rels/rels";
+	}
+
+	/** 출고등록 D */
+	@ResponseBody
+	@GetMapping("relsDetail")
+	public List<RelsVO> relsDetail(String relsDt, String relsNo) {
+
+		HashMap<String,String> relsDetailMap = new HashMap<>();
+
+		System.out.println("====== init ======");
+		relsDt = relsDt.replaceAll("-", "");
+		System.out.println("relsDt :: " + relsDt);
+		System.out.println("relsNo :: " + relsNo);
+
+		relsDetailMap.put("relsDt", relsDt);
+		relsDetailMap.put("relsNo", relsNo);
+		System.out.println(relsDetailMap);
+		List<RelsVO> relsDetList = relsDAO.relsDetailList(relsDetailMap);
+		//List<RelsVO> relsDetList = relsDAO.relsDetailList(relsDt, relsNo);
+		System.out.println("relsDetList : " + relsDetList);
+		System.out.println("====== init END ======");
+		return relsDetList;
+	}
+
+	/** 출고등록 S (할당) */
+
+
+	/** 출고등록 추가 팝업  */
+	@GetMapping("/register")
+	private String relsRegister(Model model){
+
+
+
+		return "rels/popup/relsPopup";
 	}
 
 	private void commonProcess(Model model) {
@@ -40,20 +76,5 @@ public class RelsController {
 		model.addAttribute("pageName", pageName);
 	}
 
-	private void closeLayer(HttpServletResponse response) {
-		response.setContentType("text/html; charset=euc-kr");
-		PrintWriter out = null;
-		try {
-			out = response.getWriter();
-			out.println("<script>var parent = window.parent.document;" +
-					"var layerDim = parent.getElementById('layer_dim');" +
-					"var layerPopup = parent.getElementById('layer_popup');" +
-					"parent.body.removeChild(layerDim);" +
-					"parent.body.removeChild(layerPopup);" +
-					"parent.location.reload();</script>");
-			out.flush();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+
 }
