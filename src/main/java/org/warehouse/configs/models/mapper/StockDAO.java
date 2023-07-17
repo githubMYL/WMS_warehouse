@@ -7,6 +7,7 @@ import org.warehouse.models.stock.StkadjVO;
 import org.warehouse.models.stock.StktransfVO;
 import org.warehouse.models.stock.TmstkVO;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public interface StockDAO {
 	/* tmstk S */
 	void insertTmstk(TmstkVO tmstkVO);
 	void updateTmstkAmt(TmstkVO tmstkVO);
+	void updateTmstkDelyn(TmstkVO tmstkVO);
 	void deleteTmstk(TmstkVO tmstkVO);
 
 	List<TmstkVO> tmstkList();
@@ -65,5 +67,6 @@ public interface StockDAO {
 	/* stktransf S */
 	void insertStktransf(StktransfVO stktransfVO);
 	List<StktransfVO> getStktransfList();
+	List<StktransfVO> searchTransf(LocalDate search_moveDt, String search_itemCd, String search_itemNm);
 	/* stktransf E */
 }

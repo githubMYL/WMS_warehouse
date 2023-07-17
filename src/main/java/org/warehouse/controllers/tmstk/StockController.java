@@ -18,6 +18,7 @@ import org.warehouse.models.stock.TmstkVO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -167,19 +168,25 @@ public class StockController {
 
 	/* stktransf S */
 	@GetMapping("/stktransf")
-	public String stktransf(Model model){
-		List<TmstkVO> tmstkList = stockDAO.tmstkList();
-		List<StktransfVO> stktransfList = stockDAO.getStktransfList();
-
+	public String stktransf(@Param("search_clntNm")String search_clntNm, @Param("search_itemCd")String search_itemCd, @Param("search_itemNm")String search_itemNm, Model model){
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::재고이동");
 		model.addAttribute("menuCode", "stktransf");
 
 
-		model.addAttribute("list", tmstkList);
-		model.addAttribute("stktransfList", stktransfList);
-		return "stock/stktransf_list";
+		if (search_clntNm != null || search_itemCd!= null || search_itemNm!=null) {
+			List<TmstkVO> search_list = stockDAO.getSearchList(search_clntNm,search_itemCd,search_itemNm);
+			model.addAttribute("list", search_list);
+		} else {
+			List<TmstkVO> list = stockDAO.tmstkList();
+			model.addAttribute("list", list);
+		}
+
+
+		return "stock/stktransf";
 	}
+
+
 
 	@GetMapping("_transfForm")
 	public String transfForm(@Param("locCd")String locCd, @Param("itemCd")String itemCd, @Param("wactrCd")String wactrCd, Model model) {
@@ -240,7 +247,14 @@ public class StockController {
 
 				toTmstk.setRegNm(userInfo.getUserNm());
 
-				stockDAO.insertTmstk(toTmstk);
+				// 기존에 tmstk에 delyn = y로 처리된 값이 있을 경우, 키 중복 발생
+				// 조회 후, tmstk 테이블에 값이 존재할 경우, delyn=n 으로 update
+				if(stockDAO.getTmstkByConditions(tmstkVO.getWactr_cd(), tmstkVO.getClnt_cd(), tmstkVO.getItem_cd(), tmstkVO.getLoc_cd()) != null) {
+					stockDAO.updateTmstkDelyn(toTmstk);
+				} else {
+					// 조회 후 값이 없을 경우, 새롭게 insert
+					stockDAO.insertTmstk(toTmstk);
+				}
 			}
 
 		}
@@ -249,8 +263,7 @@ public class StockController {
 			// 기존 로케이션의 가용 재고를 비우고, 만약 fault_amt 또한 0이라면, 테이블을 비운다.
 			tmstkVO.setStock_amt(0L);
 			if(tmstkVO.getFault_amt() == 0) {
-				stockDAO.deleteTmstk(tmstkVO);
-
+					stockDAO.deleteTmstk(tmstkVO);
 			}
 
 
@@ -274,7 +287,16 @@ public class StockController {
 
 				toTmstk.setRegNm(userInfo.getUserNm());
 
-				stockDAO.insertTmstk(toTmstk);
+
+				// 기존에 tmstk에 delyn = y로 처리된 값이 있을 경우, 키 중복 발생
+				// 조회 후, tmstk 테이블에 값이 존재할 경우, delyn=n 으로 update
+				if(stockDAO.getTmstkByConditions(tmstkVO.getWactr_cd(), tmstkVO.getClnt_cd(), tmstkVO.getItem_cd(), tmstkVO.getLoc_cd()) != null) {
+					stockDAO.updateTmstkDelyn(toTmstk);
+				} else {
+					// 조회 후 값이 없을 경우, 새롭게 insert
+					stockDAO.insertTmstk(toTmstk);
+				}
+
 			}
 		}
 
@@ -284,6 +306,28 @@ public class StockController {
 		closeLayer(response);
 
 		return "close";
+	}
+
+	// 재고이동내역
+	@GetMapping("/stktransf/detail")
+	public String stktransf_detail(@Param("search_moveDt") LocalDate search_moveDt, @Param("search_itemCd")String search_itemCd, @Param("search_itemNm")String search_itemNm, Model model) {
+		model.addAttribute("pageName", "stock");
+		model.addAttribute("Title", "재고::재고이동내역");
+		model.addAttribute("menuCode", "stktransf_detail");
+
+		if (search_moveDt != null || search_itemCd!= null || search_itemNm!=null) {
+			System.out.println("search_moveDt: " + search_moveDt);
+			System.out.println("search_itemCd: " + search_itemCd);
+			System.out.println("search_itemNm: " + search_itemNm);
+			List<StktransfVO> search_list = stockDAO.searchTransf(search_moveDt, search_itemCd, search_itemNm);
+			System.out.println(search_list);
+			model.addAttribute("stktransfList", search_list);
+		} else {
+			List<StktransfVO> list = stockDAO.getStktransfList();
+			model.addAttribute("stktransfList", list);
+		}
+
+		return "stock/stktransf_list";
 	}
 
 	private void closeLayer(HttpServletResponse response) {
