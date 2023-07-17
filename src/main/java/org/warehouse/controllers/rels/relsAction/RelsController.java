@@ -62,10 +62,14 @@ public class RelsController {
     @GetMapping("/register")
     private String relsRegister(Model model){
 
-
-
+        RelsVO relsVO = new RelsVO();
+        model.addAttribute("relsVO", relsVO);
         return "rels/popup/relsPopup";
+
     }
+
+    /** 출고등록 추가 & 수정 처리  */
+
 
     private void commonProcess(Model model) {
         String Title = "출고::출고등록";
