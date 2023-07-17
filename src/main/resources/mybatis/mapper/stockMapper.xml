@@ -117,17 +117,17 @@
 	</insert>
 
 	<update id="updateTmstkAmt" parameterType="org.warehouse.models.stock.TmstkVO">
-		UPDATE TMSTK SET STOCK_AMT = #{stock_amt}, MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		UPDATE TMSTK SET STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}, MOD_NM = #{modNm}, MOD_DT = SYSDATE
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
 
 	<update id="updateTmstkDelyn" parameterType="org.warehouse.models.stock.TmstkVO">
-		UPDATE TMSTK SET DEL_YN = 'N', STOCK_AMT = #{stock_amt}, FAULT_AMT = 0, STDIN_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'), MOD_DT = SYSDATE, MOD_NM = #{regNm}
+		UPDATE TMSTK SET DEL_YN = 'N', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}, STDIN_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'), MOD_DT = SYSDATE, MOD_NM = #{regNm}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
 
 	<update id="deleteTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
-		UPDATE TMSTK SET DEL_YN = 'Y'
+		UPDATE TMSTK SET DEL_YN = 'Y', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
 	<!--	tmstk E		-->
