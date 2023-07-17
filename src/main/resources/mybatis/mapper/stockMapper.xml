@@ -56,7 +56,7 @@
 			LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
 			LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
 			LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
-		WHERE L.WACTR_CD = W.WACTR_CD
+		WHERE L.WACTR_CD = W.WACTR_CD AND T.DEL_YN = 'N'
 		ORDER BY T.REG_DT DESC
 	</select>
 
@@ -102,12 +102,12 @@
 
 	<select id="getTmstkByConditions" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT * FROM TMSTK
-		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd} AND DEL_YN = 'N'
 	</select>
 
 	<select id="getTmstkByLocCdItemCd" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT * FROM TMSTK
-		WHERE ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+		WHERE ITEM_CD = #{itemCd} AND LOC_CD = #{locCd} AND DEL_YN = 'N'
 	</select>
 
 	<insert id="insertTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
@@ -258,7 +258,7 @@
 	<!--	stktransf S		-->
 	<insert id="insertStktransf" parameterType="org.warehouse.models.stock.StktransfVO">
 		INSERT INTO STKTRANSF F(F.MOVE_DT, F.NO, F.ITEM_CD, F.CLNT_CD, F.WACTR_CD_FROM, F.LOC_CD_FROM, F.WACTR_CD_TO, F.LOC_CD_TO, F.RUNTIME_STOCK, F.MOVE_AMT, F.REASON, F.REG_DT, F.REG_NM)
-		VALUES(SYSDATE,(SELECT COUNT(*) FROM STKTRANSF FF WHERE FF.MOVE_DT = SYSDATE), #{itemCd}, #{clntCd}, #{waCtrCdFrom}, #{locCdFrom}, #{waCtrCdTo}, #{locCdTo}, #{runtimeStock}, #{moveAmt}, #{reason}, SYSDATE, #{regNm})
+		VALUES(TO_CHAR(SYSDATE, 'YYYY-MM-DD'),(SELECT COUNT(*) FROM STKTRANSF FF WHERE FF.MOVE_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'))+1, #{itemCd}, #{clntCd}, #{waCtrCdFrom}, #{locCdFrom}, #{waCtrCdTo}, #{locCdTo}, #{runtimeStock}, #{moveAmt}, #{reason}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{regNm})
 
 	</insert>
 

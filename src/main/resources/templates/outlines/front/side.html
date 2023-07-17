@@ -46,9 +46,21 @@
 	<!-- 재고 사이드 탭 -->
 	<ul th:case="stock">
 		<li>
+			<a th:href="@{/stock/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
+				<i class="xi-view-list"></i>
+				시점재고
+			</a>
+		</li>
+		<li>
 			<a th:href="@{/stock/stkadj}" th:classappend="${menuCode} == 'stkadj' ? 'on'">
 				<i class="xi-view-list"></i>
 				재고조정
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/stkadj}" th:classappend="${menuCode} == 'stkadj' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고조정내역
 			</a>
 		</li>
 		<li>
@@ -58,9 +70,9 @@
 			</a>
 		</li>
 		<li>
-			<a th:href="@{/stock/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
+			<a th:href="@{/stock/stktransf}" th:classappend="${menuCode} == 'stktransf' ? 'on'">
 				<i class="xi-view-list"></i>
-				시점재고
+				재고이동내역
 			</a>
 		</li>
 		<li>

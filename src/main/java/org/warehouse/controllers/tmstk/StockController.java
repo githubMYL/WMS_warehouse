@@ -170,7 +170,6 @@ public class StockController {
 	public String stktransf(Model model){
 		List<TmstkVO> tmstkList = stockDAO.tmstkList();
 		List<StktransfVO> stktransfList = stockDAO.getStktransfList();
-		System.out.println(stktransfList);
 
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::재고이동");
@@ -211,7 +210,6 @@ public class StockController {
 		stktransfVO.setWaCtrCdTo(wactrCd);
 		stktransfVO.setRuntimeStock(tmstkVO.getStock_amt());	// 추후에 출고쪽 물려있는 수량 뺄 예정
 		stktransfVO.setRegNm(userInfo.getUserNm());
-		System.out.println(stktransfVO);
 
 		// 시점재고의 값을 변경한다.
 		// 기존 로케이션에서 재고를 옮길 때, 기존 로케이션에 잔여 재고가 있는 경우
@@ -252,6 +250,7 @@ public class StockController {
 			tmstkVO.setStock_amt(0L);
 			if(tmstkVO.getFault_amt() == 0) {
 				stockDAO.deleteTmstk(tmstkVO);
+
 			}
 
 
