@@ -11,11 +11,6 @@
     div{
     margin-bottom:5px;
     }
-    .errors{
-    font-size:12px;
-    color:red;
-    }
-
     body{
     height:97%;
     }
@@ -96,8 +91,7 @@
         <div><span>비고</span></div><textarea rows="5" cols="23" th:field="*{remk}"name="remk" th:placeholder="비고"></textarea>
     </div>
 
-    <button type="submit" th:text="#{loc.action.join}"></button>
+    <button type="submit" th:text="#{loc.action.join}" class="sbtn"></button>
 </form>
 
 </html>
-

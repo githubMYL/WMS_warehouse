@@ -75,6 +75,4 @@ public class RelsController {
         model.addAttribute("menuCode", menuCode);
         model.addAttribute("pageName", pageName);
     }
-
-
 }

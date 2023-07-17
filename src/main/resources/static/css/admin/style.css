@@ -7,6 +7,8 @@ dl, dt, dd { margin:0; padding: 0; }
 a { text-decoration: none; }
 body { margin: 0; background: linear-gradient(-20deg, #d1e6f7a6, white); }
 img { border: 0; }
+#topButton{ border:1px solid #c9c7c7ba; box-shadow: 2px 2px 2px gray; position:fixed; bottom:3rem; right:3rem; text-align: center;width:35px;border-radius:50%; background-color:#ffffff; font-size:25px;}
+
 
 .errors {
 	font-size : 0.9rem;

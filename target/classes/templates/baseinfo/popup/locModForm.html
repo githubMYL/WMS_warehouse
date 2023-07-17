@@ -50,8 +50,8 @@
 
     <div class="form_wrap">
 
-        <form name="locMod" method="post" th:action="@{/baseinfo/locMod/update}"  th:object="${locVO}" align="left" class="_form" autocomplete="off">
-            <h2 align="left">로케이션 수정</h2>
+        <form name="locMod" method="post" th:action="@{/baseinfo/locMod/update}"  th:object="${locVO}" align="center" class="_form" autocomplete="off">
+            <h2 align="center">로케이션 수정</h2>
             <div>
                 <div><span>물류센터 명 : </span></div>
                 <input type="hidden" name="ori_loc_cd" th:value="${locVO.loc_cd}">
@@ -113,8 +113,8 @@
                 <textarea rows="5" cols="22" name="remk" th:field="*{remk}" th:text="*{remk}"></textarea>
             </div>
 
-            <button type="submit" th:text="#{loc.action.update}"></button>
-            <button type="button" onClick="closelayer()">취소</button>
+            <button type="submit" th:text="#{loc.action.update}" class="sbtn"></button>
+            <button type="button" onClick="closelayer()" class="sbtn">취소</button>
         </form>
 
 

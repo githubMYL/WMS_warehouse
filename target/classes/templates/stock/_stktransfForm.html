@@ -17,6 +17,7 @@
 
 	<form name="transfForm" method="post" th:action="@{/stock/_transfForm}" th:object="${stktransfVO}" autocomplete="off">
 		<div style="display : flex; flex-wrap: wrap;" id="flexWrap">
+			<input type="hidden" th:value="${wactrCd}" name="wactrCd">
 			<input type="hidden" th:value="${tmstkVO.item_cd}" name="itemCd">
 			<div >
 				로케이션 FROM

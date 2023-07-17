@@ -25,6 +25,18 @@
 		((SELECT NVL(MAX(NO), 0) + 1 FROM CON_INF), #{clntCd}, #{mMin}, #{pltFee}, #{transSdt}, #{transEdt}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
+	<update id="update" parameterType="org.warehouse.models.baseinfo.coninfo.ConInfoVO">
+		UPDATE CON_INF
+		SET M_MIN = #{mMin}
+		, PLT_FEE = #{pltFee}
+		, TRAN_SDT = #{transSdt}
+		, TRAN_EDT = #{transEdt}
+		, REMK = #{remark}
+		, MOD_DT = SYSDATE
+		, MOD_NM = #{modNm}
+		WHERE NO = #{no}
+	</update>
+
 	<update id="deleteConInfo" parameterType="org.warehouse.models.baseinfo.coninfo.ConInfoVO">
 		UPDATE CON_INF
 		SET DEL_YN = 'Y'

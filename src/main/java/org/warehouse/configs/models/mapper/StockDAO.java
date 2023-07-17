@@ -35,6 +35,11 @@ public interface StockDAO {
 
 	// stkadj조인해서 tmstk list 가져오기
 	List<StkadjForm> stkadjList();
+	List<StkadjForm> search_stkadjList(String search_tmstk_wactrNm,
+									   String search_tmstk_clntNm,
+									   String search_tmstk_locCd,
+									   String search_tmstk_itemNm);
+
 	// 재고조정 더블클릭 해서 하나 가져오기
 	StkadjForm stkadjOne(HashMap<String, String> tmstkCdMap);
 
@@ -42,12 +47,15 @@ public interface StockDAO {
 	// StkadjModService
 	// 재고조정 테이블 저장
 	void insertStkadj(StkadjForm stkadjForm);
+
 	// 시점재고 update
 	void updateTmstk(StkadjForm stkadjForm);
 
 
+
 	//조정내역을 위한 RestController 에 쓰임
 	List<StkadjVO> getDetail(HashMap<String, String> tmstkCdMap);
+
 	// 조정일자 검색
 	List<StkadjVO> getSearch(HashMap<String,String> searchArray);
 	/* stkadj E */

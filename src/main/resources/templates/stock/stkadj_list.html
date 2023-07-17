@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/front/main}">
 <head>
 	<script>
 <!--더블릭으로 수정 S-->
     function double(event) {
+    const loginUserType = document.getElementById('loginUserType').innerText;
+    console.log(loginUserType);
+
+    if(loginUserType == 'NotLogin'){
+        alert("재고 조정은 로그인이 필요합니다");
+        return;
+    }
+    if(loginUserType != 'ADMIN'){
+        alert("재고조정은 관리자만 가능합니다");
+        return;
+    }
+
+
     var clicked = event.currentTarget;
     var clnt_cd = clicked.querySelector('.clnt_cd').textContent;
     var item_cd = clicked.querySelector('.item_cd').textContent;
@@ -15,6 +29,8 @@
     var tmstkCd = [];
 
     tmstkCd.push(clnt_cd, item_cd, wactr_cd, loc_cd);
+
+    console.log(tmstkCd)
 
     url = 'stkadjMod' + '/' + tmstkCd;
     title = ' (  ) ' + '재고 조정';
@@ -106,6 +122,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!--클릭하면 조정내역 보기 E-->
 
+<!--재고 조회S-->
+function search_tmstk(){
+
+        <!--필요시 유효성검사-->
+        var search_tmstk_wactrNm = document.getElementById("search_wactrNm").value.trim();
+        var search_tmstk_clntmNm = document.getElementById("search_clntmNm").value.trim();
+        var search_tmstk_locCd = document.getElementById("search_locCd").value.trim();
+        var search_tmstk_itemNm = document.getElementById("search_itemNm").value.trim();
+
+        var form = document.getElementById("search");
+
+        // 폼 서버로 제출
+         form.method="get"
+         form.action="/stock/stkadj"
+         form.submit();
+    }
+
+<!--재고 조회E-->
+
 
 
 <!--날짜조회 S-->
@@ -188,9 +223,38 @@ document.addEventListener('DOMContentLoaded', function() {
 </head>
 <section layout:fragment="content">
 	<h2>재고조정</h2><br>
+	<span style="color:gray"> ※ 클릭 : 조정내역 보기 </span><br>
+	<span style="color:gray"> ※ 더블클릭 : 재고 조정하기 </span><br>
 
+	<form id="search"  class="frmSearch">
+		<table class="table-cols">
+			<tr align="left">
+				<th style="width:90px;">물류센터 명</th>
+				<td style="padding-right: 10px;">
+					<input type="text"  id="search_tmstk_wactrNm" name="search_tmstk_wactrNm" th:placeholder="물류센터검색" >
+				</td>
+				<th style="width:80px;">고객사 명</th>
+				<td style="padding-right: 10px;">
+					<input type="text"  id="search_tmstk_clntNm" name="search_tmstk_clntNm" th:placeholder="고객사검색" >
+				</td>
+				<th style="width:90px;">로케이션 코드</th>
+				<td style="padding-right: 10px;">
+					<input type="text"  id="search_tmstk_locCd" name="search_tmstk_locCd" th:placeholder="로케이션검색" >
+				</td>
+				<th style="width:60px;">상품 명</th>
+				<td style="padding-right: 10px;">
+					<input type="text"  id="search_tmstk_itemNm" name="search_tmstk_itemNm" th:placeholder="상품검색" >
+				</td>
+
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button th:text="#{search_btn}" onclick="search_tmstk()" class="sbtn"></button>
+		</div>
+	</form>
+
+	<span  style="display:none;" id="loginUserType" th:text="${loginUser}"></span>
 	<div  align="center" class="table_wrapper">
-
 		<table>
 			<tr>
 				<th style="width:50px;"></th>
@@ -253,8 +317,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				<tr>
 					<th style="width:40px">순번</th>
 					<th style="width:180px">조정일자</th>
-					<th style="width:40px">조정전 재고</th>
-					<th style="width:40px">조정후 재고</th>
+					<th style="width:40px">조정전 가용수량</th>
+					<th style="width:40px">조정후 가용수량</th>
 					<th >조정사유</th>
 					<th >수정자</th>
 				</tr>

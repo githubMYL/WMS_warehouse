@@ -14,4 +14,3 @@ public interface RelsDAO {
     List<RelsVO> relsDetailList(HashMap<String,String> relsDetailMap);
     List<RelsVO> relsSubDetailList(); // 출곡등록 로케이션기준 리스트
 }
-

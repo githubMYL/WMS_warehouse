@@ -33,8 +33,8 @@ public class ConInfoValidator implements Validator {
 		Long mMin = conInfoVO.getMMin();
 //		System.out.println("mMin :: " + mMin);
 		Long pltFee = conInfoVO.getPltFee();
-		LocalDate transSdt = conInfoVO.getTransSdt();
-		LocalDate transEdt = conInfoVO.getTransEdt();
+//		LocalDate transSdt = conInfoVO.getTransSdt();
+//		LocalDate transEdt = conInfoVO.getTransEdt();
 
 		// 1. 고객사 검증
 		if (clntCd == null || clntCd.isBlank()) {
@@ -55,8 +55,8 @@ public class ConInfoValidator implements Validator {
 			errors.rejectValue("pltFee", "Validation.incorrect.pltFee");
 		}
 		// 4. 거래시작일이 거래만료일보다 작은지 체크
-		if (transSdt != null && transEdt != null && !transSdt.isBefore(transEdt.plusDays(1))) {
-			errors.rejectValue("transSdt", "Validation.incorrect.transSdt");
-		}
+//		if (transSdt != null && transEdt != null && !transSdt.isBefore(transEdt.plusDays(1))) {
+//			errors.rejectValue("transSdt", "Validation.incorrect.transSdt");
+//		}
 	}
 }

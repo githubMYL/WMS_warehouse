@@ -6,17 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
 import org.warehouse.models.baseinfo.loc.LocVO;
+import org.warehouse.models.stock.StkadjForm;
 import org.warehouse.models.stock.StkadjModService;
 import org.warehouse.models.stock.StktransfVO;
 import org.warehouse.models.stock.TmstkVO;
-import org.warehouse.models.stock.StkadjForm;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -65,23 +63,51 @@ public class StockController {
 
 	/* stkadj S */
 	@GetMapping("/stkadj")
-	public String stkadj(Model model){
+	public String stkadj(Model model ,
+						 @RequestParam(name = "search_tmstk_wactrNm", required = false) String search_tmstk_wactrNm,
+						 @RequestParam(name = "search_tmstk_clntNm", required = false) String search_tmstk_clntNm,
+						 @RequestParam(name = "search_tmstk_locCd", required = false) String search_tmstk_locCd,
+						 @RequestParam(name = "search_tmstk_itemNm", required = false) String search_tmstk_itemNm){
+
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::재고조정");
 		model.addAttribute("menuCode", "stkadj");
 
-		List <StkadjForm> stkadjList = stockDAO.stkadjList();
 
-		model.addAttribute("stkadjList",stkadjList);
+
+		// 로그인 정보 가져오기
+		UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+
+//        System.out.println("확인: " + userInfo.getUserType());
+		if(userInfo!=null){
+			// 로그인정보가 존재할 시 타입만 가져와서 넣어주기
+			model.addAttribute("loginUser",userInfo.getUserType());
+		} else {
+			// 없을시 NotLogin 이라는 메세지 바인딩
+			model.addAttribute("loginUser","NotLogin");
+		}
+
+
+		// 검색에 따라 바인딩을 다르게한다
+		if((search_tmstk_wactrNm+search_tmstk_clntNm+ search_tmstk_locCd+search_tmstk_itemNm).isEmpty()
+				||search_tmstk_wactrNm == null && search_tmstk_clntNm == null && search_tmstk_locCd == null && search_tmstk_itemNm == null) {
+			List <StkadjForm> stkadjList = stockDAO.stkadjList();
+			model.addAttribute("stkadjList", stkadjList);
+		} else {
+
+			List <StkadjForm> search_stkadjList = stockDAO.search_stkadjList(search_tmstk_wactrNm,search_tmstk_clntNm,search_tmstk_locCd,search_tmstk_itemNm);
+			model.addAttribute("stkadjList",search_stkadjList);
+
+		}
 
 		return "stock/stkadj_list";
 	}
 
 
 	@GetMapping("/stkadjMod/{tmstkCd}")
-	public String stkadjModForm(@PathVariable String[] tmstkCd , Model model) {
-		// 재고 조정을 위해 더블클릭 정보하나 가져오기
+	public String stkadjModForm(@PathVariable String[] tmstkCd ,Model model) {
 
+		// 재고 조정을 위해 더블클릭 정보하나 가져오기
 		// String 배열을 HashMap으로 변환
 		HashMap<String, String> tmstkCdMap = new HashMap<>();
 
@@ -95,7 +121,9 @@ public class StockController {
 		StkadjForm stkadjFormOne = stockDAO.stkadjOne(tmstkCdMap);
 
 
-		model.addAttribute("vo",stkadjFormOne);
+//        System.out.println("vo확인" + stkadjFormOne.toString());
+
+		model.addAttribute("vo", stkadjFormOne);
 
 		return "stock/stkadjModForm";
 	}
@@ -105,17 +133,17 @@ public class StockController {
 	@PostMapping("/stkadjMod")
 	public String stkadjMod(StkadjForm vo) {
 
-		System.out.println(vo.toString());
+
 		// 조정후 수량 체크
 		Long after_adj_stock = vo.getModNomalAmt() - vo.getModFaultAmt() - vo.getAllo_amt();
 		// tmstk 전체재고 update 수량 체크
-		Long modTmstkStockAmt = (vo.getModNomalAmt() + vo.getModFaultAmt()) - vo.getStock_amt();
+		Long modTmstkStockAmt = vo.getModNomalAmt() - vo.getStock_amt();
 		// tmstk 불량재고 update 수량
 		Long modTmstkFaultAmt = vo.getModFaultAmt() - vo.getFault_amt();
 
 
-		System.out.println("조정전 : " + vo.getBefore_adj_stock()
-				+ " 조정 후 : " + after_adj_stock
+		System.out.println("조정전 가용수량: " + vo.getBefore_adj_stock()
+				+ " 조정 후 가용수량 : " + after_adj_stock
 				+ " 전체재고 차이 : " + modTmstkStockAmt
 				+ " 불량재고 차이 : " + modTmstkFaultAmt);
 
@@ -124,8 +152,11 @@ public class StockController {
 		vo.setModTmstkStockAmt(modTmstkStockAmt);
 		vo.setModTmstkFaultAmt(modTmstkFaultAmt);
 
+		System.out.println(vo.toString());
 
 		modService.stkadjMod(vo);
+
+
 
 		closeLayer(response);
 
@@ -152,14 +183,14 @@ public class StockController {
 	}
 
 	@GetMapping("_transfForm")
-	public String transfForm(@Param("locCd")String locCd, @Param("itemCd")String itemCd, Model model) {
+	public String transfForm(@Param("locCd")String locCd, @Param("itemCd")String itemCd, @Param("wactrCd")String wactrCd, Model model) {
 		StktransfVO stktransfVO = new StktransfVO();
 
 		TmstkVO tmstkVO = stockDAO.getTmstkByLocCdItemCd(locCd, itemCd);
 		List<LocVO> locList = locDAO.getLocListByWactrCd(tmstkVO.getWactr_cd());
 
 
-
+		model.addAttribute("wactrCd", wactrCd);
 		model.addAttribute("tmstkVO", tmstkVO);
 		model.addAttribute("locList", locList);
 		model.addAttribute("stktransfVO", stktransfVO);
@@ -173,7 +204,7 @@ public class StockController {
 
 		TmstkVO tmstkVO = stockDAO.getTmstkByLocCdItemCd(stktransfVO.getLocCdFrom(), stktransfVO.getItemCd());
 		// 재고 이동에서는 같은 물류센터로만 이동한다.
-		String wactrCd = locDAO.getLocByLocCd(stktransfVO.getLocCdFrom()).getWactr_cd();
+		String wactrCd = stktransfVO.getWactrCd();
 
 		stktransfVO.setClntCd(tmstkVO.getClnt_cd());
 		stktransfVO.setWaCtrCdFrom(wactrCd);
