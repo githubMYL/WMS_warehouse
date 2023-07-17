@@ -134,7 +134,7 @@
 
 	<!--	stkadj S	-->
 	<!--재고조정 테이블을 위한 조인-->
-	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
+	<select id="tmsktList" resultType="org.warehouse.models.stock.StkadjForm">
 		SELECT
 		t.ITEM_CD, i.ITEM_NM,
 		t.CLNT_CD , c.CLNT_NM,
@@ -152,8 +152,25 @@
 		ORDER BY t.reg_dt DESC
 	</select>
 
+
+	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
+		SELECT
+		i.ITEM_NM,
+		c.CLNT_NM,
+		w.WACTR_NM,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT,
+		s.*
+		FROM stkadj s
+		LEFT JOIN RELS_S r ON r.ITEM_CD = s.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = s.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
+		where s.del_yn = 'N'
+		ORDER BY s.reg_dt DESC
+	</select>
+
 	<!--검색조건-->
-	<select id="search_stkadjList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
+	<select id="search_tmstkList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
 		SELECT
 		t.ITEM_CD, i.ITEM_NM,
 		t.CLNT_CD , c.CLNT_NM,
@@ -182,6 +199,41 @@
 		</if>
 		ORDER BY t.reg_dt DESC
 	</select>
+
+
+
+	<!--stkadj 내역 검색조회-->
+	<select id="search_stkadjList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
+		SELECT
+		i.ITEM_NM,
+		c.CLNT_NM,
+		w.WACTR_NM,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT,
+		s.*
+		FROM stkadj s
+		LEFT JOIN RELS_S r ON r.ITEM_CD = s.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = s.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
+		where s.del_yn = 'N'
+		<if test='search_tmstk_wactrNm != ""'>
+			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
+		</if>
+		<if test='search_tmstk_itemNm != ""'>
+			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
+		</if>
+		<if test='search_tmstk_clntNm != ""'>
+			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
+		</if>
+		<if test='search_tmstk_locCd != ""'>
+			and s.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
+		</if>
+		<if test='mod_dt_start != "" and mod_dt_end != "" '>
+			and s.adj_dt BETWEEN TO_DATE(#{mod_dt_start}, 'YYYY-MM-DD') AND TO_DATE(#{mod_dt_end}, 'YYYY-MM-DD') + 1
+		</if>
+		ORDER BY s.no desc
+	</select>
+
 
 
 	<select id="stkadjOne" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjForm">
@@ -246,17 +298,6 @@
 		wactr_cd = #{wactr_cd} and
 		clnt_cd = #{clnt_cd} and
 		item_cd = #{item_cd}
-		order by adj_dt desc
-	</select>
-
-	<!--조정한 날짜 사이로 검색-->
-	<select id="getSearch" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjVO">
-		select * from stkadj where
-		loc_cd = #{loc_cd} and
-		wactr_cd = #{wactr_cd} and
-		clnt_cd = #{clnt_cd} and
-		item_cd = #{item_cd} and
-		adj_dt BETWEEN TO_DATE(#{mod_dt_start}, 'YYYY-MM-DD') AND TO_DATE(#{mod_dt_end}, 'YYYY-MM-DD') + 1
 		order by adj_dt desc
 	</select>
 	<!--	stkadj E	-->
