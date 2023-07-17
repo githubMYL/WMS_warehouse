@@ -34,11 +34,21 @@ public interface StockDAO {
 	/* stkadj S */
 
 	// stkadj조인해서 tmstk list 가져오기
+	List<StkadjForm> tmsktList();
 	List<StkadjForm> stkadjList();
-	List<StkadjForm> search_stkadjList(String search_tmstk_wactrNm,
+
+	List<StkadjForm> search_tmstkList(String search_tmstk_wactrNm,
 									   String search_tmstk_clntNm,
 									   String search_tmstk_locCd,
 									   String search_tmstk_itemNm);
+
+
+	List<StkadjForm> search_stkadjList(String search_tmstk_wactrNm,
+									   String search_tmstk_clntNm,
+									   String search_tmstk_locCd,
+									   String search_tmstk_itemNm,
+									   String mod_dt_start,
+									   String mod_dt_end);
 
 	// 재고조정 더블클릭 해서 하나 가져오기
 	StkadjForm stkadjOne(HashMap<String, String> tmstkCdMap);

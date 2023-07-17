@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/front/main}">
+<head>
+<!--
+	<script>
+function search(){
+        var search_clntNm = document.getElementById("clnt_nm").value.trim();
+        var search_itemCd = document.getElementById("item_cd").value.trim();
+        var search_itemNm = document.getElementById("item_nm").value.trim();
+
+        var form = document.getElementById("search");
+
+         form.method="get";
+         form.action="/tmstk"
+         form.submit();
+    };
+	</script>
+-->
+</head>
+<section layout:fragment="content">
+
+<!--
+		<form id="search" autocomplete="off" class="frmSearch">
+			<table class="table-cols">
+				<tr>
+					<th style="width:80px;">고객사명</th>
+					<td>
+						<input type="text" id="clnt_nm" name="search_clntNm" placeholder="고객사명" style="width:100%;">
+					</td>
+
+					<th style="width:80px;">상품코드</th>
+					<td>
+						<input type="text" id="item_cd" name="search_itemCd" placeholder="상품코드" style="width:100%;">
+					</td>
+					<th style="width:80px;">상품명</th>
+					<td>
+						<input type="text" id="item_nm" name="search_itemNm" placeholder="상품명" style="width:100%;">
+					</td>
+				</tr>
+			</table>
+			<div class="btns" style="text-align:right;">
+				<button onclick="search()" class="sbtn">검색</button>
+			</div>
+		</form>
+-->
+	<script>
+		document.addEventListener('DOMContentLoaded', function(){
+			const tmstk = document.getElementById('tmstk');
+			const trs = tmstk.querySelectorAll('tr');
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', transfForm)
+				});
+		});
+
+		function transfForm(e) {
+			const locCd = e.target.parentNode.children[3].innerText;
+			const itemCd = e.target.parentNode.children[4].innerText;
+			const wactrCd = e.target.parentNode.children[8].innerText;
+			console.log(wactrCd);
+
+			const url = '_transfForm?locCd='+locCd+'&itemCd='+itemCd+'&wactrCd='+wactrCd;
+			console.log(url);
+			warehouse.popup.open(url, "테스트", 460, 460, true);
+		}
+
+
+	</script>
+		<h4 style="text-align:left;">재고 현황</h4>
+		<div class="table_wrapper">
+			<table id="tmstk">
+				<tr>
+					<th style="width:50px;"></th>
+					<th style="width:50px;">물류센터명</th>
+					<th style="width:100px;">고객사명</th>
+					<th style="width:50px;">로케이션(코드)</th>
+					<th style="width:50px;">상품코드</th>
+					<th style="width:50px;">상품명</th>
+					<th style="width:50px;">재고수량</th>
+					<th style="width:50px;">불량수량</th>
+				</tr>
+
+				<tr th:each="list , Count: ${list}" th:object="${list}">
+					<td th:text="${Count.count}"></td>
+					<td th:text="*{wactr_nm}"></td>
+					<td th:text="*{clnt_nm}"> </td>
+					<td th:text="*{loc_cd}"></td>
+					<td th:text="*{item_cd}"></td>
+					<td th:text="*{item_nm}"></td>
+					<td th:text="*{stock_amt}"></td>
+					<td th:text="*{fault_amt}"></td>
+					<td style="display : none;" th:text="*{wactr_cd}"></td>
+				</tr>
+
+			</table>
+			<br>
+			<h4 style="text-align:left;">재고 이동 내역</h4>
+			<table>
+				<tr>
+					<th>이동일자</th>
+					<th>이동순번</th>
+					<th>고객사코드</th>
+					<th>상품코드</th>
+					<th>상품명</th>
+					<th>물류센터</th>
+					<th>로케이션(FROM)</th>
+					<th>로케이션(TO)</th>
+					<th>시점가용재고</th>
+					<th>이동수량</th>
+					<th>사유</th>
+				</tr>
+				<tr th:each="item : ${stktransfList}" id="stktransf_infos">
+					<td th:text="${item.moveDt}"></td>
+					<td th:text="${item.no}"></td>
+					<td th:text="${item.clntCd}"></td>
+					<td th:text="${item.itemCd}"></td>
+					<td th:text="${item.itemNm}"></td>
+					<td th:text="${item.waCtrCdFrom}"></td>
+					<td th:text="${item.locCdFrom}"></td>
+					<td th:text="${item.locCdTo}"></td>
+					<td th:text="${item.runtimeStock}"></td>
+					<td th:text="${item.moveAmt}"></td>
+					<td th:text="${item.reason}"></td>
+				</tr>
+
+			</table>
+
+	</div>
+
+
+</section>
+</html>

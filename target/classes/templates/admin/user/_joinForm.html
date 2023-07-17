@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
+	<style>
+		html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+	</style>
+</head>
+
+	<th:block th:fragment="joinForm" th:object="${joinForm}">
+		<div>
+			<dt th:text="#{userId}" class="require_item"></dt>
+			<input type="text" name="userId" th:field="*{userId}" th:placeholder="#{userId}">
+			<div class="errors" th:each="err : ${#fields.errors('userId')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{userPw}" class="require_item"></dt>
+			<input type="password" name="userPw" th:field="*{userPw}" th:placeholder="#{userPw}">
+			<div class="errors" th:each="err : ${#fields.errors('userPw')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{userPwRe}" class="require_item"></dt>
+			<input type="password" name="userPwRe" th:field="*{userPwRe}" th:placeholder="#{userPwRe}">
+			<div class="errors" th:each="err : ${#fields.errors('userPwRe')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+		<div>
+			<dt th:text="#{userNm}" class="require_item"></dt>
+			<input type="text" name="userNm" th:field="*{userNm}" th:placeholder="#{userNm}">
+			<div class="errors" th:each="err : ${#fields.errors('userNm')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+		<div>
+			<dt th:text="#{userType}" class="require_item"></dt>
+			<select class="form-select" id="userType" name="userType" th:field="*{userType}" th:value="*{userType}">
+
+				<option th:value="ADMIN">관리자</option>
+				<option th:value="CLNT">고객사</option>
+				<option th:value="CUST">납품처</option>
+				<option th:value="CUST_CTR">납품센터</option>
+			</select>
+			<div class="errors" th:each="err : ${#fields.errors('userType')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+		<div>
+			<dt th:text="#{clnt}" class="require_item"></dt>
+			<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly style="background:#d5d5d5"/>
+			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명"/>
+			<datalist id="clnt">
+				<select id="clnt_sel">
+					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+					</option>
+				</select>
+			</datalist>
+		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const clnt = document.getElementById("clnt_tmp");
+
+				var selected = document.querySelector("select#clnt_sel")
+
+				clnt.addEventListener("change", UpdateClnt)
+			});
+
+
+			function UpdateClnt(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#clnt_sel")
+				var datalist = evnt.list;
+				var clntcd = document.getElementById("clnt_cd");
+
+				for(var j = 0; j < datalist.options.length; j++){
+					if(this.value == datalist.options[j].value) {
+						clntcd.value = datalist.options[j].label;
+					}
+				}
+			}
+		</script>
+
+		<br>
+		<div>
+			<dt th:text="#{cust}" class="require_item"></dt>
+			<input type="text" id="cust_nm" th:field="*{custNm}" th:value="*{custNm}" readonly style="background:#d5d5d5"/>
+			<input type="text" list="cust_ctr_list" id="cust_ctr_nm" th:field="*{custCtrNm}" th:value="*{custCtrNm}" name="cust_ctr_tmp" placeholder="납품센터 명"/>
+			<datalist id="cust_ctr_list">
+				<select id="cust_ctr_sel">
+					<option th:each="cust : ${custList}" th:value="${cust.custCtrNm +'('+cust.custNm + ')'}" >
+					</option>
+				</select>
+			</datalist>
+		</div>
+		<div class="errors" th:each="err : ${#fields.errors('custCd')}" th:text="${err}"></div>
+		<div class="errors" th:each="err : ${#fields.errors('custCtrCd')}" th:text="${err}"></div>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const cust_ctr = document.getElementById("cust_ctr_nm");
+
+				var selected = document.querySelector("select#cust_ctr_sel")
+
+				cust_ctr.addEventListener("change", UpdateCustCtr)
+			});
+
+
+			function UpdateCustCtr(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#cust_ctr_sel")
+				var datalist = evnt.list;
+				var cust_nm = document.getElementById("cust_nm");
+				console.log(this);
+				console.log(this.value);
+
+				if(this.value.indexOf(')') != -1) {
+					var slice_cust_ctr_nm = this.value.substr(0, this.value.indexOf('('));
+					console.log(cust_ctr_nm);
+					var slice_cust_nm = this.value.slice(this.value.indexOf('(') +1, this.value.indexOf(')'));
+					console.log(cust_nm);
+
+					cust_nm.value=slice_cust_nm;
+					this.value=slice_cust_ctr_nm;
+				}
+			}
+		</script>
+
+		<br>
+		<div>
+			<dt th:text="#{position}" class="require_item"></dt>
+			<input type="text" name="position" th:field="*{position}" th:placeholder="#{position}">
+			<div class="errors" th:each="err : ${#fields.errors('position')}" th:text="${err}"></div>
+		</div>
+
+
+		<div>
+			<dt th:text="#{email}" class="require_item"></dt>
+			<input type="text" name="email" th:field="*{email}" th:placeholder="#{email}">
+			<div class="errors" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{mobile}" class="require_item"></dt>
+			<input type="text" name="mobile" th:field="*{tel}" th:placeholder="#{tel}">
+			<div class="errors" th:each="err : ${#fields.errors('tel')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+	</th:block>
+
+</html>

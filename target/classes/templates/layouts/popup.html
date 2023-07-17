@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<meta name="_csrf" th:content="${_csrf.token}">
+		<meta name="_csrf_header" th:content="${_csrf.headerName}">
+		<link rel="stylesheet" type="text/css" th:each="cssFile : ${addCss}" th:href="@{/css/{file}.css(file=${cssFile})}">
+		<th:block layout:fragment="addCss"></th:block>
+		<script th:src="@{/js/common.js}"></script>
+		<script th:src="@{/js/front/wactrForm.js}"></script>
+		<script th:each="jsFile : ${addScript}" th:src="@{/js/{file}.js(file=${jsFile})}"></script>
+		<th:block layout:fragment="addScript"></th:block>
+		<style>
+				main {
+					margin : 0;
+				}
+		</style>
+
+	</head>
+
+	<body>
+		<main layout:fragment="content"></main>
+		<iframe name="ifrmProcess" class="dn"></iframe>
+	</body>
+</html>

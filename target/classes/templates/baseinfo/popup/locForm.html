@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+    <style>
+    span{
+    font-weight:bold;
+    font-size:18px;
+    }
+    div{
+    margin-bottom:5px;
+    }
+    body{
+    height:97%;
+    }
+    main{
+    padding:0;
+    margin:0;
+    min-width:0px;
+    min-height:0px;
+    justify-content: center;
+    }
+
+    html{
+    min-width:0;
+    height:100%;
+    }
+    </style>
+</head>
+
+<h2 align="center">로케이션 추가</h2>
+<!--    <div>로그인정보 : <span th:text="${session.userInfo.username}"></span></div>-->
+<form name="locJoin" method="post" th:action="@{/baseinfo/locjoin}" th:object="${locVO}" autocomplete="off" align="center">
+    <script>
+
+			document.addEventListener('DOMContentLoaded', function() {
+				const wactr = document.getElementById("wactr_nm");
+
+				var selected = document.querySelector("select#wactr_sel");
+				console.log(wactr);
+
+				wactr.addEventListener("change", UpdateWactr)
+			});
+
+
+			function UpdateWactr(e) {
+				var evnt = e.currentTarget;
+				var selected = document.querySelector("select#wactr_sel")
+				var datalist = evnt.list;
+				var wactr_cd = document.getElementById("wactr_cd");
+
+				for(var j = 0; j < datalist.options.length; j++){
+					if(this.value == datalist.options[j].value) {
+						wactr_cd.value = datalist.options[j].label;
+					}
+				}
+			}
+		</script>
+    <div>
+        <input type="hidden" id="wactr_cd" th:field="*{wactr_cd}"name="wactr_cd">
+        <div><span>물류센터 명 : </span></div>
+        <input style="width:160px" type="text" list="wactr" th:field="*{wactr_nm}"id="wactr_nm" placeholder="물류센터 명"/>
+        <div class="errors"th:each="err : ${#fields.errors('wactr_nm')}" th:text="${err}"></div>
+        <datalist id="wactr">
+            <select id="wactr_sel" class="inline-option-label">
+                <option th:each="wactr : ${wactr_list}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
+                </option>
+            </select>
+        </datalist>
+    </div>
+
+
+
+
+
+    <div>
+        <div><span>로케이션 이름 : </span></div>
+        <input style="width:160px"  type="text" name="loc_nm" th:field="*{loc_nm}"th:placeholder="#{loc_nm}">
+        <div class="errors"th:each="err : ${#fields.errors('loc_nm')}" th:text="${err}"></div>
+    </div>
+
+    <div>
+        <div><span>로케이션 주소 : </span></div>
+        <input style="width:160px"  type="text" name="loc_addr" th:field="*{loc_addr}"th:placeholder="#{loc_addr}">
+        <div class="errors"th:each="err : ${#fields.errors('loc_addr')}" th:text="${err}"></div>
+    </div>
+
+
+    <div>
+        <div><span>비고</span></div><textarea rows="5" cols="23" th:field="*{remk}"name="remk" th:placeholder="비고"></textarea>
+    </div>
+
+    <button type="submit" th:text="#{loc.action.join}" class="sbtn"></button>
+</form>
+
+</html>

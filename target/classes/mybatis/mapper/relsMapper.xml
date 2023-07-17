@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.RelsDAO">
+	<resultMap id="relsMap" type="org.warehouse.models.rels.relsAction.RelsVO">
+		<result property="wactrCd" column="WACTR_CD" />
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
+		<result property="locCd" column="LOC_CD" />
+		<result property="itemCd" column="ITEM_CD" />
+		<result property="itemNm" column="ITEM_NM" />
+		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
+		<result property="custCtrCd" column="CUST_CTR_CD" />
+		<result property="custCtrNm" column="CUST_CTR_NM" />
+		<result property="relsDt" column="RELS_DT" />
+		<result property="relsNo" column="RELS_NO" />
+		<result property="status" column="STATUS" />
+		<result property="remk" column="REMK" />
+		<result property="relsDNo" column="RELS_D_NO" />
+		<result property="regInAmt" column="REG_IN_AMT" />
+		<result property="relsCnt" column="RELS_CNT" />
+		<result property="confDt" column="CONF_DT" />
+		<result property="deliRequestDt" column="DELI_REQUEST_DT" />
+		<result property="plt" column="PLT" />
+		<result property="box" column="BOX" />
+		<result property="relsAfterAmt" column="RELS_AFTER_AMT" />
+		<result property="alloNo" column="ALLO_NO" />
+		<result property="alloAmt" column="ALLO_AMT" />
+		<result property="relsAmt" column="RELS_AMT" />
+		<result property="alloAfterStock" column="ALLO_AFTER_STOCK" />
+	</resultMap>
+
+	<!-- 출고등록 H -->
+	<select id="relsList" resultMap="relsMap">
+		SELECT A.RELS_DT
+		, A.RELS_NO
+		, A.CLNT_CD
+		, B.CLNT_NM
+		, C.RELS_VALUE STATUS
+		, A.REMK
+		FROM RELS_H A
+		INNER JOIN CLNT B
+		ON A.CLNT_CD = B.CLNT_CD
+		INNER JOIN RELS_CODE C
+		ON A.STATUS = C.RELS_CODE
+		ORDER BY A.REG_DT DESC
+	</select>
+
+	<!-- 출고등록 D -->
+	<!-- select id="relsDetailList"  parameterType="String" resultType="org.warehouse.models.rels.relsAction.RelsVO" -->
+	<select id="relsDetailList"  parameterType="HashMap" resultMap="relsMap">
+		SELECT ROWNUM rowCnt, A.*
+		FROM (
+		SELECT A.RELS_DT
+		, A.RELS_NO
+		, A.RELS_D_NO
+		, A.CUST_CD
+		, C.CUST_NM
+		, A.CUST_CTR_CD
+		, D.CUST_CTR_NM
+		, A.ITEM_CD
+		, E.ITEM_NM
+		, A.REG_IN_AMT
+		, A.RELS_CNT
+		, A.DELI_REQUEST_DT
+		, A.PLT
+		, A.BOX
+		, A.REMK
+		FROM RELS_D A
+		INNER JOIN CLNT B
+		ON A.CLNT_CD = B.CLNT_CD
+		INNER JOIN CUST C
+		ON A.CUST_CD = C.CUST_CD
+		INNER JOIN CUST_CTR D
+		ON A.CUST_CD = D.CUST_CD
+		AND A.CUST_CTR_CD = D.CUST_CTR_CD
+		INNER JOIN ITEM E
+		ON A.CLNT_CD = E.CLNT_CD
+		AND A.ITEM_CD = E.ITEM_CD
+		WHERE A.RELS_DT = #{relsDt}
+		AND A.RELS_NO = #{relsNo}
+		ORDER BY A.REG_DT DESC
+		) A
+	</select>
+
+	<!-- 출고등록 S -->
+	<select id="relsSubDetailList" resultMap="relsMap">
+		SELECT A.RELS_DT
+		, A.RELS_NO
+		, A.RELS_D_NO
+		, A.ALLO_NO
+		, A.ITEM_CD
+		, E.ITEM_NM
+		, D.LOC_CD
+		, A.ALLO_AMT
+		, A.ALLO_AFTER_STOCK
+		, A.REMK
+		FROM RELS_S A
+		INNER JOIN CLNT B
+		ON A.CLNT_CD = B.CLNT_CD
+		INNER JOIN WACTR C
+		ON A.WACTR_CD = C.WACTR_CD
+		INNER JOIN LOC D
+		ON A.LOC_CD = D.LOC_CD
+		INNER JOIN ITEM E
+		ON A.CLNT_CD = E.CLNT_CD
+		AND A.ITEM_CD = E.ITEM_CD
+		ORDER BY A.REG_DT DESC
+	</select>
+</mapper>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<section layout:fragment="content">
+	<head>
+		<style>
+                #equipments div{
+                    display:inline-block;
+                }
+                header {height:0px;}
+            </style>
+		<script th:src="@{/js/front/conInfo.js}"></script>
+		<script th:src="@{/js/front/layer.js}"></script>
+	</head>
+	<form name="frmJoin" method="get" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
+		계약정보등록 팝업
+		<div>
+			<input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly />
+			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
+			<datalist id="clnt">
+				<select id="clnt_sel">
+					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}"></option>
+				</select>
+			</datalist>
+		</div>
+		<script>
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    const clnt = document.getElementById("clnt_tmp");
+                    var selected = document.querySelector("select#clnt_sel")
+
+                    clnt.addEventListener("change", UpdateClnt)
+                });
+
+                function UpdateClnt(e) {
+                    var evnt = e.currentTarget;
+                    var selected = document.querySelector("select#clnt_sel")
+                    var datalist = evnt.list;
+                    var clntcd = document.getElementById("clnt_cd");
+
+                    for(var j = 0; j < datalist.options.length; j++){
+                        if(this.value == datalist.options[j].value) {
+                            clntcd.value = datalist.options[j].label;
+                        }
+                    }
+                }
+            </script>
+		<div>
+			<input type="number" th:field="*{MMin}" th:placeholder="#{mMin}" maxlength="8" oninput="maxLengthCheck(this)"/>
+			<div class="errors" th:each="err : ${#fields.errors('MMin')}" th:text="${err}"></div>
+		</div>
+		<div>
+			<input type="number" th:field="*{pltFee}" th:placeholder="#{pltFee}" maxlength="8" oninput="maxLengthCheck(this)"/>
+			<div class="errors" th:each="err : ${#fields.errors('pltFee')}" th:text="${err}"></div>
+		</div>
+		<div>
+			<input type="date" th:field="*{transSdt}" th:placeholder="#{transSdt}">
+			<div class="errors" th:each="err : ${#fields.errors('transSdt')}" th:text="${err}"></div>
+		</div>
+		<div>
+			<input type="date" th:field="*{transEdt}" th:placeholder="#{transEdt}">
+			<div class="errors" th:each="err : ${#fields.errors('transSdt')}" th:text="${err}"></div>
+		</div>
+		<div>
+			<input type="text" th:field="*{remark}" th:placeholder="#{remk}">
+		</div>
+		<button type="submit" th:text="#{conInfo.action.submit}" class="layer_close"></button>
+	</form>
+</section>
+</html>

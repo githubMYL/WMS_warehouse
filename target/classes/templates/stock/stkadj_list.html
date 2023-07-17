@@ -1,0 +1,117 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/front/main}">
+
+<head>
+    <script>
+        <!--날짜조회 S-->
+
+    function search(){
+
+                var mod_dt_start = document.getElementById('mod_dt_start').value;
+                var mod_dt_end = document.getElementById('mod_dt_end').value;
+                var search_tmstk_wactrNm = document.getElementById("search_tmstk_wactrNm").value.trim();
+                var search_tmstk_clntmNm = document.getElementById("search_tmstk_clntmNm").value.trim();
+                var search_tmstk_locCd = document.getElementById("search_tmstk_locCd").value.trim();
+                var search_tmstk_itemNm = document.getElementById("search_tmstk_itemNm").value.trim();
+
+                if(mod_dt_start =="" || mod_dt_end==""){
+                    alert("조회하실 날짜를 선택해주세요");
+                    return;
+                }
+
+                if(mod_dt_start > mod_dt_end){
+                    alert("조회종료일은 시작일보다 커야합니다");
+                    return;
+                }
+
+                var searchBar = document.getElementById('searchBar');
+
+         form.method="get"
+         form.action="/stock/stkadjList"
+         form.submit();
+
+        }
+
+<!--    날짜조회 E-->
+
+
+    </script>
+</head>
+
+<section layout:fragment="content">
+<h2>조정 내역</h2>
+<div id="stkadjList" >
+    <div  align="left" class="table_wrapper">
+
+
+
+        <form id="search"  class="frmSearch">
+            <table class="table-cols">
+                <tr>
+                    <th style="width:100px;">조회시작일</th>
+                    <td style="padding:0;">
+                        <input type="date" id="mod_dt_start" name="mod_dt_start">
+                    </td>
+                    <th style="width:100px;">조회종료일</th>
+                    <td style="padding:0;">
+                        <input type="date" id="mod_dt_end" name="mod_dt_end">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th style="width:90px;">물류센터 명</th>
+                    <td style="padding-right: 10px;">
+                        <input type="text"  id="search_tmstk_wactrNm" name="search_tmstk_wactrNm" th:placeholder="물류센터검색" >
+                    </td>
+                    <th style="width:80px;">고객사 명</th>
+                    <td style="padding-right: 10px;">
+                        <input type="text"  id="search_tmstk_clntNm" name="search_tmstk_clntNm" th:placeholder="고객사검색" >
+                    </td>
+                    <th style="width:90px;">로케이션 코드</th>
+                    <td style="padding-right: 10px;">
+                        <input type="text"  id="search_tmstk_locCd" name="search_tmstk_locCd" th:placeholder="로케이션검색" >
+                    </td>
+                    <th style="width:60px;">상품 명</th>
+                    <td style="padding-right: 10px;">
+                        <input type="text"  id="search_tmstk_itemNm" name="search_tmstk_itemNm" th:placeholder="상품검색" >
+                    </td>
+                </tr>
+                <tr >
+                    <td style="padding:0;" colspan="8" align="right" >
+                        <button type="submit" onclick="search()" class="sbtn">검색</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table id="stkadjListTable">
+            <thead>
+            <tr>
+                <th style="width:40px">순번</th>
+                <th style="width:180px">조정일자</th>
+                <th style="width:40px">조정전 가용수량</th>
+                <th style="width:40px">조정후 가용수량</th>
+                <th >조정사유</th>
+                <th >수정자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list : ${stkadjList}" th:object="${list}">
+                <td th:text="*{no}"></td>
+                <td th:text="*{adj_dt}"></td>
+                <td th:text="*{before_adj_stock}"></td>
+                <td th:text="*{after_adj_stock}"></td>
+                <td th:text="*{adj_reason}"></td>
+                <td th:text="*{mod_nm}"></td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+</section>
+
+</html>

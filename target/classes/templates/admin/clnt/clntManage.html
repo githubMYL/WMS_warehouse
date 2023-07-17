@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/admin/main}">
+
+<section layout:fragment="content">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<table class="table-cols" id="clntSearch">
+			<tr>
+				<th>고객사 명</th>
+				<td>
+					<input type="text" name="clntNm" placeholder="고객사 명">
+				</td>
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button type="button" id="ajax_btn" class="sbtn">검색</button>
+			<button type="button" id="add" class="sbtn">추가</button>
+			<button type="button" id="del" class="sbtn blue">삭제</button>
+		</div>
+	</form>
+
+	<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const ajax_btn = document.getElementById('ajax_btn');
+				const add = document.getElementById('add');
+				const del = document.getElementById('del');
+				const trs = document.querySelectorAll('tr');
+
+				ajax_btn.addEventListener("click", search);
+				add.addEventListener("click", addItem);
+				del.addEventListener("click", deleteItem);
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', updateTable)
+				});
+
+				var chkAll = document.getElementById("chkAll");
+				chkAll.addEventListener("change", checkAll);
+
+				var checkList = document.getElementsByName("check");
+
+				for( chk of checkList) {
+					chk.addEventListener("change", function(e) {
+						if(e.target.checked) {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.target.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
+					});
+				}
+			});
+
+			var chks = document.getElementsByName("check");
+
+            chks.forEach(element => element.addEventListener('click', function(e){
+                if(e.target.checked == true){
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
+                }else {
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
+                }
+            }));
+
+			function addItem(e) {
+				console.log('test');
+				url = 'clntManage/register';
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			}
+
+
+			function search() {
+				var trEl = document.getElementsByName("clntNm");
+
+				var clntNm = trEl[0].value;
+
+				const params = { clntNm };
+				const url = `ajaxadmin/clntSearch?clntNm=${clntNm}`;
+
+				commonLib.ajaxLoad(url)
+				.then((data) => {
+					var search = document.getElementById("search");
+					search.innerHTML='';
+					console.log(data);
+
+					data = JSON.parse(data);
+					var str = '';
+					for(var i = 0; i < data.length; i++) {
+						str += "<tr id='clnt_infos'>";
+						str += "<td><input type='checkbox' name='check' data-clntcd=" + data[i].clntCd +" th:value=" + data[i].clntCd + " id='chk' onclick=c(this)></td>";
+						str += "<td>"+(i+1)+"</td>";
+						str += "<td>"+data[i].clntCd+"</td>";
+						str += "<td>"+data[i].clntNm+"</td>";
+						str += "<td>"+data[i].salesNm+"</td>";
+						str += "<td>"+data[i].salesTel+"</td>";
+						str += "<td>"+data[i].tplNm+"</td>";
+						str += "<td>"+data[i].tplTel+"</td>";
+						str += "<td>"+data[i].tplEmail+"</td>";
+						str += "<td>"+data[i].business+"</td>";
+						str += "<td>"+data[i].event+"</td>";
+						str += "<td>"+data[i].busiNum+"</td>";
+						str += "<td>"+data[i].ownerNm+"</td>";
+						str += "<td>"+data[i].ownerTel+"</td>";
+						str += "<td>"+data[i].busiAddr+"</td>";
+						str += "<td>"+data[i].remark+"</td>";
+						str += '</tr>'
+					}
+					search.innerHTML=str;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			};
+
+			function deleteItem(e) {
+				var chk = document.getElementsByName("check");
+				var chk_data = [];
+
+				for(var i = 0; i < check.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+				console.log("data" + chk_data);
+
+				const url = `ajaxadmin/clntDelete?clntCd=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}
+
+			function updateTable(e) {
+				const event_tr = e.target.parentNode;
+				const input = event_tr.querySelector('td input');
+				console.log(input);
+				const clntcd = input.dataset.clntcd;
+				console.log(clntcd);
+
+				url = 'clntManage/update/' + clntcd;
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			};
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("check");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+					if(all.checked) {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "#D8D8D8", "important");
+						})
+					} else {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "white", "important");
+						})
+					}
+
+				}
+			}
+
+			function c(e) {
+				console.log(e);
+				if(e.checked) {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "#D8D8D8", "important");
+							})
+						}
+						else {
+							var tr = e.parentNode.parentNode;
+							var tds = tr.querySelectorAll("td");
+							tds.forEach( (td) => {
+								td.style.setProperty("background-color", "white", "important");
+							})
+						}
+			}
+		</script>
+
+	<div class="table_wrapper">
+		<table id="clnt_table">
+			<tr>
+				<th>
+					<input type="checkbox" id="chkAll">
+				</th>
+				<th>순번</th>
+				<th>고객사 코드</th>
+				<th>고객사 명</th>
+				<th>영업 담당자</th>
+				<th>영업 담당자 연락처</th>
+				<th>TPL 담당자</th>
+				<th>TPL 연락처</th>
+				<th>TPL 이메일</th>
+				<th>업태</th>
+				<th>종목</th>
+				<th>사업자번호</th>
+				<th>대표자 명</th>
+				<th>대표자 연락처</th>
+				<th>사업자 주소</th>
+				<th>비고</th>
+			</tr>
+			<tbody id="search">
+			<tr th:each="clnt, clntCount : ${clntList}" id="clnt_infos">
+				<td>
+					<input type="checkbox" name="check" th:value="${clnt.clntCd}" id="chk" th:data-clntcd="${clnt.clntCd}">
+				</td>
+				<td th:text="${clntCount.count}"></td>
+				<td th:text="${clnt.clntCd}"></td>
+				<td th:text="${clnt.clntNm}"></td>
+				<td th:text="${clnt.salesNm}"></td>
+				<td th:text="${clnt.salesTel}"></td>
+				<td th:text="${clnt.tplNm}"></td>
+				<td th:text="${clnt.tplTel}"></td>
+				<td th:text="${clnt.tplEmail}"></td>
+				<td th:text="${clnt.business}"></td>
+				<td th:text="${clnt.event}"></td>
+				<td th:text="${clnt.busiNum}"></td>
+				<td th:text="${clnt.ownerNm}"></td>
+				<td th:text="${clnt.ownerTel}"></td>
+				<td th:text="${clnt.busiAddr}"></td>
+				<td th:text="${clnt.remark}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+</html>

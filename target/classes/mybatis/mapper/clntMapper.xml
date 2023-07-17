@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.ClntDAO">
+	<resultMap id="clntMap" type="org.warehouse.models.admin.clnt.ClntVO">
+		<result property="clntCd" column="CLNT_CD" />
+		<result property="clntNm" column="CLNT_NM" />
+		<result property="salesNm" column="SALES_NM" />
+		<result property="salesTel" column="SALES_TEL" />
+		<result property="tplNm" column="TPL_NM" />
+		<result property="tplTel" column="TPL_TEL" />
+		<result property="tplEmail" column="TPL_EMAIL" />
+		<result property="business" column="BUSINESS" />
+		<result property="event" column="EVENT" />
+		<result property="busiNum" column="BUSI_NUM" />
+		<result property="ownerNm" column="OWNER_NM" />
+		<result property="ownerTel" column="OWNER_TEL" />
+		<result property="busiAddr" column="BUSI_ADDR" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+	</resultMap>
+	<insert id="insertClnt" parameterType="org.warehouse.models.admin.clnt.ClntVO">
+		INSERT INTO CLNT(CLNT_CD, CLNT_NM, SALES_NM, SALES_TEL, TPL_NM, TPL_TEL, TPL_EMAIL, BUSINESS,
+		EVENT, BUSI_NUM, OWNER_NM, OWNER_TEL, BUSI_ADDR, REG_DT, REG_NM)
+			VALUES(#{clntCd}, #{clntNm}, #{salesNm}, #{salesTel}, #{tplNm}, #{tplTel}, #{tplEmail}, #{business},
+			#{event}, #{busiNum}, #{ownerNm}, #{ownerTel}, #{busiAddr}, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="updateClnt">
+		UPDATE CLNT SET
+			SALES_NM = #{salesNm},
+			SALES_TEL = #{salesTel},
+			TPL_NM = #{tplNm},
+			TPL_TEL = #{tplTel},
+			TPL_EMAIL = #{tplEmail},
+			BUSINESS = #{business},
+			EVENT = #{event},
+			BUSI_NUM = #{busiNum},
+			OWNER_NM = #{ownerNm},
+			OWNER_TEL = #{ownerTel},
+			BUSI_aDDR = #{busiAddr},
+			MOD_DT = SYSDATE,
+			MOD_NM = #{modNm}
+		WHERE CLNT_CD = #{clntCd}
+	</update>
+
+	<update id="deleteClnt">
+		UPDATE CLNT SET
+		DEL_YN = 'Y',
+		MOD_NM = #{modNm},
+		MOD_DT = SYSDATE
+		WHERE CLNT_CD = #{clntCd}
+	</update>
+
+
+
+	<select id="getClntList" resultMap="clntMap">
+		SELECT * FROM CLNT WHERE DEL_YN = 'N' ORDER BY CLNT_CD
+	</select>
+
+	<select id="getClntByCd" resultMap="clntMap">
+		SELECT * FROM CLNT WHERE CLNT_CD = #{clntCd}
+	</select>
+
+
+	<!-- 고객사 존재유무 확인 -->
+	<select id="getClntByCdAndNm" resultMap="clntMap">
+		SELECT CLNT_CD
+		, replace(CLNT_NM, ' ', '') CLNT_NM
+		FROM CLNT
+		WHERE CLNT_CD = #{clntCd}
+		AND CLNT_NM = #{clntNm}
+	</select>
+
+	<select id="getClntListByNm" resultMap="clntMap">
+		SELECT * FROM CLNT WHERE CLNT_NM LIKE '%'||#{clntNm}||'%' AND DEL_YN='N'
+	</select>
+
+</mapper>

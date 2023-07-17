@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.CustDAO">
+	<resultMap id="custMap" type="org.warehouse.models.admin.cust.CustVO">
+		<result property="custCd" column="CUST_CD" />
+		<result property="custNm" column="CUST_NM" />
+		<result property="busiNum" column="BUSI_NUM" />
+		<result property="custTel" column="CUST_TEL" />
+		<result property="ownerNm" column="OWNER_NM" />
+		<result property="busiAddr" column="BUSI_ADDR" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+
+		<result property="custCtrCd" column="CUST_CTR_CD" />
+		<result property="custCtrNm" column="CUST_CTR_NM" />
+	</resultMap>
+
+	<insert id="insertCust" parameterType="org.warehouse.models.admin.cust.CustVO">
+		INSERT INTO CUST(CUST_CD, CUST_NM, BUSI_NUM, CUST_TEL, OWNER_NM, BUSI_ADDR, REMK, REG_NM, REG_DT)
+			VALUES(#{custCd}, #{custNm}, #{busiNum}, #{custTel}, #{ownerNm}, #{busiAddr}, #{remark}, #{regNm}, SYSDATE)
+	</insert>
+
+	<update id="updateCust" parameterType="org.warehouse.models.admin.cust.CustVO">
+		UPDATE CUST SET
+			BUSI_NUM = #{busiNum},
+			CUST_TEL = #{custTel},
+			OWNER_NM = #{ownerNm},
+			BUSI_ADDR = #{busiAddr},
+			REMK = #{remark},
+			MOD_NM = #{modNm},
+			MOD_DT = SYSDATE
+		WHERE CUST_CD = #{custCd}
+	</update>
+
+	<update id="deleteCust">
+		UPDATE CUST SET
+			DEL_YN = 'Y',
+			MOD_NM = #{modNm},
+			MOD_DT = SYSDATE
+		WHERE CUST_CD = #{custCd}
+	</update>
+
+
+	<select id="getCustList" resultMap="custMap">
+		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		SELECT * FROM CUST WHERE DEL_YN = 'N' ORDER BY CUST_CD
+	</select>
+
+	<select id="getCustByCustNm" resultMap="custMap">
+		SELECT * FROM CUST WHERE CUST_NM=#{custNm}
+	</select>
+
+	<select id="getCustListByCustNm" resultMap="custMap">
+		SELECT * FROM CUST WHERE CUST_NM LIKE '%'||#{custNm}||'%' AND DEL_YN = 'N'
+	</select>
+
+	<select id="getCustByCd" resultMap="custMap">
+		SELECT * FROM CUST WHERE CUST_CD=#{custCd}
+	</select>
+</mapper>

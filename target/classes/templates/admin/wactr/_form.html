@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<style>
+			#equipments div{
+				display:inline-block;
+			}
+		</style>
+		<script th:src="@{/js/front/layer.js}"></script>
+	</head>
+	<th:block th:fragment="wactrForm" th:object="${wactrForm}">
+		<div>
+			<dt th:text="#{wactrCd}" class="require_item"></dt>
+			<input type="text" name="wactrCd" th:field="*{wactrCd}" th:placeholder="#{wactrCd}">
+			<div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{wactrNm}" class="require_item"></dt>
+			<input type="text" name="wactrNm" th:field="*{wactrNm}" th:placeholder="#{wactrNm}">
+			<div class="errors" th:each="err : ${#fields.errors('wactrNm')}" th:text="${err}"></div>
+		</div>
+
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script>
+			function execDaumPostcode() {
+				new daum.Postcode( {
+					oncomplete: function( data ) {
+						console.log(data);
+						var addr = document.getElementById("addr");
+						addr.value=data.address;
+						addr.focus();
+					}
+				} ).open();
+			}
+
+		</script>
+
+		<div>
+			<dt th:text="#{addr}" class="require_item"></dt>
+			<input type="text" style="width:300px;" name="addr" id="addr" th:field="*{addr}" th:placeholder="#{addr}">
+			<input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="sbtn" style="height: 45px;"><br>
+			<div class="errors" th:each="err : ${#fields.errors('addr')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{tel}" class="require_item"></dt>
+			<input type="text" name="tel" th:field="*{tel}" th:placeholder="#{tel}">
+			<div class="errors" th:each="err : ${#fields.errors('tel')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{size}" class="require_item"></dt>
+			<input type="text" name="size" id="wactr_size" th:field="*{size}" th:placeholder="#{size}" onchange="updateScale()">
+			<div class="errors" th:each="err : ${#fields.errors('size')}" th:text="${err}"></div>
+		</div>
+
+
+
+		<div>
+			<dt th:text="#{scale}" class="require_item"></dt>
+			<input type="text" name="scale" id="scale" th:field="*{scale}" th:placeholder="#{scale}" readonly>
+			<div class="errors" th:each="err : ${#fields.errors('scale')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+		<span>장비 수</span>
+		<div id="equipments">
+			<div>
+				<dt th:text="#{reech}" class="require_item"></dt>
+				<input type="text" name="reech" th:field="*{reech}" th:placeholder="#{reech}">
+				<div class="errors" th:each="err : ${#fields.errors('reech')}" th:text="${err}"></div>
+			</div>
+
+			<div>
+				<dt th:text="#{jackee}" class="require_item"></dt>
+				<input type="text" name="jackee" th:field="*{jackee}" th:placeholder="#{jackee}">
+				<div class="errors" th:each="err : ${#fields.errors('jackee')}" th:text="${err}"></div>
+			</div>
+
+			<div>
+				<dt th:text="#{diesel}" class="require_item"></dt>
+				<input type="text" name="diesel" th:field="*{diesel}" th:placeholder="#{diesel}">
+				<div class="errors" th:each="err : ${#fields.errors('diesel')}" th:text="${err}"></div>
+			</div>
+		</div>
+		<div>
+			<dt th:text="#{racNum}" class="require_item"></dt>
+			<input type="text" name="racNum" th:field="*{racNum}" th:placeholder="#{racNum}">
+			<div class="errors" th:each="err : ${#fields.errors('racNum')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{numInPer}" class="require_item"></dt>
+			<input type="text" name="numInPer" th:field="*{numInPer}" th:placeholder="#{numInPer}">
+			<div class="errors" th:each="err : ${#fields.errors('numInPer')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{remk}" class="require_item"></dt>
+			<textarea name="remk" th:field="*{remk}" th:placeholder="#{remk}"></textarea>
+			<div class="errors" th:each="err : ${#fields.errors('remk')}" th:text="${err}"></div>
+		</div>
+	</th:block>
+</html>
