@@ -28,7 +28,35 @@
         <result property="alloAmt" column="ALLO_AMT" />
         <result property="relsAmt" column="RELS_AMT" />
         <result property="alloAfterStock" column="ALLO_AFTER_STOCK" />
+
+        <result property="dataYn" column="DATA_YN" />
     </resultMap>
+
+    <!-- 헤더 일자별 MAX 순번체크 -->
+    <select id="relsNoChk" resultMap="relsMap">
+        SELECT NVL(MAX(RELS_NO), 0) + 1 RELS_NO
+            FROM RELS_H
+        WHERE RELS_DT = #{relsDt}
+    </select>
+    <insert id="relsHinsert" parameterType="org.warehouse.models.rels.relsAction.RelsVO">
+        INSERT INTO RELS_H
+            (RELS_DT, RELS_NO, CLNT_CD, STATUS, REMK, REG_DT, REG_NM)
+        VALUES
+            (#{relsDt}, #{relsNo}, #{clntCd}, '01', #{remk}, SYSDATE, #{regNm})
+    </insert>
+    <insert id="relsDinsert" parameterType="org.warehouse.models.rels.relsAction.RelsVO">
+        INSERT INTO RELS_D
+            (RELS_DT, RELS_NO, RELS_D_NO, CLNT_CD, CUST_CD, CUST_CTR_CD, ITEM_CD
+            , REG_IN_AMT, RELS_CNT, DELI_REQUEST_DT, PLT, BOX, REG_DT, REG_NM)
+        VALUES
+            (#{relsDt}, #{relsNo}
+            , (SELECT NVL(MAX(RELS_D_NO), 0) + 1
+                FROM RELS_D
+                WHERE RELS_DT = #{relsDt}
+                AND RELS_NO = #{relsNo})
+            , #{clntCd}, #{custCd}, #{custCtrCd}, #{itemCd}
+            , #{regInAmt}, #{relsCnt}, #{deliRequestDt}, #{plt}, #{box}, SYSDATE , #{regNm})
+    </insert>
 
     <!-- 출고등록 H -->
     <select id="relsList" resultMap="relsMap">
@@ -43,6 +71,7 @@
            ON A.CLNT_CD = B.CLNT_CD
         INNER JOIN RELS_CODE C
            ON A.STATUS = C.RELS_CODE
+        WHERE A.DEL_YN = 'N'
         ORDER BY A.REG_DT DESC
     </select>
 
@@ -79,6 +108,7 @@
               AND A.ITEM_CD = E.ITEM_CD
             WHERE A.RELS_DT = #{relsDt}
               AND A.RELS_NO = #{relsNo}
+              AND A.DEL_YN = 'N'
             ORDER BY A.REG_DT DESC
         ) A
     </select>
@@ -107,4 +137,86 @@
           AND A.ITEM_CD = E.ITEM_CD
         ORDER BY A.REG_DT DESC
     </select>
+
+    <!-- 업데이트 팝업 데이터셋팅 -->
+    <select id="relsUpdataInit" resultMap="relsMap">
+        SELECT A.RELS_DT
+            , A.RELS_NO
+            , A.CLNT_CD
+            , B.CLNT_NM
+            , A.RELS_D_NO
+            , A.CUST_CD
+            , C.CUST_NM
+            , A.CUST_CTR_CD
+            , D.CUST_CTR_NM
+            , A.ITEM_CD
+            , E.ITEM_NM
+            , A.REG_IN_AMT
+            , A.RELS_CNT
+            , A.DELI_REQUEST_DT
+            , A.PLT
+            , A.BOX
+            , A.REMK
+        FROM RELS_D A
+        INNER JOIN CLNT B
+           ON A.CLNT_CD = B.CLNT_CD
+        INNER JOIN CUST C
+           ON A.CUST_CD = C.CUST_CD
+        INNER JOIN CUST_CTR D
+           ON A.CUST_CD = D.CUST_CD
+          AND A.CUST_CTR_CD = D.CUST_CTR_CD
+        INNER JOIN ITEM E
+           ON A.CLNT_CD = E.CLNT_CD
+          AND A.ITEM_CD = E.ITEM_CD
+        WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
+          AND A.DEL_YN = 'N'
+        ORDER BY A.REG_DT DESC
+    </select>
+
+
+    <!-- H 삭제 전 데이터체크 -->
+    <select id="relsHdelChk" resultType="String">
+        SELECT CASE WHEN (TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO) IS NOT NULL THEN 'Y' ELSE 'N' END DATA_YN
+        FROM RELS_H
+        WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{deleteKey}
+          AND DEL_YN = 'N'
+          AND ROWNUM = 1
+    </select>
+    <!-- D 삭제 전 데이터체크 -->
+    <select id="relsDdelChk" resultType="String">
+        SELECT CASE WHEN (TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO) IS NOT NULL THEN 'Y' ELSE 'N' END DATA_YN
+        FROM RELS_D
+        WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{deleteKey}
+          AND DEL_YN = 'N'
+          AND ROWNUM = 1
+    </select>
+    <!-- S 삭제 전 데이터체크 -->
+    <select id="relsSdelChk" resultType="String">
+        SELECT CASE WHEN (TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO) IS NOT NULL THEN 'Y' ELSE 'N' END DATA_YN
+        FROM RELS_S
+        WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{deleteKey}
+          AND DEL_YN = 'N'
+          AND ROWNUM = 1
+    </select>
+    <!-- 출고 H 삭제 -->
+    <update id="relsHdelete" parameterType="String">
+        UPDATE RELS_H
+        SET DEL_YN = 'Y'
+        WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO  = #{deleteKey}
+        AND DEL_YN = 'N'
+    </update>
+    <!-- 출고 D 삭제 -->
+    <update id="relsDdelete" parameterType="String">
+        UPDATE RELS_D
+        SET DEL_YN = 'Y'
+        WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO  = #{deleteKey}
+        AND DEL_YN = 'N'
+    </update>
+    <!-- 출고 S 삭제 -->
+    <update id="relsSdelete" parameterType="String">
+        UPDATE RELS_S
+        SET DEL_YN = 'Y'
+        WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{deleteKey}
+        AND DEL_YN = 'N'
+    </update>
 </mapper>

@@ -128,7 +128,7 @@
                     <th:block th:text="#{wactrCd}"></th:block>
                     <input id="wactr_cd_d" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
                     <th:block th:text="#{wactrNm}"></th:block>
-                    <input id="wactr_tmp_d" list="wactr_d" name="wactr_tmp" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
+                    <input id="wactr_tmp_d" list="wactr_d" name="wactr_tmp_d" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
                     <datalist id="wactr_d">
                         <select id="wactr_sel_d">
                             <option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
@@ -160,7 +160,7 @@
                     <th:block th:text="#{clntCd}"></th:block>
                     <input id="clnt_cd_d" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
                     <th:block th:text="#{clntNm}"></th:block>
-                    <input id="clnt_tmp_d" list="clnt_d" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
+                    <input id="clnt_tmp_d" list="clnt_d" name="clnt_tmp_d" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
                     <datalist id="clnt_d">
                         <select id="clnt_sel_d">
                             <option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
@@ -193,7 +193,7 @@
                 </script>
                 <div>
                     <th:block th:text="#{locCd}"></th:block>
-                    <input id="loc_cd_d" list="loc_d" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
+                    <input id="loc_cd_d" list="loc_d" name="loc_cd_d" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
                     <datalist id="loc_d">
                         <select id="loc_sel_d">
                             <option th:each="loc : ${locList}" th:value="${loc.loc_cd}">

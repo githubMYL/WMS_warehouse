@@ -24,6 +24,7 @@
         VALUES (#{wactrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
 
+    <!-- 상품정보 수정 -->
     <update id="updateItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         UPDATE ITEM SET
             WACTR_CD = #{wactrCd}
@@ -120,6 +121,7 @@
         SELECT * FROM ITEM WHERE ITEM_CD = #{itemCd}
     </select>
 
+    <!-- 상품정보 삭제 -->
     <update id="deleteItem" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         UPDATE ITEM
         SET DEL_YN = 'Y'
