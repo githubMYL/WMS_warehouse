@@ -1,10 +1,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/front/main}">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/front/main}">
 
 <head>
-    <script>
+	<script>
         <!--날짜조회 S-->
 
     function search(){
@@ -41,83 +41,83 @@
 </head>
 
 <section layout:fragment="content">
-<h2>조정 내역</h2>
-<div id="stkadjList" >
-    <div  align="left" class="table_wrapper">
+	<h2>조정 내역</h2>
+	<div id="stkadjList" >
+		<div  align="left" class="table_wrapper">
 
 
 
-        <form id="search"  class="frmSearch">
-            <table class="table-cols">
-                <tr>
-                    <th style="width:100px;">조회시작일</th>
-                    <td style="padding:0;">
-                        <input type="date" id="mod_dt_start" name="mod_dt_start">
-                    </td>
-                    <th style="width:100px;">조회종료일</th>
-                    <td style="padding:0;">
-                        <input type="date" id="mod_dt_end" name="mod_dt_end">
-                    </td>
-                </tr>
+			<form id="search"  class="frmSearch">
+				<table class="table-cols">
+					<tr>
+						<th style="width:100px;">조회시작일</th>
+						<td style="padding:0;">
+							<input type="date" id="mod_dt_start" name="mod_dt_start">
+						</td>
+						<th style="width:100px;">조회종료일</th>
+						<td style="padding:0;">
+							<input type="date" id="mod_dt_end" name="mod_dt_end">
+						</td>
+					</tr>
 
-                <tr>
-                    <th style="width:90px;">물류센터 명</th>
-                    <td style="padding-right: 10px;">
-                        <input type="text"  id="search_tmstk_wactrNm" name="search_tmstk_wactrNm" th:placeholder="물류센터검색" >
-                    </td>
-                    <th style="width:80px;">고객사 명</th>
-                    <td style="padding-right: 10px;">
-                        <input type="text"  id="search_tmstk_clntNm" name="search_tmstk_clntNm" th:placeholder="고객사검색" >
-                    </td>
-                    <th style="width:110px;">로케이션 코드</th>
-                    <td style="padding-right: 10px;">
-                        <input type="text"  id="search_tmstk_locCd" name="search_tmstk_locCd" th:placeholder="로케이션검색" >
-                    </td>
-                    <th style="width:70px;">상품 명</th>
-                    <td style="padding-right: 10px;">
-                        <input type="text"  id="search_tmstk_itemNm" name="search_tmstk_itemNm" th:placeholder="상품검색" >
-                    </td>
-                </tr>
-            </table>
-            <div class="btns" style="text-align:right;">
-                <button type="submit" onclick="search()" class="sbtn">검색</button>
-            </div>
-        </form>
+					<tr>
+						<th style="width:90px;">물류센터 명</th>
+						<td style="padding-right: 10px;">
+							<input type="text"  id="search_tmstk_wactrNm" name="search_tmstk_wactrNm" th:placeholder="물류센터검색" >
+						</td>
+						<th style="width:80px;">고객사 명</th>
+						<td style="padding-right: 10px;">
+							<input type="text"  id="search_tmstk_clntNm" name="search_tmstk_clntNm" th:placeholder="고객사검색" >
+						</td>
+						<th style="width:110px;">로케이션 코드</th>
+						<td style="padding-right: 10px;">
+							<input type="text"  id="search_tmstk_locCd" name="search_tmstk_locCd" th:placeholder="로케이션검색" >
+						</td>
+						<th style="width:70px;">상품 명</th>
+						<td style="padding-right: 10px;">
+							<input type="text"  id="search_tmstk_itemNm" name="search_tmstk_itemNm" th:placeholder="상품검색" >
+						</td>
+					</tr>
+				</table>
+				<div class="btns" style="text-align:right;">
+					<button type="submit" onclick="search()" class="sbtn">검색</button>
+				</div>
+			</form>
 
-    <div class="table_wrapper">
-        <table id="stkadjListTable">
-            <thead>
-            <tr>
-                <th style="width:40px">순번</th>
-                <th style="width:180px">조정일자</th>
-                <th style="width:50px;">물류센터명</th>
-                <th style="width:100px;">고객사명</th>
-                <th style="width:50px;">로케이션(코드)</th>
-                <th style="width:50px;">상품명</th>
-                <th style="width:40px">조정 전 총 재고</th>
-                <th style="width:40px">조정 후 총 재고</th>
-                <th >조정사유</th>
-                <th >수정자</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="list : ${stkadjList}" th:object="${list}">
-                <td th:text="*{no}"></td>
-                <td th:text="*{adj_dt}"></td>
-                <td th:text="*{wactr_nm}"></td>
-                <td th:text="*{clnt_nm}"></td>
-                <td th:text="*{loc_cd}"></td>
-                <td th:text="*{item_nm}"></td>
-                <td th:text="*{before_adj_stock}"></td>
-                <td th:text="*{after_adj_stock}"></td>
-                <td th:text="*{adj_reason}"></td>
-                <td th:text="*{mod_nm}"></td>
-            </tr>
-            </tbody>
+			<div class="table_wrapper">
+				<table id="stkadjListTable">
+					<thead>
+					<tr>
+						<th style="width:40px">순번</th>
+						<th style="width:180px">조정일자</th>
+						<th style="width:50px;">물류센터명</th>
+						<th style="width:100px;">고객사명</th>
+						<th style="width:50px;">로케이션(코드)</th>
+						<th style="width:50px;">상품명</th>
+						<th style="width:40px">조정 전 총 재고</th>
+						<th style="width:40px">조정 후 총 재고</th>
+						<th >조정사유</th>
+						<th >수정자</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="list : ${stkadjList}" th:object="${list}">
+						<td th:text="*{no}"></td>
+						<td th:text="*{adj_dt}"></td>
+						<td th:text="*{wactr_nm}"></td>
+						<td th:text="*{clnt_nm}"></td>
+						<td th:text="*{loc_cd}"></td>
+						<td th:text="*{item_nm}"></td>
+						<td th:text="*{before_adj_stock}"></td>
+						<td th:text="*{after_adj_stock}"></td>
+						<td th:text="*{adj_reason}"></td>
+						<td th:text="*{mod_nm}"></td>
+					</tr>
+					</tbody>
 
-        </table>
-    </div>
-</div>
+				</table>
+			</div>
+		</div>
 
 </section>
 

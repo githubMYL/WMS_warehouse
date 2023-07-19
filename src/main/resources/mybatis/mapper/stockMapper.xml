@@ -56,7 +56,7 @@
 			LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
 			LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
 			LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
-		WHERE L.WACTR_CD = W.WACTR_CD
+		WHERE L.WACTR_CD = W.WACTR_CD AND T.DEL_YN = 'N'
 		ORDER BY T.REG_DT DESC
 	</select>
 
@@ -96,32 +96,38 @@
 				and i.item_nm like '%'||#{search_itemNm}||'%'
 			</when>
 		</choose>
+		AND l.WACTR_CD =w.WACTR_CD
 		ORDER BY t.REG_DT DESC
 	</select>
 	<!-- 검색 조건 -->
 
 	<select id="getTmstkByConditions" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT * FROM TMSTK
-		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd} AND DEL_YN = 'N'
 	</select>
 
 	<select id="getTmstkByLocCdItemCd" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT * FROM TMSTK
-		WHERE ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+		WHERE ITEM_CD = #{itemCd} AND LOC_CD = #{locCd} AND DEL_YN = 'N'
 	</select>
 
 	<insert id="insertTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
 		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
-			VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, SYSDATE, SYSDATE, #{regNm})
+			VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateTmstkAmt" parameterType="org.warehouse.models.stock.TmstkVO">
-		UPDATE TMSTK SET STOCK_AMT = #{stock_amt}, MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		UPDATE TMSTK SET STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}, MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
+	</update>
+
+	<update id="updateTmstkDelyn" parameterType="org.warehouse.models.stock.TmstkVO">
+		UPDATE TMSTK SET DEL_YN = 'N', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}, STDIN_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'), MOD_DT = SYSDATE, MOD_NM = #{regNm}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
 
 	<update id="deleteTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
-		UPDATE TMSTK SET DEL_YN = 'Y', MOD_DT = SYSDATE
+		UPDATE TMSTK SET DEL_YN = 'Y', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
 	<!--	tmstk E		-->
@@ -294,13 +300,12 @@
 		item_cd = #{item_cd}
 		order by adj_dt desc
 	</select>
-
-
+	<!--	stkadj E	-->
 
 	<!--	stktransf S		-->
 	<insert id="insertStktransf" parameterType="org.warehouse.models.stock.StktransfVO">
 		INSERT INTO STKTRANSF F(F.MOVE_DT, F.NO, F.ITEM_CD, F.CLNT_CD, F.WACTR_CD_FROM, F.LOC_CD_FROM, F.WACTR_CD_TO, F.LOC_CD_TO, F.RUNTIME_STOCK, F.MOVE_AMT, F.REASON, F.REG_DT, F.REG_NM)
-		VALUES(SYSDATE,(SELECT COUNT(*) FROM STKTRANSF FF WHERE FF.MOVE_DT = SYSDATE), #{itemCd}, #{clntCd}, #{waCtrCdFrom}, #{locCdFrom}, #{waCtrCdTo}, #{locCdTo}, #{runtimeStock}, #{moveAmt}, #{reason}, SYSDATE, #{regNm})
+		VALUES(TO_CHAR(SYSDATE, 'YYYY-MM-DD'),(SELECT COUNT(*) FROM STKTRANSF FF WHERE FF.MOVE_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'))+1, #{itemCd}, #{clntCd}, #{waCtrCdFrom}, #{locCdFrom}, #{waCtrCdTo}, #{locCdTo}, #{runtimeStock}, #{moveAmt}, #{reason}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{regNm})
 
 	</insert>
 
@@ -308,7 +313,27 @@
 		SELECT F.*, I.ITEM_NM FROM STKTRANSF F
 			LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
 		WHERE F.DEL_YN = 'N'
-		ORDER BY F.MOVE_DT ASC
+		ORDER BY F.MOVE_DT ASC, F.NO ASC
 	</select>
+
+	<select id="searchTransf" resultMap="stktransfMap">
+		SELECT F.*, I.ITEM_NM FROM STKTRANSF F
+		LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
+		<where>
+			<if test="search_moveDt != null">
+				F.MOVE_DT = #{search_moveDt}
+			</if>
+			<if test="search_itemCd != ''">
+				AND I.ITEM_CD LIKE '%'||#{search_itemCd}||'%'
+			</if>
+			<if test="search_itemNm != ''">
+				AND I.ITEM_NM LIKE '%'||#{search_itemNm}||'%'
+			</if>
+			AND F.DEL_YN = 'N'
+		</where>
+		ORDER BY F.MOVE_DT ASC, F.NO ASC
+	</select>
+
+
 	<!--	stktransf E		-->
 </mapper>

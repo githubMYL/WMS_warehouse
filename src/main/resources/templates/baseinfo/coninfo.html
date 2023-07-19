@@ -4,12 +4,6 @@
 	  layout:decorate="~{layouts/front/main}">
 
 <section layout:fragment="content">
-	<script>
-            function add(){
-                url = '/baseinfo/coninfo/register';
-                warehouse.popup.open(url, '계약정보추가', 500, 600, true);
-            };
-        </script>
 	<form class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
 		<table class="table-cols">
 			<tr>
@@ -55,6 +49,12 @@
 			</tr>
 		</table>
 		<script>
+
+                function add(){
+                    url = '/baseinfo/coninfo/register';
+                    warehouse.popup.open(url, '계약정보추가', 500, 600, true);
+                };
+
                 // 더블클릭 이벤트
                 document.addEventListener('DOMContentLoaded', function() {
                     const trs = document.querySelectorAll('tr');
