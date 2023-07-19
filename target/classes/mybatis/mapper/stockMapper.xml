@@ -152,7 +152,7 @@
 		ORDER BY t.reg_dt DESC
 	</select>
 
-
+	<!--조정내역 리스트 -->
 	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
 		SELECT
 		i.ITEM_NM,
@@ -166,7 +166,7 @@
 		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
 		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
 		where s.del_yn = 'N'
-		ORDER BY s.reg_dt DESC
+		ORDER BY s.NO DESC
 	</select>
 
 	<!--검색조건-->
@@ -235,7 +235,7 @@
 	</select>
 
 
-
+	<!--재고 조정하기위해 tmstk 하나 가져오기-->
 	<select id="stkadjOne" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjForm">
 		SELECT
 		t.ITEM_CD, i.ITEM_NM,
@@ -259,8 +259,8 @@
 	<!--재고조정 테이블 저장-->
 	<insert id="insertStkadj" parameterType="org.warehouse.models.stock.StkadjForm">
 		insert into stkadj values (
-		TO_CHAR(SYSDATE, 'YYYY-MM-DD'),
-		(SELECT COUNT(*) FROM stkadj s WHERE s.ADJ_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'))+1,
+		sysdate,
+		(SELECT COUNT(*) FROM stkadj s WHERE TO_CHAR(s.ADJ_DT, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD'))+1,
 		#{clnt_cd},
 		#{item_cd},
 		#{wactr_cd},
@@ -289,17 +289,6 @@
 		clnt_cd = #{clnt_cd} and
 		item_cd = #{item_cd}
 	</update>
-
-
-	<!-- 조정내역 테이블 select-->
-	<select id="getDetail" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjVO">
-		select * from stkadj where
-		loc_cd = #{loc_cd} and
-		wactr_cd = #{wactr_cd} and
-		clnt_cd = #{clnt_cd} and
-		item_cd = #{item_cd}
-		order by adj_dt desc
-	</select>
 	<!--	stkadj E	-->
 
 	<!--	stktransf S		-->
