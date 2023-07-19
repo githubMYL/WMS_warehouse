@@ -1,6 +1,7 @@
 package org.warehouse.models.admin.car;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 import org.warehouse.models.BaseEntity;
 
@@ -23,6 +24,9 @@ public class CarForm extends BaseEntity {
 
 	private Long loadPlt;
 
-	private boolean licenseYn;
+	private Boolean licenseYn;
+	@Past
 	private LocalDate joinDt;
+
+	private String flag;
 }

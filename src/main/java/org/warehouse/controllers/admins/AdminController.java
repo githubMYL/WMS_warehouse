@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
 import org.warehouse.models.admin.car.CarForm;
+import org.warehouse.models.admin.car.CarService;
+import org.warehouse.models.admin.car.CarVO;
 import org.warehouse.models.admin.clnt.ClntForm;
 import org.warehouse.models.admin.clnt.ClntService;
 import org.warehouse.models.admin.clnt.ClntVO;
@@ -42,11 +44,13 @@ public class AdminController {
 	private final ClntValidator clntValidator;
 	private final CustService custService;
 	private final CustCtrService custCtrService;
+	private final CarService carService;
 
 	private final UserDAO userDAO;
 	private final ClntDAO clntDAO;
 	private final CustDAO custDAO;
 	private final CustCtrDAO custCtrDAO;
+	private final CarDAO carDAO;
 
 	private final HttpServletResponse response;
 
@@ -266,11 +270,12 @@ public class AdminController {
 	@GetMapping("/carManage")
 	public String carManage(Model model) {
 		commonProcess(model, "carManage", "차량관리");
+		List<CarVO> carList = carDAO.getCarList();
 
+		model.addAttribute("carList", carList);
 
 		return "admin/car/carManage";
 	}
-
 
 	@GetMapping("/carManage/register")
 	public String carRegister(Model model) {
@@ -280,6 +285,26 @@ public class AdminController {
 
 		return "admin/car/carRegister";
 	}
+
+	@GetMapping("/carManage/update")
+	public String carUpdate(Model model) {
+
+		return "admin/car/carUpdate";
+	}
+
+
+	@PostMapping("/carManage/save")
+	public String carSave(@Valid CarForm carForm, Errors errors) {
+		if(errors.hasErrors()) {
+			return "admin/car/carRegister";
+		}
+
+		carService.register(carForm);
+
+		return "admin/car/carManage";
+	}
+
+
 	/** carManage E */
 
 	/** commonMethod S */

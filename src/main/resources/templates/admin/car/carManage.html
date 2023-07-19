@@ -100,8 +100,25 @@
 				<th>입사일자</th>
 				<th>비고</th>
 			</tr>
-			<tbody id="search">`
-
+			<tbody id="search">
+			<tr th:each="car, carCount : ${carList}" id="car_infos">
+				<td>
+					<input type="checkbox" name="check" th:value="${car.carCd}" id="chk" th:data-carcd="${car.carCd}">
+				</td>
+				<td th:text="${carCount.count}"></td>
+				<td th:text="${car.carCd}"></td>
+				<td th:text="${car.carNo}"></td>
+				<td th:text="${car.deliveryArea}"></td>
+				<td th:text="${car.driverNm}"></td>
+				<td th:text="${car.driverTel}"></td>
+				<td th:text="${car.driverAddr}"></td>
+				<td th:text="${car.carType}"></td>
+				<td th:text="${car.carTon}"></td>
+				<td th:text="${car.loadPlt}"></td>
+				<td th:text="${car.licenseYn}"></td>
+				<td th:text="${car.joinDt}"></td>
+				<td th:text="${car.remark}"></td>
+			</tr>
 			</tbody>
 		</table>
 	</div>

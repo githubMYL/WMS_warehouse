@@ -15,6 +15,19 @@
 	</div>
 
 	<br>
+
+	<div>
+		<dt th:text="#{carType}" class="require_item"></dt>
+		<input type="text" name="carType" th:field="*{carType}" th:placeholder="#{carType}">
+		<dt th:text="#{carTon}" class="require_item"></dt>
+		<input type="text" name="carTon" th:field="*{carTon}" th:placeholder="#{carTon}">
+	</div>
+	<div>
+		<dt th:text="#{loadPlt}" class="require_item"></dt>
+		<input type="text" name="loadPlt" th:field="*{loadPlt}" th:placeholder="#{loadPlt}">
+	</div>
+
+	<br>
 	<div><h3>기사 정보</h3>
 		<dt th:text="#{driverNm}" class="require_item"></dt>
 		<input type="text" name="driverNm" th:field="*{driverNm}" th:placeholder="#{driverNm}">
@@ -38,7 +51,6 @@
 				} ).open();
 			}
 	</script>
-	<br>
 	<div>
 		<dt th:text="#{driverAddr}" class="require_item"></dt>
 		<input type="text" name="driverAddr" id="addr" th:field="*{driverAddr}" th:placeholder="#{driverAddr}">
@@ -47,25 +59,18 @@
 	</div>
 
 	<br>
-	<div><h3>차량 정보</h3>
-		<dt th:text="#{carInfo}" class="require_item"></dt>
-		<input type="text" name="carType" th:field="*{carType}" th:placeholder="#{carType}">
-		<input type="text" name="carTon" th:field="*{carTon}" th:placeholder="#{carTon}">
-	</div>
-	<div>
-		<dt th:text="#{loadPlt}" class="require_item"></dt>
-		<input type="text" name="loadPlt" th:field="*{loadPlt}" th:placeholder="#{loadPlt}">
-	</div>
 
-
-	<br>
 	<div>
 		<dt th:text="#{licenseYn}" class="require_item"></dt>
-		<input type="text" name="licenseYn" th:field="*{licenseYn}" th:placeholder="#{licenseYn}">
+		<select name="licenseYn" th:field="*{licenseYn}">
+			<option value="" th:text="#{licenseYn}"></option>
+			<option th:value="true">보유</option>
+			<option th:value="false">미보유</option>
+		</select>
 	</div>
 	<div>
 		<dt th:text="#{joinDt}" class="require_item"></dt>
-		<input type="text" name="joinDt" th:field="*{joinDt}" th:placeholder="#{joinDt}">
+		<input type="date" name="joinDt" th:field="*{joinDt}" th:placeholder="#{joinDt}">
 	</div>
 
 </th:block>
