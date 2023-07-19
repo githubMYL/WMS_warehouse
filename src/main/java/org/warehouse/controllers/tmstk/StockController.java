@@ -45,7 +45,7 @@ public class StockController {
 
 	/* tmstk S */
 	@GetMapping("/tmstk")
-	public String tmstkList(Model model , String search_clntNm ,String search_itemCd,String search_itemNm){
+	public String tmstkList(Model model, @Param("search_clntNm") String search_clntNm, @Param("search_itemCd") String search_itemCd, @Param("search_itemNm") String search_itemNm){
 
 		commonProcess(model);
 		if (search_clntNm != null || search_itemCd!= null || search_itemNm!=null) {
@@ -68,7 +68,7 @@ public class StockController {
 						 @RequestParam(name = "search_tmstk_wactrNm", required = false) String search_tmstk_wactrNm,
 						 @RequestParam(name = "search_tmstk_clntNm", required = false) String search_tmstk_clntNm,
 						 @RequestParam(name = "search_tmstk_locCd", required = false) String search_tmstk_locCd,
-						 @RequestParam(name = "search_tmstk_itemNm", required = false) String search_tmstk_itemNm){
+						 @RequestParam(name = "search_tmstk_itemNm", required = false) String search_tmstk_itemNm) {
 
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::재고조정");
