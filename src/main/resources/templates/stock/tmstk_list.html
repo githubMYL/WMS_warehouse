@@ -49,31 +49,31 @@ function search(){
 		</div>
 	</form>
 
-	<table>
-		<tr>
-			<th style="width:50px;"></th>
-			<th style="width:50px;">물류센터명</th>
-			<th style="width:100px;">고객사명</th>
-			<th style="width:50px;">로케이션(코드)</th>
-			<th style="width:50px;">상품코드</th>
-			<th style="width:50px;">상품명</th>
-			<th style="width:60px;">총 재고수량</th>
-			<th style="width:50px;">불량수량</th>
-		</tr>
+	<div class="table_wrapper">
+		<table>
+			<tr>
+				<th style="width:50px;"></th>
+				<th style="width:50px;">물류센터명</th>
+				<th style="width:100px;">고객사명</th>
+				<th style="width:50px;">로케이션(코드)</th>
+				<th style="width:50px;">상품코드</th>
+				<th style="width:50px;">상품명</th>
+				<th style="width:60px;">총 재고수량</th>
+				<th style="width:50px;">불량수량</th>
+			</tr>
 
-		<tr th:each="list , Count: ${list}" th:object="${list}">
-			<td th:text="${Count.count}"></td>
-			<td th:text="*{wactr_nm}"></td>
-			<td th:text="*{clnt_nm}"> </td>
-			<td th:text="*{loc_cd}"></td>
-			<td th:text="*{item_cd}"></td>
-			<td th:text="*{item_nm}"></td>
-			<td th:text="*{stock_amt}"></td>
-			<td th:text="*{fault_amt}"></td>
-		</tr>
+			<tr th:each="list , Count: ${list}" th:object="${list}">
+				<td th:text="${Count.count}"></td>
+				<td th:text="*{wactr_nm}"></td>
+				<td th:text="*{clnt_nm}"> </td>
+				<td th:text="*{loc_cd}"></td>
+				<td th:text="*{item_cd}"></td>
+				<td th:text="*{item_nm}"></td>
+				<td th:text="*{stock_amt}"></td>
+				<td th:text="*{fault_amt}"></td>
+			</tr>
 
-	</table>
-
+		</table>
 	</div>
 </section>
 </html>
