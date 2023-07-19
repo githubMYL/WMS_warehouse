@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.DlyCnpDAO">
+    <resultMap id="dlyMap" type="org.warehouse.models.stock.DlycnpVO">
+        <result property="payDt" column="PAY_DT" />
+        <result property="clntCd" column="CLNT_CD" />
+        <result property="clntNm" column="CLNT_NM" />
+        <result property="itemCd" column="ITEM_CD" />
+        <result property="itemNm" column="ITEM_NM" />
+        <result property="waCtrCd" column="WACTR_CD" />
+        <result property="locCd" column="LOC_CD" />
+        <result property="preDtStock" column="PREDT_STOCK" />
+        <result property="preDtFaultStock" column="PREDT_FAULTSTOCK" />
+        <result property="nomalIn" column="NORMAL_IN" />
+        <result property="faultIn" column="FAULT_IN" />
+        <result property="relsAmt" column="RELS_AMT" />
+        <result property="moveAmt" column="MOVE_AMT" />
+        <result property="amtAdj" column="AMT_ADJ" />
+        <result property="normalStock" column="NORMAL_STOCK" />
+        <result property="faultStock" column="FAULT_STOCK" />
+    </resultMap>
+    <select id="getDlyCnpList" resultMap="dlyMap">
+        SELECT A.PAY_DT
+             , B.CLNT_NM
+             , A.ITEM_CD
+             , C.ITEM_NM
+             , A.CLNT_CD
+             , A.LOC_CD
+             , A.WACTR_CD
+             , A.PREDT_STOCK
+             , A.PREDT_FAULTSTOCK
+             , A.NORMAL_IN
+             , A.FAULT_IN
+             , A.RELS_AMT
+             , A.MOVE_AMT
+             , A.AMT_ADJ
+             , A.NORMAL_STOCK
+             , A.FAULT_STOCK
+        FROM DLYCNP A
+                 INNER JOIN CLNT B
+                            ON A.CLNT_CD = B.CLNT_CD
+                 INNER JOIN ITEM C
+                            ON A.ITEM_CD = C.ITEM_CD
+        ORDER BY A.REG_DT DESC
+    </select>
+</mapper>

@@ -2,10 +2,7 @@ package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.warehouse.models.stdin.StdinVO;
-import org.warehouse.models.stock.StkadjForm;
-import org.warehouse.models.stock.StkadjVO;
-import org.warehouse.models.stock.StktransfVO;
-import org.warehouse.models.stock.TmstkVO;
+import org.warehouse.models.stock.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,4 +55,5 @@ public interface StockDAO {
 	void insertStktransf(StktransfVO stktransfVO);
 	List<StktransfVO> getStktransfList();
 	/* stktransf E */
+
 }

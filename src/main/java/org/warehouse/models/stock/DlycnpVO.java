@@ -1,11 +1,12 @@
 package org.warehouse.models.stock;
 
 import lombok.Data;
+import org.warehouse.models.BaseEntity;
 
 import java.time.LocalDateTime;
 
 @Data
-public class DlycnpVO { // 일수불
+public class DlycnpVO extends BaseEntity { // 일수불
 
     private LocalDateTime payDt;    // 수불일자
 
@@ -48,4 +49,10 @@ public class DlycnpVO { // 일수불
     private String modNm;   // 수정자
 
     private String delYn;   // 삭제여부
+
+    // 리스트를 위해 조인해온 컬럼
+    private String clntNm; // 고객사명
+
+    private String itemNm;  // 아이템명
+
 }

@@ -16,26 +16,32 @@
         <form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
             계약정보 수정 팝업
             <div>
+                <dt th:text="#{clntNm}" class="require_item"></dt>
                 <input type="hidden" th:field="*{clntCd}" th:style="'background:#D8D8D8'" readonly/>
                 <input type="text" th:field="*{clntNm}" th:style="'background:#D8D8D8'" readonly/>
             </div>
             <div>
+                <dt th:text="#{mMin}" class="require_item"></dt>
                 <input type="number" th:field="*{MMin}" th:placeholder="#{mMin}" maxlength="8" oninput="maxLengthCheck(this)"/>
                 <div class="errors" th:each="err : ${#fields.errors('MMin')}" th:text="${err}"></div>
             </div>
             <div>
+                <dt th:text="#{pltFee}" class="require_item"></dt>
                 <input type="number" th:field="*{pltFee}" th:placeholder="#{pltFee}" maxlength="8" oninput="maxLengthCheck(this)"/>
                 <div class="errors" th:each="err : ${#fields.errors('pltFee')}" th:text="${err}"></div>
             </div>
             <div>
+                <dt th:text="#{transSdt}" class="require_item"></dt>
                 <input type="date" name="transSdt" th:value="${#temporals.format(conInfoVO.transSdt, 'yyyy-MM-dd')}"  th:placeholder="#{transSdt}">
                 <div class="errors" th:each="err : ${#fields.errors('transSdt')}" th:text="${err}"></div>
             </div>
             <div>
+                <dt th:text="#{transEdt}" class="require_item"></dt>
                 <input type="date" name="transEdt" th:value="${#temporals.format(conInfoVO.transEdt, 'yyyy-MM-dd')}"  th:placeholder="#{transEdt}">
                 <div class="errors" th:each="err : ${#fields.errors('transSdt')}" th:text="${err}"></div>
             </div>
             <div>
+                <dt th:text="#{remark}" class="require_item"></dt>
                 <input type="text" th:field="*{remark}" th:placeholder="#{remk}">
             </div>
             <div>

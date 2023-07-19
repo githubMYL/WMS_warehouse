@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/front/main}">
+    <section layout:fragment="content">
+<!--        <form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">-->
+<!--            <table class="table-cols">-->
+<!--                <tr>-->
+<!--                    <th style="width:80px;">수불일자</th>-->
+<!--                    <td>-->
+<!--                        <input type="date" name="payDt" placeholder="수불일자">-->
+<!--                    </td>-->
+
+<!--                    <th style="width:80px;">상품코드</th>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="itemCd" placeholder="상품코드">-->
+<!--                    </td>-->
+
+<!--                    <th style="width:80px;">고객사명</th>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="clntNm" placeholder="고객사명">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </table>-->
+<!--            <div class="btns" style="text-align:right;">-->
+<!--                <button type="button" id="ajax_btn" class="sbtn">검색</button>-->
+<!--            </div>-->
+<!--        </form>-->
+
+        <div class="table_wrapper">
+            <table class="table-cols">
+                <tr>
+                    <th>순번</th>
+                    <th>수불일자</th>
+                    <th>고객사코드</th>
+                    <th>고객사명</th>
+                    <th>상품코드</th>
+                    <th>상품명</th>
+                    <th>물류센터코드</th>
+                    <th>로케이션코드</th>
+                    <th>전일재고</th>
+                    <th>전일불량재고</th>
+                    <th>정상입고</th>
+                    <th>불량입고</th>
+                    <th>출고수량</th>
+                    <th>이동수량</th>
+                    <th>재고조정</th>
+                    <th>정상재고</th>
+                    <th>불량재고</th>
+                </tr>
+                <tr th:each="dlyCnp, rowCount : ${dlycnpList}">
+                    <td th:text="${rowCount.count}"></td>
+                    <td th:text="${dlyCnp.payDt}"></td>
+                    <td th:text="${dlyCnp.clntCd}"></td>
+                    <td th:text="${dlyCnp.clntNm}"></td>
+                    <td th:text="${dlyCnp.itemCd}"></td>
+                    <td th:text="${dlyCnp.itemNm}"></td>
+                    <td th:text="${dlyCnp.waCtrCd}"></td>
+                    <td th:text="${dlyCnp.locCd}"></td>
+                    <td th:text="${dlyCnp.preDtStock}"></td>
+                    <td th:text="${dlyCnp.preDtFaultStock}"></td>
+                    <td th:text="${dlyCnp.normalIn}"></td>
+                    <td th:text="${dlyCnp.faultIn}"></td>
+                    <td th:text="${dlyCnp.relsAmt}"></td>
+                    <td th:text="${dlyCnp.moveAmt}"></td>
+                    <td th:text="${dlyCnp.amtAdj}"></td>
+                    <td th:text="${dlyCnp.normalStock}"></td>
+                    <td th:text="${dlyCnp.faultStock}"></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</html>

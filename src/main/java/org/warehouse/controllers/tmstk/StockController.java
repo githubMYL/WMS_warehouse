@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
 import org.warehouse.models.baseinfo.loc.LocVO;
-import org.warehouse.models.stock.StkadjModService;
-import org.warehouse.models.stock.StktransfVO;
-import org.warehouse.models.stock.TmstkVO;
-import org.warehouse.models.stock.StkadjForm;
+import org.warehouse.models.stock.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
