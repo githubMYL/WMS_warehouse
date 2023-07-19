@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
+import org.warehouse.models.admin.car.CarForm;
 import org.warehouse.models.admin.clnt.ClntForm;
 import org.warehouse.models.admin.clnt.ClntService;
 import org.warehouse.models.admin.clnt.ClntVO;
@@ -264,7 +265,20 @@ public class AdminController {
 	/** carManage S */
 	@GetMapping("/carManage")
 	public String carManage(Model model) {
-		return null;
+		commonProcess(model, "carManage", "차량관리");
+
+
+		return "admin/car/carManage";
+	}
+
+
+	@GetMapping("/carManage/register")
+	public String carRegister(Model model) {
+		CarForm carForm = new CarForm();
+
+		model.addAttribute("carForm", carForm);
+
+		return "admin/car/carRegister";
 	}
 	/** carManage E */
 
