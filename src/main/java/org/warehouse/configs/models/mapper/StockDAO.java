@@ -7,6 +7,7 @@ import org.warehouse.models.stock.StkadjVO;
 import org.warehouse.models.stock.StktransfVO;
 import org.warehouse.models.stock.TmstkVO;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public interface StockDAO {
 	/* tmstk S */
 	void insertTmstk(TmstkVO tmstkVO);
 	void updateTmstkAmt(TmstkVO tmstkVO);
+	void updateTmstkDelyn(TmstkVO tmstkVO);
 	void deleteTmstk(TmstkVO tmstkVO);
 
 	List<TmstkVO> tmstkList();
@@ -34,11 +36,21 @@ public interface StockDAO {
 	/* stkadj S */
 
 	// stkadj조인해서 tmstk list 가져오기
+	List<StkadjForm> tmsktList();
 	List<StkadjForm> stkadjList();
+
+	List<StkadjForm> search_tmstkList(String search_tmstk_wactrNm,
+									  String search_tmstk_clntNm,
+									  String search_tmstk_locCd,
+									  String search_tmstk_itemNm);
+
+
 	List<StkadjForm> search_stkadjList(String search_tmstk_wactrNm,
 									   String search_tmstk_clntNm,
 									   String search_tmstk_locCd,
-									   String search_tmstk_itemNm);
+									   String search_tmstk_itemNm,
+									   String mod_dt_start,
+									   String mod_dt_end);
 
 	// 재고조정 더블클릭 해서 하나 가져오기
 	StkadjForm stkadjOne(HashMap<String, String> tmstkCdMap);
@@ -65,5 +77,6 @@ public interface StockDAO {
 	/* stktransf S */
 	void insertStktransf(StktransfVO stktransfVO);
 	List<StktransfVO> getStktransfList();
+	List<StktransfVO> searchTransf(LocalDate search_moveDt, String search_itemCd, String search_itemNm);
 	/* stktransf E */
 }

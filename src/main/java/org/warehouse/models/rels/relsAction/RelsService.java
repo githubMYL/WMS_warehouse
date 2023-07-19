@@ -30,6 +30,5 @@ public class RelsService {
         }else {
             relsDAO.relsDinsert(relsVO);
         }
-
     }
 }

@@ -1,6 +1,7 @@
 package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.warehouse.models.rels.relsAction.RelsVO;
 
 import java.util.HashMap;

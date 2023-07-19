@@ -25,32 +25,31 @@ function search(){
 </script>
 </head>
 <section layout:fragment="content">
-	<div  align="center" class="table_wrapper">
+	<form id="search" autocomplete="off" class="frmSearch">
+		<table class="table-cols">
 
-		<form id="search" autocomplete="off" class="frmSearch">
-			<table class="table-cols">
+			<tr>
+				<th style="width:80px;">고객사명</th>
+				<td>
+					<input type="text" id="clnt_nm" name="search_clntNm" placeholder="고객사명" style="width:100%;">
+				</td>
 
-				<tr>
-					<th style="width:80px;">고객사명</th>
-					<td>
-						<input type="text" id="clnt_nm" name="search_clntNm" placeholder="고객사명" style="width:100%;">
-					</td>
+				<th style="width:80px;">상품코드</th>
+				<td>
+					<input type="text" id="item_cd" name="search_itemCd" placeholder="상품코드" style="width:100%;">
+				</td>
+				<th style="width:80px;">상품명</th>
+				<td>
+					<input type="text" id="item_nm" name="search_itemNm" placeholder="상품명" style="width:100%;">
+				</td>
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button onclick="search()" class="sbtn">검색</button>
+		</div>
+	</form>
 
-					<th style="width:80px;">상품코드</th>
-					<td>
-						<input type="text" id="item_cd" name="search_itemCd" placeholder="상품코드" style="width:100%;">
-					</td>
-					<th style="width:80px;">상품명</th>
-					<td>
-						<input type="text" id="item_nm" name="search_itemNm" placeholder="상품명" style="width:100%;">
-					</td>
-				</tr>
-			</table>
-			<div class="btns" style="text-align:right;">
-				<button onclick="search()" class="sbtn">검색</button>
-			</div>
-		</form>
-
+	<div class="table_wrapper">
 		<table>
 			<tr>
 				<th style="width:50px;"></th>
@@ -59,7 +58,7 @@ function search(){
 				<th style="width:50px;">로케이션(코드)</th>
 				<th style="width:50px;">상품코드</th>
 				<th style="width:50px;">상품명</th>
-				<th style="width:50px;">재고수량</th>
+				<th style="width:60px;">총 재고수량</th>
 				<th style="width:50px;">불량수량</th>
 			</tr>
 
@@ -75,7 +74,6 @@ function search(){
 			</tr>
 
 		</table>
-
 	</div>
 </section>
 </html>

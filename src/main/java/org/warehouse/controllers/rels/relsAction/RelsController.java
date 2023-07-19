@@ -1,10 +1,8 @@
 package org.warehouse.controllers.rels.relsAction;
 
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,8 +12,6 @@ import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.admin.cust.CustVO;
 import org.warehouse.models.admin.custctr.CustCtrVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
-import org.warehouse.models.baseinfo.loc.LocVO;
-import org.warehouse.models.baseinfo.wactr.WactrVO;
 import org.warehouse.models.rels.relsAction.RelsService;
 import org.warehouse.models.rels.relsAction.RelsVO;
 import org.warehouse.models.rels.relsAction.RelsValidator;
@@ -73,6 +69,7 @@ public class RelsController {
     }
 
     /** 출고등록 S (할당) */
+
 
 
     /** 출고등록 수정 팝업 */
@@ -216,7 +213,6 @@ public class RelsController {
 
             return "rels/popup/relsPop";
         }
-
 
         relsService.save(relsVO);
 
