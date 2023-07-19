@@ -259,8 +259,8 @@
 	<!--재고조정 테이블 저장-->
 	<insert id="insertStkadj" parameterType="org.warehouse.models.stock.StkadjForm">
 		insert into stkadj values (
-		sysdate,
-		STKADJ_NO_SEQ.nextval,
+		TO_CHAR(SYSDATE, 'YYYY-MM-DD'),
+		(SELECT COUNT(*) FROM stkadj s WHERE s.ADJ_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'))+1,
 		#{clnt_cd},
 		#{item_cd},
 		#{wactr_cd},
