@@ -60,7 +60,7 @@
 
 		<div>
 			<span>정상수량:</span>
-			<input style="width:40px"  type="text" th:value="${vo.stock_amt - vo.fault_amt}" readonly>
+			<input style="width:40px"  type="text" name="origin_nomalStock" th:value="${vo.stock_amt - vo.fault_amt}" readonly>
 			<span>불량수량:</span>
 			<input style="width:40px"  type="text" th:field="*{fault_amt}" readonly>
 			<span>출고할당수량:</span>

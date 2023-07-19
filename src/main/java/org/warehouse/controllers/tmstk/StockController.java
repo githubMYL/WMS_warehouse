@@ -137,15 +137,20 @@ public class StockController {
 
 		// 조정후 수량 체크
 		Long after_adj_stock = vo.getModNomalAmt() - vo.getModFaultAmt() - vo.getAllo_amt();
+
+
+//        System.out.println("원래 정상 : " + vo.getOrigin_nomalStock());
+//        System.out.println("바뀐정상 : " + vo.getModNomalAmt());
+//        System.out.println("원래 스톡 : " + vo.getStock_amt());
 		// tmstk 전체재고 update 수량 체크
-		Long modTmstkStockAmt = vo.getModNomalAmt() - vo.getStock_amt();
+		Long modTmstkStockAmt = vo.getModNomalAmt()-vo.getOrigin_nomalStock();
 		// tmstk 불량재고 update 수량
 		Long modTmstkFaultAmt = vo.getModFaultAmt() - vo.getFault_amt();
 
 
 		System.out.println("조정전 가용수량: " + vo.getBefore_adj_stock()
 				+ " 조정 후 가용수량 : " + after_adj_stock
-				+ " 전체재고 차이 : " + modTmstkStockAmt
+				+ " 정상재고 차이 : " + modTmstkStockAmt
 				+ " 불량재고 차이 : " + modTmstkFaultAmt);
 
 
@@ -161,7 +166,7 @@ public class StockController {
 
 		closeLayer(response);
 
-		return "redirect:/stock/stkadj";
+		return "close";
 	}
 	/* stkadj E */
 
