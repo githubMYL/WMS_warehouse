@@ -17,8 +17,8 @@ public class RelsService {
             RelsVO getRelsNo = relsDAO.relsNoChk(relsVO);
             System.out.println("relsNo  ::  " + getRelsNo.getRelsNo());
 
-            if(relsVO.getDeliRequestDt() == null)
-                relsVO.setDeliRequestDt(LocalDate.parse("1111-11-11"));
+//            if(relsVO.getDeliRequestDt() == null)
+//                relsVO.setDeliRequestDt();
 
             relsVO.setRelsNo(getRelsNo.getRelsNo());
             relsVO.setRegNm("session");

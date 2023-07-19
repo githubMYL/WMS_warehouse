@@ -221,7 +221,7 @@ public class RelsController {
         relsService.save(relsVO);
 
         closeLayer(response);
-        return "/rels/rels";
+        return "close";
     }
 
     @GetMapping("/deleteRels")
@@ -245,7 +245,7 @@ public class RelsController {
                 relsDAO.relsSdelete(deleteKey[i]);
         }
 
-        return "/rels/rels";
+        return "redirect:/rels";
     }
 
     private void commonProcess(Model model) {

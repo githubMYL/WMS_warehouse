@@ -17,7 +17,8 @@
         <!--th:block th:unless="*{updYn} == 'Y'"-->
         <form method="post" th:action="@{/rels/relsSave}" th:object="${relsVO}" autocomplete="off">
             <div>
-                <input type="hidden" th:field=*{relsDt} th:value="${#temporals.format(relsDt, 'yyyy-MM-dd')}" th:placeholder="#{relsDt}" >
+                <input type="hidden" th:field="*{relsDt}" th:value="${#temporals.format(relsDt, 'yyyy-MM-dd')}" th:placeholder="#{relsDt}" >
+                <input type="hidden" th:field="*{relsNo}" th:value="*{relsNo}" th:placeholder="#{relsNo}" >
             </div>
             <div>
                 <input type="hidden" id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'"/>

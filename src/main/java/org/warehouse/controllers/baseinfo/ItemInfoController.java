@@ -171,7 +171,7 @@ public class ItemInfoController{
 
 		closeLayer(response);
 
-		return "redirect:/baseinfo/iteminfo";
+		return "close";
 	}
 
 	/** 상품정보 삭제 처리 (DEL_YN UPDATE) */

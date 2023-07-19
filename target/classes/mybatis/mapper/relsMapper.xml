@@ -55,7 +55,13 @@
                 WHERE RELS_DT = #{relsDt}
                 AND RELS_NO = #{relsNo})
             , #{clntCd}, #{custCd}, #{custCtrCd}, #{itemCd}
-            , #{regInAmt}, #{relsCnt}, #{deliRequestDt}, #{plt}, #{box}, SYSDATE , #{regNm})
+            , #{regInAmt}, #{relsCnt},
+        <if test="deliRequestDt == null">
+            NULL, #{plt}, #{box}, SYSDATE , #{regNm})
+        </if>
+        <if test="deliRequestDt != null">
+            #{deliRequestDt}, #{plt}, #{box}, SYSDATE , #{regNm})
+        </if>
     </insert>
 
     <!-- 출고등록 H -->
