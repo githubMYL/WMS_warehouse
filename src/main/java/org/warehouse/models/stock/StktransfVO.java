@@ -18,5 +18,9 @@ public class StktransfVO extends BaseEntity {  // 재고이동
     private String locCdTo;             // 로케이션코드 To
     private Long runtimeStock;          // 시점가용재고
     private Long moveAmt;               // 이동수량
+    private Long moveNormal;            // 이동 정상 수량
+    private Long moveFault;             // 이동 불량 수량
     private String reason;              // 사유
+
+    private String wactrCd;
 }

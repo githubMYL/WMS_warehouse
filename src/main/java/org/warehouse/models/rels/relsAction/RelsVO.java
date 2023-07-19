@@ -1,11 +1,13 @@
 package org.warehouse.models.rels.relsAction;
 
-import lombok.Data;
+import lombok.*;
 import org.warehouse.models.BaseEntity;
 
 import java.time.LocalDate;
 
-@Data
+@Data @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RelsVO extends BaseEntity {
 	/** rels_key */
 	private LocalDate relsDt;   // H 출고일자
@@ -41,4 +43,7 @@ public class RelsVO extends BaseEntity {
 	private Long alloAmt;           // 할당수량
 	private Long relsAmt;           // 출고수량
 	private Long alloAfterStock;    // 할당 후 재고
+
+	private Long rowCnt;            // 순번
+	private String dataYn;          // 데이터 존재유무
 }

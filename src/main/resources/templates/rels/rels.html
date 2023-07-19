@@ -4,94 +4,287 @@
 	  layout:decorate="~{layouts/front/main}">
 
 <section layout:fragment="content">
+	<form method="get" class="frmSearch" id="searchForm" onsubmit="return false" th:object="${srchParams}" autocomplete="off">
+		<!--            <table class="table-cols">-->
+		<!--                <tr>-->
+		<!--                    <th>고객사명</th>-->
+		<!--                    <td>-->
+		<!--                        <input type="text" th:field="*{clntNm}" id="clntNmSrch">-->
+		<!--                    </td>-->
+		<!--                    <th>상품코드</th>-->
+		<!--                    <td>-->
+		<!--                        <input type="text" th:field="*{itemCd}" id="itemCdSrch">-->
+		<!--                    </td>-->
+		<!--                    <th>상품명</th>-->
+		<!--                    <td>-->
+		<!--                        <input type="text" th:field="*{itemNm}" id="itemNmSrch">-->
+		<!--                    </td>-->
+		<!--                </tr>-->
+		<!--            </table>-->
+		<div class="btns" align="right">
+			<button class="sbtn" th:text="#{search_btn}"></button>
+			<button class="sbtn" th:onclick="add()" th:text="#{add_btn}"></button>
+			<button class="sbtn blue" th:onclick="deleteItem()" th:text="#{delete_btn}"></button>
+		</div>
+	</form>
+	<!--        <script>-->
+	<!--            // 페이지이동-->
+	<!--            function movePage(page){-->
+
+	<!--                // 검색 조건을 form 에 넣어줌-->
+	<!--                const form = document.getElementById('searchForm');-->
+
+	<!--                // form 에 들어있는 검색조건을 queryParams에 넣어줌.-->
+	<!--                const queryParams = {-->
+	<!--                    page: (page) ? page: 1,-->
+	<!--                    recordSize: 10,-->
+	<!--                    pageSize: 10,-->
+	<!--                    clntNm: form.clntNmSrch.value,-->
+	<!--                    itemCd: form.itemCdSrch.value,-->
+	<!--                    itemNm: form.itemNmSrch.value-->
+	<!--                }-->
+	<!--                // location.pathname :: 페이지의 URI를 의미함.-->
+	<!--                // new URLSearchParams(queryParams).toString() :: queryParams 의 모든 값을 쿼리스트링으로 변환-->
+	<!--                location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();-->
+	<!--            }-->
+	<!--        </script>-->
 	<!--########## header ##########-->
-	<div class="table_rels_wrapper">
+	<div class="table_wrapper">
 		<table id="relsHTable" class="table-cols">
 			<tr>
 				<th align="center">
-					<input type="checkbox">
+					<input type="checkbox" id="chkAll" name="chkAll">
 				</th>
 				<th>순번</th>
 				<th>출고일자</th>
 				<th>고객사코드</th>
 				<th>고객사명</th>
 				<th>진행상태</th>
-				<!-- th>확정일자</th -->
+				<th>확정일자</th>
 				<th>비고</th>
 			</tr>
 			<tr th:each="relsData, rowCnt : ${relsList}">
 				<td align="center">
-					<input type="checkbox">
+					<input type="checkbox" name="chk" id="chk" th:data-relsdt="${relsData.relsDt}" th:data-relsno="${relsData.relsNo}">
 				</td>
 				<td align="center" th:text="${rowCnt.count}"></td>
 				<td align="center" th:text="${relsData.relsDt}"></td>
 				<td align="center" th:text="${relsData.clntCd}"></td>
 				<td th:text="${relsData.clntNm}"></td>
 				<td align="center" th:text="${relsData.status}"></td>
-				<!-- td th:text="${relsData.confDt}"></td -->
+				<td th:text="${relsData.confDt}"></td>
 				<td th:text="${relsData.remk}"></td>
 			</tr>
 		</table>
 	</div>
+	<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // relsHTable 의 tr태그를 찾음
+                const trs = document.querySelectorAll('#relsHTable tr');
+                trs.forEach( (tr) => {
+                    tr.addEventListener('click', getDetail);
+                });
+            });
+
+            function getDetail(e) {
+				const evnt = e.target.parentNode;
+				// dataset 데이터 변수에 넣기
+				const relsDt = evnt.querySelector('#chk').dataset.relsdt;
+				const relsNo = evnt.querySelector('#chk').dataset.relsno;
+
+                // detailList 테이블 id
+                var relsDTable = document.querySelector("#relsDTable > tbody");
+
+                // 쿼리스트링
+                const url = `rels/relsDetail?relsDt=${relsDt}&relsNo=${relsNo}`;
+                commonLib.ajaxLoad(url).then((data) => {
+                    // JSON 문자열을 javaScript 객체로 변환 :: 반대 :: stringify()
+                    data = JSON.parse(data);
+                    var str = '';
+
+                    for(var i = 0; i < data.length; i++) {
+
+                        if(data[i].itemNm == null) data[i].itemNm = "";                 // 상품명 null 공백처리
+                        if(data[i].regInAmt == null) data[i].regInAmt = 0;              // 출고지시수량 null 0처리
+                        if(data[i].relsCnt == null) data[i].relsCnt = 0;                // 출고수량 null 0처리
+                        if(data[i].deliRequestDt == null) data[i].deliRequestDt = "";   // 납품요청일 null 공백처리
+                        if(data[i].plt == null) data[i].plt = 0;                        // 파렛트 null 0처리
+                        if(data[i].box == null) data[i].box = 0;                        // 박스 null 0처리
+                        if(data[i].remk == null) data[i].remk = "";                     // 비고 null 공백처리
+                        str += '<tr>';
+                        str += '<td>' + data[i].rowCnt + '</td>'
+                        str += '<td>' + data[i].custNm + '</td>';
+                        str += '<td>' + data[i].custCtrNm + '</td>';
+                        str += '<td>' + data[i].itemCd + '</td>';
+                        str += '<td>' + data[i].itemNm + '</td>';
+                        str += '<td align="right">' + data[i].regInAmt + '</td>';
+                        str += '<td align="right">' + data[i].relsCnt + '</td>';
+                        str += '<td>' + data[i].deliRequestDt + '</td>';
+                        str += '<td align="right">' + data[i].plt + '</td>';
+                        str += '<td align="right">' + data[i].box + '</td>';
+                        str += '<td>' + data[i].remk + '</td>';
+                        str += '</tr>';
+                    }
+                    relsDTable.innerHTML = str;
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+            }
+        </script>
+
 	<br/>
 	<!--########## detail ##########-->
-	<div class="table_rels_wrapper">
+	<div class="table_wrapper" id="relsDetailList">
 		<table id="relsDTable" class="table-cols">
+			<thead>
 			<tr>
-				<th align="center">
-					<input type="checkbox">
-				</th>
 				<th>순번</th>
-				<th>출고일자</th>
-				<th>고객사코드</th>
-				<th>고객사명</th>
-				<th>진행상태</th>
-				<!-- th>확정일자</th -->
+				<th>납품처명</th>
+				<th>납품센터명</th>
+				<th>상품코드</th>
+				<th>상품명</th>
+				<th>출고지시수량</th>
+				<th>출고수량</th>
+				<th>납품요청일</th>
+				<th>파렛트</th>
+				<th>박스</th>
+				<!-- th>출고후수량</th -->
 				<th>비고</th>
 			</tr>
-			<tr th:each="relsData, rowCnt : ${relsList}">
-				<td align="center">
-					<input type="checkbox">
-				</td>
-				<td align="center" th:text="${rowCnt.count}"></td>
-				<td align="center" th:text="${relsData.relsDt}"></td>
-				<td align="center" th:text="${relsData.clntCd}"></td>
-				<td th:text="${relsData.clntNm}"></td>
-				<td align="center" th:text="${relsData.status}"></td>
-				<!-- td th:text="${relsData.confDt}"></td -->
-				<td th:text="${relsData.remk}"></td>
-			</tr>
+			</thead>
+			<tbody>
+			<!--                    <tr th:each="relsDtData, rowCnt : ${relsDetailList}" id="relsDetData">-->
+			<!--                        <td th:text="${rowCnt.count}"></td>-->
+			<!--                        <td th:text="${relsDtData.custNm}"></td>-->
+			<!--                        <td th:text="${relsDtData.custCtrNm}"></td>-->
+			<!--                        <td th:text="${relsDtData.itemCd}"></td>-->
+			<!--                        <td th:text="${relsDtData.itemNm}"></td><th></th>-->
+			<!--                        <td th:text="${relsDtData.regInAmt}"></td>-->
+			<!--                        <td th:text="${relsDtData.relsCnt}"></td>-->
+			<!--                        <td th:text="${relsDtData.deliRequestDt}"></td>-->
+			<!--                        <td th:text="${relsDtData.plt}"></td>-->
+			<!--                        <td th:text="${relsDtData.box}"></td>-->
+			<!--                        &lt;!&ndash; td th:text="${relsDtData.relsAfterAmt}"></th &ndash;&gt;-->
+			<!--                        <td th:text="${relsDtData.remk}"></td>-->
+			<!--                    </tr>-->
+			</tbody>
 		</table>
 	</div>
 	<br/>
 	<!--########## subdetail ##########-->
-	<div class="table_rels_wrapper">
+	<div class="table_wrapper">
 		<table id="relsSTable" class="table-cols">
+			<thead>
 			<tr>
-				<th align="center">
-					<input type="checkbox">
-				</th>
 				<th>순번</th>
-				<th>출고일자</th>
-				<th>고객사코드</th>
-				<th>고객사명</th>
-				<th>진행상태</th>
-				<!-- th>확정일자</th -->
+				<th>상품코드</th>
+				<th>상품명</th>
+				<th>로케이션</th>
+				<th>할당수량</th>
+				<th>할당후재고</th>
 				<th>비고</th>
 			</tr>
-			<tr th:each="relsData, rowCnt : ${relsList}">
-				<td align="center">
-					<input type="checkbox">
-				</td>
+			</thead>
+			<tbody>
+			<tr th:each="relsSubData, rowCnt : ${relsSubDetailList}">
 				<td align="center" th:text="${rowCnt.count}"></td>
-				<td align="center" th:text="${relsData.relsDt}"></td>
-				<td align="center" th:text="${relsData.clntCd}"></td>
-				<td th:text="${relsData.clntNm}"></td>
-				<td align="center" th:text="${relsData.status}"></td>
-				<!-- td th:text="${relsData.confDt}"></td -->
-				<td th:text="${relsData.remk}"></td>
+				<td th:text="${relsSubData.itemCd}"></td>
+				<td th:text="${relsSubData.itemNm}"></td>
+				<td th:text="${relsSubData.locCd}"></td>
+				<td th:text="${relsSubData.alloAmt}"></td>
+				<td th:text="${relsSubData.alloAfterStock}"></td>
+				<td th:text="${relsSubData.remk}"></td>
 			</tr>
+			</tbody>
 		</table>
 	</div>
+	<script>
+            // 추가 ======================================================
+            function add(e) {
+
+                var checkbox = document.querySelectorAll("input[name=chk]:checked");
+
+                if(checkbox.length == 1){
+
+                    var keyVal = [checkbox[0].dataset.relsdt.replaceAll("-", "")+checkbox[0].dataset.relsno]
+                    url = '/rels/' + keyVal + '/detInsert';
+                    warehouse.popup.open(url, "출고상품 추가", 500, 600, true);
+                }else if(checkbox.length == 0) {
+
+                    url = '/rels/register';
+                    warehouse.popup.open(url, '출고등록 추가', 500, 600, true);
+                }else if(checkbox.length > 1) {
+                    alert("출고상품 등록의 체크박스는 하나만 가능합니다.")
+                }
+            };
+
+            // 더블클릭 수정 ===============================================
+            document.addEventListener('DOMContentLoaded', function() {
+				const trs = document.querySelectorAll('tr');
+				trs.forEach( (tr) => {
+					tr.addEventListener('dblclick', editForm)
+				});
+			});
+
+			function editForm(e) {
+				console.log(e.target);
+				var tr = e.target.parentNode;
+				var keyVal = tr.querySelector('#chk').dataset.relsdt.replaceAll("-", "")
+				                + tr.querySelector('#chk').dataset.relsno;
+
+				url = '/rels/' + keyVal + '/update';
+				warehouse.popup.open(url, "출고등록 수정", 500, 600, true);
+			}
+
+            // 체크박스 선택 시 행 색변환 ======================================
+            var chks = document.getElementsByName("chk");
+
+            chks.forEach(element => element.addEventListener('click', function(e){
+
+                if(e.target.checked == true){
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
+                }else {
+                    e.target.parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
+                }
+            }));
+
+            // 모든 체크박스 체크 ==============================================
+            document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
+                e.preventDefault();
+                var list = document.querySelectorAll("input[name=chk]");
+                for (var i = 0; i < list.length; i++) {
+                    list[i].checked = this.checked;
+                    // 체크값 색상 입히기
+                    if(this.checked == true){
+                        list[i].parentNode.parentNode.style.setProperty("background-color", "#D8D8D8", "important");
+                    }else if(this.checked == false) {
+                        list[i].parentNode.parentNode.style.setProperty("background-color", "#fff", "important");
+                    }
+                }
+            });
+
+            // 체크 데이터 삭제 =================================================
+            function deleteItem(e){
+
+                // 체크된 값 가져오기
+                var checkbox = document.querySelectorAll("input[name=chk]:checked");
+                var chkArr = [];
+
+                checkbox.forEach(function (chkData){
+                    chkArr.push(chkData.dataset.relsdt.replaceAll("-", "") + chkData.dataset.relsno);
+                });
+
+                const url = `/rels/deleteRels?chkArr=${chkArr}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+            };
+        </script>
 </section>
 </html>

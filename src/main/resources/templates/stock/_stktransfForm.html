@@ -17,23 +17,38 @@
 
 	<form name="transfForm" method="post" th:action="@{/stock/_transfForm}" th:object="${stktransfVO}" autocomplete="off">
 		<div style="display : flex; flex-wrap: wrap;" id="flexWrap">
+			<input type="hidden" th:value="${wactrCd}" name="wactrCd">
 			<input type="hidden" th:value="${tmstkVO.item_cd}" name="itemCd">
-			<div >
+			<div style="padding-bottom:4px;">
 				로케이션 FROM
 				<br>
 				<input type="text" style="width : 150px; background:#d5d5d5;" readonly th:value="${tmstkVO.loc_cd}" name="locCdFrom">
 			</div>
 
-			<div>
-				이동 전 수량
+			<div style="padding-bottom:4px;">
+				이동 전 정상 수량
 				<br>
-				<input type="number" style="width : 110px; background:#d5d5d5;" readonly th:value="${tmstkVO.stock_amt}" id="runtimeAmt">
+				<input type="number" style="width : 110px; background:#d5d5d5;" readonly th:value="${tmstkVO.stock_amt - tmstkVO.fault_amt}" id="runtimeNormal">
+			</div>
+			<div style="padding-bottom:4px;">
+				이동 전 불량 수량
+				<br>
+				<input type="number" style="width : 110px; background:#d5d5d5;" readonly th:value="${tmstkVO.fault_amt}" id="runtimeFault">
+			</div>
+
+			<div style="padding-right : 10px;">
+				<div style="border : 0px solid; width:150px;"></div>
 			</div>
 
 			<div>
-				이동 후 수량
+				이동 후 정상 수량
 				<br>
-				<input type="number" style="width : 110px; background:#d5d5d5;" readonly id="leftAmt">
+				<input type="number" style="width : 110px; background:#d5d5d5;" readonly id="leftNormal">
+			</div>
+			<div>
+				이동 후 불량 수량
+				<br>
+				<input type="number" style="width : 110px; background:#d5d5d5;" readonly id="leftFault">
 			</div>
 
 			<div>
@@ -49,14 +64,15 @@
 			</div>
 
 			<div>
-				이동수량
+				이동 정상 수량
 				<br>
-				<input type="number" style="width : 110px;" onchange="amtChange(this)" id="moveAmt" th:field="${stktransfVO.moveAmt}">
+				<input type="number" style="width : 110px;" onchange="amtChange(this)" id="moveNormal" th:field="${stktransfVO.moveNormal}">
 			</div>
-			<script>
-				function amtChange() {
-				}
-			</script>
+			<div>
+				이동 불량 수량
+				<br>
+				<input type="number" style="width : 110px;" onchange="amtChange(this)" id="moveFault" th:field="${stktransfVO.moveFault}">
+			</div>
 
 			<div style="padding-bottom : 3px;">
 				이동 사유
@@ -65,22 +81,39 @@
 			</div>
 			<script>
 		function amtChange() {
-			var moveAmt = document.getElementById('moveAmt');
-			const runtimeAmt = document.getElementById('runtimeAmt').value;
-			var leftAmt = document.getElementById('leftAmt');
+			let moveNormal = document.getElementById('moveNormal');
+			let moveFault = document.getElementById('moveFault');
 
-			if(runtimeAmt-moveAmt.value < 0) {
+			const runtimeNormal = document.getElementById('runtimeNormal').value;
+			const runtimeFault = document.getElementById('runtimeFault').value;
+
+			let leftNormal = document.getElementById('leftNormal');
+			let leftFault = document.getElementById('leftFault');
+
+			if(runtimeNormal-moveNormal.value < 0) {
 				console.log('err!');
 				alert('이동할 수량이 부족합니다!');
-				leftAmt.value = runtimeAmt;
-				moveAmt.value = 0;
-			} else if(moveAmt.value < 0) {
+				leftNormal.value = runtimeNormal;
+				moveNormal.value = 0;
+			} else if(moveNormal.value < 0) {
 				alert('이동수량은 음수일 수 없습니다!');
-				leftAmt.value = runtimeAmt;
-				moveAmt.value = 0;
+				leftNormal.value = runtimeNormal;
+				moveNormal.value = 0;
+			} else {
+				leftNormal.value = runtimeNormal-moveNormal.value;
 			}
-			else {
-				leftAmt.value=runtimeAmt-moveAmt.value;
+
+			if(runtimeFault-moveFault.value < 0) {
+				console.log('err!');
+				alert('이동할 수량이 부족합니다!');
+				leftFault.value = runtimeFault;
+				moveFault.value = 0;
+			} else if(moveFault.value < 0) {
+				alert('이동수량은 음수일 수 없습니다!');
+				leftFault.value = runtimeFault;
+				moveFault.value = 0;
+			} else {
+				leftFault.value = runtimeFault-moveFault.value;
 			}
 		}
 	</script>
