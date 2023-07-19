@@ -49,7 +49,7 @@ main > section { flex-grow:1; margin: 50px; max-width:900px}
 aside li > a { display: block; height: 71px; line-height: 71px; color: #596b99; font-size: 18px; text-align: center; position: relative; }
 aside li > a * { color: #596b99; font-size: 18px; }
 aside li > a:hover,
-aside li > a.on { font-weight: bold; }
+aside li > a.on { font-weight: bold; border-right:6px solid #7c7eff; background-color:#819ad9ba; color:white; }
 aside li > a:hover:after,
 aside li > a.on:after { content: ''; display: block; position: absolute; width: 8px; height: 100%; right: 0; top: 0; }
 
