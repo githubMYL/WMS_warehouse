@@ -24,15 +24,13 @@ import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 import org.warehouse.models.baseinfo.loc.LocVO;
 import org.warehouse.models.baseinfo.wactr.WactrForm;
 import org.warehouse.models.baseinfo.wactr.WactrVO;
-import org.warehouse.models.stdin.StdinForm;
-import org.warehouse.models.stdin.StdinService;
-import org.warehouse.models.stdin.StdinVO;
-import org.warehouse.models.stdin.StdinValidator;
+import org.warehouse.models.stdin.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -50,6 +48,33 @@ public class StdinController {
 	private final HttpServletRequest request;
 	private final HttpServletResponse response;
 
+
+	@GetMapping("/registertest")
+	public String stdinRegisterTest(Model model) {
+		List<ClntVO> list = clntDAO.getClntList();
+		model.addAttribute("clntList", list);
+
+		List<ItemInfoVO> item_list = itemInfoDAO.getItemList();
+		model.addAttribute("itemList", item_list);
+
+		List<LocVO> loc_list = locDAO.getLocList();
+		model.addAttribute("locList", loc_list);
+
+		//stdinFormList 를 넘겨줌
+		StdinTestForm stdinTestForm = new StdinTestForm();
+
+		model.addAttribute("stdinTestForm", stdinTestForm);
+
+		return "stdin/registertest";
+	}
+
+	@PostMapping("/savetest")
+	public String savetest() {
+
+
+		closeLayer(response);
+		return "close";
+	}
 
 	@GetMapping("/register")
 	public String stdinRegister(Model model) {
@@ -81,8 +106,9 @@ public class StdinController {
 	}
 
 	@PostMapping("/save")
-	public String stdinRegisterPs(@Valid StdinForm stdinForm, Errors errors, Model model) {
+	public String stdinRegisterPs(@Valid List<StdinForm> stdinForm, Errors errors, Model model) {
 		System.out.println(stdinForm);
+		/*
 		validator.validate(stdinForm, errors);
 
 		if(errors.hasErrors()) {
@@ -101,7 +127,7 @@ public class StdinController {
 		service.register(stdinForm);
 
 		closeLayer(response);
-
+*/
 
 		return "close";
 	}

@@ -1,0 +1,68 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script th:src="@{/js/front/layer.js}"></script>
+</head>
+
+<th:block th:fragment="stdinForm" th:object="${stdinTestForm}" >
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const addItemForm = document.getElementsByClassName('addItemForm');
+
+			for(var i = 0; i < addItemForm.length; i++) {
+				addItemForm[i].addEventListener("click", function() {
+					console.log('test');
+					const addForm = document.getElementById('addForm');
+
+					console.log(addForm);
+					addForm.innerHTML = "<th:block th:replace='~{stdin/_addItemForm::addItem}'></th:block>";
+
+
+				});
+			};
+
+		});
+	</script>
+
+
+
+
+	<input type="hidden" th:field="*{stdinNum}">
+	<div>
+		<dt th:text="#{stdin_dt}" class="require_item"></dt>
+		<input type="date" name="stdinDt" th:value="${#temporals.format(stdinTestForm.stdinDt, 'yyyy-MM-dd')}" th:placeholder="#{stdin_dt}">
+		<div class="errors" th:each="err : ${#fields.errors('stdinDt')}" th:text="${err}"></div>
+	</div>
+
+	<br>
+
+	<div>
+		<dt th:text="#{clnt}" class="require_item"></dt>
+		<input type="text" id="clnt_cd" th:field="*{clntCd}" readonly style="background:#d5d5d5"/>
+		<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" placeholder="고객사 명" onchange="UpdateClnt()" th:field="*{clntNm}"/>
+		<datalist id="clnt">
+			<select id="clnt_sel">
+				<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+				</option>
+			</select>
+		</datalist>
+		<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
+	</div>
+
+	<br>
+
+	<input type="hidden" name="status" th:value="01">
+
+	<br>
+
+	<button type="button" class="addItemForm">상품 추가</button>
+
+	<div id="addForm"></div>
+
+	<div>
+		<dt th:text="#{remk}" class="require_item"></dt>
+		<textarea name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
+		<div class="errors" th:each="err : ${#fields.errors('remark')}" th:text="${err}"></div>
+	</div>
+</th:block>
+</html>

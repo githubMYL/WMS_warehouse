@@ -28,7 +28,8 @@
 
 	<insert id="insertHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO STDIN_H H(H.STDIN_DT, H.STDIN_NUM, H.CLNT_CD, H.STATUS, H.REMK, H.REG_DT, H.REG_NM) VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd}, #{status}, #{remark}, SYSDATE, #{regNm})
+		INSERT INTO STDIN_H H(H.STDIN_DT, H.STDIN_NUM, H.CLNT_CD, H.STATUS, H.REMK, H.REG_DT, H.REG_NM)
+		VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd}, #{status}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
 	<insert id="insertDetailStdin" parameterType="org.warehouse.models.stdin.StdinVO">
