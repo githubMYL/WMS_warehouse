@@ -32,13 +32,26 @@
 	</ul>
 
 
-
+	<!-- 입고 사이드 탭 -->
 	<ul th:case="stdin">
 		<li>
 			<a th:href="@{/stdin}" th:classappend="${menuCode} == 'stdin_h' ? 'on'">입고 등록/상세내역</a>
 		</li>
 		<li>
 			<a th:href="@{/stdin/detail}" th:classappend="${menuCode} == 'stdin_d' ? 'on'">입고 조회</a>
+		</li>
+	</ul>
+
+	<!-- 출고 사이드 탭 -->
+	<ul th:case="rels">
+		<li>
+			<a th:href="@{/rels}" th:classappend="${menuCode} == 'rels' ? 'on'">
+				<i class="xi-view-list"></i>
+				출고등록
+			</a>
+		</li>
+		<li>
+			<a>출고조회</a>
 		</li>
 	</ul>
 
