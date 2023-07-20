@@ -69,8 +69,35 @@ public class StdinController {
 	}
 
 	@PostMapping("/savetest")
-	public String savetest() {
+	public String savetest(@Valid StdinTestForm stdinTestForm, Errors errors, Model model) {
+		int cnt = (int)stdinTestForm.getItemData().chars().filter(s -> s == '/').count();
 
+		StdinForm[] forms = new StdinForm[cnt];
+
+		for(int j = 0; j < forms.length; j++) forms[j] = new StdinForm();
+		for(int i = 0; i < forms.length; i++) {
+			forms[i].setStdinDt(stdinTestForm.getStdinDt());
+			forms[i].setClntCd(stdinTestForm.getClntCd());
+			forms[i].setClntNm(stdinTestForm.getClntNm());
+			forms[i].setStatus(stdinTestForm.getStatus());
+		}
+
+		String[] itemDatas = stdinTestForm.getItemData().split("/");
+		String[][] itemData = new String[cnt][];
+		for(int r = 0; r < cnt; r++) {
+			itemData[r] = itemDatas[r].split(",");
+		}
+
+		for(int values = 0; values < cnt; values++) {
+				forms[values].setItemCd(itemData[values][0]);
+				forms[values].setItemNm(itemData[values][1]);
+				forms[values].setLocCd(itemData[values][2]);
+				forms[values].setBeforeStdin(Long.parseLong(itemData[values][3]));
+				forms[values].setNormal(Long.parseLong(itemData[values][4]));
+				forms[values].setFault(Long.parseLong(itemData[values][5]));
+		}
+
+		// forms 배열
 
 		closeLayer(response);
 		return "close";
@@ -94,9 +121,10 @@ public class StdinController {
 		return "stdin/register";
 	}
 
-	@GetMapping("/update/{stdinNum}")
-	public String update(@PathVariable String stdinNum, Model model) {
-		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
+
+	@GetMapping("/update/{stdinNum}/{stdinNo}")
+	public String update(@PathVariable Long stdinNum, @PathVariable Long stdinNo, Model model) {
+		StdinVO stdinVO = stdinDAO.getDetailByNumNo(stdinNum, stdinNo);
 
 		StdinForm stdinForm = new ModelMapper().map(stdinVO, StdinForm.class);
 
@@ -105,29 +133,45 @@ public class StdinController {
 		return("stdin/update");
 	}
 
+
 	@PostMapping("/save")
-	public String stdinRegisterPs(@Valid List<StdinForm> stdinForm, Errors errors, Model model) {
-		System.out.println(stdinForm);
-		/*
-		validator.validate(stdinForm, errors);
+	public String stdinRegisterPs(@Valid StdinForm stdinForms, Errors errors, Model model) {
+		if(stdinForms.getFlag().isBlank() || stdinForms.getFlag().isEmpty()) {
+			System.out.println("작성 탐");
+			int cnt = (int)stdinForms.getItemData().chars().filter(s -> s == '/').count();
 
-		if(errors.hasErrors()) {
-			List<ClntVO> list = clntDAO.getClntList();
-			model.addAttribute("clntList", list);
+			StdinForm[] forms = new StdinForm[cnt];
 
-			List<ItemInfoVO> item_list = itemInfoDAO.getItemList();
-			model.addAttribute("itemList", item_list);
+			for(int j = 0; j < forms.length; j++) forms[j] = new StdinForm();
+			for(int i = 0; i < forms.length; i++) {
+				forms[i].setStdinDt(stdinForms.getStdinDt());
+				forms[i].setClntCd(stdinForms.getClntCd());
+				forms[i].setClntNm(stdinForms.getClntNm());
+				forms[i].setStatus(stdinForms.getStatus());
+			}
 
-			List<LocVO> loc_list = locDAO.getLocList();
-			model.addAttribute("locList", loc_list);
+			String[] itemDatas = stdinForms.getItemData().split("/");
+			String[][] itemData = new String[cnt][];
+			for(int r = 0; r < cnt; r++) {
+				itemData[r] = itemDatas[r].split(",");
+			}
 
-			return "stdin/register";
+			for(int values = 0; values < cnt; values++) {
+				forms[values].setItemCd(itemData[values][0]);
+				forms[values].setItemNm(itemData[values][1]);
+				forms[values].setLocCd(itemData[values][2]);
+				forms[values].setBeforeStdin(Long.parseLong(itemData[values][3]));
+				forms[values].setNormal(Long.parseLong(itemData[values][4]));
+				forms[values].setFault(Long.parseLong(itemData[values][5]));
+			}
+
+			service.register(forms);
+		} else {
+			System.out.println("수정탐");
+			service.register(stdinForms);
 		}
 
-		service.register(stdinForm);
-
 		closeLayer(response);
-*/
 
 		return "close";
 	}

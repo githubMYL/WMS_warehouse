@@ -21,16 +21,17 @@ public class StdinTestForm extends BaseEntity {
 
 	/* item S */
 	@NotBlank
-	private List<String> itemCd;
-	private List<String> itemNm;
+	private String itemCd;
+	private String itemNm;
 	@NotBlank
-	private List<String> locCd;
+	private String locCd;
 
-	private List<Long> beforeStdin;
-	private List<Long> normal;
-	private List<Long> fault;
+	private Long beforeStdin;
+	private Long normal;
+	private Long fault;
 	/* item E */
 
 	private String flag;	// register, update 구분용
 	private String stdinNum;
+	private String itemData;
 }
