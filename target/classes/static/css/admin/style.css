@@ -93,3 +93,5 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 #userSearch td:last-child {
 	padding-right : 0px;
 }
+
+.tr_list:hover td{ background-color:#d3d3d3; }

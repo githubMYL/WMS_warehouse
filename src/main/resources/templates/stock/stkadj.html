@@ -61,9 +61,6 @@ function search_tmstk(){
 </head>
 <section layout:fragment="content">
 	<h2>재고조정</h2><br>
-	<span style="color:gray"> ※ 클릭 : 조정내역 보기 </span><br>
-	<span style="color:gray"> ※ 더블클릭 : 재고 조정하기 </span><br>
-
 	<form id="search"  class="frmSearch">
 		<table class="table-cols">
 			<tr align="left">
@@ -92,6 +89,7 @@ function search_tmstk(){
 	</form>
 
 	<span  style="display:none;" id="loginUserType" th:text="${loginUser}"></span>
+	<span style="color:gray"> ※ 더블클릭 : 재고 조정하기 </span><br><br>
 	<div  align="center" class="table_wrapper">
 		<table>
 			<tr>

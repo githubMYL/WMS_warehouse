@@ -6,7 +6,6 @@
         <result property="wactrNm" column="WACTR_NM" />
         <result property="clntCd" column="CLNT_CD" />
         <result property="clntNm" column="CLNT_NM" />
-        <result property="locCd" column="LOC_CD" />
         <result property="itemCd" column="ITEM_CD" />
         <result property="itemNm" column="ITEM_NM" />
         <result property="boxUnit" column="BOX_UNIT" />
@@ -20,8 +19,8 @@
     </resultMap>
 
     <insert id="insertItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
-        INSERT INTO ITEM (WACTR_CD, CLNT_CD, LOC_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
-        VALUES (#{wactrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
+        INSERT INTO ITEM (WACTR_CD, CLNT_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
+        VALUES (#{wactrCd}, #{clntCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
 
     <update id="updateItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
@@ -35,7 +34,7 @@
         , REMK = #{remk}
         , MOD_DT = SYSDATE
         , MOD_NM = #{modNm}
-        WHERE WACTR_CD || CLNT_CD || LOC_CD || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal}
     </update>
 
     <!-- 관리단위 조회-->
@@ -117,7 +116,7 @@
     <update id="deleteItem" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         UPDATE ITEM
         SET DEL_YN = 'Y'
-        WHERE WACTR_CD || CLNT_CD || 'null' || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal}
     </update>
 
     <select id="getKeyCd" resultMap="itemMap">
@@ -140,7 +139,7 @@
         WHERE A.DEL_YN  = 'N'
         ORDER BY A.REG_DT DESC
         ) A
-        WHERE WACTR_CD || CLNT_CD || 'null' || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal}
     </select>
 
 </mapper>

@@ -87,4 +87,4 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 .frmSearch td{ padding-right:50px; }
 .frmSearch th {padding-right: 10px;}
 
-.loc_list:hover td{ background-color:#d3d3d3; }
+.list_hover:hover td{ background-color:#d3d3d3; }

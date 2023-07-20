@@ -34,12 +34,8 @@ public class LocJoinValidator implements Validator, NumberValidator {
 
 
 		LocVO locVO = (LocVO) target;
-		String racNum = locVO.getRac_num();
 		String locAddr = locVO.getLoc_addr();
 
-		if (!isInteger(racNum)) {
-			errors.rejectValue("rac_num", "Validation.number");
-		}
 
 		if(!isLocAddr(locAddr)){
 			errors.rejectValue("loc_addr", "Validation.notInteger.hyphen");

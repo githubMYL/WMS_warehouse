@@ -172,6 +172,7 @@ function checkAll(){
 
 
     <div class="table_wrapper">
+        <span style="color:gray"> ※ 더블클릭 : 정보수정 </span><br>
         <table>
             <tr>
                 <th style="width:40px;">
@@ -184,7 +185,7 @@ function checkAll(){
                 <th>비고</th>
             </tr>
 
-            <tr th:each="list,listCount : ${loc_list}"  ondblclick="double(event)" class="loc_list">
+            <tr th:each="list,listCount : ${loc_list}"  ondblclick="double(event)" class="list_hover">
                 <td>
                     <input type="checkbox" class="check" th:value="${list.loc_cd}" onclick="che()">
                 </td>

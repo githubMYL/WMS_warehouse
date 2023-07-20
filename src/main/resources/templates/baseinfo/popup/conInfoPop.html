@@ -2,19 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
+
 <section layout:fragment="content">
 	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
 		<style>
                 #equipments div{
                     display:inline-block;
                 }
                 header {height:0px;}
+                html{ min-width:0;}
+
             </style>
 		<script th:src="@{/js/front/conInfo.js}"></script>
 		<script th:src="@{/js/front/layer.js}"></script>
 	</head>
-	<form name="frmJoin" method="get" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
-		계약정보등록 팝업
+	<form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
 		<div>
 			<input type="text" id="clnt_cd" th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" readonly />
 			<input type="text" list="clnt" id="clnt_tmp" name="clnt_tmp" th:placeholder="#{clntNm}"/>
@@ -65,7 +68,7 @@
 		<div>
 			<input type="text" th:field="*{remark}" th:placeholder="#{remk}">
 		</div>
-		<button type="submit" th:text="#{conInfo.action.submit}" class="layer_close"></button>
+		<button type="submit" th:text="등록" class="layer_close"></button>
 	</form>
 </section>
 </html>

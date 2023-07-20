@@ -166,7 +166,7 @@
 		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
 		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
 		where s.del_yn = 'N'
-		ORDER BY s.NO DESC
+		ORDER BY s.adj_dt DESC
 	</select>
 
 	<!--검색조건-->
@@ -231,7 +231,7 @@
 		<if test='mod_dt_start != "" and mod_dt_end != "" '>
 			and s.adj_dt BETWEEN TO_DATE(#{mod_dt_start}, 'YYYY-MM-DD') AND TO_DATE(#{mod_dt_end}, 'YYYY-MM-DD') + 1
 		</if>
-		ORDER BY s.no desc
+		ORDER BY s.adj_dt desc
 	</select>
 
 

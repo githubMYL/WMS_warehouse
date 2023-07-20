@@ -4,17 +4,19 @@
 
 <section layout:fragment="content">
 	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+
 		<style>
                 #equipments div{
                     display:inline-block;
                 }
                 header {height:0px;}
+                html{ min-width:0;}
             </style>
 		<script th:src="@{/js/front/conInfo.js}"></script>
 		<script th:src="@{/js/front/layer.js}"></script>
 	</head>
 	<form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
-		계약정보 수정 팝업
 		<div>
 			<dt th:text="#{clntNm}" class="require_item"></dt>
 			<input type="hidden" th:field="*{clntCd}" th:style="'background:#D8D8D8'" readonly/>
@@ -47,7 +49,7 @@
 		<div>
 			<input type="hidden" th:field="*{no}">
 		</div>
-		<button type="submit" th:text="#{conInfo.action.submit}" class="layer_close"></button>
+		<button type="submit" th:text="수정" class="layer_close"></button>
 	</form>
 </section>
 </html>
