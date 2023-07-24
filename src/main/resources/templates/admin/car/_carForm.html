@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="carForm" th:object="${carForm}">
+	<input type="hidden" th:field="*{carCd}">
+
 	<div><h3>차량정보</h3>
 		<dt th:text="#{carNum}" class="require_item"></dt>
 		<input type="text" name="carNum" th:field="*{carNum}" th:placeholder="#{carNum}">
@@ -70,7 +72,7 @@
 	</div>
 	<div>
 		<dt th:text="#{joinDt}" class="require_item"></dt>
-		<input type="date" name="joinDt" th:field="*{joinDt}" th:placeholder="#{joinDt}">
+		<input type="date" name="joinDt" th:placeholder="#{joinDt}" th:value ="${#temporals.format(carForm.joinDt, 'yyyy-MM-dd')}">
 	</div>
 
 </th:block>

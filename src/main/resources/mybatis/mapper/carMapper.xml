@@ -3,7 +3,7 @@
 <mapper namespace="org.warehouse.configs.models.mapper.CarDAO">
 	<resultMap id="carMap" type="org.warehouse.models.admin.car.CarVO">
 		<result property="carCd" column="CAR_CD" />
-		<result property="carNo" column="CAR_NO" />
+		<result property="carNum" column="CAR_NUM" />
 		<result property="deliveryArea" column="DRIVER_AREA" />
 		<result property="driverNm" column="DRIVER_NM" />
 		<result property="driverTel" column="DRIVER_TEL" />
@@ -22,12 +22,13 @@
 	</resultMap>
 
 	<insert id="insertCar" parameterType="org.warehouse.models.admin.car.CarVO">
-		INSERT INTO CAR_INFO(CAR_CD, CAR_NO, DELIVERY_AREA, DRIVER_NM, DRIVER_TEL, DRIVER_ADDR, CAR_TYPE, CAR_TON, LOAD_PLT, LICENSE_YN, JOIN_DT, REMK, REG_DT, REG_NM)
-			VALUES(시퀀스, #{carNo}, #{driverArea}, #{driverNm}, #{driverTel}, #{driverAddr}, #{carType}, #{carTon}, #{loadPlt}, #{licenseYn}, #{joinDt}, #{remark}, SYSDATE, #{regNm})
+		INSERT INTO CAR_INFO(CAR_CD, CAR_NUM, DELIVERY_AREA, DRIVER_NM, DRIVER_TEL, DRIVER_ADDR, CAR_TYPE, CAR_TON, LOAD_PLT, LICENSE_YN, JOIN_DT, REMK, REG_DT, REG_NM)
+			VALUES(CAR_SEQ.NEXTVAL, #{carNum}, #{deliveryArea}, #{driverNm}, #{driverTel}, #{driverAddr}, #{carType}, #{carTon}, #{loadPlt}, #{licenseYn}, #{joinDt}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateCar" parameterType="org.warehouse.models.admin.car.CarVO">
-		UPDATE CAR_INFO SET CAR_NO = #{carNo}, DELIVERY_AREA = #{deliveryArea}, DRIVER_NM = #{driverNm}, DRIVER_ADDR = #{driverAddr}, CAR_TYPE = #{carType}, CAR_TON = #{carTon}, LOAD_PLT = #{loadPlt}, LICENSE_YN = #{licenseYn}, JOIN_DT = #{joinDt}, REMK = #{remark}, MOD_DT = SYSDATE, MOD_NM = #{modNm}
+		UPDATE CAR_INFO
+			SET CAR_NUM = #{carNum}, DELIVERY_AREA = #{deliveryArea}, DRIVER_NM = #{driverNm}, DRIVER_ADDR = #{driverAddr}, CAR_TYPE = #{carType}, CAR_TON = #{carTon}, LOAD_PLT = #{loadPlt}, LICENSE_YN = #{licenseYn}, JOIN_DT = #{joinDt}, REMK = #{remark}, MOD_DT = SYSDATE, MOD_NM = #{modNm}
 		WHERE CAR_CD = #{carCd}
 	</update>
 
@@ -37,6 +38,23 @@
 
 	<select id="getCarList" resultMap="carMap">
 		SELECT * FROM CAR_INFO WHERE DEL_YN = 'N'
+	</select>
+
+	<select id="getCarSearch" resultMap="carMap">
+		SELECT * FROM CAR_INFO
+		<where>
+			<if test="carNum != ''">
+				AND CAR_NUM LIKE '%'||#{carNum}||'%'
+			</if>
+			<if test="driverNm != ''">
+				AND DRIVER_NM LIKE '%'||#{driverNm}||'%'
+			</if>
+			AND DEL_YN = 'N'
+		</where>
+	</select>
+
+	<select id="getCar" resultMap="carMap">
+		SELECT * FROM CAR_INFO WHERE CAR_CD = #{carCd}
 	</select>
 
 </mapper>

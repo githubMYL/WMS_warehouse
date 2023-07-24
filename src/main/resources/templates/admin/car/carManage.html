@@ -4,22 +4,22 @@
 	  layout:decorate="~{layouts/admin/main}">
 
 <section layout:fragment="content">
-	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+	<form id="search" autocomplete="off" class="frmSearch">
 		<table class="table-cols" id="carSearch">
 			<tr>
 				<th>차량번호</th>
 				<td>
-					<input type="text" name="carNum" placeholder="차량번호">
+					<input type="text" id="carNum" name="search_carNum" placeholder="차량번호">
 				</td>
 
 				<th>기사명</th>
 				<td>
-					<input type="text" name="driverNm" placeholder="기사명">
+					<input type="text" id="driverNm" name="search_driverNm" placeholder="기사명">
 				</td>
 			</tr>
 		</table>
 		<div class="btns" style="text-align:right;">
-			<button type="button" id="ajax_btn" class="sbtn">검색</button>
+			<button onclick="search()" class="sbtn">검색</button>
 			<button type="button" id="add" class="sbtn">추가</button>
 			<button type="button" id="del" class="sbtn red">삭제</button>
 		</div>
@@ -27,12 +27,10 @@
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
-				const ajax_btn = document.getElementById('ajax_btn');
 				const add = document.getElementById('add');
 				const del = document.getElementById('del');
 				const trs = document.querySelectorAll('tr');
 
-				ajax_btn.addEventListener("click", search);
 				add.addEventListener("click", addItem);
 				del.addEventListener("click", deleteItem);
 				trs.forEach( (tr) => {
@@ -79,6 +77,41 @@
 				url = 'carManage/register';
 				warehouse.popup.open(url, "테스트", 500, 800, true);
 			}
+
+			function checkAll() {
+				const all = document.getElementById("chkAll");
+				const chkList = document.getElementsByName("check");
+				for( chk of chkList) {
+					chk.checked = all.checked;
+					if(all.checked) {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "#D8D8D8", "important");
+						})
+					} else {
+						var tds = chk.parentNode.parentNode.querySelectorAll("td");
+						tds.forEach( (td) => {
+							td.style.setProperty("background-color", "white", "important");
+						})
+					}
+
+				}
+			}
+
+			function deleteItem() {
+
+			};
+
+			function updateTable(e) {
+				const event_tr = e.target.parentNode;
+				const input = event_tr.querySelector('td input');
+				console.log(input);
+				const carcd = input.dataset.carcd;
+				console.log(carcd);
+
+				url = 'carManage/update/' + carcd;
+				warehouse.popup.open(url, "테스트", 500, 800, true);
+			};
 	</script>
 	<div class="table_wrapper">
 		<table id="car_table">
@@ -100,14 +133,14 @@
 				<th>입사일자</th>
 				<th>비고</th>
 			</tr>
-			<tbody id="search">
+			<tbody>
 			<tr th:each="car, carCount : ${carList}" id="car_infos">
 				<td>
 					<input type="checkbox" name="check" th:value="${car.carCd}" id="chk" th:data-carcd="${car.carCd}">
 				</td>
 				<td th:text="${carCount.count}"></td>
 				<td th:text="${car.carCd}"></td>
-				<td th:text="${car.carNo}"></td>
+				<td th:text="${car.carNum}"></td>
 				<td th:text="${car.deliveryArea}"></td>
 				<td th:text="${car.driverNm}"></td>
 				<td th:text="${car.driverTel}"></td>

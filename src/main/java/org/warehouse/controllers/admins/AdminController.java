@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -268,11 +269,17 @@ public class AdminController {
 
 	/** carManage S */
 	@GetMapping("/carManage")
-	public String carManage(Model model) {
+	public String carManage(@Param("search_carNum")String search_carNum, @Param("search_driverNm") String search_driverNm, Model model) {
 		commonProcess(model, "carManage", "차량관리");
-		List<CarVO> carList = carDAO.getCarList();
 
-		model.addAttribute("carList", carList);
+		if(search_carNum != null || search_driverNm != null ) {
+			List<CarVO> searchList = carDAO.getCarSearch(search_carNum, search_driverNm);
+			model.addAttribute("carList", searchList);
+
+		} else {
+			List<CarVO> carList = carDAO.getCarList();
+			model.addAttribute("carList", carList);
+		}
 
 		return "admin/car/carManage";
 	}
@@ -286,9 +293,12 @@ public class AdminController {
 		return "admin/car/carRegister";
 	}
 
-	@GetMapping("/carManage/update")
-	public String carUpdate(Model model) {
+	@GetMapping("/carManage/update/{carCd}")
+	public String carUpdate(@PathVariable String carCd, Model model) {
+		CarVO carVO = carDAO.getCar(carCd);
+		CarForm carForm = new ModelMapper().map(carVO, CarForm.class);
 
+		model.addAttribute("carForm", carForm);
 		return "admin/car/carUpdate";
 	}
 
@@ -298,10 +308,14 @@ public class AdminController {
 		if(errors.hasErrors()) {
 			return "admin/car/carRegister";
 		}
+		System.out.println(errors);
+		System.out.println(carForm);
 
 		carService.register(carForm);
 
-		return "admin/car/carManage";
+		closeLayer(response);
+
+		return "close";
 	}
 
 

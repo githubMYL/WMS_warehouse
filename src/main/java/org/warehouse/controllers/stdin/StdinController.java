@@ -137,7 +137,6 @@ public class StdinController {
 	@PostMapping("/save")
 	public String stdinRegisterPs(@Valid StdinForm stdinForms, Errors errors, Model model) {
 		if(stdinForms.getFlag() == null || stdinForms.getFlag().isEmpty() || stdinForms.getFlag().isBlank()) {
-			System.out.println("작성 탐");
 			int cnt = (int)stdinForms.getItemData().chars().filter(s -> s == '/').count();
 
 			StdinForm[] forms = new StdinForm[cnt];
@@ -165,9 +164,13 @@ public class StdinController {
 				forms[values].setFault(Long.parseLong(itemData[values][5]));
 			}
 
+			for(int j = 0; j < cnt; j++) {
+				validator.validate(forms[j], errors);
+			}
+
 			service.register(forms);
 		} else {
-			System.out.println("수정탐");
+			validator.validate(stdinForms, errors);
 			service.register(stdinForms);
 		}
 

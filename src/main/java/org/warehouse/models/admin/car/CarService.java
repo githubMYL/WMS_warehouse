@@ -1,5 +1,6 @@
 package org.warehouse.models.admin.car;
 
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,15 +17,18 @@ public class CarService {
 	private final CarDAO carDAO;
 
 	public void register(CarForm carForm) {
+		System.out.println(carForm);
 		UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
 
 		CarVO carVO = new ModelMapper().map(carForm, CarVO.class);
+		carVO.setRemark(carForm.getRemark() == null ? "" : carForm.getRemark());
 
 		if(carForm.getFlag() == null) {
 			carVO.setRegNm(userInfo.getUserNm());
 			carDAO.insertCar(carVO);
 		} else {
 			carVO.setModNm(userInfo.getUserNm());
+			System.out.println(carVO);
 			carDAO.updateCar(carVO);
 		}
 	}
