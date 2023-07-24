@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<section layout:fragment="content">
+	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+		<style>
+                        html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+                        #equipments div{
+                            display:inline-block;
+                        }
+                        header {height:0px;}
+            </style>
+	</head>
+	<!-- form autocomplete="off" method="post" name="rels" th:action="@{/baseinfo/iteminfo}" th:object="${relsVO}" -->
+	<!--th:block th:unless="*{updYn} == 'Y'"-->
+	<form method="post" th:action="@{/rels/relsSave}" th:object="${relsVO}" autocomplete="off">
+		<div>
+			<th:block th:text="#{relsDt}"></th:block>
+			<input type="date" th:field=*{relsDt} th:value="${#temporals.format(relsVO.relsDt, 'yyyy-MM-dd')}" th:placeholder="#{relsDt}" >
+			<div class="errors" th:each="err : ${#fields.errors('relsDt')}" th:text="${err}"></div>
+		</div>
+		<div>
+			<th:block th:text="#{clntCd}"></th:block>
+			<input type="text" id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'"/>
+			<th:block th:text="#{clntNm}"></th:block>
+			<input type="text" id="clnt_tmp" list="clnt" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}"/>
+			<datalist id="clnt">
+				<select id="clnt_sel">
+					<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
+					</option>
+				</select>
+			</datalist>
+			<div class="errors" th:each="err : ${#fields.errors('clntCd')}" th:text="${err}"></div>
+		</div>
+		<script>
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    const clnt = document.getElementById("clnt_tmp");
+                    var selected = document.querySelector("select#clnt_sel");
+
+                    clnt.addEventListener("change", UpdateClnt);
+                });
+
+                function UpdateClnt(e) {
+                    var evnt = e.currentTarget;
+                    var selected = document.querySelector("select#clnt_sel")
+                    var datalist = evnt.list;
+                    var clntcd = document.getElementById("clnt_cd");
+
+                    for(var j = 0; j < datalist.options.length; j++){
+                        if(this.value == datalist.options[j].value) {
+                            clntcd.value = datalist.options[j].label;
+                        }
+                    }
+                }
+            </script>
+		<div>
+			<th:block th:text="#{custCd}"></th:block>
+			<input type="text" id="cust_cd" readonly th:field="*{custCd}" th:placeholder="#{custCd}" th:style="'background:#D8D8D8'"/>
+			<th:block th:text="#{custNm}"></th:block>
+			<input type="text" id="cust_tmp" list="cust" name="cust_tmp" th:field="*{custNm}" th:placeholder="#{custNm}"/>
+			<datalist id="cust">
+				<select id="cust_sel">
+					<option th:each="cust : ${custList}" th:label="${cust.custCd}" th:value="${cust.custNm}">
+					</option>
+				</select>
+			</datalist>
+			<div class="errors" th:each="err : ${#fields.errors('custCd')}" th:text="${err}"></div>
+		</div>
+		<script>
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    const cust = document.getElementById("cust_tmp");
+                    var selected = document.querySelector("select#cust_sel");
+
+                    cust.addEventListener("change", UpdateCust);
+                });
+
+                function UpdateCust(e) {
+                    var evnt = e.currentTarget;
+                    var selected = document.querySelector("select#cust_sel")
+                    var datalist = evnt.list;
+                    var custcd = document.getElementById("cust_cd");
+
+                    for(var j = 0; j < datalist.options.length; j++){
+                        if(this.value == datalist.options[j].value) {
+                            custcd.value = datalist.options[j].label;
+                        }
+                    }
+                }
+            </script>
+		<div>
+			<th:block th:text="#{custCtrCd}"></th:block>
+			<input type="text" id="cust_ctr_cd" readonly th:field="*{custCtrCd}" th:placeholder="#{custCtrCd}" th:style="'background:#D8D8D8'"/>
+			<th:block th:text="#{custCtrNm}"></th:block>
+			<input type="text" id="cust_ctr_tmp" list="custCtr" name="cust_ctr_tmp" th:field="*{custCtrNm}" th:placeholder="#{custCtrNm}"/>
+			<datalist id="custCtr">
+				<select id="cust_ctr_sel">
+					<option th:each="custCtr : ${custCtrList}" th:label="${custCtr.custCtrCd}" th:value="${custCtr.custCtrNm}">
+					</option>
+				</select>
+			</datalist>
+			<div class="errors" th:each="err : ${#fields.errors('custCtrCd')}" th:text="${err}"></div>
+		</div>
+		<script>
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    const custCtr = document.getElementById("cust_ctr_tmp");
+                    var selected = document.querySelector("select#cust_ctr_sel");
+
+                    custCtr.addEventListener("change", UpdateCustCtr);
+                });
+
+                function UpdateCustCtr(e) {
+                    var evnt = e.currentTarget;
+                    var selected = document.querySelector("select#cust_ctr_sel")
+                    var datalist = evnt.list;
+                    var custctrcd = document.getElementById("cust_ctr_cd");
+
+                    for(var j = 0; j < datalist.options.length; j++){
+                        if(this.value == datalist.options[j].value) {
+                            custctrcd.value = datalist.options[j].label;
+                        }
+                    }
+                }
+            </script>
+		<div>
+			<th:block th:text="#{itemCd}"></th:block>
+			<input type="text" id="itemInfo_cd" readonly th:field="*{itemCd}" th:placeholder="#{itemCd}" th:style="'background:#D8D8D8'"/>
+			<th:block th:text="#{itemNm}"></th:block>
+			<input type="text" id="itemInfo_tmp" list="itemInfo" name="itemInfo_tmp" th:field="*{itemNm}" th:placeholder="#{itemNm}"/>
+			<datalist id="itemInfo">
+				<select id="itemInfo_sel">
+					<option th:each="itemInfo : ${itemInfoList}" th:label="${itemInfo.itemCd}" th:value="${itemInfo.itemNm}">
+					</option>
+				</select>
+			</datalist>
+			<div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
+		</div>
+		<script>
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    const item = document.getElementById("itemInfo_tmp");
+                    var selected = document.querySelector("select#itemInfo_sel")
+
+                    item.addEventListener("change", UpdateItem)
+                });
+
+                function UpdateItem(e) {
+                    var evnt = e.currentTarget;
+                    var selected = document.querySelector("select#itemInfo_sel")
+                    var datalist = evnt.list;
+                    var itemcd = document.getElementById("itemInfo_cd");
+
+                    for(var j = 0; j < datalist.options.length; j++){
+                        if(this.value == datalist.options[j].value) {
+                            itemcd.value = datalist.options[j].label;
+                        }
+                    }
+                }
+            </script>
+		<div>
+			<th:block th:text="#{regInAmt}"></th:block>
+			<input type="number" th:field="*{regInAmt}" th:placeholder="#{regInAmt}" >
+		</div>
+		<div>
+			<th:block th:text="#{relsCnt}"></th:block>
+			<input type="number" th:field="*{relsCnt}" th:placeholder="#{relsCnt}" >
+		</div>
+		<div>
+			<th:block th:text="#{deliRequestDt}"></th:block>
+			<input type="date" th:field="*{deliRequestDt}" th:value="${#temporals.format(deliRequestDt, 'yyyy-MM-dd')}" th:placeholder="#{deliRequestDt}" >
+		</div>
+		<div>
+			<th:block th:text="#{plt}"></th:block>
+			<input type="number" th:field="*{plt}" th:placeholder="#{plt}" >
+		</div>
+		<div>
+			<th:block th:text="#{box}"></th:block>
+			<input type="number" th:field="*{box}" th:placeholder="#{box}">
+		</div>
+		<div>
+			<th:block th:text="#{remk}"></th:block>
+			<input type="text" th:field="*{remk}" th:placeholder="#{remk}">
+		</div>
+		<button type="submit">저장하기</button>
+	</form>
+</section>
+</html>

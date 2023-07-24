@@ -124,7 +124,7 @@ public class ConInfoController {
 		}
 		return "redirect:/baseinfo/coninfo";
 	}
-	private void commonProcess(Model model) {
+	public void commonProcess(Model model) {
 		String Title = "기본정보::계약정보";
 		String menuCode = "conInfo";
 		String pageName = "baseinfo";

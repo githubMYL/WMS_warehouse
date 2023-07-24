@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <aside th:fragment="menu" th:switch="${pageName}">
+
+	<!-- 기본정보 사이드 탭 -->
 	<ul th:case="baseinfo">
 		<li>
 			<a th:href="@{/baseinfo/iteminfo}" th:classappend="${menuCode} == 'iteminfo' ? 'on'">
@@ -29,6 +31,71 @@
 		</li>
 	</ul>
 
+	<!-- 입고 사이드 탭 -->
+	<ul th:case="stdin">
+		<li>
+			<a th:href="@{/stdin}" th:classappend="${menuCode} == 'stdin_h' ? 'on'">입고 등록/상세내역</a>
+		</li>
+		<li>
+			<a th:href="@{/stdin/detail}" th:classappend="${menuCode} == 'stdin_d' ? 'on'">입고 조회</a>
+		</li>
+	</ul>
+
+	<!-- 출고 사이드 탭 -->
+	<ul th:case="rels">
+		<li>
+			<a th:href="@{/rels}" th:classappend="${menuCode} == 'rels' ? 'on'">
+				<i class="xi-view-list"></i>
+				출고등록
+			</a>
+		</li>
+		<li>
+			<a>출고조회</a>
+		</li>
+	</ul>
+
+
+	<!-- 재고 사이드 탭 -->
+	<ul th:case="stock">
+		<li>
+			<a th:href="@{/stock/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
+				<i class="xi-view-list"></i>
+				시점재고
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/stkadj}" th:classappend="${menuCode} == 'stkadj' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고조정
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/stkadjList}" th:classappend="${menuCode} == 'stkadjList' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고조정내역
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/stktransf}" th:classappend="${menuCode} == 'stktransf' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고이동
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/stktransf/detail}" th:classappend="${menuCode} == 'stktransf_detail' ? 'on'">
+				<i class="xi-view-list"></i>
+				재고이동내역
+			</a>
+		</li>
+		<li>
+			<a th:href="@{/stock/dlycnp}" th:classappend="${menuCode} == 'dlycnp' ? 'on'">
+				<i class="xi-view-list"></i>
+				일수불
+			</a>
+		</li>
+	</ul>
+
+	<!-- 관리자 사이드 탭 -->
 	<ul th:case="admin">
 		<li>
 			<a th:href="@{/admin/userManage}" th:classappend="${menuCode} == 'userManage' ? 'on'">
@@ -57,47 +124,9 @@
 		<li>
 			<a th:href="@{/admin/carManage}" th:classappend="${menuCode} == 'carManage' ? 'on'">
 				<i class="xi-view-list"></i>
-				차량 관리
+				차량정보 관리
 			</a>
 		</li>
 	</ul>
-
-	<ul th:case="stdin">
-		<li>
-			<a th:href="@{/stdin}" th:classappend="${menuCode} == 'stdin_h' ? 'on'">입고 등록/상세내역</a>
-		</li>
-		<li>
-			<a th:href="@{/stdin/detail}" th:classappend="${menuCode} == 'stdin_d' ? 'on'">입고 조회</a>
-		</li>
-	</ul>
-
-	<ul th:case="stock">
-		<li>
-			<a th:href="@{/stock/stkadj}" th:classappend="${menuCode} == 'stkadj' ? 'on'">
-				<i class="xi-view-list"></i>
-				재고조정
-			</a>
-		</li>
-		<li>
-			<a th:href="@{/stock/stktransf}" th:classappend="${menuCode} == 'stktransf' ? 'on'">
-				<i class="xi-view-list"></i>
-				재고이동
-			</a>
-		</li>
-		<li>
-			<a th:href="@{/stock/tmstk}" th:classappend="${menuCode} == 'tmstk' ? 'on'">
-				<i class="xi-view-list"></i>
-				시점재고
-			</a>
-		</li>
-		<li>
-			<a th:classappend="${menuCode} == 'dlycnp' ? 'on'">
-				<i class="xi-view-list"></i>
-				일수불
-			</a>
-		</li>
-	</ul>
-
-
 </aside>
 </html>

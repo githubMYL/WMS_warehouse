@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
 	<style>
     span{
     font-weight:bold;
@@ -92,7 +92,7 @@
 
 	<div>
 		<div><span>조정사유</span></div>
-		<textarea rows="3" cols="23" th:field="*{adj_reason}" placeholder="조정 사유"></textarea>
+		<textarea rows="3" cols="30" id="adj_reason" th:field="*{adj_reason}" placeholder="조정 사유"  style="resize: none;"></textarea><br>
 	</div>
 
 	<button type="submit" th:text="재고조정" class="sbtn"></button>

@@ -37,10 +37,13 @@
              , A.NORMAL_STOCK
              , A.FAULT_STOCK
         FROM DLYCNP A
-                 INNER JOIN CLNT B
-                            ON A.CLNT_CD = B.CLNT_CD
-                 INNER JOIN ITEM C
-                            ON A.ITEM_CD = C.ITEM_CD
+        INNER JOIN CLNT B
+        ON A.CLNT_CD = B.CLNT_CD
+        INNER JOIN ITEM C
+        ON A.ITEM_CD = C.ITEM_CD
         ORDER BY A.REG_DT DESC
+    </select>
+    <select id="insertDlyCnpList" resultMap="dlyMap">
+
     </select>
 </mapper>

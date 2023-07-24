@@ -65,8 +65,8 @@
 
                 function editForm(e) {
                     console.log(e.target);
-                    var tr = e.target.parentNode;
-                    var keyVal = tr.querySelector('#chk').value;
+                    let tr = e.target.parentNode;
+                    let keyVal = tr.querySelector('#chk').value;
 
                     url = '/baseinfo/coninfo/' + keyVal + '/update';
                     warehouse.popup.open(url, "계약정보 수정", 500, 600, true);
@@ -92,8 +92,8 @@
                 // 체크박스 전체선택
                 document.querySelector("input[name=chkAll]").addEventListener("change", function (e) {
                     e.preventDefault();
-                    var list = document.querySelectorAll("input[name=chk]");
-                    for (var i = 0; i < list.length; i++) {
+                    let list = document.querySelectorAll("input[name=chk]");
+                    for (let i = 0; i < list.length; i++) {
                         list[i].checked = this.checked;
                     }
                 });
@@ -102,8 +102,8 @@
                 function deleteCon(e){
 
                     // 체크된 값 가져오기
-                    var checkbox = document.querySelectorAll("input[name=chk]:checked");
-                    var chkArr = [];
+                    let checkbox = document.querySelectorAll("input[name=chk]:checked");
+                    let chkArr = [];
                     checkbox.forEach(function (chkData){
                         chkArr.push(chkData.value.replaceAll(",", ""));
                     });

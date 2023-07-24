@@ -1,17 +1,18 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <section layout:fragment="content">
 	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
 		<style>
+                html { font-size: 13px; max-width: 1300px; min-width: 0px;}
                 #equipments div{
                     display:inline-block;
                 }
                 header {height:0px;}
             </style>
-		<script th:src="@{/js/front/layer.js}"></script>
 	</head>
-
 	<form autocomplete="off" method="post" name="itemInfo" th:action="@{/baseinfo/iteminfo}" th:object="${itemInfoVO}">
 		<th:block th:unless="*{updYn} == 'Y'">
 			<div>
@@ -82,7 +83,17 @@
                         }
                     }
                 </script>
-
+			<div>
+				<th:block th:text="#{locCd}"></th:block>
+				<input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
+				<datalist id="loc">
+					<select id="loc_sel">
+						<option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
+			</div>
 			<div>
 				<th:block th:text="#{itemCd}"></th:block>
 				<input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
@@ -115,11 +126,11 @@
 		<th:block th:if="*{updYn} == 'Y'">
 			<div>
 				<th:block th:text="#{wactrCd}"></th:block>
-				<input id="wactr_cd" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
+				<input id="wactr_cd_d" readonly th:field="*{wactrCd}" th:placeholder="#{wactrCd}" th:style="'background:#D8D8D8'" type="text"/>
 				<th:block th:text="#{wactrNm}"></th:block>
-				<input id="wactr_tmp" list="wactr" name="wactr_tmp" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
-				<datalist id="wactr">
-					<select id="wactr_sel">
+				<input id="wactr_tmp_d" list="wactr_d" name="wactr_tmp_d" th:field="*{wactrNm}" th:placeholder="#{wactrNm}" type="text"/>
+				<datalist id="wactr_d">
+					<select id="wactr_sel_d">
 						<option th:each="wactr : ${wactrList}" th:label="${wactr.wactrCd}" th:value="${wactr.wactrNm}">
 						</option>
 					</select>
@@ -127,32 +138,31 @@
 				<div class="errors" th:each="err : ${#fields.errors('wactrCd')}" th:text="${err}"></div>
 			</div>
 			<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const wactr = document.getElementById("wactr_tmp");
-                    var selected = document.querySelector("select#wactr_sel")
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const wactr = document.getElementById("wactr_tmp_d");
+                        var selected = document.querySelector("select#wactr_sel_d")
 
-                    wactr.addEventListener("change", UpdateWactr)
-                });
-                function UpdateWactr(e) {
-                    var evnt = e.currentTarget;
-                    var selected = document.querySelector("select#wactr_sel")
-                    var datalist = evnt.list;
-                    var wactrCd = document.getElementById("wactr_cd");
-
-                    for(var j = 0; j < datalist.options.length; j++){
-                        if(this.value == datalist.options[j].value) {
-                            wactrCd.value = datalist.options[j].label;
+                        wactr.addEventListener("change", UpdateWactr)
+                    });
+                    function UpdateWactr(e) {
+                        var evnt = e.currentTarget;
+                        var selected = document.querySelector("select#wactr_sel_d")
+                        var datalist = evnt.list;
+                        var wactrCd = document.getElementById("wactr_cd_d");
+                        for(var j = 0; j < datalist.options.length; j++){
+                            if(this.value == datalist.options[j].value) {
+                                wactrCd.value = datalist.options[j].label;
+                            }
                         }
                     }
-                }
-            </script>
+                </script>
 			<div>
 				<th:block th:text="#{clntCd}"></th:block>
-				<input id="clnt_cd" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
+				<input id="clnt_cd_d" readonly th:field="*{clntCd}" th:placeholder="#{clntCd}" th:style="'background:#D8D8D8'" type="text"/>
 				<th:block th:text="#{clntNm}"></th:block>
-				<input id="clnt_tmp" list="clnt" name="clnt_tmp" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
-				<datalist id="clnt">
-					<select id="clnt_sel">
+				<input id="clnt_tmp_d" list="clnt_d" name="clnt_tmp_d" th:field="*{clntNm}" th:placeholder="#{clntNm}" type="text"/>
+				<datalist id="clnt_d">
+					<select id="clnt_sel_d">
 						<option th:each="clnt : ${clntList}" th:label="${clnt.clntCd}" th:value="${clnt.clntNm}">
 						</option>
 					</select>
@@ -162,17 +172,17 @@
 			<script>
                     document.addEventListener('DOMContentLoaded', function() {
 
-                        const clnt = document.getElementById("clnt_tmp");
-                        var selected = document.querySelector("select#clnt_sel")
+                        const clnt = document.getElementById("clnt_tmp_d");
+                        var selected = document.querySelector("select#clnt_sel_d")
 
                         clnt.addEventListener("change", UpdateClnt)
                     });
 
                     function UpdateClnt(e) {
                         var evnt = e.currentTarget;
-                        var selected = document.querySelector("select#clnt_sel")
+                        var selected = document.querySelector("select#clnt_sel_d")
                         var datalist = evnt.list;
-                        var clntcd = document.getElementById("clnt_cd");
+                        var clntcd = document.getElementById("clnt_cd_d");
 
                         for(var j = 0; j < datalist.options.length; j++){
                             if(this.value == datalist.options[j].value) {
@@ -181,7 +191,17 @@
                         }
                     }
                 </script>
-
+			<div>
+				<th:block th:text="#{locCd}"></th:block>
+				<input id="loc_cd_d" list="loc_d" name="loc_cd_d" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
+				<datalist id="loc_d">
+					<select id="loc_sel_d">
+						<option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
+						</option>
+					</select>
+				</datalist>
+				<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
+			</div>
 			<div>
 				<th:block th:text="#{itemCd}"></th:block>
 				<input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
@@ -209,7 +229,7 @@
 			</div>
 			<div>
 				<input type="hidden" th:field="*{updYn}" th:value="*{updYn}">
-				<input type="text" th:field="*{keyVal}" th:value="*{keyVal}">
+				<input type="hidden" th:field="*{keyVal}" th:value="*{keyVal}">
 			</div>
 			<button type="submit">저장하기</button>
 		</th:block>

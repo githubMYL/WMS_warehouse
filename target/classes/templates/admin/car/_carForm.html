@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="carForm" th:object="${carForm}">
+	<div><h3>차량정보</h3>
+		<dt th:text="#{carNum}" class="require_item"></dt>
+		<input type="text" name="carNum" th:field="*{carNum}" th:placeholder="#{carNum}">
+		<div class="errors" th:each="err : ${#fields.errors('carNum')}" th:text="${err}"></div>
+	</div>
+
+	<div>
+		<dt th:text="#{deliveryArea}" class="require_item"></dt>
+		<input type="text" name="deliveryArea" th:field="*{deliveryArea}" th:placeholder="#{deliveryArea}">
+		<div class="errors" th:each="err : ${#fields.errors('deliveryArea')}" th:text="${err}"></div>
+	</div>
+
+	<br>
+	<div><h3>기사 정보</h3>
+		<dt th:text="#{driverNm}" class="require_item"></dt>
+		<input type="text" name="driverNm" th:field="*{driverNm}" th:placeholder="#{driverNm}">
+		<div class="errors" th:each="err : ${#fields.errors('driverNm')}" th:text="${err}"></div>
+	</div>
+	<div>
+		<dt th:text="#{driverTel}" class="require_item"></dt>
+		<input type="text" name="driverTel" th:field="*{driverTel}" th:placeholder="#{driverTel}">
+		<div class="errors" th:each="err : ${#fields.errors('driverTel')}" th:text="${err}"></div>
+	</div>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+			function execDaumPostcode() {
+				new daum.Postcode( {
+					oncomplete: function( data ) {
+						console.log(data);
+						var addr = document.getElementById("addr");
+						addr.value=data.address;
+						addr.focus();
+					}
+				} ).open();
+			}
+	</script>
+	<br>
+	<div>
+		<dt th:text="#{driverAddr}" class="require_item"></dt>
+		<input type="text" name="driverAddr" id="addr" th:field="*{driverAddr}" th:placeholder="#{driverAddr}">
+		<input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="sbtn" style="height: 45px;"><br>
+		<div class="errors" th:each="err : ${#fields.errors('driverAddr')}" th:text="${err}"></div>
+	</div>
+
+	<br>
+	<div><h3>차량 정보</h3>
+		<dt th:text="#{carInfo}" class="require_item"></dt>
+		<input type="text" name="carType" th:field="*{carType}" th:placeholder="#{carType}">
+		<input type="text" name="carTon" th:field="*{carTon}" th:placeholder="#{carTon}">
+	</div>
+	<div>
+		<dt th:text="#{loadPlt}" class="require_item"></dt>
+		<input type="text" name="loadPlt" th:field="*{loadPlt}" th:placeholder="#{loadPlt}">
+	</div>
+
+
+	<br>
+	<div>
+		<dt th:text="#{licenseYn}" class="require_item"></dt>
+		<input type="text" name="licenseYn" th:field="*{licenseYn}" th:placeholder="#{licenseYn}">
+	</div>
+	<div>
+		<dt th:text="#{joinDt}" class="require_item"></dt>
+		<input type="text" name="joinDt" th:field="*{joinDt}" th:placeholder="#{joinDt}">
+	</div>
+
+</th:block>
+</html>

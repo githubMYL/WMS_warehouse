@@ -3,12 +3,13 @@ package org.warehouse.models.stock;
 import lombok.Data;
 import org.warehouse.models.BaseEntity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 public class DlycnpVO extends BaseEntity { // 일수불
 
-    private LocalDateTime payDt;    // 수불일자
+    private LocalDate payDt;    // 수불일자
 
     private Long dlyCntNo;  // 순번
 

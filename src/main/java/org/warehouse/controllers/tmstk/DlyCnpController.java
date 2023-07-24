@@ -6,10 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.warehouse.commons.CommonProcess;
 import org.warehouse.configs.models.mapper.DlyCnpDAO;
+import org.warehouse.models.common.CommonVO;
 import org.warehouse.models.stock.DlycnpVO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -32,27 +36,22 @@ import java.util.List;
 public class DlyCnpController {
 
     private final DlyCnpDAO dlyCnpDAO;
+
+    private final CommonProcess common;
     @GetMapping("/dlycnp")
-    public String dlycnp(@ModelAttribute("srchParam") DlycnpVO srchParam, Model model){
+    public String dlycnp(@ModelAttribute("srchParam") DlycnpVO srchParam, @ModelAttribute("commonVO") CommonVO commonVO, Model model){
 
         List<DlycnpVO> dlycnpList = dlyCnpDAO.getDlyCnpList(srchParam);
-        System.out.println(dlycnpList);
+//        System.out.println(dlycnpList);
 
-        model.addAttribute("pageName", "stock");
-        model.addAttribute("Title", "재고::일수불");
-        model.addAttribute("menuCode", "stktransf");
+        System.out.println("commonVO>>>" + commonVO);
+
+
+
+        common.commonProcess(commonVO,model);
 
         model.addAttribute("dlycnpList", dlycnpList);
 
         return "stock/dlycnp";
-    }
-
-    private void commonProcess(Model model) {
-        String Title = "재고::일수불";
-        String menuCode = "dlycnp";
-        String pageName = "stock";
-        model.addAttribute("pageName", pageName);
-        model.addAttribute("Title", Title);
-        model.addAttribute("menuCode", menuCode);
     }
 }

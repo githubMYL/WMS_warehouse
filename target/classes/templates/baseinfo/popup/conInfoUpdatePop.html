@@ -2,16 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
+
     <section layout:fragment="content">
         <head>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
             <style>
+                html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+                #equipments div{
+                    display:inline-block;
+                }
+                header {height:0px;}
                 #equipments div{
                     display:inline-block;
                 }
                 header {height:0px;}
             </style>
             <script th:src="@{/js/front/conInfo.js}"></script>
-            <script th:src="@{/js/front/layer.js}"></script>
         </head>
         <form name="frmJoin" method="post" th:action="@{/baseinfo/coninfo}" th:object="${conInfoVO}" autocomplete="off">
             계약정보 수정 팝업

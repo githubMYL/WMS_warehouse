@@ -56,7 +56,7 @@
 			LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
 			LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
 			LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
-		WHERE L.WACTR_CD = W.WACTR_CD
+		WHERE L.WACTR_CD = W.WACTR_CD AND T.DEL_YN = 'N'
 		ORDER BY T.REG_DT DESC
 	</select>
 
@@ -96,52 +96,144 @@
 				and i.item_nm like '%'||#{search_itemNm}||'%'
 			</when>
 		</choose>
+		AND l.WACTR_CD =w.WACTR_CD
 		ORDER BY t.REG_DT DESC
 	</select>
 	<!-- 검색 조건 -->
 
 	<select id="getTmstkByConditions" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT * FROM TMSTK
-		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd} AND DEL_YN = 'N'
 	</select>
 
 	<select id="getTmstkByLocCdItemCd" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT * FROM TMSTK
-		WHERE ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
+		WHERE ITEM_CD = #{itemCd} AND LOC_CD = #{locCd} AND DEL_YN = 'N'
 	</select>
 
 	<insert id="insertTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
 		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
-			VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, SYSDATE, SYSDATE, #{regNm})
+			VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateTmstkAmt" parameterType="org.warehouse.models.stock.TmstkVO">
-		UPDATE TMSTK SET STOCK_AMT = #{stock_amt}, MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		UPDATE TMSTK SET STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}, MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
+	</update>
+
+	<update id="updateTmstkDelyn" parameterType="org.warehouse.models.stock.TmstkVO">
+		UPDATE TMSTK SET DEL_YN = 'N', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}, STDIN_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'), MOD_DT = SYSDATE, MOD_NM = #{regNm}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
 
 	<update id="deleteTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
-		UPDATE TMSTK SET DEL_YN = 'Y', MOD_DT = SYSDATE
+		UPDATE TMSTK SET DEL_YN = 'Y', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
 	<!--	tmstk E		-->
 
 	<!--	stkadj S	-->
 	<!--재고조정 테이블을 위한 조인-->
-	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
+	<select id="tmsktList" resultType="org.warehouse.models.stock.StkadjForm">
 		SELECT
 		t.ITEM_CD, i.ITEM_NM,
 		t.CLNT_CD , c.CLNT_NM,
 		t.WACTR_CD , w.WACTR_NM,
 		t.LOC_CD ,
 		t.STOCK_AMT,t.FAULT_AMT,
+		t.reg_dt,t.del_yn,
 		NVL(r.ALLO_AMT, 0) ALLO_AMT
 		FROM TMSTK T
 		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
 		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
 		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
 		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
+		where T.del_yn = 'N'
+		ORDER BY t.reg_dt DESC
 	</select>
+
+
+	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
+		SELECT
+		i.ITEM_NM,
+		c.CLNT_NM,
+		w.WACTR_NM,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT,
+		s.*
+		FROM stkadj s
+		LEFT JOIN RELS_S r ON r.ITEM_CD = s.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = s.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
+		where s.del_yn = 'N'
+		ORDER BY s.reg_dt DESC
+	</select>
+
+	<!--검색조건-->
+	<select id="search_tmstkList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
+		SELECT
+		t.ITEM_CD, i.ITEM_NM,
+		t.CLNT_CD , c.CLNT_NM,
+		t.WACTR_CD , w.WACTR_NM,
+		t.LOC_CD ,
+		t.STOCK_AMT,t.FAULT_AMT,
+		t.reg_dt,t.del_yn,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT
+		FROM TMSTK T
+		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
+		where T.del_yn = 'N'
+		<if test='search_tmstk_wactrNm != ""'>
+			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
+		</if>
+		<if test='search_tmstk_itemNm != ""'>
+			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
+		</if>
+		<if test='search_tmstk_clntNm != ""'>
+			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
+		</if>
+		<if test='search_tmstk_locCd != ""'>
+			and t.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
+		</if>
+		ORDER BY t.reg_dt DESC
+	</select>
+
+
+
+	<!--stkadj 내역 검색조회-->
+	<select id="search_stkadjList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
+		SELECT
+		i.ITEM_NM,
+		c.CLNT_NM,
+		w.WACTR_NM,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT,
+		s.*
+		FROM stkadj s
+		LEFT JOIN RELS_S r ON r.ITEM_CD = s.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = s.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
+		where s.del_yn = 'N'
+		<if test='search_tmstk_wactrNm != ""'>
+			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
+		</if>
+		<if test='search_tmstk_itemNm != ""'>
+			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
+		</if>
+		<if test='search_tmstk_clntNm != ""'>
+			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
+		</if>
+		<if test='search_tmstk_locCd != ""'>
+			and s.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
+		</if>
+		<if test='mod_dt_start != "" and mod_dt_end != "" '>
+			and s.adj_dt BETWEEN TO_DATE(#{mod_dt_start}, 'YYYY-MM-DD') AND TO_DATE(#{mod_dt_end}, 'YYYY-MM-DD') + 1
+		</if>
+		ORDER BY s.no desc
+	</select>
+
 
 
 	<select id="stkadjOne" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjForm">
@@ -191,6 +283,11 @@
 		fault_amt = fault_amt + #{modTmstkFaultAmt},
 		mod_dt = sysdate,
 		mod_nm = #{mod_nm}
+		where
+		loc_cd = #{loc_cd} and
+		wactr_cd = #{wactr_cd} and
+		clnt_cd = #{clnt_cd} and
+		item_cd = #{item_cd}
 	</update>
 
 
@@ -201,23 +298,14 @@
 		wactr_cd = #{wactr_cd} and
 		clnt_cd = #{clnt_cd} and
 		item_cd = #{item_cd}
-	</select>
-
-	<!--조정한 날짜 사이로 검색-->
-	<select id="getSearch" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjVO">
-		select * from stkadj where
-		loc_cd = #{loc_cd} and
-		wactr_cd = #{wactr_cd} and
-		clnt_cd = #{clnt_cd} and
-		item_cd = #{item_cd} and
-		adj_dt BETWEEN TO_DATE(#{mod_dt_start}, 'YYYY-MM-DD') AND TO_DATE(#{mod_dt_end}, 'YYYY-MM-DD') + 1
+		order by adj_dt desc
 	</select>
 	<!--	stkadj E	-->
 
 	<!--	stktransf S		-->
 	<insert id="insertStktransf" parameterType="org.warehouse.models.stock.StktransfVO">
 		INSERT INTO STKTRANSF F(F.MOVE_DT, F.NO, F.ITEM_CD, F.CLNT_CD, F.WACTR_CD_FROM, F.LOC_CD_FROM, F.WACTR_CD_TO, F.LOC_CD_TO, F.RUNTIME_STOCK, F.MOVE_AMT, F.REASON, F.REG_DT, F.REG_NM)
-		VALUES(SYSDATE,(SELECT COUNT(*) FROM STKTRANSF FF WHERE FF.MOVE_DT = SYSDATE), #{itemCd}, #{clntCd}, #{waCtrCdFrom}, #{locCdFrom}, #{waCtrCdTo}, #{locCdTo}, #{runtimeStock}, #{moveAmt}, #{reason}, SYSDATE, #{regNm})
+		VALUES(TO_CHAR(SYSDATE, 'YYYY-MM-DD'),(SELECT COUNT(*) FROM STKTRANSF FF WHERE FF.MOVE_DT = TO_CHAR(SYSDATE, 'YYYY-MM-DD'))+1, #{itemCd}, #{clntCd}, #{waCtrCdFrom}, #{locCdFrom}, #{waCtrCdTo}, #{locCdTo}, #{runtimeStock}, #{moveAmt}, #{reason}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{regNm})
 
 	</insert>
 
@@ -225,7 +313,27 @@
 		SELECT F.*, I.ITEM_NM FROM STKTRANSF F
 			LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
 		WHERE F.DEL_YN = 'N'
-		ORDER BY F.MOVE_DT ASC
+		ORDER BY F.MOVE_DT ASC, F.NO ASC
 	</select>
+
+	<select id="searchTransf" resultMap="stktransfMap">
+		SELECT F.*, I.ITEM_NM FROM STKTRANSF F
+		LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
+		<where>
+			<if test="search_moveDt != null">
+				F.MOVE_DT = #{search_moveDt}
+			</if>
+			<if test="search_itemCd != ''">
+				AND I.ITEM_CD LIKE '%'||#{search_itemCd}||'%'
+			</if>
+			<if test="search_itemNm != ''">
+				AND I.ITEM_NM LIKE '%'||#{search_itemNm}||'%'
+			</if>
+			AND F.DEL_YN = 'N'
+		</where>
+		ORDER BY F.MOVE_DT ASC, F.NO ASC
+	</select>
+
+
 	<!--	stktransf E		-->
 </mapper>
