@@ -43,7 +43,7 @@
 
 					if(document.getElementById('addItemTable') == null) {
 						const addForm = document.getElementById('addForm');
-						addForm.innerHTML = "<table id='addItemTable'><th>상품코드</th><th>상품명</th><th>로케이션</th><th>A</th><th>N</th><th>F</th><th>삭제</th><tr></tr></table>";
+						addForm.innerHTML = "<table id='addItemTable'><tr style='color:#fff !important;'><th>상품코드</th><th>상품명</th><th>로케이션</th><th>A</th><th>N</th><th>F</th><th style='width : 20px;'></th></tr><tr></tr></table>";
 					};
 
 					const table = document.getElementById('addItemTable');
@@ -56,7 +56,7 @@
 					}
 					updateItemData(table);
 
-					newRow.insertCell().innerHTML = "<button type='button' class='delBtn' id='delBtnId' onclick='delrow(this)'>삭제</button>";
+					newRow.insertCell().innerHTML = "<button type='button' id='delBtnId' onclick='delrow(this)' class='xi-close' style='background-color: transparent !important; background-image: none !important; border-color: transparent; border: none; color:red;'></button>";
 					document.getElementById('delBtnId').dataset.delcd = itemCd;
 			});
 		});
@@ -161,13 +161,19 @@
 			<div class="errors" th:each="err : ${#fields.errors('fault')}" th:text="${err}"></div>
 		</div>
 
-		<button type="button" id="addItemForm">상품 추가</button>
+		<div style="text-align:right; padding-top : 10px;">
+			<button type="button" id="addItemForm" style="
+			text-decoration: none;
+			transition: 0.15s;
+			border: 1px solid #596b99;border-radius: 5px; cursor:pointer;">상품 추가</button>
+		</div>
+
 
 		<div id="addForm"></div>
 
 		<div>
-			<dt th:text="#{remk}" class="require_item"></dt>
-			<textarea name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
+			<dt th:text="#{remk}" class="require_item" style="padding-top : 20px;"></dt>
+			<textarea rows="5" cols="52" style="border:1px solid #d5d5d5; width:100%;" name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
 			<div class="errors" th:each="err : ${#fields.errors('remark')}" th:text="${err}"></div>
 		</div>
 	</th:block>

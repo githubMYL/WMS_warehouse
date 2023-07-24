@@ -2,11 +2,39 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 		<style>
+
 				html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+
+				#addForm {
+					padding-top : 10px;
+				}
+
+				#addItemForm:hover{
+					 background-color: #596b99;
+					 color: #fff;
+				}
+
+				#addItemTable {
+					padding-top : 10px;
+					width : 100%;
+					text-align : center;
+				}
+				#addItemTable tr th{
+					background-color : #596b99;
+					color : white;
+				}
+				#addItemTable, #addItemTable td, #addItemTable th {
+					border : 1px solid #596b99;
+					border-collapse : collapse;
+				}
+
+
 		</style>
 		<script th:src="@{/js/front/layer.js}"></script>
 		<script th:src="@{/js/front/common.js}"></script>
+
 	</head>
 
 
@@ -23,8 +51,8 @@
 	</script>
 		<th:block th:replace="~{stdin/_form::stdinForm}"></th:block>
 		<div class="btns">
-			<button type="reset" th:text="#{admin.action.reset}"></button>
-			<button type="submit" th:text="#{admin.action.register}" id="submitBtn"></button>
+			<button type="reset" th:text="#{admin.action.reset}" class="sbtn"></button>
+			<button type="submit" th:text="#{admin.action.register}" id="submitBtn" class="sbtn blue"></button>
 		</div>
 	</form>
 </html>
