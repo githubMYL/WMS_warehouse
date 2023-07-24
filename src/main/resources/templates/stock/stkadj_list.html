@@ -101,7 +101,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr th:each="list : ${stkadjList}" th:object="${list}">
+					<tr th:each="list : ${stkadjList}" th:object="${list}" class="list_hover">
 						<td th:text="*{no}"></td>
 						<td th:text="*{adj_dt}"></td>
 						<td th:text="*{wactr_nm}"></td>

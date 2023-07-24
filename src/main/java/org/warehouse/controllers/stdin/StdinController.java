@@ -136,7 +136,7 @@ public class StdinController {
 
 	@PostMapping("/save")
 	public String stdinRegisterPs(@Valid StdinForm stdinForms, Errors errors, Model model) {
-		if(stdinForms.getFlag().isBlank() || stdinForms.getFlag().isEmpty()) {
+		if(stdinForms.getFlag() == null || stdinForms.getFlag().isEmpty() || stdinForms.getFlag().isBlank()) {
 			System.out.println("작성 탐");
 			int cnt = (int)stdinForms.getItemData().chars().filter(s -> s == '/').count();
 

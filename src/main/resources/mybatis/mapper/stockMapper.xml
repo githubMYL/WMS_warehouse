@@ -152,7 +152,7 @@
 		ORDER BY t.reg_dt DESC
 	</select>
 
-
+	<!--조정내역 리스트 -->
 	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
 		SELECT
 		i.ITEM_NM,
@@ -166,7 +166,7 @@
 		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
 		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
 		where s.del_yn = 'N'
-		ORDER BY s.reg_dt DESC
+		ORDER BY s.adj_dt DESC
 	</select>
 
 	<!--검색조건-->
@@ -231,11 +231,11 @@
 		<if test='mod_dt_start != "" and mod_dt_end != "" '>
 			and s.adj_dt BETWEEN TO_DATE(#{mod_dt_start}, 'YYYY-MM-DD') AND TO_DATE(#{mod_dt_end}, 'YYYY-MM-DD') + 1
 		</if>
-		ORDER BY s.no desc
+		ORDER BY s.adj_dt desc
 	</select>
 
 
-
+	<!--재고 조정하기위해 tmstk 하나 가져오기-->
 	<select id="stkadjOne" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjForm">
 		SELECT
 		t.ITEM_CD, i.ITEM_NM,
@@ -260,7 +260,7 @@
 	<insert id="insertStkadj" parameterType="org.warehouse.models.stock.StkadjForm">
 		insert into stkadj values (
 		sysdate,
-		STKADJ_NO_SEQ.nextval,
+		(SELECT COUNT(*) FROM stkadj s WHERE TO_CHAR(s.ADJ_DT, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD'))+1,
 		#{clnt_cd},
 		#{item_cd},
 		#{wactr_cd},
@@ -289,17 +289,6 @@
 		clnt_cd = #{clnt_cd} and
 		item_cd = #{item_cd}
 	</update>
-
-
-	<!-- 조정내역 테이블 select-->
-	<select id="getDetail" parameterType="HashMap" resultType="org.warehouse.models.stock.StkadjVO">
-		select * from stkadj where
-		loc_cd = #{loc_cd} and
-		wactr_cd = #{wactr_cd} and
-		clnt_cd = #{clnt_cd} and
-		item_cd = #{item_cd}
-		order by adj_dt desc
-	</select>
 	<!--	stkadj E	-->
 
 	<!--	stktransf S		-->

@@ -91,6 +91,7 @@ public class ConInfoController {
 
 		validator.validate(conInfoVO, errors);
 
+		System.out.println("계약정보 저장값 : " +conInfoVO.toString());
 		if(errors.hasErrors()) {
 
 			/** 고객사 명 S */

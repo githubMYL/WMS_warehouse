@@ -9,13 +9,22 @@
 		<script th:src="@{/js/front/common.js}"></script>
 	</head>
 
-	<h2>입고등록 추가</h2>
-	<form name="stdinSave" method="post" th:action="@{/stdin/save}" autocomplete="off" th:object="${stdinForm}" class="_form">
 
+	<h2>입고등록 추가</h2>
+	<form name="stdinSave" method="post" th:action="@{/stdin/save}" autocomplete="off" th:object="${stdinForm}" class="_form" th:onsubmit="return tblCheck();">
+		<script>
+		function tblCheck() {
+			const submitBtn = document.getElementById('submitBtn');
+			if(document.getElementById('addItemTable') == null) {
+				alert('상품 추가 버튼을 클릭하여, 등록할 상품을 추가해주세요');
+				return false;
+			}
+		};
+	</script>
 		<th:block th:replace="~{stdin/_form::stdinForm}"></th:block>
 		<div class="btns">
 			<button type="reset" th:text="#{admin.action.reset}"></button>
-			<button type="submit" th:text="#{admin.action.register}"></button>
+			<button type="submit" th:text="#{admin.action.register}" id="submitBtn"></button>
 		</div>
 	</form>
 </html>

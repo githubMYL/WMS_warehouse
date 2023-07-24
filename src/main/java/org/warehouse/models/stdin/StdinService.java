@@ -70,7 +70,7 @@ public class StdinService {
 			stdinVOs[i] = new ModelMapper().map(stdinForms[i], StdinVO.class);
 		}
 
-		if(stdinForms[0].getFlag() == "") {
+		if(stdinForms[0].getFlag() == null || stdinForms[0].getFlag().isEmpty() || stdinForms[0].getFlag().isBlank()) {
 			stdinVOs[0].setRemark(stdinForms[0].getRemark() != null ? stdinForms[0].getRemark() : "");
 			stdinVOs[0].setRegNm(userInfo.getUserNm());
 

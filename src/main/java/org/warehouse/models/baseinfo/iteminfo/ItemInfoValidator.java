@@ -20,7 +20,6 @@ public class ItemInfoValidator implements Validator {
 
     private final WactrDAO wactrDAO;
     private final ClntDAO clntDAO;
-    private final LocDAO locDAO;
     private final ItemInfoDAO itemInfoDAO;
 
 
@@ -48,8 +47,7 @@ public class ItemInfoValidator implements Validator {
         // 고객사
         String clntCd = itemInfoVO.getClntCd();
         String clntNm = itemInfoVO.getClntNm();
-        // 로케이션
-        String locCd = itemInfoVO.getLocCd();
+
 
         WactrVO wactrChk = null;
         if(wactrCd != "" && wactrCd != null
@@ -59,7 +57,6 @@ public class ItemInfoValidator implements Validator {
             errors.rejectValue("wactrCd", "Validation.notExist.wactr");
         }
         ClntVO clntChk = clntDAO.getClntByCdAndNm(clntCd, clntNm);
-        LocVO LocChk = locDAO.getLocByCd(locCd);
         ItemInfoVO itemChk = itemInfoDAO.getItemEqualsChk(itemInfoVO);
 
         /** 물류센터코드 존재여부 확인 */
@@ -70,10 +67,6 @@ public class ItemInfoValidator implements Validator {
         /** 2. 고객사코드 존재여부 확인 */
         if(clntChk == null) {
             errors.rejectValue("clntCd", "Validation.notExist.clnt");
-        }
-        /** 3. 로케이션 존재여부 확인 */
-        if(LocChk == null) {
-            errors.rejectValue("locCd", "Validation.notExist.loc");
         }
 
         /** 4. 상품코드 중복여부 확인 */

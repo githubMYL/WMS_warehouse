@@ -16,8 +16,7 @@ public class LocVO extends BaseEntity {
 	String loc_nm;
 	@NotBlank
 	String loc_addr;
-	@NotBlank
-	String rac_num;
+
 	String remk;
 	String reg_nm;
 	String mod_nm;
