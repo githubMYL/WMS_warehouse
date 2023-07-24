@@ -69,7 +69,7 @@
 
 		<div>
 			<span>가용수량 :</span>
-			<input style="width:40px"  type="text"  th:value="${vo.stock_amt - vo.fault_amt - vo.allo_amt}">
+			<input style="width:40px"  type="text" name="before_adj_stock"  th:value="${vo.stock_amt - vo.fault_amt - vo.allo_amt}">
 		</div>
 	</div>
 
@@ -82,7 +82,7 @@
 	<input type="hidden" name="before_adj_stock" th:value="${vo.stock_amt - vo.fault_amt - vo.allo_amt}">
 	<div>
 		<span>정상수량 조정</span>
-		<input style="width:140px"  type="number" name="modNomalAmt" th:value="${vo.stock_amt - vo.fault_amt}"placeholder="수량을 입력해주세요">
+		<input style="width:140px"  type="number" name="modNomalAmt" th:value="${vo.stock_amt - vo.fault_amt}" placeholder="수량을 입력해주세요">
 	</div>
 	<div>
 		<span>불량수량 조정</span>

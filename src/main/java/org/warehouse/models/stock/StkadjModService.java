@@ -19,10 +19,14 @@ public class StkadjModService {
 
 
 	public void stkadjMod(StkadjForm stkadjForm){
+		System.out.println(stkadjForm.toString());
 
 		UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
 
 		stkadjForm.setMod_nm(userInfo.getUserNm());
+
+		System.out.println("정상재고 차이" + stkadjForm.getModTmstkStockAmt());
+		System.out.println("불량재고 차이" + stkadjForm.getModTmstkFaultAmt());
 
 		stockDAO.insertStkadj(stkadjForm);
 		stockDAO.updateTmstk(stkadjForm);

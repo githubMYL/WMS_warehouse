@@ -134,9 +134,8 @@ public class StockController {
 	@PostMapping("/stkadjMod")
 	public String stkadjMod(StkadjForm vo) {
 
-
 		// 조정후 수량 체크
-		Long after_adj_stock = vo.getModNomalAmt() - vo.getModFaultAmt() - vo.getAllo_amt();
+		Long after_adj_stock = vo.getModNomalAmt() + vo.getModFaultAmt() - vo.getAllo_amt();
 
 
 //        System.out.println("원래 정상 : " + vo.getOrigin_nomalStock());

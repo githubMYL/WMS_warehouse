@@ -16,11 +16,7 @@
                 var search_tmstk_locCd = document.getElementById("search_tmstk_locCd").value.trim();
                 var search_tmstk_itemNm = document.getElementById("search_tmstk_itemNm").value.trim();
 
-                if(mod_dt_start =="" || mod_dt_end==""){
-                    alert("조회하실 날짜를 선택해주세요");
-                    return;
-                }
-
+				console.log(mod_dt_start,mod_dt_end);
                 if(mod_dt_start > mod_dt_end){
                     alert("조회종료일은 시작일보다 커야합니다");
                     return;
