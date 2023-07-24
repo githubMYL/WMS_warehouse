@@ -127,7 +127,7 @@ public class ConInfoController {
 	}
 	private void commonProcess(Model model) {
 		String Title = "기본정보::계약정보";
-		String menuCode = "conInfo";
+		String menuCode = "coninfo";
 		String pageName = "baseinfo";
 		model.addAttribute("pageName", pageName);
 		model.addAttribute("Title", Title);
