@@ -279,7 +279,7 @@
 	<!--시점재고 수량 업데이트-->
 	<update id="updateTmstk" parameterType="org.warehouse.models.stock.StkadjForm">
 		update tmstk set
-		stock_amt = stock_amt + #{modTmstkStockAmt},
+		stock_amt = stock_amt + #{modTmstkStockAmt} + #{modTmstkFaultAmt},
 		fault_amt = fault_amt + #{modTmstkFaultAmt},
 		mod_dt = sysdate,
 		mod_nm = #{mod_nm}

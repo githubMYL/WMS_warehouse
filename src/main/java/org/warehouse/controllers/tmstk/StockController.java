@@ -134,22 +134,19 @@ public class StockController {
 	@PostMapping("/stkadjMod")
 	public String stkadjMod(StkadjForm vo) {
 
-
-		// 조정후 수량 체크
-		Long after_adj_stock = vo.getModNomalAmt() - vo.getModFaultAmt() - vo.getAllo_amt();
-
-
-//        System.out.println("원래 정상 : " + vo.getOrigin_nomalStock());
-//        System.out.println("바뀐정상 : " + vo.getModNomalAmt());
-//        System.out.println("원래 스톡 : " + vo.getStock_amt());
+		// 조정 전 전체 수량 체크
+		System.out.println( vo.getBefore_adj_stock());
+		// 조정후 전체 재고 수량 체크
+		Long after_adj_stock = vo.getModNomalAmt() + vo.getModFaultAmt() + vo.getAllo_amt();
 		// tmstk 전체재고 update 수량 체크
-		Long modTmstkStockAmt = vo.getModNomalAmt() - vo.getOrigin_nomalStock();
+		Long modTmstkStockAmt = vo.getModNomalAmt()-vo.getOrigin_nomalStock();
 		// tmstk 불량재고 update 수량
 		Long modTmstkFaultAmt = vo.getModFaultAmt() - vo.getFault_amt();
 
 
-		System.out.println("조정전 가용수량: " + vo.getBefore_adj_stock()
-				+ " 조정 후 가용수량 : " + after_adj_stock
+
+		System.out.println("조정전 재고: " + vo.getBefore_adj_stock()
+				+ " 조정 후 재고 : " + after_adj_stock
 				+ " 정상재고 차이 : " + modTmstkStockAmt
 				+ " 불량재고 차이 : " + modTmstkFaultAmt);
 
@@ -206,6 +203,7 @@ public class StockController {
 		return "stock/stkadj_list";
 	}
 	/* stkadj E */
+
 
 
 	/* stktransf S */
