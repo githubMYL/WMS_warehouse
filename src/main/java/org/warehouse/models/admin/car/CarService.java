@@ -28,7 +28,7 @@ public class CarService {
 			carDAO.insertCar(carVO);
 		} else {
 			carVO.setModNm(userInfo.getUserNm());
-			System.out.println(carVO);
+			System.out.println("update : " + carVO);
 			carDAO.updateCar(carVO);
 		}
 	}

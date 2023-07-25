@@ -308,8 +308,6 @@ public class AdminController {
 		if(errors.hasErrors()) {
 			return "admin/car/carRegister";
 		}
-		System.out.println(errors);
-		System.out.println(carForm);
 
 		carService.register(carForm);
 

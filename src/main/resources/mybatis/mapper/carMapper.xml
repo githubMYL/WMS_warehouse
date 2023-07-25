@@ -4,7 +4,7 @@
 	<resultMap id="carMap" type="org.warehouse.models.admin.car.CarVO">
 		<result property="carCd" column="CAR_CD" />
 		<result property="carNum" column="CAR_NUM" />
-		<result property="deliveryArea" column="DRIVER_AREA" />
+		<result property="deliveryArea" column="DELIVERY_AREA" />
 		<result property="driverNm" column="DRIVER_NM" />
 		<result property="driverTel" column="DRIVER_TEL" />
 		<result property="driverAddr" column="DRIVER_ADDR" />
@@ -28,13 +28,17 @@
 
 	<update id="updateCar" parameterType="org.warehouse.models.admin.car.CarVO">
 		UPDATE CAR_INFO
-			SET CAR_NUM = #{carNum}, DELIVERY_AREA = #{deliveryArea}, DRIVER_NM = #{driverNm}, DRIVER_ADDR = #{driverAddr}, CAR_TYPE = #{carType}, CAR_TON = #{carTon}, LOAD_PLT = #{loadPlt}, LICENSE_YN = #{licenseYn}, JOIN_DT = #{joinDt}, REMK = #{remark}, MOD_DT = SYSDATE, MOD_NM = #{modNm}
+			SET CAR_NUM = #{carNum}, DELIVERY_AREA = #{deliveryArea}, DRIVER_NM = #{driverNm}, DRIVER_TEL = #{driverTel}, DRIVER_ADDR = #{driverAddr}, CAR_TYPE = #{carType}, CAR_TON = #{carTon}, LOAD_PLT = #{loadPlt}, LICENSE_YN = #{licenseYn}, JOIN_DT = #{joinDt}, REMK = #{remark}, MOD_DT = SYSDATE, MOD_NM = #{modNm}
 		WHERE CAR_CD = #{carCd}
 	</update>
 
-	<update id="deleteCar" parameterType="org.warehouse.models.admin.car.CarVO">
-		UPDATE DEL_YN = 'Y' WHERE CAR_CD = #{carCd}
+	<update id="deleteCar">
+		UPDATE CAR_INFO
+		SET DEL_YN = 'Y', MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		WHERE CAR_CD = #{carCd}
 	</update>
+
+
 
 	<select id="getCarList" resultMap="carMap">
 		SELECT * FROM CAR_INFO WHERE DEL_YN = 'N'

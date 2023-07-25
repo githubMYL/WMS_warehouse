@@ -99,6 +99,25 @@
 			}
 
 			function deleteItem() {
+				var chk = document.getElementsByName("check");
+				var chk_data = [];
+
+				for(var i = 0; i < chk.length; i++) {
+					if(chk[i].checked == true) {
+						console.log(chk[i].value);
+						chk_data.push(chk[i].value);
+					}
+				}
+
+				const url = `ajaxadmin/carDelete?carCd=${chk_data}`;
+				commonLib.ajaxLoad(url)
+					.then((data) => {
+						console.log(data);
+						location.reload();
+					})
+					.catch((err) => {
+						console.error(err);
+					});
 
 			};
 

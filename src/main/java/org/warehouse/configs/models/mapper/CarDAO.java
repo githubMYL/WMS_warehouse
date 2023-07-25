@@ -1,6 +1,7 @@
 package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.warehouse.models.admin.car.CarVO;
 import org.warehouse.models.admin.clnt.ClntVO;
 
@@ -13,5 +14,5 @@ public interface CarDAO {
 	CarVO getCar(String carCd);
 	void insertCar(CarVO carVO);
 	void updateCar(CarVO carVO);
-	void deleteCar(String carCd);
+	void deleteCar(String carCd, String modNm);
 }
