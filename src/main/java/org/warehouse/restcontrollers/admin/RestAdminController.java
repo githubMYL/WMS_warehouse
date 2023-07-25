@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.warehouse.configs.models.mapper.ClntDAO;
-import org.warehouse.configs.models.mapper.CustCtrDAO;
-import org.warehouse.configs.models.mapper.CustDAO;
-import org.warehouse.configs.models.mapper.UserDAO;
+import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.admin.cust.CustVO;
@@ -25,6 +22,7 @@ public class RestAdminController {
 	private final ClntDAO clntDAO;
 	private final CustDAO custDAO;
 	private final CustCtrDAO custCtrDAO;
+	private final CarDAO carDAO;
 
 	private final HttpSession session;
 
@@ -99,4 +97,16 @@ public class RestAdminController {
 		}
 	}
 	/** CustCtrManage E */
+
+
+	/* CarManage S */
+	@GetMapping("carDelete")
+	public void carDelete(String carCd) {
+		UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+		String[] carCdList = carCd.split(",");
+
+		for(int i = 0; i < carCdList.length; i++) {
+			carDAO.deleteCar(carCdList[i], userInfo.getUserNm());
+		}
+	}
 }

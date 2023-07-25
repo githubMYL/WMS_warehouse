@@ -20,7 +20,8 @@ public interface StdinDAO {
 	List<StdinVO> getList();
 	List<StdinVO> getDetailList();
 	List<StdinVO> getDetailListByConditions(LocalDate stdinDt, String clntNm, String itemCd, String itemNm);
-	StdinVO getDetail(String stdinNum);
+	StdinVO[] getDetail(String stdinNum);
+	StdinVO getDetailByNumNo(Long stdinNum, Long stdinNo);
 
 	List<StdinVO> getListByConditions(LocalDate stdinDt, String clntNm, String status);
 

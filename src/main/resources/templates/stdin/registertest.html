@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/front/style.css}">
+	<style>
+				html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+		</style>
+	<script th:src="@{/js/front/layer.js}"></script>
+	<script th:src="@{/js/front/common.js}"></script>
+</head>
+
+<h2>입고등록 추가</h2>
+<form name="stdinSave" method="post" th:action="@{/stdin/savetest}" autocomplete="off" th:object="${stdinTestForm}" class="_form">
+
+	<th:block th:replace="~{stdin/_testForm::stdinForm}"></th:block>
+	<div class="btns">
+		<button type="reset" th:text="#{admin.action.reset}"></button>
+		<button type="submit" th:text="#{admin.action.register}"></button>
+	</div>
+</form>
+</html>

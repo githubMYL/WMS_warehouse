@@ -1,14 +1,15 @@
 package org.warehouse.models.stdin;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.warehouse.models.BaseEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
-public class StdinForm extends BaseEntity {
+public class StdinTestForm extends BaseEntity {
 	@NotNull
 	private LocalDate stdinDt;
 	@NotBlank
@@ -17,6 +18,8 @@ public class StdinForm extends BaseEntity {
 
 	private String status;
 
+
+	/* item S */
 	@NotBlank
 	private String itemCd;
 	private String itemNm;
@@ -26,9 +29,9 @@ public class StdinForm extends BaseEntity {
 	private Long beforeStdin;
 	private Long normal;
 	private Long fault;
+	/* item E */
 
 	private String flag;	// register, update 구분용
 	private String stdinNum;
 	private String itemData;
-	private Long stdinNo;
 }

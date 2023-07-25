@@ -39,8 +39,8 @@ public class RestStdinController {
 	}
 
 	@GetMapping("getDetail")
-	public StdinVO getDetail(String stdinNum) {
-		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
+	public StdinVO[] getDetail(String stdinNum) {
+		StdinVO[] stdinVO = stdinDAO.getDetail(stdinNum);
 		return stdinVO;
 	}
 
@@ -64,6 +64,7 @@ public class RestStdinController {
 		return stdinDAO.getDetailListByConditions(stdinDt, clntNm, itemCd, itemNm);
 	}
 
+
 	@GetMapping("confirm")
 	public void confirm(String stdinNum) {
 		String[] stdinNumList = stdinNum.split(",");
@@ -76,15 +77,18 @@ public class RestStdinController {
 		// 1. 기존 재고 테이블의 존재여부 확인(물류센터, 고객사코드, 상품코드, 로케이션)
 		// 2-1. 컬럼명 조건이 일치하는 재고 테이블이 존재할 경우, 기존값을 가져와 새로운 값을 추가하여 UPDATE
 		// 2-2. 컬럼명 조건이 일치하는 재고 테이블이 존재하지 않을 경우, 재고 테이블애 새로운 값으로 INSERT
-		StdinVO stdinVO = stdinDAO.getDetail(stdinNum);
-		TmstkVO tmstk = stockDAO.getTmstkByConditions(stdinVO.getWactrCd(), stdinVO.getClntCd(), stdinVO.getItemCd(), stdinVO.getLocCd());
+		StdinVO[] stdinVO = stdinDAO.getDetail(stdinNum);
+		for(int i = 0; i < stdinVO.length; i++) {
+			TmstkVO tmstk = stockDAO.getTmstkByConditions(stdinVO[i].getWactrCd(), stdinVO[i].getClntCd(), stdinVO[i].getItemCd(), stdinVO[i].getLocCd());
 
-		if(tmstk == null) {		// 2-1. 재고 테이블이 존재하지 않을 경우
-			stockDAO.insertStdin(stdinVO);
-		} else {				// 2-2. 재고 테이블이 존재할 경우
-			stdinVO.setFault(tmstk.getFault_amt() + stdinVO.getFault());
-			stdinVO.setBeforeStdin(tmstk.getStock_amt() + stdinVO.getBeforeStdin());
-			stockDAO.updateStdin(stdinVO);
+			if(tmstk == null) {		// 2-1. 재고 테이블이 존재하지 않을 경우
+				stockDAO.insertStdin(stdinVO[i]);
+			} else {				// 2-2. 재고 테이블이 존재할 경우
+				stdinVO[i].setFault(tmstk.getFault_amt() + stdinVO[i].getFault());
+				stdinVO[i].setBeforeStdin(tmstk.getStock_amt() + stdinVO[i].getBeforeStdin());
+				stockDAO.updateStdin(stdinVO[i]);
+			}
 		}
+
 	}
 }

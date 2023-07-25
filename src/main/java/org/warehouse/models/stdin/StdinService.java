@@ -16,7 +16,6 @@ public class StdinService {
 	private final StdinDAO stdinDAO;
 	private final HttpSession session;
 	private final ItemInfoDAO itemInfoDAO;
-	private final StockDAO stockDAO;
 
 	public void register(StdinForm stdinForm) {
 		UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
@@ -56,6 +55,61 @@ public class StdinService {
 			stdinDAO.updateHeaderStdin(stdinVO);
 			//insert STDIN_D
 			stdinDAO.updateDetailStdin(stdinVO);
+		}
+	}
+
+	public void register(StdinForm[] stdinForms){
+		System.out.println(stdinForms);
+		System.out.println(stdinForms.length);
+		UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+
+		//Form → StdinVO
+		StdinVO[] stdinVOs = new StdinVO[stdinForms.length];
+
+		for(int i = 0; i < stdinVOs.length; i++) {
+			stdinVOs[i] = new ModelMapper().map(stdinForms[i], StdinVO.class);
+		}
+
+		if(stdinForms[0].getFlag() == null || stdinForms[0].getFlag().isEmpty() || stdinForms[0].getFlag().isBlank()) {
+			stdinVOs[0].setRemark(stdinForms[0].getRemark() != null ? stdinForms[0].getRemark() : "");
+			stdinVOs[0].setRegNm(userInfo.getUserNm());
+
+			//insert STDIN_H
+			stdinDAO.insertHeaderStdin(stdinVOs[0]);
+
+			System.out.println("stdin_h insert success");
+
+			//insert STDIN_D
+			for(int j = 0; j < stdinVOs.length; j++) {
+				stdinVOs[j].setRemark(stdinForms[j].getRemark() != null ? stdinForms[j].getRemark() : "");
+				stdinVOs[j].setRegNm(userInfo.getUserNm());
+
+				//wactrCd Mapping
+				ItemInfoVO item = itemInfoDAO.getItem(stdinVOs[j].getItemCd());
+				stdinVOs[j].setWactrCd(item.getWactrCd());
+				System.out.println("stdinVOs[j] : "+stdinVOs[j]);
+				stdinDAO.insertDetailStdin(stdinVOs[j]);
+			}
+		} else {
+			System.out.println("수정 탑니다!");
+			for(int i = 0; i < stdinForms.length; i++) {
+				if(stdinForms[i].isDelyn()) {
+					stdinVOs[i].setDelyn("Y");
+				} else {
+					stdinVOs[i].setDelyn("N");
+				}
+			}
+			stdinVOs[0].setRemark(stdinForms[0].getRemark());
+			stdinVOs[0].setModNm(userInfo.getUserNm());
+
+			//wactrCd Mapping
+			ItemInfoVO item = itemInfoDAO.getItem(stdinVOs[0].getItemCd());
+			stdinVOs[0].setWactrCd(item.getWactrCd());
+
+			//insert STDIN_H
+			stdinDAO.updateHeaderStdin(stdinVOs[0]);
+			//insert STDIN_D
+			stdinDAO.updateDetailStdin(stdinVOs[0]);
 		}
 	}
 }

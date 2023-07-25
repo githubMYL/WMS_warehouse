@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script th:src="@{/js/front/layer.js}"></script>
+</head>
+	<th:block th:fragment="addItem">
+		<div>
+			<dt th:text="#{item}" class="require_item"></dt>
+			<input type="text" id="item_cd" th:field="*{itemCd}" readonly style="background:#d5d5d5"/>
+			<input type="text" list="item" id="item_tmp" name="item_tmp" placeholder="상품명" onchange="UpdateItem()" th:field="*{itemNm}"/>
+			<datalist id="item">
+				<select id="item_sel">
+
+				</select>
+			</datalist>
+			<div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+
+		<div>
+			<dt th:text="#{loc}" class="require_item"></dt>
+			<input type="text" list="loc" id="loc_tmp" name="loc_tmp" placeholder="로케이션" th:field="*{locCd}"/>
+			<datalist id="loc">
+				<select id="loc_sel">
+
+				</select>
+			</datalist>
+			<div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+
+		<div>
+			<dt th:text="#{beforeStdin}" class="require_item"></dt>
+			<input type="text" name="beforeStdin" th:field="*{beforeStdin}" th:placeholder="#{beforeStdin}" id="amount" readonly style="background:#d5d5d5"/>
+			<div class="errors" th:each="err : ${#fields.errors('beforeStdin')}" th:text="${err}"></div>
+		</div>
+
+		<br>
+
+		<div>
+			<dt th:text="#{normal}" class="require_item"></dt>
+			<input type="number" name="normal" th:field="*{normal}" th:placeholder="#{normal}" id="normal" onchange="sum()"/>
+			<div class="errors" th:each="err : ${#fields.errors('normal')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{fault}" class="require_item"></dt>
+			<input type="number" name="fault" th:field="*{fault}" th:placeholder="#{fault}" id="fault" onchange="sum()"/>
+			<div class="errors" th:each="err : ${#fields.errors('fault')}" th:text="${err}"></div>
+		</div>
+
+		<div>
+			<dt th:text="#{fault}" class="require_item"></dt>
+			<input type="number" name="fault" th:field="*{fault}" th:placeholder="#{fault}" id="fault" onchange="sum()"/>
+			<div class="errors" th:each="err : ${#fields.errors('fault')}" th:text="${err}"></div>
+		</div>
+
+
+
+	</th:block>
+
+
+</html>
