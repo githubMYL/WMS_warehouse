@@ -1,6 +1,5 @@
 package org.warehouse.controllers.rels.relsAction;
 
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,16 +13,17 @@ import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.admin.cust.CustVO;
 import org.warehouse.models.admin.custctr.CustCtrVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
-import org.warehouse.models.baseinfo.loc.LocVO;
-import org.warehouse.models.baseinfo.wactr.WactrVO;
 import org.warehouse.models.rels.relsAction.RelsService;
 import org.warehouse.models.rels.relsAction.RelsVO;
 import org.warehouse.models.rels.relsAction.RelsValidator;
+import org.warehouse.models.stock.TmstkVO;
 
+import javax.swing.text.DateFormatter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,6 +35,7 @@ public class RelsController {
 	private final CustDAO custDAO;
 	private final CustCtrDAO custCtrDAO;
 	private final ItemInfoDAO itemInfoDAO;
+	private final StockDAO stockDAO;
 	private final RelsService relsService;
 	private final RelsValidator relsValidator;
 	private final HttpServletResponse response;
@@ -48,8 +49,7 @@ public class RelsController {
 		List<RelsVO> relsList = relsDAO.relsList();
 		model.addAttribute("relsList", relsList);
 
-		List<RelsVO> relsSubDetailList = relsDAO.relsSubDetailList();
-		model.addAttribute("relsSubDetailList", relsSubDetailList);
+
 
 		return "rels/rels";
 	}
@@ -57,22 +57,22 @@ public class RelsController {
 	/** 출고등록 D 리스트 */
 	@ResponseBody
 	@GetMapping("relsDetail")
-	public List<RelsVO> relsDetail(String relsDt, String relsNo) {
+	public List<RelsVO> relsDetail(String keyVal) {
 
-		HashMap<String,String> relsDetailMap = new HashMap<>();
-
-		relsDt = relsDt.replaceAll("-", "");
-
-		relsDetailMap.put("relsDt", relsDt);
-		relsDetailMap.put("relsNo", relsNo);
-
-		List<RelsVO> relsDetList = relsDAO.relsDetailList(relsDetailMap);
-		//List<RelsVO> relsDetList = relsDAO.relsDetailList(relsDt, relsNo);
+		List<RelsVO> relsDetList = relsDAO.relsDetailList(keyVal);
 
 		return relsDetList;
 	}
 
 	/** 출고등록 S (할당) */
+	@ResponseBody
+	@GetMapping("relsSubDtail")
+	public List<RelsVO> relsSubDtail(String keyVal) {
+
+		List<RelsVO> relsSubDetList = relsDAO.relsSubDetList(keyVal);
+
+		return relsSubDetList;
+	}
 
 
 	/** 출고등록 수정 팝업 */
@@ -103,13 +103,10 @@ public class RelsController {
 		/** 상품정보 코드 E */
 
 		relsVO = relsDAO.relsUpdataInit(keyVal);
-		System.out.println("=============================================");
-		System.out.println(keyVal);
-		System.out.println("=============================================");
-		System.out.println(relsVO);
-		System.out.println("=============================================");
-		model.addAttribute("relsVO", relsVO);
 
+		relsVO.setUpdateYn("Y");
+		model.addAttribute("relsVO", relsVO);
+		// dblClick ** relsDNO 있음
 		return "rels/popup/relsUpdatePop";
 	}
 
@@ -140,14 +137,12 @@ public class RelsController {
 		model.addAttribute("itemInfoList", itemInfoList);
 		/** 상품정보 코드 E */
 
-		relsVO = relsDAO.relsUpdataInit(keyVal);
-		System.out.println("=============================================");
-		System.out.println(keyVal);
-		System.out.println("=============================================");
-		System.out.println(relsVO);
-		System.out.println("=============================================");
-		model.addAttribute("relsVO", relsVO);
+		relsVO = relsDAO.relsDetInsert(keyVal);
 
+		relsVO.setRegInAmt(0L);
+		relsVO.setRelsCnt(0L);
+		model.addAttribute("relsVO", relsVO);
+		// checkBox ** relsDNO 없음
 		return "rels/popup/relsDetInsertPop";
 	}
 
@@ -179,8 +174,6 @@ public class RelsController {
 
 		relsVO.setRegInAmt(0L);
 		relsVO.setRelsCnt(0L);
-		relsVO.setPlt(0L);
-		relsVO.setBox(0L);
 		model.addAttribute("relsVO", relsVO);
 
 		return "rels/popup/relsPop";
@@ -190,6 +183,7 @@ public class RelsController {
 	@PostMapping("/relsSave")
 	public String relsPs(@Valid RelsVO relsVO, Errors errors, Model model) {
 
+		System.out.println("save Controller == " + relsVO);
 		relsValidator.validate(relsVO, errors);
 
 		if(errors.hasErrors()) {
@@ -217,11 +211,18 @@ public class RelsController {
 			return "rels/popup/relsPop";
 		}
 
-
-		relsService.save(relsVO);
+		System.out.println("relsVO ===== ");
+		System.out.println(relsVO);
+		System.out.println("relsVO ===== ");
+		if(relsVO.getUpdateYn().equals("Y")){
+			System.out.println("update =====");
+			relsService.update(relsVO);
+		}else {
+			relsService.save(relsVO);
+		}
 
 		closeLayer(response);
-		return "/rels/rels";
+		return "close";
 	}
 
 	@GetMapping("/deleteRels")
@@ -245,7 +246,80 @@ public class RelsController {
 				relsDAO.relsSdelete(deleteKey[i]);
 		}
 
-		return "/rels/rels";
+		return "redirect:/rels";
+	}
+
+	/** 출고 할당 */
+	@GetMapping("/relsAllotment")
+	public String relsAllotment(String keyVal, Model model) {
+
+		RelsVO relsVO = new RelsVO();
+
+		String[] confKey = keyVal.split(",");
+
+		// confKey 값으로 출고확정 진행
+		for(int i = 0; i < confKey.length; i++) {
+
+			// detail itemCd, clntCd data 조회
+			List<RelsVO> detailInfo = relsDAO.relsDetailList(confKey[i]);
+
+			// detail size만큼 itemCd, clntCd 데이터로 재고테이블 조회
+			for(int j = 0; j < detailInfo.size(); j++){
+				String itemCd = detailInfo.get(j).getItemCd();  // 상품코드
+				String clntCd = detailInfo.get(j).getClntCd();  // 고객사 코드
+
+				LocalDate relsDt = detailInfo.get(j).getRelsDt();   // 출고일자
+				Long relsNo = detailInfo.get(j).getRelsNo();        // 출고번호
+				Long relsDNo = detailInfo.get(j).getRelsDNo();      // 출고순번
+
+				Long regInAmt = detailInfo.get(j).getRegInAmt();    // 출고지시수량
+
+
+				TmstkVO tmstkVO = stockDAO.stockChk(itemCd, clntCd);
+
+				// 재고 확인
+				if(tmstkVO != null){
+
+					relsVO.setRelsDt(relsDt);
+					relsVO.setRelsNo(relsNo);
+					relsVO.setRelsDNo(relsDNo);
+					relsVO.setItemCd(itemCd);
+					relsVO.setClntCd(clntCd);
+					relsVO.setWactrCd(tmstkVO.getWactr_cd());
+					relsVO.setLocCd(tmstkVO.getLoc_cd());
+
+					do{
+						// 출고지시수량이 재고수량보다 작거나 같을경우
+						if(tmstkVO.getStock_amt() != 0 && regInAmt <= tmstkVO.getStock_amt()){
+							relsVO.setAlloAmt(regInAmt);
+							relsVO.setAlloAfterStock(tmstkVO.getStock_amt() - regInAmt);
+							if((regInAmt - tmstkVO.getStock_amt()) <= 0){
+								regInAmt = 0L;
+							}
+						}else if(tmstkVO.getStock_amt() != 0 && regInAmt > tmstkVO.getStock_amt()){
+							//  출고지시수량이 재고수량보다 클경우
+							relsVO.setAlloAmt(tmstkVO.getStock_amt());
+							relsVO.setAlloAfterStock(0L);
+
+							regInAmt -= tmstkVO.getStock_amt();
+						}
+
+						// 재고가 있는 로케이션으로 셋팅
+						TmstkVO nextLoc = stockDAO.stockChk(itemCd, clntCd);
+						String locCd = nextLoc.getLoc_cd();
+
+						relsVO.setLocCd(locCd);
+
+
+						System.out.println(regInAmt);
+						relsVO.setRegNm("SESSION");
+						relsDAO.relsSinsert(relsVO);
+					} while (regInAmt != 0L); // do while
+				} // if 재고확인
+			} // for
+			relsDAO.alloConf(confKey[i]);
+		} // for
+		return "rels/rels";
 	}
 
 	private void commonProcess(Model model) {
