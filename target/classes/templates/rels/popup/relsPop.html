@@ -17,8 +17,11 @@
         <!--th:block th:unless="*{updYn} == 'Y'"-->
         <form method="post" th:action="@{/rels/relsSave}" th:object="${relsVO}" autocomplete="off">
             <div>
+                <input th:type="hidden" th:field="*{updateYn}"/>
+            </div>
+            <div>
                 <th:block th:text="#{relsDt}"></th:block>
-                <input type="date" th:field=*{relsDt} th:value="${#temporals.format(relsVO.relsDt, 'yyyy-MM-dd')}" th:placeholder="#{relsDt}" >
+                <input type="date" th:field="*{relsDt}" th:placeholder="#{relsDt}" >
                 <div class="errors" th:each="err : ${#fields.errors('relsDt')}" th:text="${err}"></div>
             </div>
             <div>
@@ -171,15 +174,7 @@
             </div>
             <div>
                 <th:block th:text="#{deliRequestDt}"></th:block>
-                <input type="date" th:field="*{deliRequestDt}" th:value="${#temporals.format(deliRequestDt, 'yyyy-MM-dd')}" th:placeholder="#{deliRequestDt}" >
-            </div>
-            <div>
-                <th:block th:text="#{plt}"></th:block>
-                <input type="number" th:field="*{plt}" th:placeholder="#{plt}" >
-            </div>
-            <div>
-                <th:block th:text="#{box}"></th:block>
-                <input type="number" th:field="*{box}" th:placeholder="#{box}">
+                <input type="date" th:field="*{deliRequestDt}" th:placeholder="#{deliRequestDt}" >
             </div>
             <div>
                 <th:block th:text="#{remk}"></th:block>

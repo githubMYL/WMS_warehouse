@@ -1,6 +1,7 @@
 package org.warehouse.configs.models.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.warehouse.models.stdin.StdinVO;
 import org.warehouse.models.stock.StkadjForm;
 import org.warehouse.models.stock.StkadjVO;
@@ -79,4 +80,8 @@ public interface StockDAO {
 	List<StktransfVO> getStktransfList();
 	List<StktransfVO> searchTransf(LocalDate search_moveDt, String search_itemCd, String search_itemNm);
 	/* stktransf E */
+
+	/** 출고 할당관련 S */
+	TmstkVO stockChk(@Param("item_cd")String itemCd, @Param("clnt_cd") String clntCd);
+	/** 출고 할당관련 E */
 }

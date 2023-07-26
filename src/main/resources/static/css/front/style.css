@@ -53,7 +53,7 @@ aside li > a.on:after { content: ''; display: block; position: absolute; width: 
 /** 기본 버튼 스타일 */
 .sbtn { display: inline-block; border: 1px solid #596b99; color: #596b99; min-width: 90px; padding: 0 20px; height: 28px; line-height: 26px; text-align: center; border-radius: 5px; }
 .sbtn.blue { color: #fff; background:#596b99; }
-
+.sbtn.red { color: #fff; background:#FF7E7E; }
 
 
 /** 공통 서브 메뉴 */
