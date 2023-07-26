@@ -4,73 +4,29 @@
 	  layout:decorate="~{layouts/front/main}">
 
 	<section layout:fragment="content">
-		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<form name="frmSearch" autocomplete="off" class="frmSearch">
 			<table class="table-cols">
 				<tr>
 					<th>물류센터 명</th>
 					<td>
-						<input type="text" name="wactrNm" placeholder="물류센터 명">
+						<input type="text" name="search_wactrNm" placeholder="  물류센터 명">
 					</td>
 
 					<th>규모</th>
 					<td>
-						<input type="text" name="wactrScale" placeholder="규모">
+						<input type="text" name="search_scale" placeholder="  규모">
 					</td>
 				</tr>
 			</table>
 			<div class="btns" style="text-align:right;">
-				<button type="button" id="ajax_btn" class="sbtn">검색</button>
+				<button class="sbtn">검색</button>
 				<button type="button" id="add" class="sbtn">추가</button>
 				<button type="button" id="delete" class="sbtn red">삭제</button>
 			</div>
 
 		</form>
 
-		<script>
-			var btn = document.getElementById("ajax_btn");
 
-			btn.addEventListener("click", () => {
-				var trEl = document.getElementsByName("wactrNm");
-				var trEl2 = document.getElementsByName("wactrScale");
-
-				var wactrNm = trEl[0].value;
-				var wactrScale = trEl2[0].value;
-
-				const params = { wactrNm, wactrScale };
-
-				const url = `wactr/getSearch?wactrNm=${wactrNm}&wactrScale=${wactrScale}`;
-				commonLib.ajaxLoad(url)
-				.then((data) => {
-					var search = document.getElementById("search");
-					search.innerHTML='';
-					console.log(data);
-
-					data = JSON.parse(data);
-					var str = '';
-					for(var i = 0; i < data.length; i++) {
-						str += '<tr>'
-						str += "<td><input type='checkbox' name='check' value=" +data[i].wactrCd+ "></td>";
-						str += "<td>"+(i+1)+"</td>";
-						str += "<td>"+data[i].wactrNm+"</td>";
-						str += "<td>"+data[i].addr+"</td>";
-						str += "<td>"+data[i].tel+"</td>";
-						str += "<td>"+data[i].size+"</td>";
-						str += "<td>"+data[i].scale+"</td>";
-						str += "<td>"+data[i].reech+"</td>";
-						str += "<td>"+data[i].jackee+"</td>";
-						str += "<td>"+data[i].diesel+"</td>";
-						str += "<td>"+data[i].racNum+"</td>";
-						str += "<td>"+data[i].numInPer+"</td>";
-						str += "<td>"+data[i].remark+"</td>";
-						str += '</tr>'
-					}
-					search.innerHTML=str;
-				})
-				.catch((err) => {
-					console.error(err);
-				});
-			});
-		</script>
 
 		<div class="table_wrapper">
 			<table id="wactr_table">
