@@ -45,7 +45,7 @@ public class StockController {
 
 	/* tmstk S */
 	@GetMapping("/tmstk")
-	public String tmstkList(Model model , String search_clntNm ,String search_itemCd,String search_itemNm){
+	public String tmstkList(Model model, @Param("search_clntNm") String search_clntNm, @Param("search_itemCd") String search_itemCd, @Param("search_itemNm") String search_itemNm){
 
 		commonProcess(model);
 		if (search_clntNm != null || search_itemCd!= null || search_itemNm!=null) {
@@ -68,7 +68,7 @@ public class StockController {
 						 @RequestParam(name = "search_tmstk_wactrNm", required = false) String search_tmstk_wactrNm,
 						 @RequestParam(name = "search_tmstk_clntNm", required = false) String search_tmstk_clntNm,
 						 @RequestParam(name = "search_tmstk_locCd", required = false) String search_tmstk_locCd,
-						 @RequestParam(name = "search_tmstk_itemNm", required = false) String search_tmstk_itemNm){
+						 @RequestParam(name = "search_tmstk_itemNm", required = false) String search_tmstk_itemNm) {
 
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::재고조정");
@@ -134,18 +134,20 @@ public class StockController {
 	@PostMapping("/stkadjMod")
 	public String stkadjMod(StkadjForm vo) {
 
-
-		// 조정후 수량 체크
-		Long after_adj_stock = vo.getModNomalAmt() - vo.getModFaultAmt() - vo.getAllo_amt();
+		// 조정 전 전체 수량 체크
+		System.out.println( vo.getBefore_adj_stock());
+		// 조정후 전체 재고 수량 체크
+		Long after_adj_stock = vo.getModNomalAmt() + vo.getModFaultAmt() + vo.getAllo_amt();
 		// tmstk 전체재고 update 수량 체크
-		Long modTmstkStockAmt = vo.getModNomalAmt() - vo.getStock_amt();
+		Long modTmstkStockAmt = vo.getModNomalAmt()-vo.getOrigin_nomalStock();
 		// tmstk 불량재고 update 수량
 		Long modTmstkFaultAmt = vo.getModFaultAmt() - vo.getFault_amt();
 
 
-		System.out.println("조정전 가용수량: " + vo.getBefore_adj_stock()
-				+ " 조정 후 가용수량 : " + after_adj_stock
-				+ " 전체재고 차이 : " + modTmstkStockAmt
+
+		System.out.println("조정전 재고: " + vo.getBefore_adj_stock()
+				+ " 조정 후 재고 : " + after_adj_stock
+				+ " 정상재고 차이 : " + modTmstkStockAmt
 				+ " 불량재고 차이 : " + modTmstkFaultAmt);
 
 
@@ -161,7 +163,7 @@ public class StockController {
 
 		closeLayer(response);
 
-		return "redirect:/stock/stkadj";
+		return "close";
 	}
 	/* stkadj E */
 
@@ -201,6 +203,7 @@ public class StockController {
 		return "stock/stkadj_list";
 	}
 	/* stkadj E */
+
 
 
 	/* stktransf S */

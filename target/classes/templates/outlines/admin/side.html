@@ -87,7 +87,7 @@
 			</a>
 		</li>
 		<li>
-			<a th:classappend="${menuCode} == 'dlycnp' ? 'on'">
+			<a th:href="@{/stock/dlycnp}" th:classappend="${menuCode} == 'dlycnp' ? 'on'">
 				<i class="xi-view-list"></i>
 				일수불
 			</a>
@@ -123,7 +123,7 @@
 		<li>
 			<a th:href="@{/admin/carManage}" th:classappend="${menuCode} == 'carManage' ? 'on'">
 				<i class="xi-view-list"></i>
-				차량 관리
+				차량정보 관리
 			</a>
 		</li>
 	</ul>

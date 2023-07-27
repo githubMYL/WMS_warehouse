@@ -5,17 +5,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.warehouse.commons.MenuDetail;
 import org.warehouse.commons.Menus;
 import org.warehouse.configs.models.mapper.WactrDAO;
+import org.warehouse.models.admin.car.CarVO;
 import org.warehouse.models.baseinfo.wactr.WactrForm;
 import org.warehouse.models.baseinfo.wactr.WactrRegisterService;
 import org.warehouse.models.baseinfo.wactr.WactrVO;
@@ -36,12 +35,17 @@ public class WactrController {
 	private final HttpServletResponse response;
 
 	@GetMapping
-	public String wactr(Model model) {
+	public String wactr(@Param("search_wactrNm")String search_wactrNm, @Param("search_scale") String search_scale, Model model) {
 		commonProcess(model);
 
-		List<WactrVO> list = wactrDAO.getList();
+		if(search_wactrNm != null || search_scale != null ) {
+			List<WactrVO> list = wactrDAO.getListByNmScale(search_wactrNm, search_scale);
+			model.addAttribute("list", list);
 
-		model.addAttribute("list", list);
+		} else {
+			List<WactrVO> list = wactrDAO.getList();
+			model.addAttribute("list", list);
+		}
 
 		return "baseinfo/wactr";
 	}

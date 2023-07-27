@@ -8,29 +8,16 @@
         <!--날짜조회 S-->
 
     function search(){
-
                 var mod_dt_start = document.getElementById('mod_dt_start').value;
                 var mod_dt_end = document.getElementById('mod_dt_end').value;
-                var search_tmstk_wactrNm = document.getElementById("search_tmstk_wactrNm").value.trim();
-                var search_tmstk_clntmNm = document.getElementById("search_tmstk_clntmNm").value.trim();
-                var search_tmstk_locCd = document.getElementById("search_tmstk_locCd").value.trim();
-                var search_tmstk_itemNm = document.getElementById("search_tmstk_itemNm").value.trim();
-
-                if(mod_dt_start =="" || mod_dt_end==""){
-                    alert("조회하실 날짜를 선택해주세요");
-                    return;
-                }
 
                 if(mod_dt_start > mod_dt_end){
                     alert("조회종료일은 시작일보다 커야합니다");
                     return;
                 }
 
-                var searchBar = document.getElementById('searchBar');
-
          form.method="get"
          form.action="/stock/stkadjList"
-         form.submit();
 
         }
 
@@ -80,7 +67,7 @@
 					</tr>
 				</table>
 				<div class="btns" style="text-align:right;">
-					<button type="submit" onclick="search()" class="sbtn">검색</button>
+					<button type="submit" th:onclick="search()" class="sbtn">검색</button>
 				</div>
 			</form>
 
@@ -101,7 +88,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr th:each="list : ${stkadjList}" th:object="${list}">
+					<tr th:each="list : ${stkadjList}" th:object="${list}" class="list_hover">
 						<td th:text="*{no}"></td>
 						<td th:text="*{adj_dt}"></td>
 						<td th:text="*{wactr_nm}"></td>
@@ -118,7 +105,6 @@
 				</table>
 			</div>
 		</div>
-
+	</div>
 </section>
-
 </html>

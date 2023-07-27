@@ -86,8 +86,6 @@ public class LocController {
 			List<WactrVO> waclist = wactrDAO.getList();
 			model.addAttribute("wactr_list", waclist);
 
-			System.out.println(loc.toString());
-
 			return "baseinfo/popup/locForm";
 
 		}
@@ -99,12 +97,12 @@ public class LocController {
 		loc.setLoc_cd(loc_cd);
 		loc.setReg_nm(userInfo.getUserNm());
 
-
+		System.out.println(loc.toString());
 
 		locDAO.insertLoc(loc);
 
 		closeLayer(response);
-		return "redirect:/baseinfo/loc";
+		return "close";
 	}
 
 	// 체크한 loc삭제 x

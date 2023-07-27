@@ -9,18 +9,18 @@
 			<tr>
 				<th>입고일자</th>
 				<td>
-					<input type="date" name="stdinDt" placeholder="입고일자">
+					<input type="date" name="stdinDt" placeholder="  입고일자">
 				</td>
 
 				<th>고객사 명</th>
 				<td>
-					<input type="text" name="clntNm" placeholder="고객사 명">
+					<input type="text" name="clntNm" placeholder="  고객사 명">
 				</td>
 
 
 				<th>진행상태</th>
 				<td>
-					<select name="status">
+					<select name="status" style="width:100px;">
 						<option th:value="01">01 - 등록</option>
 						<option th:value="02">02 - 확정</option>
 					</select>
@@ -30,7 +30,7 @@
 		<div class="btns" style="text-align:right;">
 			<button type="button" id="ajax_btn" class="sbtn">검색</button>
 			<button type="button" id="add" class="sbtn">추가</button>
-			<button type="button" id="delete" class="sbtn blue">삭제</button>
+			<button type="button" id="delete" class="sbtn red">삭제</button>
 		</div>
 	</form>
 
@@ -180,15 +180,19 @@
 				commonLib.ajaxLoad(url)
 					.then((data) => {
 						data = JSON.parse(data);
-						str += '<td data-status= '+ data.status + ' data-stdinnum='+data.stdinNum+'>' + 1 + '</td>';
-						str += '<td>' + data.itemCd + '</td>';
-						str += '<td>' + data.itemNm + '</td>';
-						str += '<td>' + data.locCd + '</td>';
-						str += '<td>' + data.beforeStdin + '</td>';
-						str += '<td>' + data.normal + '</td>';
-						str += '<td>' + data.fault + '</td>';
-						str += '<td>' + data.remark + '</td>';
-						str += '</tr>';
+						console.log(data);
+						for(var i = 0; i < data.length; i++){
+							str += '<td data-status= '+ data[i].status + ' data-stdinnum='+data[i].stdinNum+' id="stdinNo" data-stdinno='+data[i].stdinNo+'>' + (i+1) + '</td>';
+							str += '<td>' + data[i].itemCd + '</td>';
+							str += '<td>' + data[i].itemNm + '</td>';
+							str += '<td>' + data[i].locCd + '</td>';
+							str += '<td>' + data[i].beforeStdin + '</td>';
+							str += '<td>' + data[i].normal + '</td>';
+							str += '<td>' + data[i].fault + '</td>';
+							str += '<td>' + data[i].remark + '</td>';
+							str += '</tr>';
+						}
+
 						stdin_d_table.innerHTML = str;
 					})
 					.catch((err) => {
@@ -196,14 +200,16 @@
 					});
 			}
 
-			function updateTable() {
-				const td = document.querySelector('#stdin_d_infos td')
+			function updateTable(e) {
+				const td = e.target.parentNode.querySelector('td');
+				console.log(td);
+				const stdinno = td.dataset.stdinno;
 				const stdinnum = td.dataset.stdinnum;
 				const status = td.dataset.status;
-				console.log(status);
+				console.log(stdinno);
 
 				if(status == '1') {
-					url = 'stdin/update/' + stdinnum;
+					url = 'stdin/update/' + stdinnum + '/' + stdinno;
 					warehouse.popup.open(url, "테스트", 500, 800, true);
 				}
 
@@ -276,7 +282,7 @@
 					<td>
 						<input type="checkbox" name="check" th:value="${stdin.stdinNum}" id="chk" th:data-stdinnum="${stdin.stdinNum}">
 					</td>
-					<td th:text="${wactrCount.count}"></td>
+					<td th:text="${wactrCount.count}" id="stdinNo"></td>
 					<td th:text="${stdin.stdinDt}"></td>
 					<td th:text="${stdin.clntCd}"></td>
 					<td th:text="${stdin.clntNm}"></td>
@@ -287,7 +293,7 @@
 		</table>
 
 		<h1>입고 상세</h1>
-		<table id="stdin_d_table" ondblclick="updateTable()">
+		<table id="stdin_d_table" ondblclick="updateTable(event)">
 			<tr>
 				<th>순번</th>
 				<th>상품코드</th>

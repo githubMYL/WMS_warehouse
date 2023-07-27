@@ -71,11 +71,6 @@ public class ItemInfoController{
 		model.addAttribute("clntList", clntList);
 		/** 고객사 코드 E */
 
-		/** 로케이션 코드 S */
-		List<LocVO> locList = locDAO.getLocList();
-		model.addAttribute("locList", locList);
-		/** 로케이션 코드 E */
-
 		/** 관리단위 S */
 		List<ItemInfoVO> codeList = itemInfoDAO.getCodeList();
 		model.addAttribute("codeList", codeList);
@@ -109,11 +104,6 @@ public class ItemInfoController{
 		model.addAttribute("clntList", clntList);
 		/** 고객사 코드 E */
 
-		/** 로케이션 코드 S */
-		List<LocVO> locList = locDAO.getLocList();
-		model.addAttribute("locList", locList);
-		/** 로케이션 코드 E */
-
 		/** 관리단위 S */
 		List<ItemInfoVO> codeList = itemInfoDAO.getCodeList();
 		model.addAttribute("codeList", codeList);
@@ -144,11 +134,6 @@ public class ItemInfoController{
 			List<ClntVO> clntList = clntDAO.getClntList();
 			model.addAttribute("clntList", clntList);
 			/** 고객사 코드 E */
-
-			/** 로케이션 코드 S */
-			List<LocVO> locList = locDAO.getLocList();
-			model.addAttribute("locList", locList);
-			/** 로케이션 코드 E */
 
 			/** 관리단위 S */
 			List<ItemInfoVO> codeList = itemInfoDAO.getCodeList();
@@ -183,8 +168,8 @@ public class ItemInfoController{
 
 		// DEL_YN = 'Y' UPDATE
 		for(int i = 0; i < chkData.length; i++){
-
 			itemInfoDAO.deleteItem(chkData[i]);
+			System.out.println("체크데이터 : " + chkData[i]);
 		}
 		return "redirect:/baseinfo/iteminfo";
 	}

@@ -28,12 +28,13 @@
 
 	<insert id="insertHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
-		INSERT INTO STDIN_H H(H.STDIN_DT, H.STDIN_NUM, H.CLNT_CD, H.STATUS, H.REMK, H.REG_DT, H.REG_NM) VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd}, #{status}, #{remark}, SYSDATE, #{regNm})
+		INSERT INTO STDIN_H H(H.STDIN_DT, H.STDIN_NUM, H.CLNT_CD, H.STATUS, H.REMK, H.REG_DT, H.REG_NM)
+		VALUES (#{stdinDt}, NUM_SEQ.NEXTVAL, #{clntCd}, #{status}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
 	<insert id="insertDetailStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		INSERT INTO STDIN_D D(D.STDIN_NO, D.STDIN_DT, D.STDIN_NUM, D.ITEM_CD, D.CLNT_CD, D.LOC_CD, D.WACTR_CD, D.BEFORE_STDIN, D.NORMAL, D.FAULT, D.REMK, D.REG_DT, D.REG_NM)
-		VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt}), #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{normal}, #{fault}, #{remark}, SYSDATE, #{regNm})
+		VALUES ((SELECT COUNT(*) FROM STDIN_D DD WHERE DD.STDIN_DT = #{stdinDt})+1, #{stdinDt}, NUM_SEQ.CURRVAL, #{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{normal}, #{fault}, #{remark}, SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateHeaderStdin" parameterType="org.warehouse.models.stdin.StdinVO">
@@ -73,11 +74,11 @@
 			<choose>
 				<when test="delyn == true">
 					D.DEL_YN = 'Y'
-					WHERE D.STDIN_NUM = #{stdinNum}
+					WHERE D.STDIN_NUM = #{stdinNum} AND D.STDIN_NO = #{stdinNo}
 				</when>
 				<when test="delyn == false">
 					D.DEL_YN = 'N'
-					WHERE D.STDIN_NUM = #{stdinNum}
+					WHERE D.STDIN_NUM = #{stdinNum} AND D.STDIN_NO = #{stdinNo}
 				</when>
 			</choose>
 	</update>
@@ -85,7 +86,11 @@
 
 
 	<select id="getList" resultMap="stdinMap">
-		SELECT H.STDIN_NUM, H.STDIN_DT, C.CLNT_CD, C.CLNT_NM, H.STATUS FROM STDIN_H H LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD WHERE H.DEL_YN = 'N' ORDER BY STDIN_DT
+		SELECT H.STDIN_NUM, H.STDIN_DT, C.CLNT_CD, C.CLNT_NM, H.STATUS
+		FROM STDIN_H H
+			LEFT OUTER JOIN CLNT C ON H.CLNT_CD = C.CLNT_CD
+
+		WHERE H.DEL_YN = 'N' ORDER BY STDIN_DT
 	</select>
 
 	<select id="getDetailList" resultMap="stdinMap">
@@ -126,6 +131,15 @@
 			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
 			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
 		WHERE D.STDIN_NUM = #{stdinNum}
+		ORDER BY D.STDIN_NO ASC
+	</select>
+
+	<select id="getDetailByNumNo" resultMap="stdinMap">
+		SELECT * FROM STDIN_D D
+			LEFT OUTER JOIN ITEM I ON I.ITEM_CD = D.ITEM_CD
+			LEFT OUTER JOIN CLNT C ON C.CLNT_CD = I.CLNT_CD
+			LEFT OUTER JOIN STDIN_H H ON H.STDIN_NUM = D.STDIN_NUM
+		WHERE D.STDIN_NUM = #{stdinNum} AND D.STDIN_NO = #{stdinNo}
 	</select>
 
 	<select id="getListByConditions" resultMap="stdinMap">

@@ -4,30 +4,27 @@
 	  layout:decorate="~{layouts/front/main}">
 
 	<section layout:fragment="content">
-		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<form name="frmSearch" autocomplete="off" class="frmSearch">
 			<table class="table-cols">
 				<tr>
 					<th>물류센터 명</th>
 					<td>
-						<input type="text" name="wactrNm" placeholder="물류센터 명">
+						<input type="text" name="search_wactrNm" placeholder="  물류센터 명">
 					</td>
 
 					<th>규모</th>
 					<td>
-						<input type="text" name="wactrScale" placeholder="규모">
+						<input type="text" name="search_scale" placeholder="  규모">
 					</td>
 				</tr>
 			</table>
 			<div class="btns" style="text-align:right;">
-				<button type="button" id="ajax_btn" class="sbtn">검색</button>
+				<button class="sbtn">검색</button>
 				<button type="button" id="add" class="sbtn">추가</button>
-				<button type="button" id="delete" class="sbtn blue">삭제</button>
+				<button type="button" id="delete" class="sbtn red">삭제</button>
 			</div>
 		</form>
-
 		<script>
-			var btn = document.getElementById("ajax_btn");
-
 			btn.addEventListener("click", () => {
 				var trEl = document.getElementsByName("wactrNm");
 				var trEl2 = document.getElementsByName("wactrScale");

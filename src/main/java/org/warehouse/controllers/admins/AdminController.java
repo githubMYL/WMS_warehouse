@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.*;
 import org.warehouse.controllers.users.UserInfo;
+import org.warehouse.models.admin.car.CarForm;
+import org.warehouse.models.admin.car.CarService;
+import org.warehouse.models.admin.car.CarVO;
 import org.warehouse.models.admin.clnt.ClntForm;
 import org.warehouse.models.admin.clnt.ClntService;
 import org.warehouse.models.admin.clnt.ClntVO;
@@ -41,11 +45,13 @@ public class AdminController {
 	private final ClntValidator clntValidator;
 	private final CustService custService;
 	private final CustCtrService custCtrService;
+	private final CarService carService;
 
 	private final UserDAO userDAO;
 	private final ClntDAO clntDAO;
 	private final CustDAO custDAO;
 	private final CustCtrDAO custCtrDAO;
+	private final CarDAO carDAO;
 
 	private final HttpServletResponse response;
 
@@ -263,9 +269,54 @@ public class AdminController {
 
 	/** carManage S */
 	@GetMapping("/carManage")
-	public String carManage(Model model) {
-		return null;
+	public String carManage(@Param("search_carNum")String search_carNum, @Param("search_driverNm") String search_driverNm, Model model) {
+		commonProcess(model, "carManage", "차량관리");
+
+		if(search_carNum != null || search_driverNm != null ) {
+			List<CarVO> searchList = carDAO.getCarSearch(search_carNum, search_driverNm);
+			model.addAttribute("carList", searchList);
+
+		} else {
+			List<CarVO> carList = carDAO.getCarList();
+			model.addAttribute("carList", carList);
+		}
+
+		return "admin/car/carManage";
 	}
+
+	@GetMapping("/carManage/register")
+	public String carRegister(Model model) {
+		CarForm carForm = new CarForm();
+
+		model.addAttribute("carForm", carForm);
+
+		return "admin/car/carRegister";
+	}
+
+	@GetMapping("/carManage/update/{carCd}")
+	public String carUpdate(@PathVariable String carCd, Model model) {
+		CarVO carVO = carDAO.getCar(carCd);
+		CarForm carForm = new ModelMapper().map(carVO, CarForm.class);
+
+		model.addAttribute("carForm", carForm);
+		return "admin/car/carUpdate";
+	}
+
+
+	@PostMapping("/carManage/save")
+	public String carSave(@Valid CarForm carForm, Errors errors) {
+		if(errors.hasErrors()) {
+			return "admin/car/carRegister";
+		}
+
+		carService.register(carForm);
+
+		closeLayer(response);
+
+		return "close";
+	}
+
+
 	/** carManage E */
 
 	/** commonMethod S */

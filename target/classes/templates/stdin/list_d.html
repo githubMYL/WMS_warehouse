@@ -2,30 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/front/main}">
-
+<style>
+	.table-cols td {
+		padding-right: 45px;
+	}
+</style>
 <section layout:fragment="content">
 	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
 		<table class="table-cols">
 			<tr>
-				<th>입고일자</th>
-				<td>
-					<input type="date" name="stdinDt" placeholder="입고일자">
+				<th style="width:70px;">입고일자</th>
+				<td style="padding-right: 30px;" >
+					<input type="date" name="stdinDt" placeholder="  입고일자">
 				</td>
 
-				<th>고객사 명</th>
-				<td>
-					<input type="text" name="clntNm" placeholder="고객사 명">
+				<th style="width:70px;">고객사 명</th>
+				<td style="padding-right: 30px;" >
+					<input type="text" name="clntNm" placeholder="  고객사 명">
 				</td>
 
 
-				<th>상품코드</th>
-				<td>
-					<input type="text" name="itemCd" placeholder="상품코드">
+				<th style="width:70px;">상품코드</th>
+				<td style="padding-right: 30px;" >
+					<input type="text" name="itemCd" placeholder="  상품코드">
 				</td>
 
-				<th>상품명</th>
+				<th style="width:70px;">상품명</th>
 				<td style="padding-right: 0;" >
-					<input type="text" name="itemNm" placeholder="상품명">
+					<input type="text" name="itemNm" placeholder="  상품명">
 				</td>
 			</tr>
 		</table>

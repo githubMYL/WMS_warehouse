@@ -29,4 +29,6 @@ public class StdinForm extends BaseEntity {
 
 	private String flag;	// register, update 구분용
 	private String stdinNum;
+	private String itemData;
+	private Long stdinNo;
 }

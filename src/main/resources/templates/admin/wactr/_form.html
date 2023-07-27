@@ -98,7 +98,7 @@
 
 		<div>
 			<dt th:text="#{remk}" class="require_item"></dt>
-			<textarea name="remk" th:field="*{remk}" th:placeholder="#{remk}"></textarea>
+			<textarea textarea rows="5" cols="52" style="border:1px solid #d5d5d5; width:100%;" name="remk" th:field="*{remk}" th:placeholder="#{remk}"></textarea>
 			<div class="errors" th:each="err : ${#fields.errors('remk')}" th:text="${err}"></div>
 		</div>
 	</th:block>

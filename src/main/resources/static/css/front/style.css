@@ -34,7 +34,7 @@ select { border: 1px solid #d5d5d5; width: 100%; height: 45px; padding: 0 10px; 
 
 
 /** 기본 레이아웃 스타일 */
-header { height: 80px; background: #fff; display: flex; align-items: center; }
+header { height: 80px; display: flex; align-items: center; }
 header > .left { width: 208px; text-align: center; }
 header > .mid {flex-grow : 5;text-align:center;}
 header > .right { flex-grow: 1; text-align: right; padding: 10px; }
@@ -43,18 +43,23 @@ main { min-width: 1100px; min-height: 800px; display: flex; margin-top:80px; jus
 main > aside { min-width: 200px; height: 400px; margin-top:50px;}
 main > section { flex-grow:1; margin: 50px; max-width:900px}
 
-aside li > a { display: block; height: 71px; line-height: 71px; color: #596b99; font-size: 18px; text-align: center; position: relative; }
+aside li > a { box-shadow: 2px 2px 5px 2px #b1c4ea; display: block; height: 71px; line-height: 71px; color: #596b99; font-size: 18px; text-align: center; position: relative; }
 aside li > a * { color: #596b99; font-size: 18px; }
 aside li > a:hover,
-aside li > a.on { font-weight: bold; border-right:6px solid #7c7eff; background-color:#819ad9ba; color:white; }
+aside li > a.on { box-shadow: inset 2px 2px 5px 2px #b1c4ea; font-weight: bold; border-right:6px solid #7c7eff; background-color:#819ad9ba; color:white; }
 aside li > a:hover:after,
 aside li > a.on:after { content: ''; display: block; position: absolute; width: 8px; height: 100%; right: 0; top: 0; }
 
 /** 기본 버튼 스타일 */
-.sbtn { display: inline-block; border: 1px solid #596b99; color: #596b99; min-width: 90px; padding: 0 20px; height: 28px; line-height: 26px; text-align: center; border-radius: 5px; }
+.sbtn { display: inline-block; border: 1px solid #596b99; color: #596b99; min-width: 90px; padding: 0 20px; height: 28px; line-height: 26px; text-align: center; border-radius: 5px; transition: 0.15s; cursor:pointer;}
 .sbtn.blue { color: #fff; background:#596b99; }
-.sbtn.red { color: #fff; background:#FF7E7E; }
 
+.sbtn.red { color: #fff; background:#FF7E7E; border: 1px solid #FF7E7E;}
+
+.sbtn:hover:not(.blue, .red) {
+	 background-color: #596b99;
+     color: #fff;
+}
 
 /** 공통 서브 메뉴 */
 nav.submenus { background: #fff; box-shadow: 1px 1px 5px #cdced5; display: flex; height: 60px; }

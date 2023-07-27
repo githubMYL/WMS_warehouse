@@ -2,8 +2,11 @@ package org.warehouse.models.stock;
 
 import lombok.Data;
 
+
+
 @Data
 public class StkadjForm {
+
 	private String adj_dt;    // 조정일자
 	private Long no;    // 순번
 	private String clnt_cd;  // 고객사코드
@@ -28,8 +31,9 @@ public class StkadjForm {
 
 
 	// 정보 업데이트 위해 추가 변수
-	private int modNomalAmt;
-	private int modFaultAmt;
+	private Long modNomalAmt;
+	private Long modFaultAmt;
+	private Long origin_nomalStock;
 
 	private Long modTmstkStockAmt;
 	private Long modTmstkFaultAmt;
@@ -49,4 +53,6 @@ public class StkadjForm {
 	private String wactr_nm;
 	private String clnt_nm;
 	private String item_nm;
+
+
 }

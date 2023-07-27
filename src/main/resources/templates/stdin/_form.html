@@ -5,7 +5,88 @@
 
 	<th:block th:fragment="stdinForm" th:object="${stdinForm}" >
 		<script th:src="@{/js/front/stdin.js}"></script>
+		<script>
+		function delrow(e) {
+			let rowIndex = e.parentNode.parentNode.rowIndex;
+			let table = document.getElementById('addItemTable');
+
+
+			table.deleteRow(rowIndex);
+
+			updateItemData(table);
+		};
+	</script>
+		<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const addItemForm = document.getElementById('addItemForm');
+
+			addItemForm.addEventListener("click", function() {
+					let itemInfo = [];
+					itemInfo[0] = document.getElementById('item_cd');
+					const itemCd = itemInfo[0].value;
+					itemInfo[1] = document.getElementById('item_tmp');
+					itemInfo[2] = document.getElementById('loc_tmp');
+					itemInfo[3] = document.getElementById('amount');
+					itemInfo[4] = document.getElementById('normal');
+					itemInfo[5] = document.getElementById('fault');
+
+					for(var i in itemInfo) {
+						console.log(itemInfo[i]);
+						if(itemInfo[i].value == '') {
+							alert('상품 정보를 올바르게 기입해주세요.');
+							return;
+						}
+					}
+
+
+
+
+					if(document.getElementById('addItemTable') == null) {
+						const addForm = document.getElementById('addForm');
+						addForm.innerHTML = "<table id='addItemTable'><tr style='color:#fff !important;'><th>상품코드</th><th>상품명</th><th>로케이션</th><th>A</th><th>N</th><th>F</th><th style='width : 20px;'></th></tr><tr></tr></table>";
+					};
+
+					const table = document.getElementById('addItemTable');
+					const itemData = document.getElementById('itemData');
+
+					const newRow = table.insertRow();
+					for(var i in itemInfo) {
+						newRow.insertCell(i).innerText = itemInfo[i].value;
+						itemInfo[i].value = null;
+					}
+					updateItemData(table);
+
+					newRow.insertCell().innerHTML = "<button type='button' id='delBtnId' onclick='delrow(this)' class='xi-close' style='background-color: transparent !important; background-image: none !important; border-color: transparent; border: none; color:red;'></button>";
+					document.getElementById('delBtnId').dataset.delcd = itemCd;
+			});
+		});
+	</script>
+
+		<script>
+		function updateItemData() {
+			var itemData = document.getElementById('itemData');
+			const table = document.getElementById('addItemTable');
+			var rowList = table.rows;
+
+			console.log('rowListNum : ' + rowList.length);
+
+			var str = '';
+			itemData.value = null;
+			for (var i = 2; i < rowList.length; i++) {
+				for (var j = 0; j < 6; j++){
+					itemData.value += rowList[i].cells[j].innerHTML + ',';
+				}
+				itemData.value += '/';
+			}
+			console.log(itemData);
+		};
+	</script>
 		<input type="hidden" th:field="*{stdinNum}">
+		<input type="hidden" th:field="*{itemData}" id="itemData">
+
+
+
+
 		<div>
 			<dt th:text="#{stdin_dt}" class="require_item"></dt>
 			<input type="date" name="stdinDt" th:value="${#temporals.format(stdinForm.stdinDt, 'yyyy-MM-dd')}" th:placeholder="#{stdin_dt}">
@@ -80,9 +161,19 @@
 			<div class="errors" th:each="err : ${#fields.errors('fault')}" th:text="${err}"></div>
 		</div>
 
+		<div style="text-align:right; padding-top : 10px;">
+			<button type="button" id="addItemForm" style="
+			text-decoration: none;
+			transition: 0.15s;
+			border: 1px solid #596b99;border-radius: 5px; cursor:pointer;">상품 추가</button>
+		</div>
+
+
+		<div id="addForm"></div>
+
 		<div>
-			<dt th:text="#{remk}" class="require_item"></dt>
-			<textarea name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
+			<dt th:text="#{remk}" class="require_item" style="padding-top : 20px;"></dt>
+			<textarea rows="5" cols="52" style="border:1px solid #d5d5d5; width:100%;" name="remark" th:field="*{remark}" th:placeholder="#{remark}"></textarea>
 			<div class="errors" th:each="err : ${#fields.errors('remark')}" th:text="${err}"></div>
 		</div>
 	</th:block>

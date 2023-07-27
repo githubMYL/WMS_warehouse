@@ -49,8 +49,6 @@ public class RelsController {
         List<RelsVO> relsList = relsDAO.relsList();
         model.addAttribute("relsList", relsList);
 
-
-
         return "rels/rels";
     }
 

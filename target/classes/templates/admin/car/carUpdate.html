@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
+	<style>
+			html { font-size: 13px; max-width: 1300px; min-width: 0px;}
+		</style>
+</head>
+
+
+<h2>차량등록 수정</h2>
+<form name="carForm" method="post" th:action="@{/admin/carManage/save}" autocomplete="off" th:object="${carForm}" class="_form">
+	<input type="hidden" name="flag" th:field="*{flag}" th:value="update">
+
+	<th:block th:replace="~{admin/car/_carForm::carForm}"></th:block>
+	<br>
+	<div class="btns" style="text-align:center;">
+		<button type="reset" th:text="#{admin.action.reset}" class="sbtn"></button>
+		<button type="submit" th:text="#{admin.action.update}" class="sbtn blue"></button>
+	</div>
+</form>
+
+
+</html>
