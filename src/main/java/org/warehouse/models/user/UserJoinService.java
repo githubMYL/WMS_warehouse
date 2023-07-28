@@ -27,15 +27,15 @@ public class UserJoinService {
 
 		if(joinForm.getFlag() == null) {
 			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
-			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
-			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
+			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()) == null ? "" : custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
+			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()) == null ? "" : custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
 			userVO.setRegNm(userInfo.getUserNm());
 
 			userDAO.insertUser(userVO);
 		} else {
 			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
-			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
-			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
+			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()) == null ? "" : custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
+			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()) == null ? "" : custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
 			userVO.setModNm(userInfo.getUserNm());
 
 			userDAO.updateUser(userVO);
