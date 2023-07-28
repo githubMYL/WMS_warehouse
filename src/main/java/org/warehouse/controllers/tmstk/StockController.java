@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -194,12 +193,7 @@ public class StockController {
 				||search_tmstk_wactrNm == null && search_tmstk_clntNm == null && search_tmstk_locCd == null && search_tmstk_itemNm == null && mod_dt_end == null && mod_dt_start == null) {
 
 			List <StkadjForm> stkadjList = stockDAO.stkadjList();
-			Page<StkadjForm> stkadjList = stockService.getStkadjList( page, size);
-
-			model.addAttribute("pagination", stkadjList);
 			model.addAttribute("stkadjList", stkadjList);
-
-
 
 
 		} else {
