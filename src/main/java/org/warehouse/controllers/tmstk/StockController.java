@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -177,12 +178,15 @@ public class StockController {
 							 @RequestParam(name = "mod_dt_start", required = false) String mod_dt_start,
 							 @RequestParam(name = "mod_dt_end", required = false) String mod_dt_end){
 
+
+
+
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::조정내역");
 		model.addAttribute("menuCode", "stkadjList");
 
 
-		System.out.println(mod_dt_end + "::" + mod_dt_start);
+//		System.out.println(mod_dt_end + "::" + mod_dt_start);
 
 
 		// 검색에 따라 바인딩을 다르게한다
@@ -190,7 +194,13 @@ public class StockController {
 				||search_tmstk_wactrNm == null && search_tmstk_clntNm == null && search_tmstk_locCd == null && search_tmstk_itemNm == null && mod_dt_end == null && mod_dt_start == null) {
 
 			List <StkadjForm> stkadjList = stockDAO.stkadjList();
+			Page<StkadjForm> stkadjList = stockService.getStkadjList( page, size);
+
+			model.addAttribute("pagination", stkadjList);
 			model.addAttribute("stkadjList", stkadjList);
+
+
+
 
 		} else {
 
