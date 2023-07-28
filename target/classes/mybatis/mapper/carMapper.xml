@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.warehouse.configs.models.mapper.CarDAO">
+	<resultMap id="carMap" type="org.warehouse.models.admin.car.CarVO">
+		<result property="carCd" column="CAR_CD" />
+		<result property="carNum" column="CAR_NUM" />
+		<result property="deliveryArea" column="DELIVERY_AREA" />
+		<result property="driverNm" column="DRIVER_NM" />
+		<result property="driverTel" column="DRIVER_TEL" />
+		<result property="driverAddr" column="DRIVER_ADDR" />
+		<result property="carType" column="CAR_TYPE" />
+		<result property="carTon" column="CAR_TON" />
+		<result property="loadPlt" column="LOAD_PLT" />
+		<result property="licenseYn" column="LICENSE_YN" />
+		<result property="joinDt" column="JOIN_DT" />
+		<result property="remark" column="REMK" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delyn" column="DEL_YN" />
+	</resultMap>
+
+	<insert id="insertCar" parameterType="org.warehouse.models.admin.car.CarVO">
+		INSERT INTO CAR_INFO(CAR_CD, CAR_NUM, DELIVERY_AREA, DRIVER_NM, DRIVER_TEL, DRIVER_ADDR, CAR_TYPE, CAR_TON, LOAD_PLT, LICENSE_YN, JOIN_DT, REMK, REG_DT, REG_NM)
+			VALUES(CAR_SEQ.NEXTVAL, #{carNum}, #{deliveryArea}, #{driverNm}, #{driverTel}, #{driverAddr}, #{carType}, #{carTon}, #{loadPlt}, #{licenseYn}, #{joinDt}, #{remark}, SYSDATE, #{regNm})
+	</insert>
+
+	<update id="updateCar" parameterType="org.warehouse.models.admin.car.CarVO">
+		UPDATE CAR_INFO
+			SET CAR_NUM = #{carNum}, DELIVERY_AREA = #{deliveryArea}, DRIVER_NM = #{driverNm}, DRIVER_TEL = #{driverTel}, DRIVER_ADDR = #{driverAddr}, CAR_TYPE = #{carType}, CAR_TON = #{carTon}, LOAD_PLT = #{loadPlt}, LICENSE_YN = #{licenseYn}, JOIN_DT = #{joinDt}, REMK = #{remark}, MOD_DT = SYSDATE, MOD_NM = #{modNm}
+		WHERE CAR_CD = #{carCd}
+	</update>
+
+	<update id="deleteCar">
+		UPDATE CAR_INFO
+		SET DEL_YN = 'Y', MOD_NM = #{modNm}, MOD_DT = SYSDATE
+		WHERE CAR_CD = #{carCd}
+	</update>
+
+
+
+	<select id="getCarList" resultMap="carMap">
+		SELECT * FROM CAR_INFO WHERE DEL_YN = 'N'
+	</select>
+
+	<select id="getCarSearch" resultMap="carMap">
+		SELECT * FROM CAR_INFO
+		<where>
+			<if test="carNum != ''">
+				AND CAR_NUM LIKE '%'||#{carNum}||'%'
+			</if>
+			<if test="driverNm != ''">
+				AND DRIVER_NM LIKE '%'||#{driverNm}||'%'
+			</if>
+			AND DEL_YN = 'N'
+		</where>
+	</select>
+
+	<select id="getCar" resultMap="carMap">
+		SELECT * FROM CAR_INFO WHERE CAR_CD = #{carCd}
+	</select>
+
+</mapper>
