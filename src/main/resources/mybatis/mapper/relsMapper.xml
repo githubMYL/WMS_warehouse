@@ -38,16 +38,18 @@
 		FROM RELS_H
 		WHERE RELS_DT = #{relsDt}
 	</select>
+	<!-- 출고등록 H insert -->
 	<insert id="relsHinsert" parameterType="org.warehouse.models.rels.relsAction.RelsVO">
 		INSERT INTO RELS_H
 		(RELS_DT, RELS_NO, CLNT_CD, STATUS, REMK, REG_DT, REG_NM)
 		VALUES
 		(#{relsDt}, #{relsNo}, #{clntCd}, '01', #{remk}, SYSDATE, #{regNm})
 	</insert>
+	<!-- 출고등록 D insert -->
 	<insert id="relsDinsert" parameterType="org.warehouse.models.rels.relsAction.RelsVO">
 		INSERT INTO RELS_D
 		(RELS_DT, RELS_NO, RELS_D_NO, CLNT_CD, CUST_CD, CUST_CTR_CD, ITEM_CD
-		, REG_IN_AMT, RELS_CNT, DELI_REQUEST_DT, PLT, BOX, REG_DT, REG_NM)
+		, REG_IN_AMT, RELS_CNT, DELI_REQUEST_DT, REMK, REG_DT, REG_NM)
 		VALUES
 		(#{relsDt}, #{relsNo}
 		, (SELECT NVL(MAX(RELS_D_NO), 0) + 1
@@ -55,10 +57,39 @@
 		WHERE RELS_DT = #{relsDt}
 		AND RELS_NO = #{relsNo})
 		, #{clntCd}, #{custCd}, #{custCtrCd}, #{itemCd}
-		, #{regInAmt}, #{relsCnt}, #{deliRequestDt}, #{plt}, #{box}, SYSDATE , #{regNm})
+		, #{regInAmt}, #{relsCnt},
+		<if test="deliRequestDt == null">
+			NULL, #{remk}, SYSDATE , #{regNm})
+		</if>
+		<if test="deliRequestDt != null">
+			#{deliRequestDt}, #{remk}, SYSDATE , #{regNm})
+		</if>
 	</insert>
+	<!-- 출고등록 S insert -->
+	<insert id="relsSinsert" parameterType="org.warehouse.models.rels.relsAction.RelsVO">
+		INSERT INTO RELS_S (RELS_DT, RELS_NO, RELS_D_NO, ALLO_NO, WACTR_CD, LOC_CD, ITEM_CD, CLNT_CD, ALLO_AMT, ALLO_AFTER_STOCK, REG_DT, REG_NM)
+		VALUES (#{relsDt}, #{relsNo}, #{relsDNo}, (SELECT NVL(MAX(ALLO_NO), 0) + 1
+		FROM RELS_S
+		WHERE RELS_DT = #{relsDt}
+		AND RELS_NO = #{relsNo}), #{wactrCd}, #{locCd}, #{itemCd}, #{clntCd}, #{alloAmt}, #{alloAfterStock}, SYSDATE, #{regNm})
+	</insert>
+	<!-- 출고등록 정보수정 -->
+	<update id="relsUpdate" parameterType="org.warehouse.models.rels.relsAction.RelsVO">
+		UPDATE RELS_D
+		SET CUST_CD = #{custCd}
+		, CUST_CTR_CD = #{custCtrCd}
+		, ITEM_CD = #{itemCd}
+		, REG_IN_AMT = #{regInAmt}
+		, RELS_CNT = #{relsCnt}
+		, DELI_REQUEST_DT = #{deliRequestDt}
+		, MOD_DT = SYSDATE
+		, MOD_NM = #{modNm}
+		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO || RELS_D_NO = #{keyVal}
+		AND DEL_YN = 'N'
+		AND ROWNUM = 1
+	</update>
 
-	<!-- 출고등록 H -->
+	<!-- 출고등록 H list -->
 	<select id="relsList" resultMap="relsMap">
 		SELECT A.RELS_DT
 		, A.RELS_NO
@@ -75,14 +106,14 @@
 		ORDER BY A.REG_DT DESC
 	</select>
 
-	<!-- 출고등록 D -->
-	<!-- select id="relsDetailList"  parameterType="String" resultType="org.warehouse.models.rels.relsAction.RelsVO" -->
-	<select id="relsDetailList"  parameterType="HashMap" resultMap="relsMap">
+	<!-- 출고등록 D list -->
+	<select id="relsDetailList" resultMap="relsMap">
 		SELECT ROWNUM rowCnt, A.*
 		FROM (
 		SELECT A.RELS_DT
 		, A.RELS_NO
 		, A.RELS_D_NO
+		, A.CLNT_CD
 		, A.CUST_CD
 		, C.CUST_NM
 		, A.CUST_CTR_CD
@@ -92,8 +123,6 @@
 		, A.REG_IN_AMT
 		, A.RELS_CNT
 		, A.DELI_REQUEST_DT
-		, A.PLT
-		, A.BOX
 		, A.REMK
 		FROM RELS_D A
 		INNER JOIN CLNT B
@@ -106,15 +135,16 @@
 		INNER JOIN ITEM E
 		ON A.CLNT_CD = E.CLNT_CD
 		AND A.ITEM_CD = E.ITEM_CD
-		WHERE A.RELS_DT = #{relsDt}
-		AND A.RELS_NO = #{relsNo}
+		WHERE TO_CHAR(A.RELS_DT, 'yyyyMMdd') || A.RELS_NO = #{keyVal}
 		AND A.DEL_YN = 'N'
 		ORDER BY A.REG_DT DESC
 		) A
 	</select>
 
-	<!-- 출고등록 S -->
-	<select id="relsSubDetailList" resultMap="relsMap">
+	<!-- 출고등록 S list -->
+	<select id="relsSubDetList" resultMap="relsMap">
+		SELECT ROWNUM rowCnt, A.*
+		FROM (
 		SELECT A.RELS_DT
 		, A.RELS_NO
 		, A.RELS_D_NO
@@ -135,10 +165,13 @@
 		INNER JOIN ITEM E
 		ON A.CLNT_CD = E.CLNT_CD
 		AND A.ITEM_CD = E.ITEM_CD
+		WHERE TO_CHAR(A.RELS_DT, 'yyyyMMdd') || A.RELS_NO = #{keyVal}
+		AND A.DEL_YN = 'N'
 		ORDER BY A.REG_DT DESC
+		) A
 	</select>
 
-	<!-- 업데이트 팝업 데이터셋팅 -->
+	<!-- 업데이트 팝업 데이터셋팅 (relsDNO == 'Y')-->
 	<select id="relsUpdataInit" resultMap="relsMap">
 		SELECT A.RELS_DT
 		, A.RELS_NO
@@ -154,8 +187,6 @@
 		, A.REG_IN_AMT
 		, A.RELS_CNT
 		, A.DELI_REQUEST_DT
-		, A.PLT
-		, A.BOX
 		, A.REMK
 		FROM RELS_D A
 		INNER JOIN CLNT B
@@ -168,12 +199,38 @@
 		INNER JOIN ITEM E
 		ON A.CLNT_CD = E.CLNT_CD
 		AND A.ITEM_CD = E.ITEM_CD
-		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
+		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO || RELS_D_NO = #{keyVal}
 		AND A.DEL_YN = 'N'
+		AND ROWNUM = 1
 		ORDER BY A.REG_DT DESC
 	</select>
 
+	<!-- 출고상품 팝업 데이터셋팅 (relsDNO == 'N')-->
+	<select id="relsDetInsert" resultMap="relsMap">
+		SELECT A.RELS_DT
+		, A.RELS_NO
+		, A.CLNT_CD
+		, B.CLNT_NM
+		, A.RELS_D_NO
+		FROM RELS_D A
+		INNER JOIN CLNT B
+		ON A.CLNT_CD = B.CLNT_CD
+		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
+		AND A.DEL_YN = 'N'
+		AND ROWNUM = 1
+		ORDER BY A.REG_DT DESC
+	</select>
 
+	<!-- 할당 S -->
+	<!-- 진행상태 FLG값 변경 -->
+	<update id="alloConf" parameterType="org.warehouse.models.rels.relsAction.RelsVO">
+		UPDATE RELS_H
+		SET STATUS = '03'
+		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
+	</update>
+	<!-- 할당 E -->
+
+	<!-- 삭제 S -->
 	<!-- H 삭제 전 데이터체크 -->
 	<select id="relsHdelChk" resultType="String">
 		SELECT CASE WHEN (TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO) IS NOT NULL THEN 'Y' ELSE 'N' END DATA_YN
@@ -219,4 +276,5 @@
 		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{deleteKey}
 		AND DEL_YN = 'N'
 	</update>
+	<!-- 삭제 E -->
 </mapper>

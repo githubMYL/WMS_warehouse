@@ -325,4 +325,28 @@
 
 
 	<!--	stktransf E		-->
+
+
+	<!-- 출고할당관련 S -->
+	<select id="stockChk" resultMap="stock2Map">
+		SELECT A.ITEM_CD
+		, A.CLNT_CD
+		, A.LOC_CD
+		, A.WACTR_CD
+		, A.STOCK_AMT
+		, A.FAULT_AMT
+		FROM TMSTK A
+		LEFT OUTER JOIN RELS_S B
+		ON  A.ITEM_CD = B.ITEM_CD
+		AND A.CLNT_CD = B.CLNT_CD
+		AND A.LOC_CD = B.LOC_CD
+		WHERE A.ITEM_CD = #{item_cd}
+		AND A.CLNT_CD = #{clnt_cd}
+		AND A.STOCK_AMT > 0
+		AND A.STOCK_AMT - NVL(B.ALLO_AMT, 0) != 0
+		AND (NVL(B.ALLO_AFTER_STOCK, 0) > 0 OR B.ITEM_CD IS NULL)
+		AND ROWNUM = 1
+	</select>
+
+	<!-- 출고할당관련 E -->
 </mapper>

@@ -54,7 +54,7 @@
 				WACTR_NM LIKE '%'||#{wactrNm}||'%'
 			</if>
 			<if test="scale != ''">
-				AND "SCALE" = #{scale}
+				AND "SCALE" LIKE '%'||#{scale}||'%'
 			</if>
 			AND DEL_YN = 'N'
 		</where>
