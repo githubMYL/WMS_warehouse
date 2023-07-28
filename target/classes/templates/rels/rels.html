@@ -25,6 +25,8 @@
 			<button class="sbtn" th:text="#{search_btn}"></button>
 			<button class="sbtn" th:onclick="add()" th:text="#{add_btn}"></button>
 			<button class="sbtn red" th:onclick="deleteItem()" th:text="#{delete_btn}"></button>
+			<button class="sbtn blue" th:onclick="relsAllotment()" th:text="#{allotment_btn}"></button>
+			<!--                <button class="sbtn blue" th:onclick="relsConf()" th:text="#{conf_btn}"></button>-->
 		</div>
 	</form>
 	<!--        <script>-->
@@ -94,13 +96,18 @@
 
                 // detailList 테이블 id
                 var relsDTable = document.querySelector("#relsDTable > tbody");
+                var relsSTable = document.querySelector("#relsSTable > tbody");
+                var keyVal = [];
+                keyVal = relsDt.replaceAll("-", "") + relsNo;
 
                 // 쿼리스트링
-                const url = `rels/relsDetail?relsDt=${relsDt}&relsNo=${relsNo}`;
+                const url = `rels/relsDetail?keyVal=${keyVal}`;
                 commonLib.ajaxLoad(url).then((data) => {
                     // JSON 문자열을 javaScript 객체로 변환 :: 반대 :: stringify()
                     data = JSON.parse(data);
                     var str = '';
+
+                    str += '<tr id="rels_d_infos">';
 
                     for(var i = 0; i < data.length; i++) {
 
@@ -111,8 +118,8 @@
                         if(data[i].plt == null) data[i].plt = 0;                        // 파렛트 null 0처리
                         if(data[i].box == null) data[i].box = 0;                        // 박스 null 0처리
                         if(data[i].remk == null) data[i].remk = "";                     // 비고 null 공백처리
-                        str += '<tr>';
-                        str += '<td>' + data[i].rowCnt + '</td>'
+
+                        str += '<td data-relsdt= ' + data[i].relsDt + ' data-relsno= ' + data[i].relsNo + ' data-relsdno= ' + data[i].relsDNo + '>' + data[i].rowCnt + '</td>'
                         str += '<td>' + data[i].custNm + '</td>';
                         str += '<td>' + data[i].custCtrNm + '</td>';
                         str += '<td>' + data[i].itemCd + '</td>';
@@ -120,12 +127,41 @@
                         str += '<td align="right">' + data[i].regInAmt + '</td>';
                         str += '<td align="right">' + data[i].relsCnt + '</td>';
                         str += '<td>' + data[i].deliRequestDt + '</td>';
-                        str += '<td align="right">' + data[i].plt + '</td>';
-                        str += '<td align="right">' + data[i].box + '</td>';
+<!--                        str += '<td align="right">' + data[i].plt + '</td>';-->
+<!--                        str += '<td align="right">' + data[i].box + '</td>';-->
                         str += '<td>' + data[i].remk + '</td>';
                         str += '</tr>';
                     }
                     relsDTable.innerHTML = str;
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+
+                // 쿼리스트링
+                const urlSub = `rels/relsSubDtail?keyVal=${keyVal}`;
+                commonLib.ajaxLoad(urlSub).then((data) => {
+                    // JSON 문자열을 javaScript 객체로 변환 :: 반대 :: stringify()
+                    data = JSON.parse(data);
+                    var str = '';
+
+                    str += '<tr id="rels_s_infos">';
+
+                    for(var i = 0; i < data.length; i++) {
+
+                        if(data[i].itemNm == null) data[i].itemNm = "";                 // 상품명 null 공백처리
+                        if(data[i].alloAmt == null) data[i].alloAmt = 0;                // 할당수량 null 0처리
+                        if(data[i].alloAfterStock == null) data[i].alloAfterStock = 0;  // 할당후재고 null 0처리
+
+                        str += '<td>' + data[i].rowCnt + '</td>'
+                        str += '<td>' + data[i].itemCd + '</td>';
+                        str += '<td>' + data[i].itemNm + '</td>';
+                        str += '<td>' + data[i].locCd + '</td>';
+                        str += '<td>' + data[i].alloAmt + '</td>';
+                        str += '<td>' + data[i].alloAfterStock + '</td>';
+                        str += '</tr>';
+                    }
+                    relsSTable.innerHTML = str;
                 })
                 .catch((err) => {
                     console.error(err);
@@ -147,8 +183,8 @@
 				<th>출고지시수량</th>
 				<th>출고수량</th>
 				<th>납품요청일</th>
-				<th>파렛트</th>
-				<th>박스</th>
+				<!--th>파렛트</th-->
+				<!--th>박스</th-->
 				<!-- th>출고후수량</th -->
 				<th>비고</th>
 			</tr>
@@ -183,7 +219,6 @@
 				<th>로케이션</th>
 				<th>할당수량</th>
 				<th>할당후재고</th>
-				<th>비고</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -194,7 +229,6 @@
 				<td th:text="${relsSubData.locCd}"></td>
 				<td th:text="${relsSubData.alloAmt}"></td>
 				<td th:text="${relsSubData.alloAfterStock}"></td>
-				<td th:text="${relsSubData.remk}"></td>
 			</tr>
 			</tbody>
 		</table>
@@ -207,7 +241,8 @@
 
                 if(checkbox.length == 1){
 
-                    var keyVal = [checkbox[0].dataset.relsdt.replaceAll("-", "")+checkbox[0].dataset.relsno]
+                    var keyVal = [checkbox[0].dataset.relsdt.replaceAll("-", "") + checkbox[0].dataset.relsno];
+
                     url = '/rels/' + keyVal + '/detInsert';
                     warehouse.popup.open(url, "출고상품 추가", 500, 600, true);
                 }else if(checkbox.length == 0) {
@@ -219,19 +254,32 @@
                 }
             };
 
-            // 더블클릭 수정 ===============================================
-            document.addEventListener('DOMContentLoaded', function() {
-				const trs = document.querySelectorAll('tr');
-				trs.forEach( (tr) => {
-					tr.addEventListener('dblclick', editForm)
-				});
-			});
+                // 더블클릭 수정 ===============================================
+<!--            document.addEventListener('DOMContentLoaded', function() {-->
+<!--				const trs = document.querySelectorAll('tr');-->
+<!--				trs.forEach( (tr) => {-->
+<!--					tr.addEventListener('dblclick', editForm)-->
+<!--				});-->
+<!--			});-->
 
-			function editForm(e) {
-				console.log(e.target);
-				var tr = e.target.parentNode;
-				var keyVal = tr.querySelector('#chk').dataset.relsdt.replaceAll("-", "")
-				                + tr.querySelector('#chk').dataset.relsno;
+<!--			function editForm(e) {-->
+<!--			alert("aa");-->
+<!--				var tr = e.target.parentNode;-->
+<!--				var keyVal = tr.querySelector('#chk').dataset.relsdt.replaceAll("-", "")-->
+<!--				                + tr.querySelector('#chk').dataset.relsno;-->
+
+            function relsUpdate() {
+                var table = document.getElementById('relsDTable');
+                var rowList = table.rows; // row count
+
+
+				const td = document.querySelector('#rels_d_infos td')
+				const relsDt = td.dataset.relsdt;
+				const relsNo = td.dataset.relsno;
+				const relsDNo = td.dataset.relsdno;
+
+				var keyVal = relsDt.replaceAll("-", "") + relsNo + relsDNo;
+
 
 				url = '/rels/' + keyVal + '/update';
 				warehouse.popup.open(url, "출고등록 수정", 500, 600, true);
@@ -277,13 +325,33 @@
 
                 const url = `/rels/deleteRels?chkArr=${chkArr}`;
 				commonLib.ajaxLoad(url)
-					.then((data) => {
-						console.log(data);
-						location.reload();
-					})
-					.catch((err) => {
-						console.error(err);
-					});
+                .then((data) => {
+                    console.log(data);
+                    location.reload();
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+            };
+
+            function relsAllotment(){
+                // 체크된 checkbox 만 selector
+                var checkbox = document.querySelectorAll("input[name=chk]:checked");
+                var keyVal = []
+                // 체크된 row의 키값 keyVal 에 push
+                for(var i = 0; i < checkbox.length; i++){
+                    keyVal.push(checkbox[i].dataset.relsdt.replaceAll("-", "") + checkbox[i].dataset.relsno)
+                };
+
+                const url = `/rels/relsAllotment?keyVal=${keyVal}`;
+				commonLib.ajaxLoad(url)
+                .then((data) => {
+                    console.log(data);
+                    location.reload();
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
             };
         </script>
 </section>
