@@ -112,10 +112,20 @@ public class AdminController {
 		}
 
 		joinService.join(joinForm);
+		System.out.println("joinForm.getFlag().equals(addPop) : " + joinForm.getFlag().equals("addPop"));
+		System.out.println("joinForm.getFlag().equals(updatePop) : " + joinForm.getFlag().equals("updatePop"));
+		System.out.println("joinForm.getFlag() : " + joinForm.getFlag());
+		if(joinForm.getFlag().equals("addPop")) {
+			closeLayer(response);
+			return "close";
+		}else if(joinForm.getFlag().equals("updatePop")) {
 
-		closeLayer(response);
+			closeLayer(response);
+			return "close";
+		}else {
 
-		return "close";
+			return "user/login";
+		}
 	}
 	/** userManage E */
 

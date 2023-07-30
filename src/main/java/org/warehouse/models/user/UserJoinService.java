@@ -25,17 +25,46 @@ public class UserJoinService {
 
 		UserVO userVO = new ModelMapper().map(joinForm, UserVO.class);
 
-		if(joinForm.getFlag() == null) {
+		System.out.println(joinForm.getFlag());
+		if(joinForm.getFlag() == null || joinForm.getFlag().isBlank() || joinForm.getFlag().equals("addPop")) {
+			System.out.println("flag null");
 			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
-			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
-			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
-			userVO.setRegNm(userInfo.getUserNm());
-
+			if(custDAO.getCustByCustNm(joinForm.getCustNm()) != null){
+				userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
+			}
+			if(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()) != null){
+				userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
+			}
+			if(userInfo != null){
+				userVO.setRegNm(userInfo.getUserNm());
+			}else{
+				userVO.setRegNm("");
+			}
+			// custCd, custCtrCd null값 오류관련 공백 넣어주기
+			if(joinForm.getCustCd() == null || joinForm.getCustCtrCd() == null){
+				System.out.println("타지??");
+				joinForm.setClntCd("");
+				joinForm.setCustCd("");
+				joinForm.setCustCtrCd("");
+			}
+			System.out.println("joinForm :: " + joinForm);
 			userDAO.insertUser(userVO);
 		} else {
+			System.out.println("flag null222");
 			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
-			userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
-			userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
+			if(custDAO.getCustByCustNm(joinForm.getCustNm()) != null){
+				userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
+			}
+			if(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()) != null){
+				userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
+			}
+			// custCd, custCtrCd null값 오류관련 공백 넣어주기
+			if(joinForm.getCustCd() == null || joinForm.getCustCtrCd() == null){
+				System.out.println("업 타지??");
+				joinForm.setClntCd("");
+				joinForm.setCustCd("");
+				joinForm.setCustCtrCd("");
+			}
 			userVO.setModNm(userInfo.getUserNm());
 
 			userDAO.updateUser(userVO);

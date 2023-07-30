@@ -33,6 +33,7 @@ public class UserJoinValidator implements Validator {
 		String userId = joinForm.getUserId();
 		String userPw = joinForm.getUserPw();
 		String userPwRe = joinForm.getUserPwRe();
+		String custCd = joinForm.getCustCd();
 
 		/** 기타 입력폼 정보들 - 추후에 검증 추가할지도?
 		String userNm = joinForm.getUserNm();
@@ -40,7 +41,6 @@ public class UserJoinValidator implements Validator {
 
 		String clntCd = joinForm.getClntCd();
 		String custCtrCd = joinForm.getCustCtrCd();
-		String custCd = joinForm.getCustCd();
 		String position = joinForm.getPosition();
 		String tel = joinForm.getTel();
 		String email = joinForm.getEmail();
@@ -54,7 +54,7 @@ public class UserJoinValidator implements Validator {
 			//2. 비밀번호 복잡성 체크 - 우선은 빼고 진행
 
 			//3. 비밀번호와 비밀번호 확인란 일치
-			if(userPw != null && !userPw.isBlank() && userPwRe != null && !userPwRe.isBlank() && !userPw.equals(userPwRe)){
+			if(!userPw.equals(userPwRe)){
 				errors.rejectValue("userPwRe", "Validation.incorrect.userPwRe");
 			}
 		}

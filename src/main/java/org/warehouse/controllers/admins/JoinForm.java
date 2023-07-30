@@ -15,8 +15,9 @@ public class JoinForm {
 	@NotBlank
 	@Size(min=6)
 	private String userId;
-
+	@NotBlank
 	private String userPw;
+	@NotBlank
 	private String userPwRe;
 
 	private String userNm;
@@ -28,6 +29,7 @@ public class JoinForm {
 	private String custCd;
 	private String custNm;
 	private String position;
+	@Size(max = 11)
 	private String tel;
 	private String email;
 

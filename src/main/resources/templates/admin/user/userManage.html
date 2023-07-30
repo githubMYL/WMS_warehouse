@@ -76,8 +76,10 @@
 
 			function addItem(e) {
 				console.log('test');
+				const flagData = { flag: "addPop" }
+				localStorage.setItem("flag-data", JSON.stringify(flagData));
 				url = 'userManage/join';
-				warehouse.popup.open(url, "테스트", 500, 800, true);
+				warehouse.popup.open(url, "사용자 추가", 500, 800, true);
 			}
 
 			function search() {
@@ -151,6 +153,9 @@
 				const event_tr = e.target.parentNode;
 				const input = event_tr.querySelector('td input');
 				const userId = input.dataset.userid;
+
+				const flagData = { flag: "updatePop" }
+				localStorage.setItem("flag-data", JSON.stringify(flagData));
 
 				url = 'userManage/update/' + userId;
 				warehouse.popup.open(url, "테스트", 500, 800, true);
