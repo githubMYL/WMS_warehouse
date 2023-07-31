@@ -24,6 +24,7 @@ public class JoinForm {
 	private String userType;
 
 	private String clntCd;
+	private String clntNm;
 	private String custCtrCd;
 	private String custCtrNm;
 	private String custCd;

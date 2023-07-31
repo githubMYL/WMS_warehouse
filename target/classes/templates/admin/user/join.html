@@ -10,7 +10,7 @@
 
 	<h2>사용자 추가</h2>
 	<form name="joinForm" method="post" th:action="@{/admin/userManage/join}" autocomplete="off" th:object="${joinForm}" class="_form">
-		<input type="text" id="flagData" th:field="*{flag}" value="">
+		<input type="hidden" id="flagData" th:field="*{flag}" value="">
 
 		<th:block th:replace="~{admin/user/_joinForm::joinForm}"></th:block>
 		<br>
@@ -19,10 +19,10 @@
 			<button type="submit" th:text="#{admin.action.join}" class="sbtn blue"></button>
 		</div>
 		<script>
-		const { flag } = JSON.parse(localStorage.getItem("flag-data"));
-		console.log(flag);
-		document.getElementById('flagData').value= flag;
-		localStorage.removeItem("flag-data")
-	</script>
+			const { flag } = JSON.parse(localStorage.getItem("flag-data"));
+			console.log(flag);
+			document.getElementById('flagData').value= flag;
+			localStorage.removeItem("flag-data")
+		</script>
 	</form>
 </html>

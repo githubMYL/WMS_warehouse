@@ -40,31 +40,20 @@ public class UserJoinService {
 			}else{
 				userVO.setRegNm("");
 			}
-			// custCd, custCtrCd null값 오류관련 공백 넣어주기
-			if(joinForm.getCustCd() == null || joinForm.getCustCtrCd() == null){
-				System.out.println("타지??");
-				joinForm.setClntCd("");
-				joinForm.setCustCd("");
-				joinForm.setCustCtrCd("");
-			}
 			System.out.println("joinForm :: " + joinForm);
+
 			userDAO.insertUser(userVO);
 		} else {
 			System.out.println("flag null222");
 			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
+
 			if(custDAO.getCustByCustNm(joinForm.getCustNm()) != null){
 				userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
 			}
 			if(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()) != null){
 				userVO.setCustCtrCd(custCtrDAO.getCustCtrByNm(joinForm.getCustCtrNm()).getCustCtrCd());
 			}
-			// custCd, custCtrCd null값 오류관련 공백 넣어주기
-			if(joinForm.getCustCd() == null || joinForm.getCustCtrCd() == null){
-				System.out.println("업 타지??");
-				joinForm.setClntCd("");
-				joinForm.setCustCd("");
-				joinForm.setCustCtrCd("");
-			}
+			System.out.println("userInfo : " + userInfo);
 			userVO.setModNm(userInfo.getUserNm());
 
 			userDAO.updateUser(userVO);

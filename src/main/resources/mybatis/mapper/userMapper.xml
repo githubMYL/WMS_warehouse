@@ -28,9 +28,20 @@
 <!--			LEFT OUTER JOIN CUST C ON C.CUST_CD = U.CUST_CD-->
 <!--			LEFT OUTER JOIN CUST_CTR CC ON CC.CUST_CTR_CD = U.CUST_CTR_CD-->
 <!--		WHERE C.CUST_CD = CC.CUST_CD AND U.USER_ID = #{userId}-->
-		SELECT *
-			FROM USER_MANAGE
+		SELECT A.*
+			, B.CLNT_NM
+			, C.CUST_NM
+			, D.CUST_CTR_NM
+			FROM USER_MANAGE A
+		LEFT OUTER JOIN CLNT B
+			ON A.CLNT_CD = B.CLNT_CD
+		LEFT OUTER JOIN CUST C
+			ON A.CUST_CD = C.CUST_CD
+		LEFT OUTER JOIN CUST_CTR D
+			ON A.CUST_CD = D.CUST_CD
+		   AND A.CUST_CTR_CD = D.CUST_CTR_CD
 		WHERE USER_ID = #{userId}
+		ORDER BY A.REG_DT DESC
 	</select>
 
 	<select id="getUserByEmail" parameterType="String" resultMap="userMap"> <!--  회원 정보  -->
