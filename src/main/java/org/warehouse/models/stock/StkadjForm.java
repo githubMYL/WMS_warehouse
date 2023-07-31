@@ -28,8 +28,6 @@ public class StkadjForm {
 
 	private String del_yn;   // 삭제여부
 
-
-
 	// 정보 업데이트 위해 추가 변수
 	private Long modNomalAmt;
 	private Long modFaultAmt;

@@ -34,7 +34,6 @@
 		<result property="modNm" column="MOD_NM" />
 		<result property="delyn" column="DEL_YN" />
 	</resultMap>
-
 	<resultMap id="stock2Map" type="org.warehouse.models.stock.TmstkVO">
 		<result property="item_cd" column="ITEM_CD" />
 		<result property="clnt_cd" column="CLNT_CD" />
@@ -145,6 +144,43 @@
 		UPDATE TMSTK SET DEL_YN = 'Y', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
+
+
+
+	<!--검색조건-->
+	<select id="search_tmstkList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
+		SELECT * from
+		(
+		select
+		t.ITEM_CD, i.ITEM_NM,
+		t.CLNT_CD , c.CLNT_NM,
+		t.WACTR_CD , w.WACTR_NM,
+		t.LOC_CD ,
+		t.STOCK_AMT,t.FAULT_AMT,
+		t.reg_dt,t.del_yn,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT
+		ROW_NUMBER() OVER (ORDER BY adj_dt DESC) rnum
+		FROM TMSTK T
+		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
+		where T.del_yn = 'N'
+		<if test='search_tmstk_wactrNm != ""'>
+			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
+		</if>
+		<if test='search_tmstk_itemNm != ""'>
+			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
+		</if>
+		<if test='search_tmstk_clntNm != ""'>
+			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
+		</if>
+		<if test='search_tmstk_locCd != ""'>
+			and t.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
+		</if>
+		)
+		WHERE rnum BETWEEN #{offset} + 1 AND #{offset} + #{size}
+	</select>
 	<!--	tmstk E		-->
 
 	<!--	stkadj S	-->
@@ -167,55 +203,31 @@
 		ORDER BY t.reg_dt DESC
 	</select>
 
+
+	<!--STKADJ-->
+	<select id="StkadjListCount">
+		select count(*) from stkadj
+	</select>
+
 	<!--조정내역 리스트 -->
 	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
-		SELECT
-		i.ITEM_NM,
+		SELECT *
+		FROM (
+		SELECT i.ITEM_NM,
 		c.CLNT_NM,
 		w.WACTR_NM,
 		NVL(r.ALLO_AMT, 0) ALLO_AMT,
-		s.*
+		s.*,
+		ROW_NUMBER() OVER (ORDER BY adj_dt DESC) rnum
 		FROM stkadj s
 		LEFT JOIN RELS_S r ON r.ITEM_CD = s.ITEM_CD
 		LEFT JOIN WACTR w ON w.WACTR_CD = s.WACTR_CD
 		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
 		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
-		where s.del_yn = 'N'
-		ORDER BY s.adj_dt DESC
+		WHERE s.del_yn = 'N'
+		)
+		WHERE rnum BETWEEN #{offset} + 1 AND #{offset} + #{size}
 	</select>
-
-	<!--검색조건-->
-	<select id="search_tmstkList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
-		SELECT
-		t.ITEM_CD, i.ITEM_NM,
-		t.CLNT_CD , c.CLNT_NM,
-		t.WACTR_CD , w.WACTR_NM,
-		t.LOC_CD ,
-		t.STOCK_AMT,t.FAULT_AMT,
-		t.reg_dt,t.del_yn,
-		NVL(r.ALLO_AMT, 0) ALLO_AMT
-		FROM TMSTK T
-		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
-		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
-		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
-		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
-		where T.del_yn = 'N'
-		<if test='search_tmstk_wactrNm != ""'>
-			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
-		</if>
-		<if test='search_tmstk_itemNm != ""'>
-			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
-		</if>
-		<if test='search_tmstk_clntNm != ""'>
-			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
-		</if>
-		<if test='search_tmstk_locCd != ""'>
-			and t.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
-		</if>
-		ORDER BY t.reg_dt DESC
-	</select>
-
-
 
 	<!--stkadj 내역 검색조회-->
 	<select id="search_stkadjList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">

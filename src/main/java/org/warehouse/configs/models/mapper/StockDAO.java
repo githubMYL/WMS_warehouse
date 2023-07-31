@@ -38,12 +38,15 @@ public interface StockDAO {
 
 	// stkadj조인해서 tmstk list 가져오기
 	List<StkadjForm> tmsktList();
-	List<StkadjForm> stkadjList();
+	List<StkadjForm> stkadjList(int offset , int size);
+
+	int StkadjListCount();
 
 	List<StkadjForm> search_tmstkList(String search_tmstk_wactrNm,
 									  String search_tmstk_clntNm,
 									  String search_tmstk_locCd,
 									  String search_tmstk_itemNm);
+
 
 
 	List<StkadjForm> search_stkadjList(String search_tmstk_wactrNm,
