@@ -27,7 +27,7 @@
 		FROM USER_MANAGE U
 			LEFT OUTER JOIN CUST C ON C.CUST_CD = U.CUST_CD
 			LEFT OUTER JOIN CUST_CTR CC ON CC.CUST_CTR_CD = U.CUST_CTR_CD
-		WHERE C.CUST_CD = CC.CUST_CD AND U.USER_ID = #{userId}
+		WHERE U.USER_ID = #{userId}
 	</select>
 
 	<select id="getUserByEmail" parameterType="String" resultMap="userMap"> <!--  회원 정보  -->

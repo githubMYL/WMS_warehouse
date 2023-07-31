@@ -34,6 +34,20 @@
 		<result property="modNm" column="MOD_NM" />
 		<result property="delyn" column="DEL_YN" />
 	</resultMap>
+	<resultMap id="stock2Map" type="org.warehouse.models.stock.TmstkVO">
+		<result property="item_cd" column="ITEM_CD" />
+		<result property="clnt_cd" column="CLNT_CD" />
+		<result property="loc_cd" column="LOC_CD" />
+		<result property="wactr_cd" column="WACTR_CD" />
+		<result property="stock_amt" column="STOCK_AMT" />
+		<result property="fault_amt" column="FAULT_AMT" />
+		<result property="stdin_dt" column="STDIN_DT" />
+		<result property="regDt" column="REG_DT" />
+		<result property="regNm" column="REG_NM" />
+		<result property="modDt" column="MOD_DT" />
+		<result property="modNm" column="MOD_NM" />
+		<result property="delYn" column="DEL_YN" />
+	</resultMap>
 
 	<!--	stdin S		-->
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">

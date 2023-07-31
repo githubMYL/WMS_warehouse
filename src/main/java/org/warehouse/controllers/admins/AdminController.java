@@ -84,6 +84,8 @@ public class AdminController {
 	@GetMapping("/userManage/update/{userId}")
 	public String update(@PathVariable String userId, Model model) {
 		UserVO userVO = userDAO.getUserById(userId);
+		System.out.println(userId);
+		System.out.println(userVO);
 		JoinForm joinForm = new ModelMapper().map(userVO, JoinForm.class);
 
 		List<ClntVO> clntList = clntDAO.getClntList();
