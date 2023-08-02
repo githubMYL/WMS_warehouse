@@ -48,11 +48,11 @@
 						<input type="password" name="userPw" th:placeholder="#{userPw}">
 						<div class="errors" th:if="${session.requiredUserPw != null}" th:text="${session.requiredUserPw}"></div>
 					</div>
-					<div>
+					<!-- div>
 						<a th:href="@{/user/find_id}"><i class="xi-search"></i>[[#{findId}]]</a> |
 						<a th:href="@{/user/find_pw}"><i class="xi-search"></i>[[#{findPw}]]</a> |
 						<a th:href="@{/admin/userManage/join}"><i class="xi-user-plus"></i>[[#{user.join}]]</a>
-					</div>
+					</div -->
 
 					<div class="errors global" th:if="${session.global} != null" th:text="${session.global}"></div>
 

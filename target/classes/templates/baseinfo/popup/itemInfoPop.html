@@ -84,17 +84,6 @@
                     }
                 </script>
                 <div>
-                    <th:block th:text="#{locCd}"></th:block>
-                    <input id="loc_cd" list="loc" name="loc_cd" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
-                    <datalist id="loc">
-                        <select id="loc_sel">
-                            <option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
-                            </option>
-                        </select>
-                    </datalist>
-                    <div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
-                </div>
-                <div>
                     <th:block th:text="#{itemCd}"></th:block>
                     <input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
                     <div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
@@ -192,17 +181,6 @@
                     }
                 </script>
                 <div>
-                    <th:block th:text="#{locCd}"></th:block>
-                    <input id="loc_cd_d" list="loc_d" name="loc_cd_d" th:field="*{locCd}" th:placeholder="#{locCd}" type="text"/>
-                    <datalist id="loc_d">
-                        <select id="loc_sel_d">
-                            <option th:each="loc : ${locList}" th:value="${loc.loc_cd}">
-                            </option>
-                        </select>
-                    </datalist>
-                    <div class="errors" th:each="err : ${#fields.errors('locCd')}" th:text="${err}"></div>
-                </div>
-                <div>
                     <th:block th:text="#{itemCd}"></th:block>
                     <input th:field="*{itemCd}" th:placeholder="#{itemCd}" type="text">
                     <div class="errors" th:each="err : ${#fields.errors('itemCd')}" th:text="${err}"></div>
@@ -217,6 +195,7 @@
                         <option value="" th:text="#{boxUnit}"></option>
                         <option th:each="code : ${codeList}" th:text="${code.itemValue}" th:value="${code.itemCode}"></option>
                     </select>
+                    <div class="errors" th:each="err : ${#fields.errors('boxUnit')}" th:text="${err}"></div>
                 </div>
                 <div>
                     <th:block th:text="#{pltInBox}"></th:block>
