@@ -103,6 +103,34 @@
 		INNER JOIN RELS_CODE C
 		ON A.STATUS = C.RELS_CODE
 		WHERE A.DEL_YN = 'N'
+<!--		<choose>-->
+<!--			<when test='relsDt != null and clntNm == null || clntNm == "" and status == null || status == ""'>-->
+<!--				AND A.RELS_DT = #{relsDt}-->
+<!--			</when>-->
+<!--			<when test='relsDt == null and clntNm != null || clntNm != "" and status == null || status == ""'>-->
+<!--				AND B.CLNT_NM like '%'||#{clntNm}||'%'-->
+<!--			</when>-->
+<!--			<when test='relsDt == null and clntNm == null || clntNm == "" and status != null || status != ""'>-->
+<!--				AND A.STATUS = #{status}-->
+<!--			</when>-->
+<!--			<when test='relsDt != null and clntNm != null || clntNm != "" and status == null || status == ""'>-->
+<!--				AND A.RELS_DT = #{relsDt}-->
+<!--				AND B.CLNT_NM like '%'||#{CLNT_NM}||'%'-->
+<!--			</when>-->
+<!--			<when test='relsDt == null and clntNm != null || clntNm != "" and status != null || status != ""'>-->
+<!--				AND B.CLNT_NM like '%'||#{clntNm}||'%'-->
+<!--				AND A.STATUS = #{status}-->
+<!--			</when>-->
+<!--			<when test='relsDt != null and clntNm == null || clntNm == "" and status != null || status != ""'>-->
+<!--				AND A.RELS_DT = #{relsDt}-->
+<!--				AND A.STATUS = #{status}-->
+<!--			</when>-->
+<!--			<when test='relsDt != null and clntNm != null || clntNm != "" and status != null || status != ""'>-->
+<!--				AND A.RELS_DT = #{relsDt}-->
+<!--				AND B.CLNT_NM like '%'||#{clntNm}||'%'-->
+<!--				AND A.STATUS = #{status}-->
+<!--			</when>-->
+<!--		</choose>-->
 		ORDER BY A.REG_DT DESC
 	</select>
 
@@ -229,6 +257,29 @@
 		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
 	</update>
 	<!-- 할당 E -->
+
+	<!-- 확정 S -->
+	<select id="relsCnt" resultMap="relsMap">
+		SELECT WACTR_CD
+			, CLNT_CD
+			, ITEM_CD
+			, LOC_CD
+			, SUM(ALLO_AMT) ALLO_AMT
+		FROM RELS_S
+		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
+		GROUP BY WACTR_CD, CLNT_CD, ITEM_CD, LOC_CD
+	</select>
+	<select id="statsChk" resultType="String">
+		SELECT STATUS
+		FROM RELS_H
+		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
+	</select>
+	<update id="relsConf" parameterType="String">
+		UPDATE RELS_H
+		SET STATUS = '04'
+		WHERE TO_CHAR(RELS_DT, 'yyyyMMdd') || RELS_NO = #{keyVal}
+	</update>
+	<!-- 확정 E -->
 
 	<!-- 삭제 S -->
 	<!-- H 삭제 전 데이터체크 -->

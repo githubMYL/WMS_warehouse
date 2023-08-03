@@ -18,7 +18,7 @@ public interface RelsDAO {
     String relsHdelChk(String deleteKey); // H 삭제 전 데이터확인
     String relsDdelChk(String deleteKey); // D 삭제 전 데이터확인
     String relsSdelChk(String deleteKey); // S 삭제 전 데이터확인
-    List<RelsVO> relsList();    // 출고등록 리스트
+    List<RelsVO> relsList(RelsVO params);    // 출고등록 리스트
     List<RelsVO> relsDetailList(String keyVal); // 출고등록 품목기준 레스트
     List<RelsVO> relsSubDetList(String keyVal); // 출곡등록 로케이션기준 리스트
     RelsVO relsUpdataInit(String keyVal); // 업데이트 팝업 데이터셋팅 (relsDNO == Y)
@@ -27,5 +27,8 @@ public interface RelsDAO {
     void relsDdelete(String deleteKey); // 출고 D 삭제유무 갱신
     void relsSdelete(String deleteKey); // 출고 S 삭제유무 갱신
 
-    void alloConf(String keyVal);
+    void alloConf(String keyVal);   // 할당
+    List<RelsVO> relsCnt(String keyVal); // 출고수량 SUM
+    String statsChk(String keyVal); // 진행상태 가져오기
+    void relsConf(String keyVal); // 출고 H STATUS 출고확정 flg변경
 }

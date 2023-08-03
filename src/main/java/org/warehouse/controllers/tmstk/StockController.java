@@ -155,7 +155,7 @@ public class StockController {
 		vo.setModTmstkStockAmt(modTmstkStockAmt);
 		vo.setModTmstkFaultAmt(modTmstkFaultAmt);
 
-		System.out.println(vo.toString());
+		System.out.println(vo);
 
 		modService.stkadjMod(vo);
 
@@ -175,26 +175,38 @@ public class StockController {
 							 @RequestParam(name = "search_tmstk_locCd", required = false) String search_tmstk_locCd,
 							 @RequestParam(name = "search_tmstk_itemNm", required = false) String search_tmstk_itemNm,
 							 @RequestParam(name = "mod_dt_start", required = false) String mod_dt_start,
-							 @RequestParam(name = "mod_dt_end", required = false) String mod_dt_end){
+							 @RequestParam(name = "mod_dt_end", required = false) String mod_dt_end,
+							 @RequestParam(defaultValue = "1") int page){
 
 		model.addAttribute("pageName", "stock");
 		model.addAttribute("Title", "재고::조정내역");
 		model.addAttribute("menuCode", "stkadjList");
+		// 한페이지 갯수
+		int size = 10;
+		// 현재부터 보여줄 값 ex) 1페이지 = 1~10 ,2페이지 = 2~20
+		int offset = (page-1) * size;
 
-
-		System.out.println(mod_dt_end + "::" + mod_dt_start);
-
+//		System.out.println("offset: " +  offset);
 
 		// 검색에 따라 바인딩을 다르게한다
 		if((search_tmstk_wactrNm+search_tmstk_clntNm+ search_tmstk_locCd+search_tmstk_itemNm+mod_dt_end+mod_dt_start).isEmpty()
 				||search_tmstk_wactrNm == null && search_tmstk_clntNm == null && search_tmstk_locCd == null && search_tmstk_itemNm == null && mod_dt_end == null && mod_dt_start == null) {
 
-			List <StkadjForm> stkadjList = stockDAO.stkadjList();
+			int listCount = stockDAO.StkadjListCount();
+			// 총 페이지 수 계산 : 전체페이지+10 / 10
+			int pageCount = (listCount + size) / size;
+
+			List <StkadjForm> stkadjList = stockDAO.stkadjList(offset, size);
 			model.addAttribute("stkadjList", stkadjList);
+			model.addAttribute("pageCount", pageCount);
+			model.addAttribute("page", page);
+//			System.out.println("리스트 사이즈: " + stkadjList.size());
+
 
 		} else {
 
 			List <StkadjForm> search_stkadjList = stockDAO.search_stkadjList(search_tmstk_wactrNm,search_tmstk_clntNm,search_tmstk_locCd,search_tmstk_itemNm,mod_dt_start,mod_dt_end);
+
 			model.addAttribute("stkadjList",search_stkadjList);
 
 		}
