@@ -4,5 +4,6 @@ public enum Role {
 	CLNT,
 	CUST,
 	CUST_CTR,
-	ADMIN
+	ADMIN,
+	WORKER
 }

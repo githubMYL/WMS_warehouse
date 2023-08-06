@@ -52,14 +52,14 @@
 	<!--	stdin S		-->
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
-			VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
+		VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		UPDATE TMSTK SET
-			STOCK_AMT = #{beforeStdin},
-			FAULT_AMT = #{fault},
-			STDIN_DT = #{stdinDt}
+		STOCK_AMT = #{beforeStdin},
+		FAULT_AMT = #{fault},
+		STDIN_DT = #{stdinDt}
 		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
 	</update>
 	<!--	stdin E		-->
@@ -67,9 +67,9 @@
 	<!--	tmstk S		-->
 	<select id="tmstkList" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT T.*, W.WACTR_NM, C.CLNT_NM, I.ITEM_NM  FROM TMSTK T LEFT OUTER JOIN WACTR W ON T.WACTR_CD = W.WACTR_CD
-			LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
-			LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
-			LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
+		LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
+		LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
+		LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
 		WHERE L.WACTR_CD = W.WACTR_CD AND T.DEL_YN = 'N'
 		ORDER BY T.REG_DT DESC
 	</select>
@@ -127,7 +127,7 @@
 
 	<insert id="insertTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
 		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
-			VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), SYSDATE, #{regNm})
+		VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateTmstkAmt" parameterType="org.warehouse.models.stock.TmstkVO">
@@ -144,6 +144,43 @@
 		UPDATE TMSTK SET DEL_YN = 'Y', STOCK_AMT = #{stock_amt}, FAULT_AMT = #{fault_amt}
 		WHERE WACTR_CD = #{wactr_cd} AND CLNT_CD = #{clnt_cd} AND ITEM_CD = #{item_cd} AND LOC_CD = #{loc_cd}
 	</update>
+
+
+
+	<!--검색조건-->
+	<select id="search_tmstkList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
+		SELECT * from
+		(
+		select
+		t.ITEM_CD, i.ITEM_NM,
+		t.CLNT_CD , c.CLNT_NM,
+		t.WACTR_CD , w.WACTR_NM,
+		t.LOC_CD ,
+		t.STOCK_AMT,t.FAULT_AMT,
+		t.reg_dt,t.del_yn,
+		NVL(r.ALLO_AMT, 0) ALLO_AMT
+		ROW_NUMBER() OVER (ORDER BY adj_dt DESC) rnum
+		FROM TMSTK T
+		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
+		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
+		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
+		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
+		where T.del_yn = 'N'
+		<if test='search_tmstk_wactrNm != ""'>
+			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
+		</if>
+		<if test='search_tmstk_itemNm != ""'>
+			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
+		</if>
+		<if test='search_tmstk_clntNm != ""'>
+			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
+		</if>
+		<if test='search_tmstk_locCd != ""'>
+			and t.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
+		</if>
+		)
+		WHERE rnum BETWEEN #{offset} + 1 AND #{offset} + #{size}
+	</select>
 	<!--	tmstk E		-->
 
 	<!--	stkadj S	-->
@@ -166,55 +203,31 @@
 		ORDER BY t.reg_dt DESC
 	</select>
 
+
+	<!--STKADJ-->
+	<select id="StkadjListCount">
+		select count(*) from stkadj
+	</select>
+
 	<!--조정내역 리스트 -->
 	<select id="stkadjList" resultType="org.warehouse.models.stock.StkadjForm">
-		SELECT
-		i.ITEM_NM,
+		SELECT *
+		FROM (
+		SELECT i.ITEM_NM,
 		c.CLNT_NM,
 		w.WACTR_NM,
 		NVL(r.ALLO_AMT, 0) ALLO_AMT,
-		s.*
+		s.*,
+		ROW_NUMBER() OVER (ORDER BY adj_dt DESC) rnum
 		FROM stkadj s
 		LEFT JOIN RELS_S r ON r.ITEM_CD = s.ITEM_CD
 		LEFT JOIN WACTR w ON w.WACTR_CD = s.WACTR_CD
 		LEFT JOIN CLNT c ON c.CLNT_CD = s.CLNT_CD
 		LEFT JOIN ITEM i ON i.ITEM_CD = s.ITEM_CD
-		where s.del_yn = 'N'
-		ORDER BY s.adj_dt DESC
+		WHERE s.del_yn = 'N'
+		)
+		WHERE rnum BETWEEN #{offset} + 1 AND #{offset} + #{size}
 	</select>
-
-	<!--검색조건-->
-	<select id="search_tmstkList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
-		SELECT
-		t.ITEM_CD, i.ITEM_NM,
-		t.CLNT_CD , c.CLNT_NM,
-		t.WACTR_CD , w.WACTR_NM,
-		t.LOC_CD ,
-		t.STOCK_AMT,t.FAULT_AMT,
-		t.reg_dt,t.del_yn,
-		NVL(r.ALLO_AMT, 0) ALLO_AMT
-		FROM TMSTK T
-		LEFT JOIN RELS_S r ON r.ITEM_CD = t.ITEM_CD
-		LEFT JOIN WACTR w ON w.WACTR_CD = t.WACTR_CD
-		LEFT JOIN CLNT c ON c.CLNT_CD = t.CLNT_CD
-		LEFT JOIN ITEM i ON i.ITEM_CD = t.ITEM_CD
-		where T.del_yn = 'N'
-		<if test='search_tmstk_wactrNm != ""'>
-			and w.WACTR_NM like '%'||#{search_tmstk_wactrNm}||'%'
-		</if>
-		<if test='search_tmstk_itemNm != ""'>
-			and i.ITEM_NM like '%'||#{search_tmstk_itemNm}||'%'
-		</if>
-		<if test='search_tmstk_clntNm != ""'>
-			and c.CLNT_NM like '%'||#{search_tmstk_clntNm}||'%'
-		</if>
-		<if test='search_tmstk_locCd != ""'>
-			and t.LOC_CD like '%'||#{search_tmstk_locCd}||'%'
-		</if>
-		ORDER BY t.reg_dt DESC
-	</select>
-
-
 
 	<!--stkadj 내역 검색조회-->
 	<select id="search_stkadjList" resultType="org.warehouse.models.stock.StkadjForm" parameterType="String">
@@ -314,7 +327,7 @@
 
 	<select id="getStktransfList" resultMap="stktransfMap">
 		SELECT F.*, I.ITEM_NM FROM STKTRANSF F
-			LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
+		LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
 		WHERE F.DEL_YN = 'N'
 		ORDER BY F.MOVE_DT ASC, F.NO ASC
 	</select>
@@ -361,6 +374,15 @@
 		AND (NVL(B.ALLO_AFTER_STOCK, 0) > 0 OR B.ITEM_CD IS NULL)
 		AND ROWNUM = 1
 	</select>
-
 	<!-- 출고할당관련 E -->
+	<!-- 출고확정관련 S -->
+	<update id="relsConf" parameterType="String">
+		UPDATE TMSTK
+		SET STOCK_AMT = STOCK_AMT - #{alloAmt}
+		WHERE WACTR_CD = #{wactrCd}
+		AND CLNT_CD = #{clntCd}
+		AND ITEM_CD = #{itemCd}
+		AND LOC_CD = #{locCd}
+	</update>
+	<!-- 출고확정관련 E -->
 </mapper>

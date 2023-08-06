@@ -6,12 +6,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
-import org.warehouse.configs.models.mapper.LocDAO;
 import org.warehouse.configs.models.mapper.WactrDAO;
-import org.warehouse.controllers.admins.JoinForm;
 import org.warehouse.models.admin.clnt.ClntVO;
-import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
-import org.warehouse.models.baseinfo.loc.LocVO;
 import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 @Component
@@ -35,8 +31,8 @@ public class ItemInfoValidator implements Validator {
          * 1. 물류센터코드 존재여부 확인
          * 2. 고객사코드 존재여부 확인
          * 3. 로케이션 존재여부 확인
-         * 3. 상품코드 중복여부 확인
-         * 4. 파렛트당 박스 수 음수 및 자릿수 확인(100,000 개 미만)
+         * 4. 상품코드 중복여부 확인
+         * 5. 파렛트당 박스 수 음수 및 자릿수 확인(100,000 개 미만)
          */
         ItemInfoVO itemInfoVO = (ItemInfoVO) target;;
 
@@ -47,7 +43,8 @@ public class ItemInfoValidator implements Validator {
         // 고객사
         String clntCd = itemInfoVO.getClntCd();
         String clntNm = itemInfoVO.getClntNm();
-
+        // 관리단위
+        String boxUnit = itemInfoVO.getBoxUnit();
 
         WactrVO wactrChk = null;
         if(wactrCd != "" && wactrCd != null
@@ -70,7 +67,7 @@ public class ItemInfoValidator implements Validator {
         }
 
         /** 4. 상품코드 중복여부 확인 */
-        if(itemChk != null){
+        if(itemInfoVO.getUpdYn() == null && itemChk != null){
             errors.rejectValue("itemCd", "Validation.itemEquals");
         }
 

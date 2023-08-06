@@ -20,7 +20,6 @@ public class ItemInfoVO extends BaseEntity {
     @NotBlank
     private String itemCd; // 상품코드
     private String itemNm; // 상품명
-    private String locCd; // 로케이션코드
     private String boxUnit; // 관리단위
     //private Number getBox; // 박스당 입수
     @Max(value = 99999, message = "10만개 미만으로 입력바랍니다.")

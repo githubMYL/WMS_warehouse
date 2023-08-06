@@ -53,15 +53,13 @@ aside li > a.on:after { content: ''; display: block; position: absolute; width: 
 /** 기본 버튼 스타일 */
 .sbtn { display: inline-block; border: 1px solid #596b99; color: #596b99; min-width: 90px; padding: 0 20px; height: 28px; line-height: 26px; text-align: center; border-radius: 5px; transition: 0.15s; cursor:pointer;}
 .sbtn.blue { color: #fff; background:#596b99; }
+
 .sbtn.red { color: #fff; background:#FF7E7E; border: 1px solid #FF7E7E;}
 
 .sbtn:hover:not(.blue, .red) {
 	 background-color: #596b99;
      color: #fff;
 }
-
-
-
 
 /** 공통 서브 메뉴 */
 nav.submenus { background: #fff; box-shadow: 1px 1px 5px #cdced5; display: flex; height: 60px; }
@@ -95,3 +93,4 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 .frmSearch th {padding-right: 10px;}
 
 .loc_list:hover td{ background-color:#d3d3d3; }
+tr:hover td{ background-color:#d3d3d3; }

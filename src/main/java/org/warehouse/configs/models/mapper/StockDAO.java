@@ -38,12 +38,15 @@ public interface StockDAO {
 
 	// stkadj조인해서 tmstk list 가져오기
 	List<StkadjForm> tmsktList();
-	List<StkadjForm> stkadjList();
+	List<StkadjForm> stkadjList(int offset , int size);
+
+	int StkadjListCount();
 
 	List<StkadjForm> search_tmstkList(String search_tmstk_wactrNm,
 									  String search_tmstk_clntNm,
 									  String search_tmstk_locCd,
 									  String search_tmstk_itemNm);
+
 
 
 	List<StkadjForm> search_stkadjList(String search_tmstk_wactrNm,
@@ -83,5 +86,12 @@ public interface StockDAO {
 
 	/** 출고 할당관련 S */
 	TmstkVO stockChk(@Param("item_cd")String itemCd, @Param("clnt_cd") String clntCd);
+	/** 출고 할당관련 E */
+	/** 출고 할당관련 S */
+	void relsConf(@Param("wactrCd")String wactrCd
+			, @Param("clntCd") String clntCd
+			, @Param("itemCd") String itemCd
+			, @Param("locCd") String locCd
+			, @Param("alloAmt") String alloAmt);
 	/** 출고 할당관련 E */
 }

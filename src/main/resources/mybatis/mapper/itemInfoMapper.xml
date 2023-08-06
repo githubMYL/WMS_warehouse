@@ -6,7 +6,6 @@
         <result property="wactrNm" column="WACTR_NM" />
         <result property="clntCd" column="CLNT_CD" />
         <result property="clntNm" column="CLNT_NM" />
-        <result property="locCd" column="LOC_CD" />
         <result property="itemCd" column="ITEM_CD" />
         <result property="itemNm" column="ITEM_NM" />
         <result property="boxUnit" column="BOX_UNIT" />
@@ -20,10 +19,11 @@
     </resultMap>
 
     <insert id="insertItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
-        INSERT INTO ITEM (WACTR_CD, CLNT_CD, LOC_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
-        VALUES (#{wactrCd}, #{clntCd}, #{locCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
+        INSERT INTO ITEM (WACTR_CD, CLNT_CD, ITEM_CD, ITEM_NM, BOX_UNIT, PLT_IN_BOX, REMK, REG_DT, REG_NM)
+        VALUES (#{wactrCd}, #{clntCd}, #{itemCd}, #{itemNm}, #{boxUnit}, #{pltInBox}, #{remk}, SYSDATE, #{regNm})
     </insert>
 
+    <!-- 상품정보 수정 -->
     <update id="updateItemInfo" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         UPDATE ITEM SET
         WACTR_CD = #{wactrCd}
@@ -35,7 +35,7 @@
         , REMK = #{remk}
         , MOD_DT = SYSDATE
         , MOD_NM = #{modNm}
-        WHERE WACTR_CD || CLNT_CD || LOC_CD || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD|| ITEM_CD = #{keyVal} <!-- *** -->
     </update>
 
     <!-- 관리단위 조회-->
@@ -65,7 +65,7 @@
         , C.CLNT_NM
         , A.ITEM_CD
         , A.ITEM_NM
-        , A.BOX_UNIT
+        , D.ITEM_VALUE BOX_UNIT
         , A.PLT_IN_BOX
         , A.REMK
         FROM ITEM A
@@ -73,6 +73,8 @@
         ON A.WACTR_CD = B.WACTR_CD
         INNER JOIN CLNT C
         ON A.CLNT_CD = C.CLNT_CD
+        LEFT OUTER JOIN ITEM_CODE D
+        ON A.BOX_UNIT = D.ITEM_CODE
         WHERE A.DEL_YN  = 'N'
         ORDER BY A.REG_DT DESC
         ) A
@@ -114,10 +116,11 @@
         SELECT * FROM ITEM WHERE ITEM_CD = #{itemCd}
     </select>
 
+    <!-- 상품정보 삭제 -->
     <update id="deleteItem" parameterType="org.warehouse.models.baseinfo.iteminfo.ItemInfoVO">
         UPDATE ITEM
         SET DEL_YN = 'Y'
-        WHERE WACTR_CD || CLNT_CD || 'null' || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal}
     </update>
 
     <select id="getKeyCd" resultMap="itemMap">
@@ -140,7 +143,6 @@
         WHERE A.DEL_YN  = 'N'
         ORDER BY A.REG_DT DESC
         ) A
-        WHERE WACTR_CD || CLNT_CD || 'null' || ITEM_CD = #{keyVal}
+        WHERE WACTR_CD || CLNT_CD || ITEM_CD = #{keyVal} <!-- *** -->
     </select>
-
 </mapper>

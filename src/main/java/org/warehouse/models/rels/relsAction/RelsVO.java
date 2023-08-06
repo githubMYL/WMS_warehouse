@@ -47,4 +47,8 @@ public class RelsVO extends BaseEntity {
 	private Long rowCnt;            // 순번
 	private String dataYn;          // 데이터 존재유무
 	private String updateYn;        // detail 상품등록 유무 확인
+
+	/** 진행상태 */
+	private String relsCode;        // 진행상태 Key
+	private String relsValue;       // 진행상태 Value
 }
