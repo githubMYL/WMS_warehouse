@@ -9,7 +9,7 @@
                 <tr>
                     <th>출고일자</th>
                     <td>
-                        <input type="date" th:field="*{relsDt}" id="relsDtSrch">
+                        <input type="date" name="relsDt" th:value="${#temporals.format(srchParams.relsDt, 'yyyy-MM-dd')}" id="relsDtSrch">
                     </td>
                     <th>고객사명</th>
                     <td>
@@ -17,7 +17,10 @@
                     </td>
                     <th>진행상태</th>
                     <td>
-                        <input type="text" th:field="*{status}" id="statusSrch">
+                        <select th:field="*{status}" th:value="*{status}" id="statusSrch">
+                            <option value="" th:text="#{status}"></option>
+                            <option th:each="code : ${codeList}" th:text="${code.relsValue}" th:value="${code.relsCode}"></option>
+                        </select>
                     </td>
                 </tr>
             </table>

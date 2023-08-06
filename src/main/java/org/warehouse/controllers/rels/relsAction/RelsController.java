@@ -45,9 +45,14 @@ public class RelsController {
     public String rels(@ModelAttribute("srchParams") RelsVO srchParams, Model model){
 
         commonProcess(model);
+
+        List<RelsVO> codeList = relsDAO.codeList();
+        model.addAttribute("codeList", codeList);
+
         System.out.println("srchParams :: " + srchParams);
 
         List<RelsVO> relsList = relsDAO.relsList(srchParams);
+        System.out.println("relsList :: " + relsList);
         model.addAttribute("relsList", relsList);
 
         return "rels/rels";

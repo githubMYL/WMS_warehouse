@@ -30,6 +30,8 @@
         <result property="alloAfterStock" column="ALLO_AFTER_STOCK" />
 
         <result property="dataYn" column="DATA_YN" />
+		<result property="relsCode" column="RELS_CODE" />
+		<result property="relsValue" column="RELS_VALUE" />
     </resultMap>
 
 	<!-- 헤더 일자별 MAX 순번체크 -->
@@ -91,46 +93,35 @@
 
 	<!-- 출고등록 H list -->
 	<select id="relsList" resultMap="relsMap">
-		SELECT A.RELS_DT
-		, A.RELS_NO
-		, A.CLNT_CD
-		, B.CLNT_NM
-		, C.RELS_VALUE STATUS
-		, A.REMK
-		FROM RELS_H A
-		INNER JOIN CLNT B
-		ON A.CLNT_CD = B.CLNT_CD
-		INNER JOIN RELS_CODE C
-		ON A.STATUS = C.RELS_CODE
-		WHERE A.DEL_YN = 'N'
-<!--		<choose>-->
-<!--			<when test='relsDt != null and clntNm == null || clntNm == "" and status == null || status == ""'>-->
-<!--				AND A.RELS_DT = #{relsDt}-->
-<!--			</when>-->
-<!--			<when test='relsDt == null and clntNm != null || clntNm != "" and status == null || status == ""'>-->
-<!--				AND B.CLNT_NM like '%'||#{clntNm}||'%'-->
-<!--			</when>-->
-<!--			<when test='relsDt == null and clntNm == null || clntNm == "" and status != null || status != ""'>-->
-<!--				AND A.STATUS = #{status}-->
-<!--			</when>-->
-<!--			<when test='relsDt != null and clntNm != null || clntNm != "" and status == null || status == ""'>-->
-<!--				AND A.RELS_DT = #{relsDt}-->
-<!--				AND B.CLNT_NM like '%'||#{CLNT_NM}||'%'-->
-<!--			</when>-->
-<!--			<when test='relsDt == null and clntNm != null || clntNm != "" and status != null || status != ""'>-->
-<!--				AND B.CLNT_NM like '%'||#{clntNm}||'%'-->
-<!--				AND A.STATUS = #{status}-->
-<!--			</when>-->
-<!--			<when test='relsDt != null and clntNm == null || clntNm == "" and status != null || status != ""'>-->
-<!--				AND A.RELS_DT = #{relsDt}-->
-<!--				AND A.STATUS = #{status}-->
-<!--			</when>-->
-<!--			<when test='relsDt != null and clntNm != null || clntNm != "" and status != null || status != ""'>-->
-<!--				AND A.RELS_DT = #{relsDt}-->
-<!--				AND B.CLNT_NM like '%'||#{clntNm}||'%'-->
-<!--				AND A.STATUS = #{status}-->
-<!--			</when>-->
-<!--		</choose>-->
+		SELECT *
+		FROM (
+			SELECT A.RELS_DT
+				, A.RELS_NO
+				, A.CLNT_CD
+				, B.CLNT_NM
+				, C.RELS_VALUE STATUS
+				, A.REMK
+				, A.REG_DT
+			FROM RELS_H A
+			INNER JOIN CLNT B
+			ON A.CLNT_CD = B.CLNT_CD
+			INNER JOIN RELS_CODE C
+			ON A.STATUS = C.RELS_CODE
+			WHERE A.DEL_YN = 'N'
+		) A
+		<where>
+			<if test='relsDt != null'>
+				AND A.RELS_DT = #{relsDt}
+			</if>
+			<if test='clntNm != null and clntNm != ""'>
+				AND A.CLNT_NM like '%'||#{clntNm}||'%'
+			</if>
+			<if test='status != null and status != ""'>
+				AND A.STATUS = case #{status} when '01' then '출고등록'
+											when '03' then '출고대기'
+											when '04' then '출고확정' end
+			</if>
+		</where>
 		ORDER BY A.REG_DT DESC
 	</select>
 
@@ -328,4 +319,11 @@
 		AND DEL_YN = 'N'
 	</update>
 	<!-- 삭제 E -->
+
+	<select id="codeList" resultMap="relsMap">
+		SELECT *
+		FROM RELS_CODE
+		WHERE RELS_CODE &lt;&gt; '02'
+		AND RELS_CODE  &lt;&gt; '04'
+	</select>
 </mapper>

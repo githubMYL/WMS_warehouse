@@ -31,4 +31,5 @@ public interface RelsDAO {
     List<RelsVO> relsCnt(String keyVal); // 출고수량 SUM
     String statsChk(String keyVal); // 진행상태 가져오기
     void relsConf(String keyVal); // 출고 H STATUS 출고확정 flg변경
+    List<RelsVO> codeList(); // 조회조건 진행상태 codeList
 }
