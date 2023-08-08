@@ -52,14 +52,14 @@
 	<!--	stdin S		-->
 	<insert id="insertStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
-			VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
+		VALUES(#{itemCd}, #{clntCd}, #{locCd}, #{wactrCd}, #{beforeStdin}, #{fault}, #{stdinDt}, SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateStdin" parameterType="org.warehouse.models.stdin.StdinVO">
 		UPDATE TMSTK SET
-			STOCK_AMT = #{beforeStdin},
-			FAULT_AMT = #{fault},
-			STDIN_DT = #{stdinDt}
+		STOCK_AMT = #{beforeStdin},
+		FAULT_AMT = #{fault},
+		STDIN_DT = #{stdinDt}
 		WHERE WACTR_CD = #{wactrCd} AND CLNT_CD = #{clntCd} AND ITEM_CD = #{itemCd} AND LOC_CD = #{locCd}
 	</update>
 	<!--	stdin E		-->
@@ -67,9 +67,9 @@
 	<!--	tmstk S		-->
 	<select id="tmstkList" resultType="org.warehouse.models.stock.TmstkVO">
 		SELECT T.*, W.WACTR_NM, C.CLNT_NM, I.ITEM_NM  FROM TMSTK T LEFT OUTER JOIN WACTR W ON T.WACTR_CD = W.WACTR_CD
-			LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
-			LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
-			LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
+		LEFT OUTER JOIN LOC L ON L.LOC_CD = T.LOC_CD
+		LEFT OUTER JOIN CLNT C ON T.CLNT_CD = C.CLNT_CD
+		LEFT OUTER JOIN ITEM I ON T.ITEM_CD = I.ITEM_CD
 		WHERE L.WACTR_CD = W.WACTR_CD AND T.DEL_YN = 'N'
 		ORDER BY T.REG_DT DESC
 	</select>
@@ -127,7 +127,7 @@
 
 	<insert id="insertTmstk" parameterType="org.warehouse.models.stock.TmstkVO">
 		INSERT INTO TMSTK(ITEM_CD, CLNT_CD, LOC_CD, WACTR_CD, STOCK_AMT, FAULT_AMT, STDIN_DT, REG_DT, REG_NM)
-			VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), SYSDATE, #{regNm})
+		VALUES(#{item_cd}, #{clnt_cd}, #{loc_cd}, #{wactr_cd}, #{stock_amt}, #{fault_amt}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateTmstkAmt" parameterType="org.warehouse.models.stock.TmstkVO">
@@ -327,7 +327,7 @@
 
 	<select id="getStktransfList" resultMap="stktransfMap">
 		SELECT F.*, I.ITEM_NM FROM STKTRANSF F
-			LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
+		LEFT OUTER JOIN ITEM I ON F.ITEM_CD = I.ITEM_CD
 		WHERE F.DEL_YN = 'N'
 		ORDER BY F.MOVE_DT ASC, F.NO ASC
 	</select>
@@ -374,6 +374,15 @@
 		AND (NVL(B.ALLO_AFTER_STOCK, 0) > 0 OR B.ITEM_CD IS NULL)
 		AND ROWNUM = 1
 	</select>
-
 	<!-- 출고할당관련 E -->
+	<!-- 출고확정관련 S -->
+	<update id="relsConf" parameterType="String">
+		UPDATE TMSTK
+		SET STOCK_AMT = STOCK_AMT - #{alloAmt}
+		WHERE WACTR_CD = #{wactrCd}
+		AND CLNT_CD = #{clntCd}
+		AND ITEM_CD = #{itemCd}
+		AND LOC_CD = #{locCd}
+	</update>
+	<!-- 출고확정관련 E -->
 </mapper>

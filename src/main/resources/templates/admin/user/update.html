@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
-		<style>
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/admin/style.css}">
+	<style>
 			html { font-size: 13px; max-width: 1300px; min-width: 0px;}
 		</style>
-	</head>
+</head>
 
 
-	<h2>사용자 수정</h2>
-	<form name="joinForm" method="post" th:action="@{/admin/userManage/join}" autocomplete="off" th:object="${joinForm}" class="_form">
-		<input type="hidden" name="flag" th:field="*{flag}" th:value="update">
+<h2>사용자 수정</h2>
+<form name="joinForm" method="post" th:action="@{/admin/userManage/join}" autocomplete="off" th:object="${joinForm}" class="_form">
+	<!--		<input type="hidden" name="flag" th:field="*{flag}" th:value="update">-->
+	<input type="hidden" id="flagData" th:field="*{flag}" value="">
 
-		<th:block th:replace="~{admin/user/_joinForm::joinForm}"></th:block>
-		<br>
-		<div class="btns" style="text-align:center;">
-			<button type="reset" th:text="#{admin.action.reset}" class="sbtn"></button>
-			<button type="submit" th:text="#{admin.action.update}" class="sbtn blue"></button>
-		</div>
-	</form>
+	<th:block th:replace="~{admin/user/_joinForm::joinForm}"></th:block>
+	<br>
+	<div class="btns" style="text-align:center;">
+		<button type="reset" th:text="#{admin.action.reset}" class="sbtn"></button>
+		<button type="submit" th:text="#{admin.action.update}" class="sbtn blue"></button>
+	</div>
+	<script>
+			const { flag } = JSON.parse(localStorage.getItem("flag-data"));
+			console.log(flag);
+			document.getElementById('flagData').value= flag;
+			localStorage.removeItem("flag-data")
+		</script>
+</form>
 </html>

@@ -195,6 +195,7 @@
 					<option value="" th:text="#{boxUnit}"></option>
 					<option th:each="code : ${codeList}" th:text="${code.itemValue}" th:value="${code.itemCode}"></option>
 				</select>
+				<div class="errors" th:each="err : ${#fields.errors('boxUnit')}" th:text="${err}"></div>
 			</div>
 			<div>
 				<th:block th:text="#{pltInBox}"></th:block>

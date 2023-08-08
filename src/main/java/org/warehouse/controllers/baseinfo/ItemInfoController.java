@@ -9,13 +9,11 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.warehouse.configs.models.mapper.ClntDAO;
 import org.warehouse.configs.models.mapper.ItemInfoDAO;
-import org.warehouse.configs.models.mapper.LocDAO;
 import org.warehouse.configs.models.mapper.WactrDAO;
 import org.warehouse.models.admin.clnt.ClntVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoService;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoVO;
 import org.warehouse.models.baseinfo.iteminfo.ItemInfoValidator;
-import org.warehouse.models.baseinfo.loc.LocVO;
 import org.warehouse.models.baseinfo.wactr.WactrVO;
 
 
@@ -31,7 +29,6 @@ public class ItemInfoController{
 
 	private final WactrDAO wactrDAO;
 	private final ClntDAO clntDAO;
-	private final LocDAO locDAO;
 	private final ItemInfoDAO itemInfoDAO;
 	private final ItemInfoService itemInfoService;
 	private final ItemInfoValidator itemInfoValidator;
@@ -145,18 +142,16 @@ public class ItemInfoController{
 
 		if(itemInfoVO.getUpdYn() == null){
 			System.out.println("===== 추가 진입 =====");
-			itemInfoVO.setRegNm("session");
 			itemInfoService.itemInfoSave(itemInfoVO);
 		}
 		else if(itemInfoVO.getUpdYn().equals("Y")){
 			System.out.println("===== 수정 진입 =====");
-			itemInfoVO.setModNm("session");
 			itemInfoService.itemInfoUpdate(itemInfoVO);
 		}
 
 		closeLayer(response);
 
-		return "redirect:/baseinfo/iteminfo";
+		return "close";
 	}
 
 	/** 상품정보 삭제 처리 (DEL_YN UPDATE) */

@@ -87,4 +87,11 @@ public interface StockDAO {
 	/** 출고 할당관련 S */
 	TmstkVO stockChk(@Param("item_cd")String itemCd, @Param("clnt_cd") String clntCd);
 	/** 출고 할당관련 E */
+	/** 출고 할당관련 S */
+	void relsConf(@Param("wactrCd")String wactrCd
+			, @Param("clntCd") String clntCd
+			, @Param("itemCd") String itemCd
+			, @Param("locCd") String locCd
+			, @Param("alloAmt") String alloAmt);
+	/** 출고 할당관련 E */
 }

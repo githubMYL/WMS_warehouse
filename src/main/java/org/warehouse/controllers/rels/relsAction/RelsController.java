@@ -42,14 +42,18 @@ public class RelsController {
 
 	/** 출고등록 리스트 */
 	@GetMapping
-	public String rels(Model model){
+	public String rels(@ModelAttribute("srchParams") RelsVO srchParams, Model model){
 
 		commonProcess(model);
 
-		List<RelsVO> relsList = relsDAO.relsList();
+		List<RelsVO> codeList = relsDAO.codeList();
+		model.addAttribute("codeList", codeList);
+
+		System.out.println("srchParams :: " + srchParams);
+
+		List<RelsVO> relsList = relsDAO.relsList(srchParams);
+		System.out.println("relsList :: " + relsList);
 		model.addAttribute("relsList", relsList);
-
-
 
 		return "rels/rels";
 	}
@@ -318,6 +322,41 @@ public class RelsController {
 				} // if 재고확인
 			} // for
 			relsDAO.alloConf(confKey[i]);
+		} // for
+		return "rels/rels";
+	}
+
+	/** 출고확정(재고반영) */
+	@GetMapping("/relsConf")
+	public String relsConf(String keyVal, Model model) {
+
+		String[] keyData = keyVal.split(",");
+		System.out.println("keyData.length :: " + keyData.length);
+
+		for(int i = 0; i < keyData.length; i++){
+			// 출고수량 추출
+			List<RelsVO> relsCnt = relsDAO.relsCnt(keyData[i]);
+			System.out.println(relsCnt.size());
+
+			System.out.println("keyData[i] :: "+ keyData[i]);
+			// 출고대기 진행상태 확인
+			String statsChk = relsDAO.statsChk(keyData[i]);
+			if(statsChk.equals("03")){
+				// 재고반영
+				for(int j = 0; j < relsCnt.size(); j++) {
+					String wactrCd = String.valueOf(relsCnt.get(j).getWactrCd());
+					String clntCd = String.valueOf(relsCnt.get(j).getClntCd());
+					String itemCd = String.valueOf(relsCnt.get(j).getItemCd());
+					String locCd = String.valueOf(relsCnt.get(j).getLocCd());
+					String alloAmt = String.valueOf(relsCnt.get(j).getAlloAmt());
+
+					System.out.println(wactrCd + " : " + clntCd + " : " + itemCd + " : " + locCd + " : " + alloAmt);
+
+					stockDAO.relsConf(wactrCd, clntCd, itemCd, locCd, alloAmt);
+
+				} // for
+				relsDAO.relsConf(keyData[i]);
+			} // if
 		} // for
 		return "rels/rels";
 	}

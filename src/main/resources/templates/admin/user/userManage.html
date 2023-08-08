@@ -3,39 +3,39 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/admin/main}">
 
-	<section layout:fragment="content">
-		<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
-			<table class="table-cols" id="userSearch">
-				<tr>
-					<th>고객사 명</th>
-					<td>
-						<input type="text" name="clntNm" placeholder="고객사 명">
-					</td>
+<section layout:fragment="content">
+	<form name="frmSearch" method="get" th:action="@{/}" autocomplete="off" class="frmSearch">
+		<table class="table-cols" id="userSearch">
+			<tr>
+				<th>고객사 명</th>
+				<td>
+					<input type="text" name="clntNm" placeholder="고객사 명">
+				</td>
 
-					<th>아이디</th>
-					<td>
-						<input type="text" name="userId" placeholder="아이디">
-					</td>
+				<th>아이디</th>
+				<td>
+					<input type="text" name="userId" placeholder="아이디">
+				</td>
 
-					<th>성명</th>
-					<td>
-						<input type="text" name="userNm" placeholder="성명">
-					</td>
+				<th>성명</th>
+				<td>
+					<input type="text" name="userNm" placeholder="성명">
+				</td>
 
-					<th>연락처</th>
-					<td>
-						<input type="text" name="tel" placeholder="연락처">
-					</td>
-				</tr>
-			</table>
-			<div class="btns" style="text-align:right;">
-				<button type="button" id="ajax_btn" class="sbtn">검색</button>
-				<button type="button" id="add" class="sbtn">추가</button>
-				<button type="button" id="del" class="sbtn red">삭제</button>
-			</div>
-		</form>
+				<th>연락처</th>
+				<td>
+					<input type="text" name="tel" placeholder="연락처">
+				</td>
+			</tr>
+		</table>
+		<div class="btns" style="text-align:right;">
+			<button type="button" id="ajax_btn" class="sbtn">검색</button>
+			<button type="button" id="add" class="sbtn">추가</button>
+			<button type="button" id="del" class="sbtn red">삭제</button>
+		</div>
+	</form>
 
-		<script>
+	<script>
 			document.addEventListener('DOMContentLoaded', function () {
 				const ajax_btn = document.getElementById('ajax_btn');
 				const add = document.getElementById('add');
@@ -76,8 +76,10 @@
 
 			function addItem(e) {
 				console.log('test');
+				const flagData = { flag: "addPop" }
+				localStorage.setItem("flag-data", JSON.stringify(flagData));
 				url = 'userManage/join';
-				warehouse.popup.open(url, "테스트", 500, 800, true);
+				warehouse.popup.open(url, "사용자 추가", 500, 800, true);
 			}
 
 			function search() {
@@ -152,6 +154,9 @@
 				const input = event_tr.querySelector('td input');
 				const userId = input.dataset.userid;
 
+				const flagData = { flag: "updatePop" }
+				localStorage.setItem("flag-data", JSON.stringify(flagData));
+
 				url = 'userManage/update/' + userId;
 				warehouse.popup.open(url, "테스트", 500, 800, true);
 			};
@@ -194,41 +199,41 @@
 			}
 		</script>
 
-		<div class="table_wrapper">
-			<table id="user_table">
-				<tr>
-					<th>
-						<input type="checkbox" id="chkAll">
-					</th>
-					<th>순번</th>
-					<th>아이디</th>
-					<th>성명</th>
-					<th>사용자구분</th>
-					<th>고객사 명</th>
-					<th>납품처 명</th>
-					<th>직책</th>
-					<th>연락처</th>
-					<th>E-MAIL</th>
-					<th>비고</th>
-				</tr>
-				<tbody id="search">
-				<tr th:each="user, userCount : ${userList}" id="user_infos">
-					<td>
-						<input type="checkbox" name="check" th:value="${user.userId}" id="chk" th:data-userid="${user.userId}">
-					</td>
-					<td th:text="${userCount.count}"></td>
-					<td th:text="${user.userId}"></td>
-					<td th:text="${user.userNm}"></td>
-					<td th:text="${user.userType}"></td>
-					<td th:text="${user.clntNm}"></td>
-					<td th:text="${user.custNm}"></td>
-					<td th:text="${user.position}"></td>
-					<td th:text="${user.tel}"></td>
-					<td th:text="${user.email}"></td>
-					<td th:text="${user.remark}"></td>
-				</tr>
-				</tbody>
-			</table>
-		</div>
-	</section>
+	<div class="table_wrapper">
+		<table id="user_table">
+			<tr>
+				<th>
+					<input type="checkbox" id="chkAll">
+				</th>
+				<th>순번</th>
+				<th>아이디</th>
+				<th>성명</th>
+				<th>사용자구분</th>
+				<th>고객사 명</th>
+				<th>납품처 명</th>
+				<th>직책</th>
+				<th>연락처</th>
+				<th>E-MAIL</th>
+				<th>비고</th>
+			</tr>
+			<tbody id="search">
+			<tr th:each="user, userCount : ${userList}" id="user_infos">
+				<td>
+					<input type="checkbox" name="check" th:value="${user.userId}" id="chk" th:data-userid="${user.userId}">
+				</td>
+				<td th:text="${userCount.count}"></td>
+				<td th:text="${user.userId}"></td>
+				<td th:text="${user.userNm}"></td>
+				<td th:text="${user.userType}"></td>
+				<td th:text="${user.clntNm}"></td>
+				<td th:text="${user.custNm}"></td>
+				<td th:text="${user.position}"></td>
+				<td th:text="${user.tel}"></td>
+				<td th:text="${user.email}"></td>
+				<td th:text="${user.remark}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
 </html>

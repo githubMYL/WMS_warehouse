@@ -115,9 +115,17 @@ public class AdminController {
 
 		joinService.join(joinForm);
 
-		closeLayer(response);
+		if(joinForm.getFlag().equals("addPop")) {
+			closeLayer(response);
+			return "close";
+		}else if(joinForm.getFlag().equals("updatePop")) {
 
-		return "close";
+			closeLayer(response);
+			return "close";
+		}else {
+
+			return "user/login";
+		}
 	}
 	/** userManage E */
 
@@ -164,7 +172,7 @@ public class AdminController {
 		clntService.register(clntForm);
 
 		closeLayer(response);
-		
+
 		return "close";
 	}
 	/** clntManage E */

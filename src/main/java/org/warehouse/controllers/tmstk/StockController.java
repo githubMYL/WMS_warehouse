@@ -184,7 +184,7 @@ public class StockController {
 		// 한페이지 갯수
 		int size = 10;
 		// 현재부터 보여줄 값 ex) 1페이지 = 1~10 ,2페이지 = 2~20
-        int offset = (page-1) * size;
+		int offset = (page-1) * size;
 
 //		System.out.println("offset: " +  offset);
 

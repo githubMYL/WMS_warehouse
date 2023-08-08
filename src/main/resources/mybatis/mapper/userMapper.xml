@@ -23,14 +23,25 @@
 		<result property="delyn" column="DEL_YN" />
 	</resultMap>
 	<select id="getUserById" resultMap="userMap"> <!--  회원 정보  -->
-		<!--      SELECT U.*, C.CUST_NM, CC.CUST_CTR_NM-->
-		<!--      FROM USER_MANAGE U-->
-		<!--         LEFT OUTER JOIN CUST C ON C.CUST_CD = U.CUST_CD-->
-		<!--         LEFT OUTER JOIN CUST_CTR CC ON CC.CUST_CTR_CD = U.CUST_CTR_CD-->
-		<!--      WHERE C.CUST_CD = CC.CUST_CD AND U.USER_ID = #{userId}-->
-		SELECT *
-		FROM USER_MANAGE
+		<!--		SELECT U.*, C.CUST_NM, CC.CUST_CTR_NM-->
+		<!--		FROM USER_MANAGE U-->
+		<!--			LEFT OUTER JOIN CUST C ON C.CUST_CD = U.CUST_CD-->
+		<!--			LEFT OUTER JOIN CUST_CTR CC ON CC.CUST_CTR_CD = U.CUST_CTR_CD-->
+		<!--		WHERE C.CUST_CD = CC.CUST_CD AND U.USER_ID = #{userId}-->
+		SELECT A.*
+		, B.CLNT_NM
+		, C.CUST_NM
+		, D.CUST_CTR_NM
+		FROM USER_MANAGE A
+		LEFT OUTER JOIN CLNT B
+		ON A.CLNT_CD = B.CLNT_CD
+		LEFT OUTER JOIN CUST C
+		ON A.CUST_CD = C.CUST_CD
+		LEFT OUTER JOIN CUST_CTR D
+		ON A.CUST_CD = D.CUST_CD
+		AND A.CUST_CTR_CD = D.CUST_CTR_CD
 		WHERE USER_ID = #{userId}
+		ORDER BY A.REG_DT DESC
 	</select>
 
 	<select id="getUserByEmail" parameterType="String" resultMap="userMap"> <!--  회원 정보  -->
@@ -40,30 +51,30 @@
 	<select id="getUserList" resultMap="userMap">
 		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
 		SELECT U.*, CL.CLNT_NM, CS.CUST_NM FROM USER_MANAGE U
-			LEFT OUTER JOIN CLNT CL ON CL.CLNT_CD = U.CLNT_CD
-			LEFT OUTER JOIN CUST CS ON CS.CUST_CD = U.CUST_CD
-			WHERE U.DEL_YN = 'N'
+		LEFT OUTER JOIN CLNT CL ON CL.CLNT_CD = U.CLNT_CD
+		LEFT OUTER JOIN CUST CS ON CS.CUST_CD = U.CUST_CD
+		WHERE U.DEL_YN = 'N'
 	</select>
 
 	<insert id="insertUser" parameterType="org.warehouse.models.user.UserVO" keyProperty="userId">
-		<!-- 이 안에서 처리할 SQL문을 명시한다. -->
+		<!--		 이 안에서 처리할 SQL문을 명시한다. -->
 		INSERT INTO USER_MANAGE(USER_ID, USER_PW, USER_NM, USER_TYPE, CLNT_CD, CUST_CTR_CD, CUST_CD, POSITION, TEL, EMAIL, REG_DT, REG_NM)
-		VALUES (#{userId},#{userPw},#{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE, #{regNm})
+		VALUES (#{userId}, #{userPw}, #{userNm}, #{userType}, #{clntCd}, #{custCtrCd}, #{custCd}, #{position}, #{tel}, #{email}, SYSDATE, #{regNm})
 	</insert>
 
 	<update id="updateUser" parameterType="org.warehouse.models.user.UserVO">
 		UPDATE USER_MANAGE SET
-			USER_PW = #{userPw},
-			USER_NM = #{userNm},
-			USER_TYPE = #{userType},
-			CLNT_CD = #{clntCd},
-			CUST_CTR_CD = #{custCtrCd},
-			CUST_CD = #{custCd},
-			POSITION = #{position},
-			TEL = #{tel},
-			EMAIL = #{email},
-			MOD_DT = SYSDATE,
-			MOD_NM = #{modNm}
+		USER_PW = #{userPw},
+		USER_NM = #{userNm},
+		USER_TYPE = #{userType},
+		CLNT_CD = #{clntCd},
+		CUST_CTR_CD = #{custCtrCd},
+		CUST_CD = #{custCd},
+		POSITION = #{position},
+		TEL = #{tel},
+		EMAIL = #{email},
+		MOD_DT = SYSDATE,
+		MOD_NM = #{modNm}
 		WHERE USER_ID = #{userId}
 	</update>
 

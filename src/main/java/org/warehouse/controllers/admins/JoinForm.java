@@ -15,19 +15,22 @@ public class JoinForm {
 	@NotBlank
 	@Size(min=6)
 	private String userId;
-
+	@NotBlank
 	private String userPw;
+	@NotBlank
 	private String userPwRe;
 
 	private String userNm;
 	private String userType;
 
 	private String clntCd;
+	private String clntNm;
 	private String custCtrCd;
 	private String custCtrNm;
 	private String custCd;
 	private String custNm;
 	private String position;
+	@Size(max = 11)
 	private String tel;
 	private String email;
 

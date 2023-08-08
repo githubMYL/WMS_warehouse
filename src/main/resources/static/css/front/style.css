@@ -8,6 +8,7 @@ a { text-decoration: none; }
 body { margin: 0; background: linear-gradient(-20deg, #d1e6f7a6, white); }
 img { border: 0; }
 #topButton{ border:1px solid #c9c7c7ba; box-shadow: 2px 2px 2px gray; position:fixed; bottom:3rem; right:3rem; text-align: center;width:35px;border-radius:50%; background-color:#ffffff; font-size:25px;}
+
 /** 기준 너비 */
 .layout_width { max-width: 1300px; min-width: 1100px; margin: 0 auto; padding: 0 10px; }
 
@@ -52,15 +53,13 @@ aside li > a.on:after { content: ''; display: block; position: absolute; width: 
 /** 기본 버튼 스타일 */
 .sbtn { display: inline-block; border: 1px solid #596b99; color: #596b99; min-width: 90px; padding: 0 20px; height: 28px; line-height: 26px; text-align: center; border-radius: 5px; transition: 0.15s; cursor:pointer;}
 .sbtn.blue { color: #fff; background:#596b99; }
+
 .sbtn.red { color: #fff; background:#FF7E7E; border: 1px solid #FF7E7E;}
 
 .sbtn:hover:not(.blue, .red) {
 	 background-color: #596b99;
      color: #fff;
 }
-
-
-
 
 /** 공통 서브 메뉴 */
 nav.submenus { background: #fff; box-shadow: 1px 1px 5px #cdced5; display: flex; height: 60px; }
@@ -93,4 +92,5 @@ nav.submenus a { width:100%; line-height: 60px; padding: 0 40px; font-size: 18px
 .frmSearch td{ padding-right:50px; }
 .frmSearch th {padding-right: 10px;}
 
-.list_hover:hover td{ background-color:#d3d3d3; }
+.loc_list:hover td{ background-color:#d3d3d3; }
+tr:hover td{ background-color:#d3d3d3; }
