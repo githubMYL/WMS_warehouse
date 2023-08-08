@@ -22,19 +22,32 @@
         }
 
 <!--    날짜조회 E-->
-
-
     </script>
+	<style>
+        .paging{
+            text-align:center;
+            font-size:15px;
+            margin-top:6px;
+        }
+        .paging span {
+             display: inline-block;
+             padding:0px 8px;
+        }
+        .currentPage{
+            font-weight:bold;
+            font-size:17px;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <section layout:fragment="content">
 	<h2>조정 내역</h2>
-	<div id="stkadjList" >
-		<div  align="left" class="table_wrapper">
+	<div id="stkadjList">
+		<div align="left" class="table_wrapper">
 
 
-
-			<form id="search"  class="frmSearch">
+			<form id="search" class="frmSearch">
 				<table class="table-cols">
 					<tr>
 						<th style="width:100px;">조회시작일</th>
@@ -50,19 +63,23 @@
 					<tr>
 						<th style="width:90px;">물류센터 명</th>
 						<td style="padding-right: 10px;">
-							<input type="text"  id="search_tmstk_wactrNm" name="search_tmstk_wactrNm" th:placeholder="물류센터검색" >
+							<input type="text" id="search_tmstk_wactrNm" name="search_tmstk_wactrNm"
+								   th:placeholder="물류센터검색">
 						</td>
 						<th style="width:80px;">고객사 명</th>
 						<td style="padding-right: 10px;">
-							<input type="text"  id="search_tmstk_clntNm" name="search_tmstk_clntNm" th:placeholder="고객사검색" >
+							<input type="text" id="search_tmstk_clntNm" name="search_tmstk_clntNm"
+								   th:placeholder="고객사검색">
 						</td>
 						<th style="width:110px;">로케이션 코드</th>
-						<td style="padding-right: 10px;">
-							<input type="text"  id="search_tmstk_locCd" name="search_tmstk_locCd" th:placeholder="로케이션검색" >
+						<td style="padding-right: 10px; width:120px">
+							<input type="text" id="search_tmstk_locCd" name="search_tmstk_locCd"
+								   th:placeholder="로케이션검색">
 						</td>
 						<th style="width:70px;">상품 명</th>
 						<td style="padding-right: 10px;">
-							<input type="text"  id="search_tmstk_itemNm" name="search_tmstk_itemNm" th:placeholder="상품검색" >
+							<input type="text" id="search_tmstk_itemNm" name="search_tmstk_itemNm"
+								   th:placeholder="상품검색">
 						</td>
 					</tr>
 				</table>
@@ -83,8 +100,8 @@
 						<th style="width:50px;">상품명</th>
 						<th style="width:40px">조정 전 총 재고</th>
 						<th style="width:40px">조정 후 총 재고</th>
-						<th >조정사유</th>
-						<th >수정자</th>
+						<th>조정사유</th>
+						<th>수정자</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -104,6 +121,16 @@
 
 				</table>
 			</div>
+
+			<th:block th:if="${page}">
+				<div class="paging">
+                 <span th:each="pageNum : ${#numbers.sequence(1, pageCount)}"
+					   th:class="${pageNum == page} ? 'currentPage' : ''">
+                    <a th:href="@{${'/stock/stkadjList?page=' + pageNum}}" th:text="${pageNum}"></a>
+                 </span>
+				</div>
+			</th:block>
+
 		</div>
 	</div>
 </section>

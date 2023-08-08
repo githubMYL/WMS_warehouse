@@ -87,6 +87,7 @@ public class AdminController {
 		System.out.println(userId);
 		System.out.println(userVO);
 		JoinForm joinForm = new ModelMapper().map(userVO, JoinForm.class);
+		joinForm.setUserPwSave(joinForm.getUserPw());
 
 		List<ClntVO> clntList = clntDAO.getClntList();
 		List<CustCtrVO> custCtrList = custCtrDAO.getCustCtrList();

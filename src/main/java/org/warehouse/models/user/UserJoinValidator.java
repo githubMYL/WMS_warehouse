@@ -31,8 +31,7 @@ public class UserJoinValidator implements Validator {
 
 		JoinForm joinForm = (JoinForm) target;
 		String userId = joinForm.getUserId();
-		String userPw = joinForm.getUserPw();
-		String userPwRe = joinForm.getUserPwRe();
+
 		String custCd = joinForm.getCustCd();
 
 		/** 기타 입력폼 정보들 - 추후에 검증 추가할지도?
@@ -46,17 +45,22 @@ public class UserJoinValidator implements Validator {
 		 String email = joinForm.getEmail();
 		 */
 
-		if(joinForm.getFlag() == null) {
+		if(joinForm.getFlag() == null || joinForm.getFlag().isBlank() || joinForm.getFlag().equals("addPop")) {
+			String userPw = joinForm.getUserPw();
+			String userPwRe = joinForm.getUserPwRe();
+
 			//1. 아이디 중복 여부
-			if(userId != null && !userId.isBlank() && (userMapper.getUserById(userId) != null)){
+			if (userId != null && !userId.isBlank() && (userMapper.getUserById(userId) != null)) {
 				errors.rejectValue("userId", "Validation.duplicate.userId");
 			}
 			//2. 비밀번호 복잡성 체크 - 우선은 빼고 진행
 
 			//3. 비밀번호와 비밀번호 확인란 일치
-			if(!userPw.equals(userPwRe)){
+			if (!userPw.equals(userPwRe)) {
 				errors.rejectValue("userPwRe", "Validation.incorrect.userPwRe");
 			}
 		}
+
+		System.out.println(errors.getAllErrors());
 	}
 }

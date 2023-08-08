@@ -11,7 +11,7 @@
 		<result property="locCd" column="LOC_CD" />
 		<result property="preDtStock" column="PREDT_STOCK" />
 		<result property="preDtFaultStock" column="PREDT_FAULTSTOCK" />
-		<result property="nomalIn" column="NORMAL_IN" />
+		<result property="normalIn" column="NORMAL_IN" />
 		<result property="faultIn" column="FAULT_IN" />
 		<result property="relsAmt" column="RELS_AMT" />
 		<result property="moveAmt" column="MOVE_AMT" />
@@ -42,5 +42,20 @@
 		INNER JOIN ITEM C
 		ON A.ITEM_CD = C.ITEM_CD
 		ORDER BY A.REG_DT DESC
+	</select>
+
+	<select id="getTest" resultMap="dlyMap">
+		SELECT F.*, T.STOCK_AMT AS "NORMAL_STOCK", T.FAULT_AMT AS "FAULT_STOCK"
+		FROM (
+		SELECT T.ITEM_CD, T.CLNT_CD, T.LOC_CD, T.WACTR_CD, SUM(STDIN.NORMAL) AS "NORMAL_IN", SUM(STDIN.FAULT) AS "FAULT_IN",
+		SUM(RELS.RELS_CNT) AS "RELS_AMT", SUM(TRANSF.MOVE_AMT) AS "MOVE_AMT", SUM(ADJ.BEFORE_ADJ_STOCK-ADJ.AFTER_ADJ_STOCK) AS "AMT_ADJ"
+		FROM TMSTK T
+		LEFT OUTER JOIN STDIN_D STDIN ON (STDIN.ITEM_CD = T.ITEM_CD AND STDIN.LOC_CD = T.LOC_CD)
+		LEFT OUTER JOIN STKTRANSF TRANSF ON(TRANSF.ITEM_CD = T.ITEM_CD AND TRANSF.LOC_CD_FROM = T.LOC_CD)
+		LEFT OUTER JOIN RELS_D RELS ON(RELS.ITEM_CD = T.ITEM_CD AND RELS.ITEM_CD = T.ITEM_CD)
+		LEFT OUTER JOIN STKADJ ADJ ON(ADJ.ITEM_CD = T.ITEM_CD AND ADJ.LOC_CD = T.LOC_CD)
+		GROUP BY T.ITEM_CD, T.CLNT_CD, T.LOC_CD, T.WACTR_CD) F , TMSTK T
+		WHERE F.ITEM_CD = T.ITEM_CD AND F.LOC_CD = T.LOC_CD
+		ORDER BY F.ITEM_CD ASC
 	</select>
 </mapper>

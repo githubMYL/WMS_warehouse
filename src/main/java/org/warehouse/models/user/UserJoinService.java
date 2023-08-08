@@ -45,8 +45,11 @@ public class UserJoinService {
 			userDAO.insertUser(userVO);
 		} else {
 			System.out.println("flag null222");
-			userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
-
+			if(joinForm.getUserPwRe() == null || joinForm.getUserPwRe().isBlank()) {
+				userVO.setUserPw(joinForm.getUserPwSave());
+			} else {
+				userVO.setUserPw(passwordEncoder.encode(joinForm.getUserPwRe()));
+			}
 			if(custDAO.getCustByCustNm(joinForm.getCustNm()) != null){
 				userVO.setCustCd(custDAO.getCustByCustNm(joinForm.getCustNm()).getCustCd());
 			}

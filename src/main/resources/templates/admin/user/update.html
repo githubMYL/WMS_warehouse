@@ -12,6 +12,7 @@
 <form name="joinForm" method="post" th:action="@{/admin/userManage/join}" autocomplete="off" th:object="${joinForm}" class="_form">
 	<!--		<input type="hidden" name="flag" th:field="*{flag}" th:value="update">-->
 	<input type="hidden" id="flagData" th:field="*{flag}" value="">
+	<input type="hidden" th:field="*{userPwSave}">
 
 	<th:block th:replace="~{admin/user/_joinForm::joinForm}"></th:block>
 	<br>

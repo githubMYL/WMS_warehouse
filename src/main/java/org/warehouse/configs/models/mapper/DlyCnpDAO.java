@@ -13,4 +13,6 @@ public interface DlyCnpDAO {
 	List<DlycnpVO> getDlyCnpList(DlycnpVO srchParam);
 	/** dlycno E*/
 
+	List<DlycnpVO> getTest();
+
 }

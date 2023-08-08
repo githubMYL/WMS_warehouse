@@ -50,4 +50,15 @@ public class DlyCnpController {
 		model.addAttribute("Title", Title);
 		model.addAttribute("menuCode", menuCode);
 	}
+
+	@GetMapping("/dlycnptest")
+	public String dlycnptest(Model model) {
+		commonProcess(model);
+		List<DlycnpVO> dlycnpList = dlyCnpDAO.getTest();
+		System.out.println(dlycnpList);
+
+		model.addAttribute("dlycnpList", dlycnpList);
+
+		return "stock/dlycnp";
+	}
 }
